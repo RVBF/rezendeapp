@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>RezendeApp</title>
+      <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900" rel="stylesheet">
+      <link rel="stylesheet" href="assets/styles/main.css">
+      <link rel="stylesheet" type="text/css" href="vendor/font-awesome/web-fonts-with-css/css/fontawesome-all.css">
+      <link rel="stylesheet" type="text/css" href="vendor/bootstrap/dist/css/bootstrap.css">
+      <link rel="stylesheet" type="text/css" href="vendor/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+      <link rel="stylesheet" type="text/css" href="vendor/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css">
+      <link rel="stylesheet" type="text/css" href="vendor/datatables.net-keytable-bs4/css/keyTable.bootstrap4.min.css">
+      <link rel="stylesheet" type="text/css" href="vendor/datatables.net-fixedheader-bs4/css/fixedHeader.bootstrap4.min.css">
+      <link rel="stylesheet" type="text/css" href="vendor/datatables.net-fixedcolumns-bs4/css/fixedColumns.bootstrap4.min.css">
+      <link rel="stylesheet" type="text/css" href="vendor/datatables.net-autofill-bs4/css/autoFill.bootstrap4.min.css">
+      <link rel="stylesheet" type="text/css" href="vendor/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
+      <link rel="stylesheet" type="text/css" href="vendor/datatables.net-rowreorder-bs4/css/rowReorder.bootstrap4.min.css">
+      <link rel="stylesheet" type="text/css" href="vendor/datatables.net-rowgroup-bs4/css/rowGroup.bootstrap4.min.css">
+      <link rel="stylesheet" type="text/css" href="vendor/datatables.net-scroller-bs4/css/scroller.bootstrap4.min.css">
+      <link rel="stylesheet" type="text/css" href="vendor/datatables.net-select-bs4/css/select.bootstrap4.min.css">
+      <link rel="stylesheet" type="text/css" href="vendor/toastr/toastr.min.css">
+      <link rel="stylesheet" type="text/css" href="vendor/bootstrap3-dialog/dist/css/bootstrap-dialog.min.css">
+
+
+      <link rel="stylesheet" type="text/css" href="assets/styles/meanmenu.min.css">
+      <link rel="stylesheet" type="text/css" href="assets/styles/animate.css">
+      <link rel="stylesheet" type="text/css" href="assets/styles/normalize.css">
+      <link rel="stylesheet" type="text/css" href="assets/styles/estilo.css">
+      <link rel="stylesheet" type="text/css" href="assets/styles/responsive.css">
+
+
+      <!-- TODO add manifest here -->
+      <link rel="manifest" href="/manifest.json">
+      <!-- Add to home screen for Safari on iOS -->
+      <meta name="apple-mobile-web-app-capable" content="yes">
+      <meta name="apple-mobile-web-app-status-bar-style" content="black">
+      <meta name="apple-mobile-web-app-title" content="Weather PWA">
+      <link rel="shortcut icon" href="assets/images/icons/Logo_Rezende_Icone_512x512.png" type="image/x-icon">
+      <link rel="apple-touch-icon" href="assets/images/icons/Logo_Rezende_Icone_152x152.png">
+      <meta name="msapplication-TileImage" content="assets/images/icons/Logo_Rezende_Icone_144x144.png">
+      <meta name="msapplication-TileColor" content="#2F3BA2">
+  </head>
+
+  <body>
+    <div class="header-top-area">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                            <div class="logo-area">
+                                    <a href="#"><img src="assets/images/LogoRezende_CorelDraw_App_Branco.png"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Menu start -->
+    <div class="mobile-menu-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="mobile-menu">
+                        <nav id="dropdown">
+                            <ul class="mobile-menu-nav">
+                                <li>
+                                    <a data-toggle="collapse"  href="#">Início</a>
+                                    
+                                    <ul class="collapse dropdown-header-top">
+                                        <li><a href="index.html">Exemplo</a></li>
+                                    </ul>
+                                </li>
+                                
+                                <li>
+                                    <a data-toggle="collapse" data-target="#demoevent" href="#">CheckList</a>
+
+                                    <ul id="demoevent" class="collapse dropdown-header-top">
+                                        <li>
+                                            <a href="categoria.html" class="categoria_link">Categoria</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Mobile Menu end -->
+
+    <div class="main-menu-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    
+                    <ul class="nav nav-tabs rezende-menu-wrap menu-it-icon-pro">
+                        <li class="">
+                        <a data-toggle="tab" href="#inicio" aria-expanded="false"><i class="rezende-icon fas fa-home"></i> Início</a>
+                        </li>
+                        
+                        <li class="">
+                            <a data-toggle="tab" href="#tarefa" aria-expanded="false"><i class="rezende-icon fas fa-tasks"></i>Tarefa</a>
+                        </li>
+                        
+                        <li class="">
+                                <a data-toggle="tab" href="#plano_acao" aria-expanded="false"><i class="rezende-icon fas fa-clipboard"></i>Plano de Ação</a>
+                        </li>
+                        
+                        <li class="">
+                            <a data-toggle="tab" href="#config" aria-expanded="false"><i class="rezende-icon fas fa-cog"></i>Configuração</a>
+                        </li>
+
+                        <li class="">
+                            <a data-toggle="tab" href="#opc_user" aria-expanded="false"><i class="rezende-icon fas fa-sign-out-alt"></i>Opções de usuário</a>
+                        </li>
+                    </ul>
+
+                   <div class="tab-content custom-menu-content">
+                        <div id="inicio" class="tab-pane notika-tab-menu-bg animated flipInX">
+                            <ul class="notika-main-menu-dropdown">
+                                <li><a href="index.html">Exemple</a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div id="tarefa" class="tab-pane notika-tab-menu-bg animated flipInX">
+                            <ul class="notika-main-menu-dropdown">
+                                <li><a href="categoria.html" class="categoria_link">Categoria</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+        <div id="app"></div>
+    </div>
+
+    <noscript>
+      <p>Por favor habilite o JavaScript!</p>
+    </noscript>
+
+    <script type="text/javascript" src="vendor/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="vendor/bootstrap/dist/js/bootstrap.js"></script>
+    <script type="text/javascript" src="vendor/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script type="text/javascript" src="vendor/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="vendor/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="vendor/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="vendor/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script type="text/javascript" src="vendor/datatables.net-keytable-bs4/js/keyTable.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="vendor/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
+    <script type="text/javascript" src="vendor/datatables.net-fixedheader-bs4/js/fixedHeader.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="vendor/datatables.net-fixedcolumns/js/dataTables.fixedColumns.min.js"></script>
+    <script type="text/javascript" src="vendor/datatables.net-fixedcolumns-bs4/js/fixedColumns.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="vendor/datatables.net-autofill/js/dataTables.autoFill.min.js"></script>
+    <script type="text/javascript" src="vendor/datatables.net-autofill-bs4/js/autoFill.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="vendor/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="vendor/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="vendor/datatables.net-rowreorder-bs4/js/rowReorder.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="vendor/datatables.net-rowgroup/js/dataTables.rowGroup.min.js"></script>
+    <script type="text/javascript" src="vendor/datatables.net-rowgroup-bs4/js/rowGroup.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="vendor/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
+    <script type="text/javascript" src="vendor/datatables.net-scroller-bs4/js/scroller.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="vendor/datatables.net-select/js/dataTables.select.min.js"></script>
+    <script type="text/javascript" src="vendor/datatables.net-select-bs4/js/select.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="vendor/toastr/toastr.min.js"></script>
+    <script type="text/javascript" src="vendor/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="vendor/bootstrap3-dialog/dist/js/bootstrap-dialog.min.js"></script>
+    <script type="text/javascript" src="vendor/grapnel/dist/grapnel.min.js"></script>
+
+    <script type="text/javascript" src="assets/js/jquery.meanmenu.js"></script>
+    <script type="text/javascript" src="assets/js/main.js"></script>
+    <script type="text/javascript" src="assets/js/app.js" async></script>
+    <script type="text/javascript" src="assets/js/rotas.js"></script>
+    <script type="text/javascript" src="assets/js/funcoesSistema.js"></script>
+  </body>
+</html>
