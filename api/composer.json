@@ -1,0 +1,17 @@
+{
+    "require": {
+        "slim/slim": "^3.0"
+    },
+
+	"require-dev": {
+	},
+
+    "autoload": {
+		"psr-4": {
+			"": [
+				"/",
+				"modules/"
+			]
+		}
+    }
+}
