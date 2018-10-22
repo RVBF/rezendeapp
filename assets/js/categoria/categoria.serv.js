@@ -16,7 +16,7 @@
 		var _this = this;
 		// Rota no servidor
         _this.rota = function rota() {
-			return app.API + '/categorias';
+			return app.api + '/categorias';
 		};
 
 		// Cria um objeto de categoria

@@ -1,6 +1,6 @@
 var app = {
   isLoading: true,
-  api : '/API'
+  api : '/api'
 };
 
 (function(app, document, $, toastr, BootstrapDialog) {
@@ -74,7 +74,7 @@ var app = {
 
 	// Opções padrão para o DataTables ----------------------------------------
 	app.dtOptions = {
-		language	: { url: 'vendor/datatables-i18n/i18n/pt-BR.json' },
+		language	: { url: 'bower_components/datatables-i18n/i18n/pt-BR.json' },
 		bFilter : true,
 		serverSide: true,
 		processing : true,

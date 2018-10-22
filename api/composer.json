@@ -1,6 +1,11 @@
 {
     "require": {
-        "slim/slim": "^3.0"
+        "slim/slim": "^3.0",
+		"monolog/monolog": "^1.23",
+		"illuminate/database": "^4.2",
+        "filp/whoops": "^2.3",
+        "phputil/datatables": "^2.0",
+        "phputil/di": "^0.3.1"
     },
 
 	"require-dev": {
@@ -10,7 +15,10 @@
 		"psr-4": {
 			"": [
 				"/",
-				"modules/"
+				"modules/",
+				"modules/comum/",
+				"modules/model/",
+				"modules/controllers/"
 			]
 		}
     }
