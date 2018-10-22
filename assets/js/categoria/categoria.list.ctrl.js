@@ -20,7 +20,7 @@
 		_this.opcoesDaTabela = function opcoesDaTabela()
 		{
 			var objeto = $.extend(true, {}, app.dtOptions);
-			objeto.ajax =servicoCategoria.rota();
+			objeto.ajax = servicoCategoria.rota();
 
 			objeto.columnDefs = [ {
 					data: 'id',
