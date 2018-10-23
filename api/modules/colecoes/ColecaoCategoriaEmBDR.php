@@ -14,9 +14,10 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 
 	private $db;
 
-	function __construct(Db $db)
+	function __construct()
 	{
-		$this->db = $db;
+		Debuger::printr(Db::connection);
+
 	}
 
 	function adicionar(&$obj) {
@@ -37,9 +38,9 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 	function todos($limite = 0, $pulo = 0){
 		try
 		{
-			Debuger::printr($this->db->table(self::TABELA)->offset(10)
-			->limit(5)
-			->get());
+
+			Debuger::printr($this->db->table(self::TABELA)->get());
+
 
 			return $this->pdoW->queryObjects([$this, 'construirObjeto'], $sql);
 		}
