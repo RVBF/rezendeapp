@@ -1,12 +1,12 @@
 <?php
 
 /**
- *	MedicamentoPrecificado
+ *	Categoria
  *
  *  @author Rafael Vinicius Barros Ferreira
  *  @version	0.1
  */
-class MedicamentoPrecificado {
+class Categoria {
 
 	private $id;
     private $titulo;
@@ -22,6 +22,14 @@ class MedicamentoPrecificado {
 
     public function setId(int $id){
         $this->id = $id;
+    }
+
+    public function getTitulo(){
+        return $this->titulo; 
+    }
+ 
+    public function setTitulo(String $titulo){
+        $this->titulo = $titulo;
     }
 }
 ?>
