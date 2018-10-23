@@ -7,10 +7,7 @@ $app->get('/categorias', function(Request $req,  Response $res, $args = []) use 
 {
 	$this->logger->addInfo("Acessando listagem de categorias");
 	
-	Debuger::printr($req->getQueryParams());
-	// $session = new Session();
-	// $sessaoUsuario = new Sessao($session);
-	// $ctrl = new ControladoraCategoria($params);
-	// $ctrl->todos();
+	$ctrl = new ControladoraCategoria($req->getQueryParams());
+	$categorias =  $ctrl->todos();
 });
 ?>

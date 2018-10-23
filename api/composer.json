@@ -18,7 +18,9 @@
 				"modules/",
 				"modules/comum/",
 				"modules/model/",
-				"modules/controllers/"
+				"modules/controllers/",
+				"modules/interfaces/",
+				"modules/colecoes/"
 			]
 		}
     }
