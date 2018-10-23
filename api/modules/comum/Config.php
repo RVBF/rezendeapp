@@ -8,12 +8,12 @@ class Config{
         $this->config['development']['host'] = 'localhost';
         $this->config['development']['name'] = 'rezendeapp';
         $this->config['development']['user'] = 'root';
-        $this->config['development']['pass'] = '115243';
+        $this->config['development']['pass'] = '';
 
         $this->config['production']['host'] = 'localhost';
         $this->config['production']['name'] = 'rezendeapp';
         $this->config['production']['user'] = 'root';
-        $this->config['production']['pass'] = '115243';
+        $this->config['production']['pass'] = '';
     }
 
     public static function  getInstance(){

@@ -13,7 +13,7 @@ class Dice {
 
 	private $container = null;
 
-	private function __construct(){}
+	private function __construct()	{}
 	private function __clone()	{}
 	private function __wakeup()	{}
     private static $singleton = null;
@@ -40,7 +40,7 @@ class Dice {
 
 	private function makeContainer()
 	{
-		DI::config( DI::let( 'Db')->create($this->makeBD())->shared());
+		DI::config( DI::let( 'Db')->create( 'ColecaoCategoriaEmBDR')->shared());
 
 		DI::config( DI::let( 'ColecaoCategoria' )->create( 'ColecaoCategoriaEmBDR'));
 	}

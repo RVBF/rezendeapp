@@ -33,4 +33,7 @@ $db->addConnection([
 
 $db->setAsGlobal();
 $db->bootEloquent();
+$categoria = Db::table('categoria')->where('id',1)->get();
+
+Debuger::printr($db);
 include __DIR__.'/modules/comum/app.php'; //nova linha
