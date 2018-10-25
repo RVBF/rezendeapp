@@ -12,13 +12,7 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 
 	const TABELA = 'categoria';
 
-	private $db;
-
-	function __construct()
-	{
-		Debuger::printr(Db::connection);
-
-	}
+	function __construct(){}
 
 	function adicionar(&$obj) {
 	}
@@ -35,14 +29,17 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 	/**
 	 * @inheritDoc
 	 */
-	function todos($limite = 0, $pulo = 0){
+	function todos($limite = 0, $pulo = 0) {
 		try
-		{
+		{	
+			$categorias = Db::table(self::TABELA)->orderBy('titulo', 'DESC')->offset($limite)->limit($pulo)->get();
+			$categoriasObjects = [];
 
-			Debuger::printr($this->db->table(self::TABELA)->get());
+			foreach ($categorias as $categoria) {
+				$categoriasObjects[] =  $this->construirObjeto($categoria);
+			}
 
-
-			return $this->pdoW->queryObjects([$this, 'construirObjeto'], $sql);
+			return $categoriasObjects;
 		}
 		catch (\Exception $e)
 		{
@@ -51,9 +48,11 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 	}
 
 	function construirObjeto(array $row){
+		return new Categoria($row['id'],$row['titulo']);
 	}
 
     function contagem() {
+		return Db::table(self::TABELA)->count();
     }
 }
 

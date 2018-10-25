@@ -1,6 +1,8 @@
 <?php
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
+use \phputil\JSON;
+
 
 // Início das rotas para Medicamentos Precificados
 $app->get('/categorias', function(Request $req,  Response $res, $args = []) use ($app)
@@ -8,6 +10,8 @@ $app->get('/categorias', function(Request $req,  Response $res, $args = []) use 
 	$this->logger->addInfo("Acessando listagem de categorias");
 	
 	$ctrl = new ControladoraCategoria($req->getQueryParams());
-	$categorias =  $ctrl->todos();
+	$categorias = $ctrl->todos();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($categorias)));
+
 });
 ?>

@@ -40,43 +40,7 @@ class Dice {
 
 	private function makeContainer()
 	{
-		DI::config( DI::let( 'Db')->create( 'ColecaoCategoriaEmBDR')->shared());
-
 		DI::config( DI::let( 'ColecaoCategoria' )->create( 'ColecaoCategoriaEmBDR'));
-	}
-
-	private function makeBD()
-	{
-		$config = Config::getInstance();
-
-		if($config->getConfiguration('debug')) {
-			$dbConfig = $config->getConfiguration('development');
-
-			$run = new Whoops\Run;
-			$handler = new Whoops\Handler\PrettyPageHandler;
-			$run->pushHandler($handler);
-			$run->register();
-		} else {
-			$dbConfig = $config->getConfiguration('production');
-		}
-
-		$db = new Db;
-
-		$db->addConnection([
-			'driver'    => 'mysql',
-			'host'      => $dbConfig['host'],
-			'database'  => $dbConfig['name'],
-			'username'  => $dbConfig['user'],
-			'password'  => $dbConfig['pass'],
-			'charset'   => 'utf8',
-			'collation' => 'utf8_unicode_ci',
-			'prefix'    => '',
-		]);
-
-		$db->setAsGlobal();
-		$db->bootEloquent();
-
-		return $db;
 	}
 }
 
