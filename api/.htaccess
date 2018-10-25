@@ -1,11 +1,10 @@
 RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^ index.php [QSA,L]
-AllowOverride All
 
-<IfModule mod_rewrite.c>
-   RewriteEngine on
-   RewriteRule ^$ api/     [L]
-   RewriteRule (.*) api/$1 [L]
-</IfModule>
+# Some hosts may require you to use the `RewriteBase` directive.
+# If you need to use the `RewriteBase` directive, it should be the
+# absolute physical path to the directory that contains this htaccess file.
+#
+# RewriteBase /
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [QSA,L]

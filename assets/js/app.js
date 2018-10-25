@@ -79,7 +79,7 @@ var app = {
 		serverSide: true,
 		processing : true,
 		searching : true,
-		responsive : true,
+		responsive : false,
 		autoWidth : false,
 		order: [[1, 'asc']]
 	};

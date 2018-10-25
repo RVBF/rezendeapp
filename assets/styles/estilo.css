@@ -368,3 +368,7 @@ ul.rezende-menu-wrap li a {
 #app{
     margin-top : 5em; 
 }
+
+table.th {
+	text-align: center;
+}

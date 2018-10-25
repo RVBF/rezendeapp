@@ -29,7 +29,7 @@
 				},
 
 				{
-					data: 'nome',
+					data: 'titulo',
 					responsivePriority: 1,
 					targets: 2
 				}
@@ -39,6 +39,7 @@
 			{
 				// eventos da tabela
 			};
+			console.log(objeto);
 
 			return objeto;
 		};

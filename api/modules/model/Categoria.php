@@ -11,7 +11,7 @@ class Categoria {
 	private $id;
     private $titulo;
 
-	function __construct(int $id, String $titulo) {
+	function __construct($id = 0, $titulo = '') {
 		$this->id = $id;
 		$this->titulo = $titulo;
     }

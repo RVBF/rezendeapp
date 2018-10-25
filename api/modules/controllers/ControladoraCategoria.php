@@ -25,18 +25,16 @@ class ControladoraCategoria {
 		$contagem = 0;
 		$objetos = [];
 		$erro = null;
+
 		try
 		{
-			Debuger::printr($this->colecaoCategoria->todos($dtr->start, $dtr->length));
+			$objetos = $this->colecaoCategoria->todos($dtr->start, $dtr->length);
+
 			$contagem = $this->colecaoCategoria->contagem();
-
-			// $objetos = $this->colecaoCategoria->todos($dtr->limit(), $dtr->offset());
-
-			$resposta = [];
 		}
 		catch (\Exception $e )
 		{
-			// return $this->geradoraResposta->erro($e->getMessage(), GeradoraResposta::TIPO_TEXTO);
+			throw new Exception("Erro ao listar categorias");
 		}
 
 		$conteudo = new DataTablesResponse(
