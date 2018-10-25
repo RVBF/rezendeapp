@@ -74,12 +74,12 @@ var app = {
 
 	// Opções padrão para o DataTables ----------------------------------------
 	app.dtOptions = {
-		language	: { url: 'bower_components/datatables-i18n/i18n/pt-BR.json' },
+		language	: { url: 'vendor/datatables-i18n/i18n/pt-BR.json' },
 		bFilter : true,
 		serverSide: true,
 		processing : true,
 		searching : true,
-		responsive : false,
+		responsive: true,
 		autoWidth : false,
 		order: [[1, 'asc']]
 	};
