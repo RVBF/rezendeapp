@@ -24,14 +24,13 @@
 
 			objeto.columnDefs = [ {
 					data: 'id',
-					targets: 1
+					targets: 0
 
 				},
-
 				{
 					data: 'titulo',
 					responsivePriority: 1,
-					targets: 2
+					targets: 1
 				}
 			];
 
@@ -39,7 +38,6 @@
 			{
 				// eventos da tabela
 			};
-			console.log(objeto);
 
 			return objeto;
 		};
