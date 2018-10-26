@@ -210,7 +210,7 @@ ul.rezende-menu-wrap li a {
 	width:26px;
 	height: 15px;
     margin-top: 1px;
-    padding: 12px !important;
+    paddin: 12pxtdimportant;
 	text-align:center;
 	position:absolute;
 	right:0;top:0;
@@ -369,6 +369,10 @@ ul.rezende-menu-wrap li a {
     margin-top : 5em; 
 }
 
-table.th {
-	text-align: center;
+#app th {
+	text-align: center !important;
+}
+
+#app td {
+	text-align: center !important;
 }

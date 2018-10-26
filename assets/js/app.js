@@ -74,14 +74,23 @@ var app = {
 
 	// Opções padrão para o DataTables ----------------------------------------
 	app.dtOptions = {
-		language	: { url: 'vendor/datatables-i18n/i18n/pt-BR.json' },
-		bFilter : true,
-		serverSide: true,
-		processing : true,
-		searching : true,
-		responsive: true,
-		autoWidth : false,
-		order: [[1, 'asc']]
+		"responsive": true,
+		"autoWidth": false,
+		"processing":true,
+		"serverSide":true,
+		"destroy": true,
+		"ajax" :{
+			 "type": "POST"
+		},
+		"pageLength": 10,
+		"lengthMenu":[ [10, 25, 50, 100], [10, 25, 50,100] ],
+		"paging":true,
+		"searching":false,
+		"ordering":false,
+		"language"	: { url: 'vendor/datatables-i18n/i18n/pt-BR.json' },
+		"bFilter" : true,
+		"searching" : true,
+		"order": [[1, 'asc']]
 	};
 })(app, document, jQuery, toastr, BootstrapDialog);
   
