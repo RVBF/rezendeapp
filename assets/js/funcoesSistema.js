@@ -91,6 +91,15 @@
 			});
 		};
 
+		window.erro = function erro( jqXHR, textStatus, errorThrown ){
+			toastr.error(jqXHR.responseText);
+		};
+
+		var sucesso = function sucesso( data, textStatus, jqXHR ) {
+			toastr.success(jqXHR.responseText);
+		};
+
+
 		$(".categoria_link").on('click', function(event){
 			event.preventDefault();
 			router.navigate('/categorias');

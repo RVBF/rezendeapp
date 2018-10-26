@@ -79,6 +79,7 @@ var app = {
 		"processing":true,
 		"serverSide":true,
 		"destroy": true,
+		"select": true,
 		"ajax" :{
 			 "type": "POST"
 		},

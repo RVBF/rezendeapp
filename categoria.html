@@ -1,24 +1,61 @@
+<div class="card">
+    <div class="card-header  bg-secondary text-white">Categorias</div>
 
-    <div class="col-xs-12 col-sm-12 col-md-12 col-sm-12 col-md-12">
-        <table class="table table-striped table-bordered display responsive" style="width:100%" id="categoria" >
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Nome</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td></td><td></td></tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th>Id</th>
-                    <th>Nome</th>
-                </tr>
-            </tfoot>
-        </table>
+    <div class="card bg-light text-dark">
+        <div class="card-body">
+            <button type="button" class="btn btn-primary" id="cadastrar"><i class="fas fa-plus"></i></button>
+            <button type="button" class="btn btn-warning" id="editar"><i class="far fa-edit"></i></button>
+            <button type="button" class="btn btn-danger" id="remover"><i class="far fa-trash-alt"></i></button>                    
+        </div>
     </div>
+
+    <div class="card" hidden="hidden">
+        <div class="card-body">
+            <div class="col-xs-12  col-sm-12 col-md-12">
+                <form class="form-horizontal " id="categoria_form">
+                    <input type="hidden" id="id" name ="id" />
+                    
+                    <div class="row form-row">
+                        <div class="col-xs-11 col-md-11 col-sm-11 col-9">
+                            <label for="titulo">Título</label>
+                            <input type="text" class="form-control" id="titulo" name="titulo" required>
+                        </div>
+
+                        <div class="col-xs-1 col-md-1 col-sm-1 col-3 button_add">
+                            <button type="button" class="btn btn-success"><i class="fas fa-check"></i></i></button>
+                            <button type="button" class="btn btn-default"><i class="fas fa-sign-out-alt"></i></button>
+                        </div>
+                    </div>  
+                </form>           
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body" id="painel_listagem">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <table class="table table-striped table-bordered" id="categoria" >
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Título</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td></td><td></td></tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Id</th>
+                        <th>Título</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div> 
+    </div> 
+</div>
 
 <script type="text/javascript" src="assets/js/categoria/categoria.serv.js"></script>
 <script type="text/javascript" src="assets/js/categoria/categoria.list.ctrl.js"></script>
 <script type="text/javascript" src="assets/js/categoria/categoria.list.cfg.js"></script>
+<script type="text/javascript" src="assets/js/categoria/categoria.form.cfg.js"></script>
+<script type="text/javascript" src="assets/js/categoria/categoria.form.cfg.js"></script>
