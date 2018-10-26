@@ -31,6 +31,7 @@ ul {
 
 .header-top-area, .footer-copyright-area {
     background:#00a99e;
+    padding: 0px !important
 }
 
 .footer-copyright-area {
@@ -365,14 +366,23 @@ ul.rezende-menu-wrap li a {
     text-align: right;
 }
 
-#app{
-    margin-top : 5em; 
-}
-
 #app th {
 	text-align: center !important;
 }
 
 #app td {
 	text-align: center !important;
+}
+
+#categoria_form .button_add {
+    padding-top: 26px;
+}
+
+#painel_listagem.card-body {
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+ .selected{
+    background-color : #747a84 !important;
 }

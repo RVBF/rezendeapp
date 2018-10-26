@@ -51,6 +51,13 @@
  			_tabela.ajax.reload();
 		};
 
+		_this.remover = function remover(event){
+            event.preventDefault();
+            var obj;
+            servicoCategoria.remover(obj.id).done(sucesso).fail(erro);
+		}; // remover
+
+
 		_this.visualizar = function visualizar(){
 			var objeto = _tabela.row($(this).parent(' td').parent('tr')).data();
 			router.navigate('/categoria/visualizar/' +  objeto.id + '/');
