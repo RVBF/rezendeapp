@@ -379,8 +379,8 @@ ul.rezende-menu-wrap li a {
 }
 
 #painel_listagem.card-body {
-    padding-right: 1rem;
-    padding-left: 1rem;
+    padding-right: 1rem !important;
+    padding-left: 1rem !important;
 }
 
  .selected{
