@@ -79,7 +79,7 @@ a.meanmenu-reveal{display:none}
 .mean-container .mean-bar,.mean-container .mean-bar *{-webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box}
 .mean-remove{display:none!important}
 .mean-container .mean-bar::after {
-  color: #ffffff;
+  color: #333;
   content: "MENU";
   font-size: 21px;
   left: 5%;
