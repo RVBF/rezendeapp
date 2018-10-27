@@ -3,8 +3,9 @@
   <head>
       <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
       <title>RezendeApp</title>
+      <link rel="stylesheet" type="text/css" href="assets/styles/estilo.css">
       <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900" rel="stylesheet">
       <link rel="stylesheet" href="assets/styles/main.css">
       <link rel="stylesheet" type="text/css" href="vendor/font-awesome/web-fonts-with-css/css/fontawesome-all.css">
@@ -18,7 +19,6 @@
       <link rel="stylesheet" type="text/css" href="vendor/datatables.net-responsive-bs4/css/responsive.bootstrap4.css">
       <link rel="stylesheet" type="text/css" href="vendor/datatables.net-select-dt/css/select.dataTables.min.css">
 
-
       <link rel="stylesheet" type="text/css" href="vendor/bootstrap3-dialog/dist/css/bootstrap-dialog.min.css">
       <link rel="stylesheet" type="text/css" href="vendor/toastr/toastr.min.css">
 
@@ -26,7 +26,6 @@
       <link rel="stylesheet" type="text/css" href="assets/styles/meanmenu.min.css">
       <link rel="stylesheet" type="text/css" href="assets/styles/animate.css">
       <link rel="stylesheet" type="text/css" href="assets/styles/normalize.css">
-      <link rel="stylesheet" type="text/css" href="assets/styles/estilo.css">
       <link rel="stylesheet" type="text/css" href="assets/styles/responsive.css">
 
 
@@ -40,98 +39,93 @@
       <link rel="apple-touch-icon" href="assets/images/icons/Logo_Rezende_Icone_152x152.png">
       <meta name="msapplication-TileImage" content="assets/images/icons/Logo_Rezende_Icone_144x144.png">
       <meta name="msapplication-TileColor" content="#f9f9f9">
+      <meta name="theme-color" content="#f9f9f9">
+
+
   </head>
 
   <body>
     <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 col-12">
-            <div class="header-top-area">
-                <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 col-12">
-                    <div class="logo-area">
-                        <a href="#"><img src="assets/images/LogoRezende_CorelDraw_App_Branco.png"></a>
-                    </div>
-                </div>
+        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 col-12 header-top-area">
+            <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 col-12 logo-area">
+                <a href="#"><img src="assets/images/LogoRezende_CorelDraw_App_Branco.jpg"></a>
             </div>
         </div>        
     </div>
 
-
     <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 mobile-menu-area">
-            <div class="mobile-menu">
-                <nav id="dropdown">
-                    <ul class="mobile-menu-nav">
-                        <li>
-                            <a data-toggle="collapse"  href="#">Início</a>
-                            
-                            <ul class="collapse dropdown-header-top">
-                                <li><a href="index.html">Exemplo</a></li>
-                            </ul>
-                        </li>
+        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 mobile-menu-area mobile-menu">
+            <nav id="dropdown">
+                <ul class="mobile-menu-nav">
+                    <li>
+                        <a data-toggle="collapse"  href="#">Início</a>
                         
-                        <li>
-                            <a data-toggle="collapse" data-target="#demoevent" href="#">CheckList</a>
+                        <ul class="collapse dropdown-header-top">
+                            <li><a href="index.html">Exemplo</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li>
+                        <a data-toggle="collapse" data-target="#demoevent" href="#">CheckList</a>
 
-                            <ul id="demoevent" class="collapse dropdown-header-top">
-                                <li>
-                                    <a href="categoria.html" class="categoria_link">Categoria</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+                        <ul id="demoevent" class="collapse dropdown-header-top">
+                            <li>
+                                <a href="categoria.html" class="categoria_link">Categoria</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 
     <div class="main-menu-area">
         <div class="container">
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    
-                    <ul class="nav nav-tabs rezende-menu-wrap menu-it-icon-pro">
-                        <li class="">
-                        <a data-toggle="tab" href="#inicio" aria-expanded="false"><i class="rezende-icon fas fa-home"></i> Início</a>
-                        </li>
-                        
-                        <li class="">
-                            <a data-toggle="tab" href="#tarefa" aria-expanded="false"><i class="rezende-icon fas fa-tasks"></i>Tarefa</a>
-                        </li>
-                        
-                        <li class="">
-                                <a data-toggle="tab" href="#plano_acao" aria-expanded="false"><i class="rezende-icon fas fa-clipboard"></i>Plano de Ação</a>
-                        </li>
-                        
-                        <li class="">
-                            <a data-toggle="tab" href="#config" aria-expanded="false"><i class="rezende-icon fas fa-cog"></i>Configuração</a>
-                        </li>
-
-                        <li class="">
-                            <a data-toggle="tab" href="#opc_user" aria-expanded="false"><i class="rezende-icon fas fa-sign-out-alt"></i>Opções de usuário</a>
-                        </li>
-                    </ul>
-
-                   <div class="tab-content custom-menu-content">
-                        <div id="inicio" class="tab-pane notika-tab-menu-bg animated flipInX">
-                            <ul class="notika-main-menu-dropdown">
-                                <li><a href="index.html">Exemple</a>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <ul class="nav nav-tabs rezende-menu-wrap menu-it-icon-pro">
+                                <li class="">
+                                <a data-toggle="tab" href="#inicio" aria-expanded="false"><i class="rezende-icon fas fa-home"></i> Início</a>
+                                </li>
+                                
+                                <li class="">
+                                    <a data-toggle="tab" href="#tarefa" aria-expanded="false"><i class="rezende-icon fas fa-tasks"></i>Tarefa</a>
+                                </li>
+                                
+                                <li class="">
+                                        <a data-toggle="tab" href="#plano_acao" aria-expanded="false"><i class="rezende-icon fas fa-clipboard"></i>Plano de Ação</a>
+                                </li>
+                                
+                                <li class="">
+                                    <a data-toggle="tab" href="#config" aria-expanded="false"><i class="rezende-icon fas fa-cog"></i>Configuração</a>
+                                </li>
+                
+                                <li class="">
+                                    <a data-toggle="tab" href="#opc_user" aria-expanded="false"><i class="rezende-icon fas fa-sign-out-alt"></i>Opções de usuário</a>
                                 </li>
                             </ul>
-                        </div>
-                        
-                        <div id="tarefa" class="tab-pane notika-tab-menu-bg animated flipInX">
-                            <ul class="notika-main-menu-dropdown">
-                                <li><a href="categoria.html" class="categoria_link">Categoria</a></li>
-                            </ul>
-                        </div>
+                
+                            <div class="tab-content custom-menu-content">
+                                <div id="inicio" class="tab-pane notika-tab-menu-bg animated flipInX">
+                                    <ul class="notika-main-menu-dropdown">
+                                        <li><a href="index.html">Exemple</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <div id="tarefa" class="tab-pane notika-tab-menu-bg animated flipInX">
+                                    <ul class="notika-main-menu-dropdown">
+                                        <li><a href="categoria.html" class="categoria_link">Categoria</a></li>
+                                    </ul>
+                                </div>
+                            </div>
                     </div>
-                </div>
             </div>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12">
+        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 body_app">
             <div id="app" ></div>
         </div>
     </div>

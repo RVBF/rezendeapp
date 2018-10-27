@@ -39,7 +39,7 @@ ul {
 }
 
 .logo-area {
-    padding: 12px 0px;
+    padding: 12px 30px;
 }
 
 .logo-area img{
@@ -384,5 +384,9 @@ ul.rezende-menu-wrap li a {
 }
 
  .selected{
-    background-color : #747a84 !important;
+    background-color : #00a99e !important;
+}
+
+.body_app {
+    padding: 0px !important;
 }
