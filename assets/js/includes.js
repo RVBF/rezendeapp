@@ -84,7 +84,7 @@
 	dependenciasCSS.push({ url :'assets/styles/normalize.css' });
 	dependenciasCSS.push({ url :'assets/styles/responsive.css' });
 
-	dependenciasCSS.push({ url : 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900' });
+	// dependenciasCSS.push({ url : 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900' });
 	dependenciasCSS.push({ url : 'assets/styles/main.css' });
 	dependenciasCSS.push({ url : 'vendor/font-awesome/web-fonts-with-css/css/fontawesome-all.css' });
 	dependenciasCSS.push({ url : 'vendor/bootstrap/dist/css/bootstrap.css' });

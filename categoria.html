@@ -3,9 +3,14 @@
 
     <div class="card bg-light text-dark">
         <div class="card-body">
-            <button type="button" class="btn btn-primary" id="cadastrar"><i class="fas fa-plus"></i></button>
-            <button type="button" class="btn btn-warning" id="editar"><i class="far fa-edit"></i></button>
-            <button type="button" class="btn btn-danger" id="remover"><i class="far fa-trash-alt"></i></button>                    
+            <div class="row">
+                <div class="col-md-12 col-sm-12 col-xs-12 col-12">
+                    <button aria-hidden="true" role="presentation" type="button" aria-label="cadastrar" class="btn btn-primary" id="cadastrar"><i class="fas fa-plus"></i></button>
+                    <button aria-hidden="true" role="presentation" type="button" aria-label="editar" class="btn btn-warning" id="editar"><i class="far fa-edit"></i></button>
+                    <button aria-hidden="true" role="presentation" type="button" aria-label="remover" class="btn btn-danger" id="remover"><i class="far fa-trash-alt"></i></button> 
+                </div>
+            </div>
+                               
         </div>
     </div>
 
@@ -53,6 +58,15 @@
         </div> 
     </div> 
 </div>
+<script>
+    $(document).ready(function()
+	{
+		var servicoCategoria = new app.ServicoCategoria();
 
-<script type="text/javascript" src="assets/js/categoria/categoria.list.cfg.js"></script>
-<script type="text/javascript" src="assets/js/categoria/categoria.form.cfg.js"></script>
+        var controladoraCategoria = new app.ControladoraListagemCategoria(servicoCategoria);
+        var controladoraFormCategoria = new app.ControladoraFormCategoria(servicoCategoria)
+
+        controladoraCategoria.configurar();
+ 		controladoraFormCategoria.configurar();
+	}); // ready
+</script>
