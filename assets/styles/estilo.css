@@ -39,7 +39,7 @@ ul {
 }
 
 .logo-area {
-    padding: 12px 30px;
+    padding: 12px 30px !important;
 }
 
 .logo-area img{
@@ -390,4 +390,12 @@ ul.rezende-menu-wrap li a {
 .body_app {
     padding-left: 0px !important;
     padding-right: 0px !important;
+}
+
+.page-item.active .page-link{
+    color: #100e0e!important;
+}
+
+.page-link {
+    color: #005dc0 !important;
 }
