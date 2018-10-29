@@ -42,10 +42,10 @@
 			return objeto;
 		};
 
-		_this.cadastrar = function cadastrar()
-		{
-			router.navigate('/categoria/cadastrar/');
-		}
+		_this.cadastrar = function cadastrar() {
+			var ctrlFormulario = new app.ControladoraFormCategoria(servicoCategoria, _this);
+			ctrlFormulario.configurar();
+		};
 
 		_this.atualizar = function atualizar(){
  			_tabela.ajax.reload();
@@ -67,8 +67,8 @@
 		_this.configurar = function configurar()
 		{
 			_tabela = _this.idTabela.DataTable(_this.opcoesDaTabela());
-			_this.botaoCadastrar.click(_this.cadastrar);
-			_this.botaoAtualizar.click(_this.atualizar);
+			_this.botaoCadastrar.on('click',_this.cadastrar);
+			_this.botaoAtualizar.on('click',_this.atualizar);
 		};
 	} // ControladoraListagemCategoria
 

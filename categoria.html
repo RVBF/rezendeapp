@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <div class="card" hidden="hidden">
+    <div class="card desabilitado d-none">
         <div class="card-body">
             <div class="col-xs-12  col-sm-12 col-md-12">
                 <form class="form-horizontal " id="categoria_form">
@@ -27,8 +27,8 @@
                         </div>
 
                         <div class="col-xs-1 col-md-1 col-sm-1 col-3 button_add">
-                            <button type="button" class="btn btn-success"><i class="fas fa-check"></i></i></button>
-                            <button type="button" class="btn btn-default"><i class="fas fa-sign-out-alt"></i></button>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-check"></i></i></button>
+                            <button type="button" class="btn btn-default" id="cancelar_edicao"><i class="fas fa-sign-out-alt"></i></button>
                         </div>
                     </div>  
                 </form>           
@@ -63,10 +63,8 @@
 	{
 		var servicoCategoria = new app.ServicoCategoria();
 
-        var controladoraCategoria = new app.ControladoraListagemCategoria(servicoCategoria);
-        var controladoraFormCategoria = new app.ControladoraFormCategoria(servicoCategoria)
+        var controladoraListagemCategoria = new app.ControladoraListagemCategoria(servicoCategoria);
 
-        controladoraCategoria.configurar();
- 		controladoraFormCategoria.configurar();
-	}); // ready
+        controladoraListagemCategoria.configurar();
+	});
 </script>

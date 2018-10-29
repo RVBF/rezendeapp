@@ -15,6 +15,19 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 	function __construct(){}
 
 	function adicionar(&$obj) {
+		try {	
+			$id = Db::table(self::TABELA)->insertGetId(
+				['titulo' => $obj->getTitulo()]
+			);
+			
+			$obj->setId($id);
+
+			return $obj;
+		}
+		catch (\Exception $e)
+		{
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		}
 	}
 
 	function remover($id) {
@@ -30,8 +43,7 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 	 * @inheritDoc
 	 */
 	function todos($limite = 0, $pulo = 0) {
-		try
-		{	
+		try {	
 			$categorias = Db::table(self::TABELA)->orderBy('titulo', 'DESC')->offset($limite)->limit($pulo)->get();
 			$categoriasObjects = [];
 

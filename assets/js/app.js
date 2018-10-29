@@ -123,6 +123,34 @@ var app = {
 		"order": [[1, 'asc']]
 	};
 
+	$.fn.extend({
+		desabilitar: function (status) {
+			$(this).find("*").each(function(){
+				$(this).prop('disabled', status);
+			});
+		}
+	});
+
+
+	function iniciarFuncoesPadroesSistema(event)
+	{
+		var evento = event;
+		if(typeof(evento) != 'undefined')
+		{
+			$(evento.target).find('.desabilitado').each(function(i) {
+				$(this).desabilitar(true)
+			});
+		}
+	}
+
+	var bodyEvento = {target: 'body'};
+	iniciarFuncoesPadroesSistema(bodyEvento);
+
+	$('body').on('DOMNodeInserted', '#app',function(evento)
+	{
+		iniciarFuncoesPadroesSistema(evento);
+	});
+
 	$(document).ready(function()
 	{
 		window.validarSeONavegadorSuporta  = function validarSeONavegadorSuporta() {
@@ -133,40 +161,6 @@ var app = {
 			}
 		};
 
-		window.converterEmFloat = function converterEmFloat(moeda) {
-			moeda = moeda.replace(".","");
-
-			moeda = moeda.replace(",",".");
-
-			return parseFloat(moeda);
-		};
-
-		window.converterEmMoeda = function converterEmMoeda(numero, casasDecimais) {
-			if(casasDecimais == undefined)
-			{
-				var casasDecimais = 2;
-			}
-
-			var number = parseFloat(numero).toFixed(casasDecimais);
-
-			numero += '';
-
-			numero = number.replace(".", ",");
-			return numero;
-		};
-
-		window.desabilitarFormulario = function desabilitarFormulario(status = true) {
-			$('form input,select,textarea,checkbox').each(function(){
-				$(this).prop('disabled', status);
-			});
-		};
-
-		window.desabilitarBotoesDeFormulario = function desabilitarBotoesDeFormulario(status = true) {
-			$('button').each(function(){
-				$(this).prop('disabled', status);
-			});
-        };
-        
 		window.retornarInteiroEmStrings = function retornarInteiroEmStrings(string) {
 			var numero = string.replace(/[^0-9]/g,'');
 			return parseInt(numero);
@@ -214,7 +208,6 @@ var app = {
 		var sucesso = function sucesso( data, textStatus, jqXHR ) {
 			toastr.success(jqXHR.responseText);
 		};
-
 
 		$(".categoria_link").on('click', function(event){
 			event.preventDefault();
