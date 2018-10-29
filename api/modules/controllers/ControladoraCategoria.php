@@ -1,6 +1,8 @@
 <?php
 use phputil\datatables\DataTablesRequest;
 use phputil\datatables\DataTablesResponse;
+use Symfony\Component\Validator\Validation as Validacao;
+use \phputil\JSON;
 
 /**
  * Controladora de Categoria
@@ -13,14 +15,12 @@ class ControladoraCategoria {
 	private $params;
 	private $colecaoCategoria;
 	
-	function __construct($params)
-	{
+	function __construct($params) {
 		$this->params = $params;
 		$this->colecaoCategoria = Dice::instance()->create('ColecaoCategoria');
 	}
 
-	function todos()
-	{
+	function todos() {
 		$dtr = new DataTablesRequest($this->params);
 		$contagem = 0;
 		$objetos = [];
@@ -47,6 +47,28 @@ class ControladoraCategoria {
 
 		return $conteudo;
 	}
+
+	function adicionar() {
+		$categoria = new Categoria(
+			0,
+			$this->params['titulo']
+		);
+
+		$resposta = [];
+		
+		try {
+			$categoria = $this->colecaoCategoria->adicionar($categoria);
+
+			$resposta = ['categoria'=> json_encode($categoria), 'status' => true, 'mensagem'=> 'Categoria cadastrada com sucesso.']; 
+		}
+		catch (\Exception $e)
+		{
+			throw new Exception($e->getMessage());
+		}
+
+		return $resposta;
+	}
+
 }
 
 ?>

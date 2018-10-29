@@ -8,12 +8,13 @@
 {
 	'use strict';
 
-	function ControladoraFormCategoria(servicoCategoria)
-	{ // Model
+	function ControladoraFormCategoria(servicoCategoria, controladoraListagemCategoria) {
 		var _this = this;
 
-		_this.formulario = null;
+		_this.formulario = $('#categoria_form');
 		_this.alterar = false;
+		_this.botaoSubmissao = $('#salvar')
+		_this.cancelarModoEdicao = $('#cancelar_edicao')
 
 		// Cria as opções de validação do formulário
 		var criarOpcoesValidacao = function criarOpcoesValidacao()
@@ -41,8 +42,7 @@
 				// Habilita/desabilita os controles
 				var controlesHabilitados = function controlesHabilitados(b)
 				{
-					desabilitarFormulario(!b);
-					desabilitarBotoesDeFormulario(!b);
+					_this.formulario.desabilitar(!b);
 				};
 
 				controlesHabilitados(false);
@@ -58,28 +58,9 @@
 					controlesHabilitados(true);
 				};
 
-				var sucesso = function sucesso(data, textStatus, jqXHR)
-				{
-					toastr.success('Salvo');
-
-					var nomeCategoria = _this.formulario.find('#nome');
-					_this.modal.find('form')[0].reset();
-					fecharModal();
-
-					var controladraMedicamentoPrecificado = new  app.ControladoraFormMedicamentoPrecificado(
-						undefined,
-						undefined,
-						undefined,
-						undefined,
-						servicoCategoria
-					);
-
-					controladraMedicamentoPrecificado.popularSelectCategoria();
-				};
-
 				var obj = _this.conteudo();
 				var jqXHR = _this.alterar ? servicoCategoria.atualizar(obj) : servicoCategoria.adicionar(obj);
-				jqXHR.done(sucesso).fail(erro).always(terminado);
+				jqXHR.done(window.sucesso).fail(window.erro).always(terminado);
 			}; // submitHandler
 
 			return opcoes;
@@ -94,10 +75,29 @@
 			);
 		};
 
-		_this.iniciarFormularioCategoria = function iniciarFormularioCategoria(){
-
-			_this.formulario.find('#tiulo').focus();
+		_this.configurarBotoes = function configurarBotoes(){
+			_this.botaoSubmissao.on('click', _this.salvar());
+			_this.cancelarModoEdicao.on('clik', _this.cancelar());
 		};
+
+		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro(){
+			_this.formulario.parents('.card').removeClass('desabilitado').desabilitar(false);
+			_this.formulario.parents('.card').removeClass('d-none');
+			_this.formulario.find('#tiulo').focus();
+			_this.configurarBotoes();
+		};
+
+		_this.definirForm = function definirForm(status) {			
+			_this.formulario.submit(false);
+			_this.alterar = status;
+
+		 	if(!_this.alterar) {
+				_this.iniciarFormularioModoCadastro();
+			}
+			else{
+				_this.iniciarFormularioModoEdicao();
+			}
+		}
 
 		// Desenha o objeto no formulário
 		_this.desenhar = function desenhar(obj) {
@@ -109,11 +109,17 @@
 		_this.salvar = function salvar(event) {
 			_this.formulario.validate(criarOpcoesValidacao());
         };
-        
+		
+		_this.cancelar = function cancelar(event) {
+			var contexto = _this.formulario.parents('.desabilitado');
+
+			contexto.removeClass('desabilitado');
+			contexto.addClass('d-none');
+		};
+
 		// Configura os eventos do formulário
-		_this.configurar = function configurar() {
-			_this.formulario = $('#Categoria_form');
-			_this.formulario.submit(false);
+		_this.configurar = function configurar(status = false) {
+			_this.definirForm(status);
 		};
 	}; // ControladoraFormCategoria
 
@@ -123,3 +129,4 @@
 })(window, app, jQuery, toastr);
 
 
+var url = window.location.href;

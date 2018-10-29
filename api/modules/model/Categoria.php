@@ -20,7 +20,7 @@ class Categoria {
        return $this->id; 
     }
 
-    public function setId(int $id){
+    public function setId($id){
         $this->id = $id;
     }
 
@@ -28,7 +28,7 @@ class Categoria {
         return $this->titulo; 
     }
  
-    public function setTitulo(String $titulo){
+    public function setTitulo($titulo){
         $this->titulo = $titulo;
     }
 }
