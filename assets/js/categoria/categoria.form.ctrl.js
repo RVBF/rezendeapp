@@ -94,9 +94,8 @@
 
 		// Desenha o objeto no formulário
 		_this.desenhar = function desenhar(obj) {
-			_obj = obj;
-			$('#id').val(obj.id);
-            $('#titulo').val(obj.titulo);
+			_this.formulario.find('#id').val(obj.id);
+            _this.formulario.find('#titulo').val(obj.titulo);
 		};
 
 		_this.salvar = function salvar() {

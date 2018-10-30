@@ -30,13 +30,38 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 		}
 	}
 
-	function remover($id) {
+	function remover($obj) {
+		try {	
+			return DB::table(self::TABELA)->where('id', $obj->getId())->delete();
+		}
+		catch (\Exception $e)
+		{
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		}
 	}
 
 	function atualizar(&$obj) {
+		try {	
+			DB::table(self::TABELA)->where('id', $obj->getId())->update(['titulo' => $obj->getTitulo()]);
+
+			return $obj;
+		}
+		catch (\Exception $e)
+		{
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		}
 	}
 
 	function comId($id){
+		try {	
+			$categoria = $this->construirObjeto(DB::table(self::TABELA)->where('id', $obj->getId())->get());
+
+			return $categoria;
+		}
+		catch (\Exception $e)
+		{
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		}
 	}
 
 	/**
