@@ -11,14 +11,13 @@
 	function ControladoraFormCategoria(servicoCategoria, controladoraListagemCategoria) {
 		var _this = this;
 
-		_this.formulario = $('#categoria_form');
 		_this.alterar = false;
+		_this.formulario = $('#categoria_form');
 		_this.botaoSubmissao = $('#salvar')
 		_this.cancelarModoEdicao = $('#cancelar_edicao')
 
 		// Cria as opções de validação do formulário
-		var criarOpcoesValidacao = function criarOpcoesValidacao()
-		{
+		var criarOpcoesValidacao = function criarOpcoesValidacao() {
 			var opcoes = {
 				rules: {
 					"titulo": {
@@ -35,59 +34,53 @@
 					}
 				}
 			};
-
 			// Irá disparar quando a validação passar, após chamar o método validate().
-			opcoes.submitHandler = function submitHandler(form)
-			{
-				// Habilita/desabilita os controles
-				var controlesHabilitados = function controlesHabilitados(b)
-				{
-					_this.formulario.desabilitar(!b);
-				};
+			opcoes.submitHandler = function submitHandler(form) {
+				_this.formulario.desabilitar(false);
 
-				controlesHabilitados(false);
 
-				var erro = function erro(jqXHR, textStatus, errorThrown)
-				{
+				var erro = function erro(jqXHR, textStatus, errorThrown) {
 					var mensagem = jqXHR.responseText;
 					_this.formulario.find('#msg').empty().append('<div class="error" >' + mensagem + '</div>');
 				};
-
-				var terminado = function terminado()
-				{
-					controlesHabilitados(true);
+				
+				var terminado = function() {
+					_this.formulario.desabilitar(true);
 				};
-
+				
 				var obj = _this.conteudo();
 				var jqXHR = _this.alterar ? servicoCategoria.atualizar(obj) : servicoCategoria.adicionar(obj);
-				jqXHR.done(window.sucesso).fail(window.erro).always(terminado);
+				jqXHR.done(window.sucessoParaFormulario).fail(window.erro).always(terminado);
 			}; // submitHandler
 
 			return opcoes;
 		};
         
 		// Obtém o conteúdo atual do form como um objeto
-		_this.conteudo = function conteudo()
-		{
+		_this.conteudo = function conteudo() {
 			return servicoCategoria.criar(
                 $('#id').val(),
                 $('#titulo').val()
 			);
 		};
 
-		_this.configurarBotoes = function configurarBotoes(){
-			_this.botaoSubmissao.on('click', _this.salvar());
-			_this.cancelarModoEdicao.on('clik', _this.cancelar());
+		_this.configurarBotoes = function configurarBotoes() {
+			_this.botaoSubmissao.on('click', _this.salvar);
+			_this.cancelarModoEdicao.on('click', _this.cancelar);
 		};
 
-		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro(){
-			_this.formulario.parents('.card').removeClass('desabilitado').desabilitar(false);
-			_this.formulario.parents('.card').removeClass('d-none');
+		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro() {
+			_this.formulario.parents('#painel_formulario').removeClass('desabilitado').desabilitar(false);
+			_this.formulario.parents('#painel_formulario').removeClass('d-none');
 			_this.formulario.find('#tiulo').focus();
 			_this.configurarBotoes();
 		};
 
-		_this.definirForm = function definirForm(status) {			
+		_this.iniciarFormularioModoEdicao = function iniciarFormularioModoEdicao() {
+			_this.iniciarFormularioModoCadastro();
+		};
+
+		_this.definirForm = function definirForm(status = false) {			
 			_this.formulario.submit(false);
 			_this.alterar = status;
 
@@ -103,18 +96,19 @@
 		_this.desenhar = function desenhar(obj) {
 			_obj = obj;
 			$('#id').val(obj.id);
-            $('#titulo').val(obj.nome);
+            $('#titulo').val(obj.titulo);
 		};
 
-		_this.salvar = function salvar(event) {
+		_this.salvar = function salvar() {
 			_this.formulario.validate(criarOpcoesValidacao());
         };
 		
 		_this.cancelar = function cancelar(event) {
-			var contexto = _this.formulario.parents('.desabilitado');
+			var contexto = _this.formulario.parents('#painel_formulario');
+			contexto.addClass('desabilitado');
 
-			contexto.removeClass('desabilitado');
 			contexto.addClass('d-none');
+			contexto.desabilitar(true);
 		};
 
 		// Configura os eventos do formulário
