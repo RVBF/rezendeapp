@@ -70,6 +70,44 @@ class ControladoraCategoria {
 		return $resposta;
 	}
 
-}
+	function atualizar() {
+		
+		$categoria = new Categoria(
+			$this->params['id'],
+			$this->params['titulo']
+		);
 
+		$resposta = [];
+		
+		try {
+			$categoria = $this->colecaoCategoria->atualizar($categoria);
+			$resposta = ['categoria'=> RTTI::getAttributes( $categoria, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria atualizada com sucesso.']; 
+		}
+		catch (\Exception $e)
+		{
+			throw new Exception($e->getMessage());
+		}
+
+		return $resposta;
+	}
+
+	function remover() {
+		$resposta = [];
+		$categoria = new Categoria(
+			$this->params['id'],
+			''
+		);
+		try {
+			Debuger::printr($this->params);
+			$status = $this->colecaoCategoria->remover($categoria);
+			$resposta = ['status' => true, 'mensagem'=> 'Categoria removida com sucesso.']; 
+		}
+		catch (\Exception $e)
+		{
+			throw new Exception($e->getMessage());
+		}
+
+		return $resposta;
+	}
+}
 ?>

@@ -14,6 +14,7 @@
 		var _tabela = null;
 		_this.botaoCadastrar = $('#cadastrar');
 		_this.botaoEditar = $('#editar');
+		_this.botaoRemover = $('#remover');
 		_this.botaoAtualizar = $('#atualizar');
 		_this.idTabela = $('#categoria');
 
@@ -35,11 +36,6 @@
 				}
 			];
 
-			objeto.fnDrawCallback = function(settings)
-			{
-				// eventos da tabela
-			};
-
 			return objeto;
 		};
 
@@ -49,9 +45,12 @@
 		};
 
 		_this.editar = function editar() {
+			
+			var objeto = _tabela.row('.selected').data();
 			var modoEdicao = true;
 			var ctrlFormulario = new app.ControladoraFormCategoria(servicoCategoria, _this);
 			ctrlFormulario.configurar(modoEdicao);
+			ctrlFormulario.desenhar(objeto);
 		};
 
 		_this.atualizar = function atualizar(){
@@ -59,9 +58,9 @@
 		};
 
 		_this.remover = function remover(event){
-            event.preventDefault();
-            var obj;
-            servicoCategoria.remover(obj.id).done(sucesso).fail(erro);
+			var objeto = _tabela.row('.selected').data();
+			console.log(objeto);
+            servicoCategoria.remover(objeto.id).done(window.sucesso).fail(window.erro);
 		}; // remover
 
 
@@ -71,12 +70,27 @@
 
 		};
 
-		_this.configurar = function configurar()
-		{
+		_this.selecionar = function selecionar() {
+			var objeto = _tabela.row('.selected').data();
+			if(objeto.id > 0){
+				$('.depende_selecao').each(function(){
+					$(this).prop('disabled', false);
+				});
+			}
+			else{
+				$('.depende_selecao').each(function(){
+					$(this).prop('disabled', true);
+				});
+			}
+		};
+		_this.configurar = function configurar() {
 			_tabela = _this.idTabela.DataTable(_this.opcoesDaTabela());
 			_this.botaoCadastrar.on('click',_this.cadastrar);
 			_this.botaoEditar.on('click', _this.editar)
 			_this.botaoAtualizar.on('click',_this.atualizar);
+			_this.botaoRemover.on('click', _this.remover)
+
+			_tabela.on('select',_this.selecionar);
 		};
 	} // ControladoraListagemCategoria
 

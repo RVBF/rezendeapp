@@ -79,7 +79,7 @@ var app = {
 		"processing":true,
 		"serverSide":true,
 		"destroy": true,
-		"select": true,
+		"select": 'single',
 		"ajax" :{
 			 "type": "POST"
 		},
@@ -211,7 +211,7 @@ var app = {
 			datatable.row.add({
 				'id' : data.categoria.id,
 				'titulo' : data.categoria.titulo
-			}).draw();
+			}).draw(false);
 
 			contexto.find('form')[0].reset();
 			contexto.desabilitar(true);
