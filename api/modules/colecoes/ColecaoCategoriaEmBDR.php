@@ -44,7 +44,7 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 	 */
 	function todos($limite = 0, $pulo = 0) {
 		try {	
-			$categorias = Db::table(self::TABELA)->orderBy('titulo', 'DESC')->offset($limite)->limit($pulo)->get();
+			$categorias = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
 			$categoriasObjects = [];
 
 			foreach ($categorias as $categoria) {
