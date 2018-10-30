@@ -87,7 +87,7 @@ var app = {
 		"lengthMenu":[ [10, 25, 50, 100], [10, 25, 50,100] ],
 		"paging":true,
 		"searching":false,
-		"ordering":false,
+		"ordering":true,
 		"language"	: {
 			"sEmptyTable": "Nenhum registro encontrado",
 			"sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
