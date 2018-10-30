@@ -120,7 +120,7 @@ var app = {
 		},
 		"bFilter" : true,
 		"searching" : true,
-		"order": [[1, 'asc']]
+		"order": [[0, 'desc']]
 	};
 
 	$.fn.extend({
@@ -205,8 +205,20 @@ var app = {
 			toastr.error(jqXHR.responseText);
 		};
 
-		var sucesso = function sucesso( data, textStatus, jqXHR ) {
-			toastr.success(jqXHR.responseText);
+		window.sucessoParaFormulario = function sucessoParaFormulario( data, textStatus, jqXHR ) {
+			var datatable = $('body').find('.dataTable').DataTable();
+			var contexto = $('body').find('#painel_formulario');
+			datatable.row.add({
+				'id' : data.categoria.id,
+				'titulo' : data.categoria.titulo
+			}).draw();
+
+			contexto.find('form')[0].reset();
+			contexto.desabilitar(true);
+			contexto.addClass('desabilitado');
+			contexto.addClass('d-none');
+
+			toastr.success(data.mensagem);
 		};
 
 		$(".categoria_link").on('click', function(event){

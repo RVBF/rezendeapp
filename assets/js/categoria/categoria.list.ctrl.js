@@ -13,6 +13,7 @@
 		var _cont = 0;
 		var _tabela = null;
 		_this.botaoCadastrar = $('#cadastrar');
+		_this.botaoEditar = $('#editar');
 		_this.botaoAtualizar = $('#atualizar');
 		_this.idTabela = $('#categoria');
 
@@ -47,6 +48,12 @@
 			ctrlFormulario.configurar();
 		};
 
+		_this.editar = function editar() {
+			var modoEdicao = true;
+			var ctrlFormulario = new app.ControladoraFormCategoria(servicoCategoria, _this);
+			ctrlFormulario.configurar(modoEdicao);
+		};
+
 		_this.atualizar = function atualizar(){
  			_tabela.ajax.reload();
 		};
@@ -68,6 +75,7 @@
 		{
 			_tabela = _this.idTabela.DataTable(_this.opcoesDaTabela());
 			_this.botaoCadastrar.on('click',_this.cadastrar);
+			_this.botaoEditar.on('click', _this.editar)
 			_this.botaoAtualizar.on('click',_this.atualizar);
 		};
 	} // ControladoraListagemCategoria

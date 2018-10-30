@@ -3,6 +3,8 @@ use phputil\datatables\DataTablesRequest;
 use phputil\datatables\DataTablesResponse;
 use Symfony\Component\Validator\Validation as Validacao;
 use \phputil\JSON;
+use \phputil\RTTI;
+
 
 /**
  * Controladora de Categoria
@@ -58,8 +60,7 @@ class ControladoraCategoria {
 		
 		try {
 			$categoria = $this->colecaoCategoria->adicionar($categoria);
-
-			$resposta = ['categoria'=> json_encode($categoria), 'status' => true, 'mensagem'=> 'Categoria cadastrada com sucesso.']; 
+			$resposta = ['categoria'=> RTTI::getAttributes( $categoria, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria cadastrada com sucesso.']; 
 		}
 		catch (\Exception $e)
 		{
