@@ -30,9 +30,9 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 		}
 	}
 
-	function remover($obj) {
+	function remover($id) {
 		try {	
-			return DB::table(self::TABELA)->where('id', $obj->getId())->delete();
+			return DB::table(self::TABELA)->where('id', $id)->delete();
 		}
 		catch (\Exception $e)
 		{

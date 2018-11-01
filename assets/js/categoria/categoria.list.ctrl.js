@@ -59,8 +59,12 @@
 
 		_this.remover = function remover(event){
 			var objeto = _tabela.row('.selected').data();
-			console.log(objeto);
-            servicoCategoria.remover(objeto.id).done(window.sucesso).fail(window.erro);
+			BootstrapDialog.show({
+				message: 'Hi Apple!'
+			});
+			
+			// servicoCategoria.remover(objeto.id).done(window.sucessoPadrao).fail(window.erro);
+
 		}; // remover
 
 

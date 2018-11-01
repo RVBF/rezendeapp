@@ -30,15 +30,15 @@ var app = {
 	}
 
 	// Opções para diálogos
-	BootstrapDialog.DEFAULT_TEXTS[ BootstrapDialog.TYPE_DEFAULT ] = 'Informação';
-	BootstrapDialog.DEFAULT_TEXTS[ BootstrapDialog.TYPE_INFO ] = 'Informação';
-	BootstrapDialog.DEFAULT_TEXTS[ BootstrapDialog.TYPE_PRIMARY ] = 'Informação';
-	BootstrapDialog.DEFAULT_TEXTS[ BootstrapDialog.TYPE_SUCCESS ] = 'Sucesso';
-	BootstrapDialog.DEFAULT_TEXTS[ BootstrapDialog.TYPE_WARNING ] = 'Aviso';
-	BootstrapDialog.DEFAULT_TEXTS[ BootstrapDialog.TYPE_DANGER ] = 'Erro';
-	BootstrapDialog.DEFAULT_TEXTS[ 'OK' ] = 'OK';
-	BootstrapDialog.DEFAULT_TEXTS[ 'CANCEL' ] = 'Cancelar';
-	BootstrapDialog.DEFAULT_TEXTS[ 'CONFIRM' ] = 'Confirmação';
+	BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_DEFAULT] = 'Informação';
+	BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_INFO] = 'Informação';
+	BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_PRIMARY] = 'Informação';
+	BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_SUCCESS] = 'Sucesso';
+	BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_WARNING] = 'Aviso';
+	BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_DANGER] = 'Erro';
+	BootstrapDialog.DEFAULT_TEXTS['OK'] = 'OK';
+	BootstrapDialog.DEFAULT_TEXTS['CANCEL'] = 'Cancelar';
+	BootstrapDialog.DEFAULT_TEXTS['CONFIRM'] = 'Confirmação';
 
 	$.validator.setDefaults({
 		ignore: [],
@@ -84,7 +84,7 @@ var app = {
 			 "type": "POST"
 		},
 		"pageLength": 10,
-		"lengthMenu":[ [10, 25, 50, 100], [10, 25, 50,100] ],
+		"lengthMenu":[[10, 25, 50, 100], [10, 25, 50,100] ],
 		"paging":true,
 		"searching":false,
 		"ordering":true,
@@ -205,6 +205,13 @@ var app = {
 			toastr.error(jqXHR.responseText);
 		};
 
+		window.sucessoPadrao = function sucessoPadrao(data, textStatus, jqXHR){
+			console.log(data);
+			if(data.status){
+				toastr.success(data.mensagem);
+			}
+		};
+
 		window.sucessoParaFormulario = function sucessoParaFormulario( data, textStatus, jqXHR ) {
 			var datatable = $('body').find('.dataTable').DataTable();
 			var contexto = $('body').find('#painel_formulario');
@@ -218,7 +225,7 @@ var app = {
 			contexto.addClass('desabilitado');
 			contexto.addClass('d-none');
 
-			toastr.success(data.mensagem);
+			window.sucessoPadrao();
 		};
 
 		$(".categoria_link").on('click', function(event){

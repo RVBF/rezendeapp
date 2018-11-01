@@ -35,7 +35,7 @@ $app->put('/categorias/{id}', function(Request $req,  Response $res, $args = [])
 $app->delete('/categorias/{id}', function(Request $req,  Response $res, $args = []) use ($app) {
 	$this->logger->addInfo("Acessando o cadastro de categorias");
 	$ctrl = new ControladoraCategoria($req->getParsedBody());
-	$categoriaResponse = $ctrl->remover();
+	$categoriaResponse = $ctrl->remover($args['id']);
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($categoriaResponse)));
 
 });
