@@ -91,15 +91,12 @@ class ControladoraCategoria {
 		return $resposta;
 	}
 
-	function remover() {
+	function remover($id) {
 		$resposta = [];
-		$categoria = new Categoria(
-			$this->params['id'],
-			''
-		);
+
 		try {
-			Debuger::printr($this->params);
-			$status = $this->colecaoCategoria->remover($categoria);
+			$status = $this->colecaoCategoria->remover($id);
+			
 			$resposta = ['status' => true, 'mensagem'=> 'Categoria removida com sucesso.']; 
 		}
 		catch (\Exception $e)

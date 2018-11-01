@@ -116,7 +116,7 @@
 
 	dependenciasJavaScript.push({url : 'vendor/jquery/dist/jquery.js', async : true, onLoad : function(){
 	   loader.script('vendor/bootstrap/dist/js/bootstrap.js');
-       loader.script('vendor/bootstrap/dist/js/bootstrap.bundle.js');
+	   loader.script('vendor/bootstrap/dist/js/bootstrap.bundle.js');
        loader.script('vendor/datatables/media/js/jquery.dataTables.js');
        loader.script('vendor/datatables/media/js/dataTables.bootstrap.js');
        loader.script('vendor/datatables/media/js/dataTables.dataTables.js');
@@ -124,9 +124,10 @@
        loader.script('vendor/datatables.net-responsive-dt/js/responsive.dataTables.min.js');
        loader.script('vendor/datatables.net-select/js/dataTables.select.min.js');
        loader.script('vendor/datatables.net-select-dt/js/select.dataTables.js');
-       loader.script('vendor/toastr/toastr.min.js');
-       loader.script('vendor/jquery-validation/dist/jquery.validate.min.js');
-       loader.script('vendor/bootstrap3-dialog/dist/js/bootstrap-dialog.min.js');
+	   loader.script('vendor/toastr/toastr.min.js');
+	   loader.script('vendor/bootstrap3-dialog/dist/js/bootstrap-dialog.min.js');
+	   loader.script('vendor/jquery-validation/dist/jquery.validate.min.js');
+	   
        loader.script('vendor/grapnel/dist/grapnel.min.js');
 
         // Inicialização
