@@ -81,10 +81,11 @@
     router.get('/logout', criarRotaPara('login.html'));
 
     // router.get('/categorias', verficarLogin , criarRotaPara('categoria.html'));
-    router.get('/categorias' , criarRotaPara('categoria.html'));
+	router.get('/categorias' , criarRotaPara('categoria.html'));
+	
     // router.get('/', verficarLogin , criarRotaPara('home.html'));
     // router.get('', verficarLogin , criarRotaPara('home.html'));
-    router.get('/', criarRotaPara('home.html'));
+    router.get('/', criarRotaPara('checklist.html'));
 
 
 	// // 404

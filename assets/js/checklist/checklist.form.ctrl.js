@@ -1,5 +1,5 @@
 /**
- *  categoria.form.ctrl.js
+ *  checklist.form.ctrl.js
  *
  *  @author  Rafael Vinicius Barros Ferreira
  *	 @version 1.0
@@ -8,11 +8,11 @@
 {
 	'use strict';
 
-	function ControladoraFormCategoria(servicoCategoria, controladoraListagemCategoria) {
+	function ControladoraFormChecklist(servicoChecklist, controladoraListagemChecklist) {
 		var _this = this;
 
 		_this.alterar;
-		_this.formulario = $('#categoria_form');
+		_this.formulario = $('#checklist_form');
 		_this.botaoSubmissao = $('#salvar')
 		_this.cancelarModoEdicao = $('#cancelar_edicao')
 
@@ -49,7 +49,7 @@
 				};
 				
 				var obj = _this.conteudo();
-				var jqXHR = _this.alterar ? servicoCategoria.atualizar(obj) : servicoCategoria.adicionar(obj);
+				var jqXHR = _this.alterar ? servicoChecklist.atualizar(obj) : servicoChecklist.adicionar(obj);
 				jqXHR.done(window.sucessoParaFormulario).fail(window.erro);
 
 				if(_this.alterar){
@@ -64,7 +64,7 @@
         
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
-			return servicoCategoria.criar(
+			return servicoChecklist.criar(
                 $('#id').val(),
                 $('#titulo').val()
 			);
@@ -122,10 +122,10 @@
 		_this.configurar = function configurar(status = false) {
 			_this.definirForm(status);
 		};
-	}; // ControladoraFormCategoria
+	}; // ControladoraFormChecklist
 
 	// Registrando
-	app.ControladoraFormCategoria = ControladoraFormCategoria;
+	app.ControladoraFormChecklist = ControladoraFormChecklist;
 
 })(window, app, jQuery, toastr);
 
