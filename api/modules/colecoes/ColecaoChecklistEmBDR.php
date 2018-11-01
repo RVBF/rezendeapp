@@ -1,16 +1,16 @@
 <?php
 use Illuminate\Database\Capsule\Manager as Db;
 /**
- *	Coleção de Categoria em Banco de Dados Relacional.
+ *	Coleção de Checklist em Banco de Dados Relacional.
  *
  *  @author		Rafael Vinicius Barros Ferreira
  *	@version	0.1
  */
 
-class ColecaoCategoriaEmBDR implements ColecaoCategoria
+class ColecaoChecklistEmBDR implements Colecao
 {
 
-	const TABELA = 'categoria';
+	const TABELA = 'checklist';
 
 	function __construct(){}
 

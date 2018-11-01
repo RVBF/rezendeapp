@@ -11,6 +11,10 @@ class Categoria {
 	private $id;
     private $titulo;
 
+    const TAM_TITULO_MIM = 2;
+    const TAM_TITULO_MAX = 85;
+
+    
 	function __construct($id = 0, $titulo = '') {
 		$this->id = $id;
 		$this->titulo = $titulo;

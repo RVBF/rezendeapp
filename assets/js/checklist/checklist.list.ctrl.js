@@ -1,5 +1,5 @@
 /**
- *  categoria.list.ctrl.js
+ *  checklist.list.ctrl.js
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */
@@ -7,7 +7,7 @@
 {
 	'use strict';
 
-	function ControladoraListagemCategoria(servicoCategoria)
+	function ControladoraListagemChecklist(servicoCheckList)
 	{
 		var _this = this;
 		var _cont = 0;
@@ -16,14 +16,14 @@
 		_this.botaoEditar = $('#editar');
 		_this.botaoRemover = $('#remover');
 		_this.botaoAtualizar = $('#atualizar');
-		_this.idTabela = $('#categoria');
-		var ctrlFormulario = new app.ControladoraFormCategoria(servicoCategoria, _this);
+		_this.idTabela = $('#checklist');
+		var ctrlFormulario = new app.ControladoraFormCategoria(servicoCheckList, _this);
 
 
 		//Configura a tabela
 		_this.opcoesDaTabela = function opcoesDaTabela() {
 			var objeto = $.extend(true, {}, app.dtOptions);
-			objeto.ajax = servicoCategoria.rota();
+			objeto.ajax = servicoCheckList.rota();
 
 			objeto.columnDefs = [ {
 					data: 'id',
@@ -75,7 +75,7 @@
 						label	: '<u>S</u>im',
 						hotkey	: 'S'.charCodeAt(0),
 						action	: function(dialog){
-							servicoCategoria.remover(objeto.id).done(window.sucessoPadrao).fail(window.erro);
+							servicoCheckList.remover(objeto.id).done(window.sucessoPadrao).fail(window.erro);
 							_this.atualizar();
 							$('.depende_selecao').each(function(){
 								$(this).prop('disabled', true);
@@ -131,8 +131,8 @@
 
 			_tabela.on('select',_this.selecionar);
 		};
-	} // ControladoraListagemCategoria
+	} // ControladoraListagemChecklist
 
 	// Registrando
-	app.ControladoraListagemCategoria = ControladoraListagemCategoria;
+	app.ControladoraListagemChecklist = ControladoraListagemChecklist;
 })(window, app, jQuery, toastr, BootstrapDialog);

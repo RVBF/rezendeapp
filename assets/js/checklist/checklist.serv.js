@@ -1,5 +1,5 @@
 /**
- *  categoria.serv.js
+ *  checklist.serv.js
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */
@@ -7,23 +7,31 @@
  {
 	'use strict';
 
-	function Categoria(id, titulo) {
+	function Checklist(	id, descricao, dataLimite, dataCadastro, categoria, loja) {
 		this.id = id  || 0;
-		this.titulo = titulo  || '';
+        this.descricao = descricao  || '';
+        this.dataLimite = dataLimite  || '';
+        this.dataCadastro = dataCadastro  || '';
+        this.categoria = categoria  || '';
+        this.loja = loja  || '';
 	};
 
-	function ServicoCategoria() { // Model
+	function ServicoChecklist() { // Model
 		var _this = this;
 		// Rota no servidor
         _this.rota = function rota() {
-			return app.api + '/categorias';
+			return app.api + '/checklist';
 		};
 
 		// Cria um objeto de categoria
 		this.criar = function criar(id, titulo) {
  			return {
-				id : id  || 0,
-				titulo : titulo  || ''
+                id : id  || 0,
+                descricao : descricao  || '',
+                dataLimite : dataLimite  || '',
+                dataCadastro : dataCadastro  || '',
+                categoria : categoria  || '',
+                loja : loja  || ''
 			};
 		};
 
@@ -42,8 +50,7 @@
 			});
 		};
 
-		_this.atualizar = function atualizar(obj)
-		{
+		_this.atualizar = function atualizar(obj) {
 			return $.ajax({
 				type: "PUT",
 				url: _this.rota(),
@@ -67,7 +74,6 @@
 	}; // ServicoCategoria
 
 	// Registrando
-	app.Categoria = Categoria;
-	app.ServicoCategoria = ServicoCategoria;
-
+	app.Checklist = Checklist;
+	app.ServicoChecklist = ServicoChecklist;
 })(app, $);

@@ -7,12 +7,12 @@ use \phputil\RTTI;
 
 
 /**
- * Controladora de Categoria
+ * Controladora de Checklist
  *
  * @author	Rafael Vinicius Barros Ferreira
  * @version	0.1
  */
-class ControladoraCategoria {
+class ControladoraChecklist {
 
 	private $params;
 	private $colecaoCategoria;

@@ -6,6 +6,7 @@
       <meta name="Description" content="Author: Rafael Vinicius Barros Ferreira, Description: Software desenvolvido para Rezende Materiais de construção.">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
       <title>RezendeApp</title>
+      <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 
       <script type="text/javascript" async="false" src="assets/js/includes.js"></script>
 
@@ -26,7 +27,7 @@
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 col-12 header-top-area">
             <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 col-12 logo-area">
-                <a href="index.html" class="inicio_link"><img alt="logo rezende" src="assets/images/logoRezende.png"></a>
+                <a  class="checklist_link"><img alt="logo rezende" src="assets/images/logoRezende.png"></a>
             </div>
         </div>        
     </div>
@@ -36,15 +37,7 @@
             <nav id="dropdown">
                 <ul class="mobile-menu-nav">
                     <li>
-                        <a data-toggle="collapse"   href="index.html" class="inicio_link">Início</a>
-                        
-                        <ul class="collapse dropdown-header-top">
-                            <li><a href="index.html">Exemplo</a></li>
-                        </ul>
-                    </li>
-                    
-                    <li>
-                        <a data-toggle="collapse" data-target="#checklist">CheckList</a>
+                        <a data-toggle="collapse" data-target="#checklist" class="checklist_link">CheckList</a>
 
                         <ul class="collapse dropdown-header-top">
                             <li>
@@ -62,11 +55,7 @@
             <div class="row justify-content-center">
                 <ul class="nav nav-tabs rezende-menu-wrap menu-it-icon-pro">
                     <li class="">
-                    <a data-toggle="tab" href="#inicio" aria-expanded="false"><i class="rezende-icon fas fa-home"></i> Início</a>
-                    </li>
-                    
-                    <li class="">
-                        <a data-toggle="tab" href="#tarefa" aria-expanded="false"><i class="rezende-icon fas fa-tasks"></i>Tarefa</a>
+                        <a data-toggle="tab" href="#tarefa" aria-expanded="false" class="checklist_link"><i class="rezende-icon fas fa-tasks"></i>CheckList</a>
                     </li>
                     
                     <li class="">
@@ -84,14 +73,7 @@
             </div>
 
             <div class="row justify-content-center">
-                <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9  tab-content custom-menu-content">
-                    <div id="inicio" class="tab-pane notika-tab-menu-bg animated flipInX">
-                        <ul class="notika-main-menu-dropdown">
-                            <li><a href="index.html">Exemple</a>
-                            </li>
-                        </ul>
-                    </div>
-                    
+                <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9  tab-content custom-menu-content">                    
                     <div id="tarefa" class="tab-pane notika-tab-menu-bg animated flipInX">
                         <ul class="notika-main-menu-dropdown">
                             <li><a href="categoria.html" class="categoria_link">Categoria</a></li>
@@ -106,7 +88,7 @@
     <div class="row">
         <div id="app" class="col-md-12 col-sm-12 col-xs-12 col-lg-12 col-12 body_app">
         </div>
-    </div>
+    </div>          
 
     <noscript>
       <p>Por favor habilite o JavaScript!</p>

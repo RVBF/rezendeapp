@@ -84,10 +84,14 @@
 	dependenciasCSS.push({ url :'assets/styles/normalize.css' });
 	dependenciasCSS.push({ url :'assets/styles/responsive.css' });
 
-	// dependenciasCSS.push({ url : 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900' });
+	dependenciasCSS.push({ url : 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900' });
 	dependenciasCSS.push({ url : 'assets/styles/main.css' });
 	dependenciasCSS.push({ url : 'vendor/font-awesome/web-fonts-with-css/css/fontawesome-all.css' });
 	dependenciasCSS.push({ url : 'vendor/bootstrap/dist/css/bootstrap.css' });
+	dependenciasCSS.push({ url :'assets/styles/bootstrap.css' });
+
+	// dependenciasCSS.push({url:'assets/bootstrap-3.3.7/dist/css/bootstrap.css'});
+
 	dependenciasCSS.push({ url : 'vendor/bootstrap/dist/css/bootstrap-reboot.css' });
 	dependenciasCSS.push({ url : 'vendor/bootstrap/dist/css/bootstrap-grid.css' });
 	dependenciasCSS.push({ url : 'vendor/datatables.net-dt/css/jquery.dataTables.min.css' });
@@ -96,7 +100,7 @@
 	dependenciasCSS.push({ url : 'vendor/datatables.net-dt/css/jquery.dataTables.css' });
 	dependenciasCSS.push({ url : 'vendor/datatables.net-responsive-bs4/css/responsive.bootstrap4.css' });
 	dependenciasCSS.push({ url : 'vendor/datatables.net-select-dt/css/select.dataTables.min.css' });
-	dependenciasCSS.push({ url : 'vendor/bootstrap3-dialog/dist/css/bootstrap-dialog.min.css' });
+	dependenciasCSS.push({ url : 'vendor/bootstrap-dialog/dist/css/bootstrap-dialog.min.css' });
 	dependenciasCSS.push({ url : 'vendor/toastr/toastr.min.css' });
 
 	var loader = new window.Loader();
@@ -114,7 +118,7 @@
 
 	var dependenciasJavaScript = [];
 
-	dependenciasJavaScript.push({url : 'vendor/jquery/dist/jquery.js', async : true, onLoad : function(){
+	dependenciasJavaScript.push({url : 'vendor/jquery/dist/jquery.js', async : true, onLoad : function(dependenciasJavaScript){
 	   loader.script('vendor/bootstrap/dist/js/bootstrap.js');
 	   loader.script('vendor/bootstrap/dist/js/bootstrap.bundle.js');
        loader.script('vendor/datatables/media/js/jquery.dataTables.js');
@@ -125,21 +129,31 @@
        loader.script('vendor/datatables.net-select/js/dataTables.select.min.js');
        loader.script('vendor/datatables.net-select-dt/js/select.dataTables.js');
 	   loader.script('vendor/toastr/toastr.min.js');
-	   loader.script('vendor/bootstrap3-dialog/dist/js/bootstrap-dialog.min.js');
 	   loader.script('vendor/jquery-validation/dist/jquery.validate.min.js');
-	   
-       loader.script('vendor/grapnel/dist/grapnel.min.js');
+	   loader.script('vendor/grapnel/dist/grapnel.min.js');
+	   loader.script('assets/js/bootstrap.js');
+
+	   loader.script('vendor/bootstrap-dialog/dist/js/bootstrap-dialog.min.js');
 
         // Inicialização
         loader.script('assets/js/jquery.meanmenu.js');
-        loader.script('assets/js/main.js');
-        loader.script('assets/js/app.js');
+		loader.script('assets/js/main.js');
+		loader.script('assets/js/app.js');
 		loader.script('assets/js/rotas.js');
+		loader.script('assets/js/funcoesSistema.js');
+
+		
 		loader.script('assets/js/categoria/categoria.serv.js');
 		loader.script('assets/js/categoria/categoria.form.ctrl.js');
 		loader.script('assets/js/categoria/categoria.list.ctrl.js');
-    }});
-    
+		
+		loader.script('assets/js/checklist/checklist.serv.js');
+		loader.script('assets/js/checklist/checklist.form.ctrl.js');
+		loader.script('assets/js/checklist/checklist.list.ctrl.js');
+	}});
+	
+
+
 	var loader = new window.Loader();
 
 	dependenciasJavaScript.forEach(function(e, index, arr)

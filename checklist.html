@@ -1,5 +1,5 @@
 <div class="card">
-    <div class="card-header  bg-secondary text-white">Categorias</div>
+    <div class="card-header  bg-secondary text-white">Checklist</div>
 
     <div class="card bg-light text-dark">
         <div class="card-body">
@@ -18,7 +18,7 @@
     <div class="card desabilitado d-none" id="painel_formulario">
         <div class="card-body">
             <div class="col-xs-12  col-sm-12 col-md-12">
-                <form class="form-horizontal " id="categoria_form">
+                <form class="form-horizontal " id="checklist_form">
                     <input type="hidden" id="id" name ="id" />
                     
                     <div class="row form-row">
@@ -45,20 +45,34 @@
 
     <div class="card-body" id="painel_listagem">
         <div class="col-xs-12 col-sm-12 col-md-12">
-            <table class="table table-striped table-bordered" id="categoria" >
+            <table class="table table-striped table-bordered" id="checklist" >
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Título</th>
+                        <th>Descricão</th>
+                        <th>Data Limite</th>
+                        <th>Categoria</th>
+                        <th>Loja</th>
+
+
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td></td><td></td></tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                 </tbody>
                 <tfoot>
                     <tr>
                         <th>Id</th>
-                        <th>Título</th>
+                        <th>Descricão</th>
+                        <th>Data Limite</th>
+                        <th>Categoria</th>
+                        <th>Loja</th>
                     </tr>
                 </tfoot>
             </table>
@@ -66,12 +80,10 @@
     </div> 
 </div>
 <script>
-    $(document).ready(function()
-	{
-		var servicoCategoria = new app.ServicoCategoria();
+    $(document).ready(function() {
+		var servicoChecklist = new app.ServicoChecklist();
+        var crltChecklist = new app.ControladoraListagemChecklist(servicoChecklist);
 
-        var controladoraListagemCategoria = new app.ControladoraListagemCategoria(servicoCategoria);
-
-        controladoraListagemCategoria.configurar();
+        crltChecklist.configurar();
 	});
 </script>
