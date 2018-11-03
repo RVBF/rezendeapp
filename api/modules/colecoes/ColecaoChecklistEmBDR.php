@@ -74,14 +74,14 @@ class ColecaoChecklistEmBDR implements Colecao
 	 */
 	function todos($limite = 0, $pulo = 0) {
 		try {	
-			$categorias = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
-			$categoriasObjects = [];
-
-			foreach ($categorias as $categoria) {
-				$categoriasObjects[] =  $this->construirObjeto($categoria);
+			$checklists = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+			$checklistObjects = [];
+			// Debuger::printr($checklists);
+			foreach ($checklists as $checklist) {
+				$checklistObjects[] =  $this->construirObjeto($checklist);
 			}
 
-			return $categoriasObjects;
+			return $checklistObjects;
 		}
 		catch (\Exception $e)
 		{
@@ -90,7 +90,10 @@ class ColecaoChecklistEmBDR implements Colecao
 	}
 
 	function construirObjeto(array $row){
-		return new Categoria($row['id'],$row['titulo']);
+		$categoria = Dice::instance()->create('ColecaoCategoria')->comId($row['categoria_id']);
+
+		$checklist = new Checklist($row['id'],$row['descricao'], $row['data_limite'], $row['data_cadastro'],$categoria);
+		return $checklist;
 	}
 
     function contagem() {

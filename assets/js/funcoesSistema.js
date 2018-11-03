@@ -10,11 +10,37 @@
 			});
 
 			$(evento.target).find('.bootstrap-dialog-header').each(function(i) {
-				console.log($(this));
 				$(this).find('.bootstrap-dialog-close-button').addClass('d-none')
 			});
 
-			
+			$(evento.target).find('.data').each(function(){
+                $(this).pickadate({
+					// Strings and translations
+					monthsFull: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+					monthsShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+					weekdaysFull: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+					weekdaysShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+					showMonthsShort: undefined,
+					showWeekdaysFull: undefined,
+					// Buttons
+					today: 'Hoje',
+					clear: 'Limpar',
+					close: 'Fechar',
+
+					// Accessibility labels
+					labelMonthNext: 'Próximo Mês',
+					labelMonthPrev: 'Mês Anterior',
+					labelMonthSelect: 'Selecione o Mês',
+					labelYearSelect: 'Selecione o Ano',
+				});
+			});
+
+
+			$(evento.target).find('.hora').each(function(){
+                $(this).pickatime({
+					clear: 'Limpar'
+				});
+			});
 		}
 	}
 
@@ -46,28 +72,6 @@
 		window.definirMascarasPadroes = function definirMascarasPadroes() {
 			var mascara = new Inputmask("decimal", { radixPoint: ".", digits:2, autoGroup: true, groupSeparator: ",", groupSize: 3, rightAlign: false, negative: false });
 			mascara.mask($('.decimal'));
-
-			var optionSelct2 = {
-				width: 'copy',
-				theme: 'bootstrap',
-				minimumResultsForSearch: 1
-			};
-
-			$(".select2").select2(optionSelct2);
-
-			var optionsDatePicker = {
-				format: "dd/mm/yyyy",
-				language: 'pt-BR',
-				startView: 0,
-				startDate: "today",
-				autoclose: true,
-				todayHighlight: true,
-				todayBtn: true
-			};
-
-			$('.datepicker').datepicker(optionsDatePicker);
-
-			$('.datepicker').mask('99/99/9999');
 
 			$(".preco").maskMoney({
 				symbol:'R$ ',

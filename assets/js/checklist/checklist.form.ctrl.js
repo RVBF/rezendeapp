@@ -75,11 +75,48 @@
 			_this.cancelarModoEdicao.on('click', _this.cancelar);
 		};
 
+		_this.popularSelectFarmacia  =  function popularSelectFarmacia(valor = 0)
+		{
+			var sucesso = function (resposta)
+			{
+				console.log(resposta);
+				$("#categoria").empty();
+				$("#categoria").append($('<option>', {
+					value: '',
+					text: 'Selecione'
+				}));
+
+				$.each(resposta.data, function(i ,item) {
+					$("#categoria").append($('<option>', {
+						value: item.id,
+						text: item.titulo
+					}));
+				});
+
+				if(valor != 0  || valor > 0)
+				{
+					$("#categoria").val(valor || 0);
+				}
+			};
+
+			var erro = function(resposta)
+			{
+				var mensagem = jqXHR.responseText || 'Erro ao popular select de farmácias.';
+				toastr.error(mensagem);
+				return false;
+			}
+			var servCategoria = new app.ServicoCategoria();
+			var  jqXHR = servCategoria.todos();
+			jqXHR.done(sucesso).fail(erro);
+		}
+
+
 		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro() {
 			_this.formulario.parents('#painel_formulario').removeClass('desabilitado').desabilitar(false);
 			_this.formulario.parents('#painel_formulario').removeClass('d-none');
 			_this.formulario.find('#tiulo').focus();
 			_this.configurarBotoes();
+			_this.popularSelectFarmacia();
 		};
 
 		_this.iniciarFormularioModoEdicao = function iniciarFormularioModoEdicao() {
@@ -121,6 +158,9 @@
 		// Configura os eventos do formulário
 		_this.configurar = function configurar(status = false) {
 			_this.definirForm(status);
+			$('#data_limite').on('click', function(event){
+				event.preventDefault();
+			});
 		};
 	}; // ControladoraFormChecklist
 

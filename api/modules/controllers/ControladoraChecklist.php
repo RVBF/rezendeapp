@@ -15,11 +15,11 @@ use \phputil\RTTI;
 class ControladoraChecklist {
 
 	private $params;
-	private $colecaoCategoria;
+	private $colecaoChecklist;
 	
 	function __construct($params) {
 		$this->params = $params;
-		$this->colecaoCategoria = Dice::instance()->create('ColecaoCategoria');
+		$this->colecaoChecklist = Dice::instance()->create('Colecao');
 	}
 
 	function todos() {
@@ -27,16 +27,15 @@ class ControladoraChecklist {
 		$contagem = 0;
 		$objetos = [];
 		$erro = null;
-
 		try
 		{
-			$objetos = $this->colecaoCategoria->todos($dtr->start, $dtr->length);
+			$objetos = $this->colecaoChecklist->todos($dtr->start, $dtr->length);
 
-			$contagem = $this->colecaoCategoria->contagem();
+			$contagem = $this->colecaoChecklist->contagem();
 		}
 		catch (\Exception $e )
 		{
-			throw new Exception("Erro ao listar categorias");
+			throw new Exception("Erro ao listar checklist.");
 		}
 
 		$conteudo = new DataTablesResponse(
@@ -61,7 +60,7 @@ class ControladoraChecklist {
 		$resposta = [];
 		
 		try {
-			$categoria = $this->colecaoCategoria->adicionar($categoria);
+			$categoria = $this->colecaoChecklist->adicionar($categoria);
 			$resposta = ['categoria'=> RTTI::getAttributes( $categoria, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria cadastrada com sucesso.']; 
 		}
 		catch (\Exception $e) {
@@ -89,7 +88,7 @@ class ControladoraChecklist {
 				\ParamUtil::value($this->params, 'titulo')
 			);
 	
-			$this->colecaoCategoria->atualizar($categoria);
+			$this->colecaoChecklist->atualizar($categoria);
 			$resposta = ['categoria'=> RTTI::getAttributes( $categoria, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria atualizada com sucesso.']; 
 		}
 		catch (\Exception $e) {
@@ -103,7 +102,7 @@ class ControladoraChecklist {
 		$resposta = [];
 
 		try {
-			$status = $this->colecaoCategoria->remover($id);
+			$status = $this->colecaoChecklist->remover($id);
 			
 			$resposta = ['status' => true, 'mensagem'=> 'Categoria removida com sucesso.']; 
 		}
