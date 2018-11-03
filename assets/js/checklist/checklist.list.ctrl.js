@@ -17,7 +17,7 @@
 		_this.botaoRemover = $('#remover');
 		_this.botaoAtualizar = $('#atualizar');
 		_this.idTabela = $('#checklist');
-		var ctrlFormulario = new app.ControladoraFormCategoria(servicoCheckList, _this);
+		var ctrlFormulario = new app.ControladoraFormChecklist(servicoCheckList, _this);
 
 
 		//Configura a tabela
@@ -27,14 +27,22 @@
 
 			objeto.columnDefs = [ {
 					data: 'id',
-					targets: 0
-
-				},
-				{
-					data: 'titulo',
+					targets: 0,
+					visible : false
+				}, {
+					data: 'categoria.titulo',
 					responsivePriority: 1,
 					targets: 1
+				}, {
+					data: 'descricao',
+					responsivePriority: 1,
+					targets: 2
+				}, {
+					data: 'dataLimite',
+					responsivePriority: 2,
+					targets: 3
 				}
+
 			];
 
 			return objeto;
@@ -68,8 +76,8 @@
 
 			BootstrapDialog.show({
 				type	: BootstrapDialog.TYPE_DANGER,
-				title	: 'Deseja remover esta categoria?',
-				message	: 'Categoria' + objeto.titulo,
+				title	: 'Deseja remover esta Checklist?',
+				message	: 'Checklist: ' + objeto.descricao,
 				size	: BootstrapDialog.SIZE_LARGE,
 				buttons	: [ {
 						label	: '<u>S</u>im',

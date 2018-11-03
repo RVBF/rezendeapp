@@ -90,8 +90,6 @@
 	dependenciasCSS.push({ url : 'vendor/bootstrap/dist/css/bootstrap.css' });
 	dependenciasCSS.push({ url :'assets/styles/bootstrap.css' });
 
-	// dependenciasCSS.push({url:'assets/bootstrap-3.3.7/dist/css/bootstrap.css'});
-
 	dependenciasCSS.push({ url : 'vendor/bootstrap/dist/css/bootstrap-reboot.css' });
 	dependenciasCSS.push({ url : 'vendor/bootstrap/dist/css/bootstrap-grid.css' });
 	dependenciasCSS.push({ url : 'vendor/datatables.net-dt/css/jquery.dataTables.min.css' });
@@ -102,7 +100,12 @@
 	dependenciasCSS.push({ url : 'vendor/datatables.net-select-dt/css/select.dataTables.min.css' });
 	dependenciasCSS.push({ url : 'vendor/bootstrap-dialog/dist/css/bootstrap-dialog.min.css' });
 	dependenciasCSS.push({ url : 'vendor/toastr/toastr.min.css' });
+	dependenciasCSS.push({ url : 'vendor/pickadate/lib/compressed/themes/default.css' });
+	dependenciasCSS.push({ url : 'vendor/pickadate/lib/compressed/themes/default.time.css' });
+	dependenciasCSS.push({ url : 'vendor/pickadate/lib/compressed/themes/default.date.css' });
 
+
+	
 	var loader = new window.Loader();
 
 	dependenciasCSS.forEach(function(e, index, arr)
@@ -119,21 +122,24 @@
 	var dependenciasJavaScript = [];
 
 	dependenciasJavaScript.push({url : 'vendor/jquery/dist/jquery.js', async : true, onLoad : function(dependenciasJavaScript){
-	   loader.script('vendor/bootstrap/dist/js/bootstrap.js');
-	   loader.script('vendor/bootstrap/dist/js/bootstrap.bundle.js');
-       loader.script('vendor/datatables/media/js/jquery.dataTables.js');
-       loader.script('vendor/datatables/media/js/dataTables.bootstrap.js');
-       loader.script('vendor/datatables/media/js/dataTables.dataTables.js');
-       loader.script('vendor/datatables/media/js/dataTables.bootstrap4.min.js');
-       loader.script('vendor/datatables.net-responsive-dt/js/responsive.dataTables.min.js');
-       loader.script('vendor/datatables.net-select/js/dataTables.select.min.js');
-       loader.script('vendor/datatables.net-select-dt/js/select.dataTables.js');
-	   loader.script('vendor/toastr/toastr.min.js');
-	   loader.script('vendor/jquery-validation/dist/jquery.validate.min.js');
-	   loader.script('vendor/grapnel/dist/grapnel.min.js');
-	   loader.script('assets/js/bootstrap.js');
+		loader.script('vendor/bootstrap/dist/js/bootstrap.js');
+		loader.script('vendor/bootstrap/dist/js/bootstrap.bundle.js');       
+		loader.script('vendor/datatables/media/js/jquery.dataTables.js');
+		loader.script('vendor/datatables/media/js/dataTables.bootstrap.js');
+		loader.script('vendor/datatables/media/js/dataTables.dataTables.js');
+		loader.script('vendor/datatables/media/js/dataTables.bootstrap4.min.js');
+		loader.script('vendor/datatables.net-responsive-dt/js/responsive.dataTables.min.js');
+		loader.script('vendor/datatables.net-select/js/dataTables.select.min.js');
+		loader.script('vendor/datatables.net-select-dt/js/select.dataTables.js');
+		loader.script('vendor/toastr/toastr.min.js');
+		loader.script('vendor/jquery-validation/dist/jquery.validate.min.js');
+		loader.script('vendor/grapnel/dist/grapnel.min.js');
+		loader.script('assets/js/bootstrap.js');
+		loader.script('vendor/bootstrap-dialog/dist/js/bootstrap-dialog.min.js');
+		loader.script('vendor/pickadate/lib/compressed/picker.js');
+		loader.script('vendor/pickadate/lib/compressed/picker.date.js');
+		loader.script('vendor/pickadate/lib/compressed/picker.time.js');
 
-	   loader.script('vendor/bootstrap-dialog/dist/js/bootstrap-dialog.min.js');
 
         // Inicialização
         loader.script('assets/js/jquery.meanmenu.js');

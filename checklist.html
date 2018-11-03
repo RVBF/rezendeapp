@@ -20,24 +20,53 @@
             <div class="col-xs-12  col-sm-12 col-md-12">
                 <form class="form-horizontal " id="checklist_form">
                     <input type="hidden" id="id" name ="id" />
-                    
+
                     <div class="row form-row">
-                        <div class="col-xs-11 col-md-11 col-sm-11 col-9">
-                            <label for="titulo">Título</label>
-                            <input type="text" class="form-control" id="titulo" name="titulo" required>
+                        <div class="col-xs-6 col-md-6 col-sm-6 col-6">
+                            <label for="categoria">Categoria</label>
+                            <select id ="categoria"  name="categoria" class="form-control select2"></select>
                         </div>
 
-                        <div class="col-xs-1 col-md-1 col-sm-1 col-3 button_add">
+                        <div class="col-xs-6 col-md-6 col-sm-6 col-6">
+                            <label for="loja">Loja</label>
+                            <select id ="loja"  name="loja" class="form-control select2"></select>
+                        </div>
+
+                    </div>
+
+                    <div class="row form-row">
+                        <div class="col-xs-6 col-md-6 col-sm-6 col-6">
+                            <label for="data_limite">Data limite</label>
+                            <input type="text" class="form-control data" id="data_limite"/>
+                        </div>
+
+                        <div class="col-xs-6 col-md-6 col-sm-6 col-6">
+                            <div class="form-group">
+                                <label for="data_limite">Hora limite</label>
+                                <input type="text" class="form-control hora" id="hora_limite"/>
+                            </div>
+                        </div>
+                    </div> 
+
+                    <div class="row form-row">
+                        <div class="col-xs-12 col-md-12 col-sm-12 col-12">
+                            <label for="descricao">Descrição</label>
+                            <textarea class="form-control" rows="2" id="descricao"></textarea>
+                        </div>
+                    </div>
+ 
+                    <div  class="row">
+                        <div class="col-xs-12  col-sm-12 col-md-12">
+                            <br /><div id="msg" class="text-danger msg" ></div>
+                        </div>
+                    </div>
+
+                    <div class="row form-row card-footer">
+                        <div class="col-xs-12 col-md-12 col-sm-12 col-12 button_add">
                             <button type="submit" class="btn btn-success" id="salvar"><i class="fas fa-check"></i></i></button>
                             <button type="button" class="btn btn-default" id="cancelar_edicao"><i class="fas fa-sign-out-alt"></i></button>
                         </div>
-                    </div>  
-
-                    <div  lass="row">
-                        <div class="col-xs-12  col-sm-12 col-md-12">
-                            <br /><div id="msg" class="text-danger msg" ></div>
-                        </div
-                    ></div>
+                    </div>
                 </form>           
             </div>
         </div>
@@ -49,12 +78,10 @@
                 <thead>
                     <tr>
                         <th>Id</th>
+                        <th>Categoria</th>
                         <th>Descricão</th>
                         <th>Data Limite</th>
-                        <th>Categoria</th>
-                        <th>Loja</th>
-
-
+                        <!-- <th>Loja</th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -63,16 +90,16 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
+                        <!-- <td></td> -->
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr>
                         <th>Id</th>
+                        <th>Categoria</th>
                         <th>Descricão</th>
                         <th>Data Limite</th>
-                        <th>Categoria</th>
-                        <th>Loja</th>
+                        <!-- <th>Loja</th> -->
                     </tr>
                 </tfoot>
             </table>

@@ -59,9 +59,7 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 
 	function comId($id){
 		try {	
-			$categoria = $this->construirObjeto(DB::table(self::TABELA)->where('id', $obj->getId())->get());
-
-			return $categoria;
+			return $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->first());
 		}
 		catch (\Exception $e)
 		{
