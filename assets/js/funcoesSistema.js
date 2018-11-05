@@ -3,6 +3,7 @@
 	function iniciarFuncoesPadroesSistema(event)
 	{
 		var evento = event;
+	
 		if(typeof(evento) != 'undefined')
 		{
 			$(evento.target).find('.desabilitado').each(function(i) {
@@ -35,12 +36,17 @@
 				});
 			});
 
-
 			$(evento.target).find('.hora').each(function(){
                 $(this).pickatime({
 					clear: 'Limpar'
 				});
 			});
+
+			$(evento.target).find('.select2').select2({
+				theme: 'bootstrap4',
+				width: '100%'
+			});
+			
 		}
 	}
 

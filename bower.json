@@ -23,7 +23,9 @@
     "datatables.net-responsive-dt": "^2.2.3",
     "datatables.net-responsive-bs4": "^2.2.3",
     "datatables.net-select-dt": "^1.2.7",
-    "pickadate" : "^3.5.6"
+    "pickadate": "^3.5.6",
+    "select2": "^4.0.5",
+    "select2-bootstrap4-theme": "^2.0.0"
   },
   "devDependencies": {}
 }

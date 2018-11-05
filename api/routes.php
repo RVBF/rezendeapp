@@ -54,4 +54,14 @@ $app->delete('/checklist/{id}', function(Request $req,  Response $res, $args = [
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($checkListResponse)));
 
 });
+
+// Início das rotas para loja
+$app->get('/loja', function(Request $req,  Response $res, $args = []) use ($app) {
+	$this->logger->addInfo("Acessando listagem de lojas");	
+	$ctrl = new ControladoraChecklist($req->getQueryParams());
+	$checkListResponse = $ctrl->todos();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($checkListResponse)));
+
+});
+
 ?>
