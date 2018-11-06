@@ -20,17 +20,29 @@
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
 			var opcoes = {
 				rules: {
-					"titulo": {
-						// required    : true,
-						// rangelength : [ 2, 85 ]
-					}
+					"categoria": {required : true},
+					"lojas" :{required : true},
+					"data_limite" : { required : true},
+					"hora_limite" : { required : true},
+					"descricao" : {required : true}
+
 				},
 
-				messages:
-				{
-					"titulo": {
-						required    : "O campo título é obrigatório.",
-						rangelength : $.validator.format("O campo nome deve ter no mínimo  {2} e no máximo {85} caracteres.")
+				messages: {
+					"categoria": {
+						required    : "O campo categoria é obrigatório.",
+					},
+					"lojas": {
+						required    : "O campo lojas é obrigatório.",
+					},
+					"data_limite": {
+						required    : "O campo data limite é obrigatório.",
+					},
+					"hora_limite": {
+						required    : "O campo hora limite é obrigatório.",
+					},
+					"descricao": {
+						required    : "O campo descrição é obrigatório.",
 					}
 				}
 			};
@@ -66,7 +78,10 @@
 		_this.conteudo = function conteudo() {
 			return servicoChecklist.criar(
                 $('#id').val(),
-                $('#titulo').val()
+                $('#descricao').val(),
+				$('#data_limite').pickadate('picker').get('select', 'yyyy-mm-dd') + ' ' + $('#hora_limite').pickatime('picker').get('select','hh:i'),
+				$('#categoria').val(),
+				$('#lojas').val()
 			);
 		};
 
@@ -109,21 +124,20 @@
 				$.each(resposta.data, function(i ,item) {
 					$("#lojas").append($('<option>', {
 						value: item.id,
-						text: item.titulo
+						text: item.razaoSocial + '/' + item.nomeFantasia
 					}));
 				});
 
 				$('#lojas').trigger('change');
 			};
 
-			var erro = function(resposta)
-			{
+			var erro = function(resposta) {
 				var mensagem = jqXHR.responseText || 'Erro ao popular select de farmácias.';
 				toastr.error(mensagem);
 				return false;
-			}
-			var servCategoria = new app.ServicoCategoria();
-			var  jqXHR = servCategoria.todos();
+			};
+			var servicoLoja = new app.ServicoLoja();
+			var  jqXHR = servicoLoja.todos();
 			jqXHR.done(sucesso).fail(erro);
 		};
 
@@ -133,6 +147,7 @@
 			_this.formulario.find('#tiulo').focus();
 			_this.configurarBotoes();
 			_this.popularSelectCategorias();
+			_this.popularSelectLojas();
 		};
 
 		_this.iniciarFormularioModoEdicao = function iniciarFormularioModoEdicao() {

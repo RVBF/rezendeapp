@@ -4,7 +4,7 @@ use phputil\datatables\DataTablesResponse;
 use Symfony\Component\Validator\Validation as Validacao;
 use \phputil\JSON;
 use \phputil\RTTI;
-
+use Carbon\Carbon;
 
 /**
  * Controladora de Checklist
@@ -16,10 +16,14 @@ class ControladoraChecklist {
 
 	private $params;
 	private $colecaoChecklist;
-	
+	private $colecaoCategoria;
+	private $colecaoLoja;
 	function __construct($params) {
 		$this->params = $params;
-		$this->colecaoChecklist = Dice::instance()->create('Colecao');
+		$this->colecaoChecklist = Dice::instance()->create('ColecaoChecklist');
+		$this->colecaoCategoria = Dice::instance()->create('ColecaoCategoria');
+		$this->colecaoLoja = Dice::instance()->create('ColecaoLoja');
+
 	}
 
 	function todos() {
@@ -50,18 +54,34 @@ class ControladoraChecklist {
 	}
 
 	function adicionar() {
-		$inexistentes = \ArrayUtil::nonExistingKeys(['titulo'], $this->params);
-
-		$categoria = new Categoria(
-			0,
-			\ParamUtil::value($this->params, 'titulo')
-		);
-
+		$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'descricao','dataLimite','categoria', 'lojas'], $this->params);
 		$resposta = [];
-		
+
 		try {
-			$categoria = $this->colecaoChecklist->adicionar($categoria);
-			$resposta = ['categoria'=> RTTI::getAttributes( $categoria, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria cadastrada com sucesso.']; 
+			if(count($inexistentes) > 0) {
+				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
+
+				throw new Exception($msg);
+			}
+			$categoria = $this->colecaoCategoria->comId(\ParamUtil::value($this->params, 'categoria'));
+			if(!isset($categoria) and !($categoria instanceof Categoria)){
+				throw new Exception("Categoria não encontrada na base de dados.");
+			}
+
+			$lojasObject = $this->colecaoLoja->todosComId($this->params['lojas']);
+
+			if(!count($lojasObject)) throw new Exception("As lojas selecionadas não se econtra no banco de dados");
+			$checklist = new Checklist(
+				0,
+				\ParamUtil::value($this->params, 'descricao'),
+				\ParamUtil::value($this->params, 'dataLimite'),
+				'',
+				$categoria,
+				$lojasObject
+			);
+
+			$checklist = $this->colecaoChecklist->adicionar($checklist);
+			$resposta = ['checklist'=> RTTI::getAttributes( $checklist, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Checklist cadastrada com sucesso.']; 
 		}
 		catch (\Exception $e) {
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
@@ -71,7 +91,6 @@ class ControladoraChecklist {
 	}
 
 	function atualizar() {
-
 		$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo'], $this->params);
 
 		$resposta = [];

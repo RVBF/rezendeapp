@@ -9,12 +9,12 @@
 class Loja {
 
 	private $id;
-    private $nome;
+    private $razaoSocial;
     private $nomeFantasia;
     
-    function __construct($id = 0, $nome = '', $nomeFantasia = '') {
+    function __construct($id = 0, $razaoSocial = '', $nomeFantasia = '') {
         $this->id = $id;
-        $this->nome = $nome;
+        $this->razaoSocial = $razaoSocial;
         $this->nomeFantasia = $nomeFantasia;
     }
 
@@ -26,12 +26,12 @@ class Loja {
         $this->id = $id;
     }
 
-    public function getNome(){
-        return $this->nome; 
+    public function getRazaoSocial(){
+        return $this->razaoSocial; 
     }
  
-    public function setNome($nome){
-        $this->nome = $nome;
+    public function setRazaoSocial($razaoSocial){
+        $this->razaoSocial = $razaoSocial;
     }
 
     public function getNomeFantasia(){

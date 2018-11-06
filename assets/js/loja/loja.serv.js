@@ -7,35 +7,31 @@
  {
 	'use strict';
 
-	function Checklist(id, descricao, dataLimite, categoria, lojas) {
+	function Loja(id, razaoSocial, nomeFantasia) {
 		this.id = id  || 0;
-        this.descricao = descricao  || '';
-        this.dataLimite = dataLimite  || '';
-        this.categoria = categoria  || '';
-        this.lojas = lojas  || '';
+        this.razaoSocial = razaoSocial  || '';
+        this.nomeFantasia = nomeFantasia  || '';
 	};
 
-	function ServicoChecklist() { // Model
+	function ServicoLoja() { // Model
 		var _this = this;
 		// Rota no servidor
         _this.rota = function rota() {
-			return app.api + '/checklist';
+			return app.api + '/loja';
 		};
 
 		// Cria um objeto de categoria
-		this.criar = function criar(id, descricao, dataLimite, categoria, lojas) {
+		this.criar = function criar(id, titulo) {
  			return {
                 id : id  || 0,
-                descricao : descricao  || '',
-                dataLimite : dataLimite  || '',
-                categoria : categoria  || '',
-                lojas : lojas  || ''
-			};
+                razaoSocial : razaoSocial  || '',
+                nomeFantasia : nomeFantasia  || ''
+            };
 		};
 
 		_this.adicionar = function adicionar(obj) {
 			return $.ajax({
-				type: "POST",
+                type: "POST",
 				url: _this.rota(),
 				data: obj
 			});
@@ -72,6 +68,6 @@
 	}; // ServicoCategoria
 
 	// Registrando
-	app.Checklist = Checklist;
-	app.ServicoChecklist = ServicoChecklist;
+	app.Loja = Loja;
+	app.ServicoLoja = ServicoLoja;
 })(app, $);
