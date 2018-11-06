@@ -11,17 +11,27 @@ class ColecaoChecklistEmBDR implements Colecao
 {
 
 	const TABELA = 'checklist';
+	const TABELA_RELACIONAL = 'checklist_tem_loja';
 
 	function __construct(){}
 
 	function adicionar(&$obj) {
-		if($this->validarCategoria($obj)){
+		if($this->validarChecklist($obj)){
 			try {	
-				$id = Db::table(self::TABELA)->insertGetId(
-					['titulo' => $obj->getTitulo()]
-				);
+				$id = Db::table(self::TABELA)->insertGetId(['descricao' => $obj->getDescricao(),
+					'data_limite'=> $obj->getDataLimite(),
+					'categoria_id'=> $obj->getCategoria()->getId()
+				]);
 				
 				$obj->setId($id);
+
+				$itensRelacionais = [];
+
+				foreach ($obj->getLojas() as $loja) {
+					$itensRelacionais[] = ['checklist_id' => $obj->getId(), 'loja_id'=> $loja->getId()];
+				}
+
+				DB::table(self::TABELA_RELACIONAL)->insert($itensRelacionais);
 
 				return $obj;
 			}
@@ -34,7 +44,7 @@ class ColecaoChecklistEmBDR implements Colecao
 
 	function remover($id) {
 		try {	
-			return DB::table(self::TABELA)->where('id', $id)->delete();
+			return DB::table(self::TABELA)->where('id', $id)->sharedLock()->delete();
 		}
 		catch (\Exception $e)
 		{
@@ -43,7 +53,7 @@ class ColecaoChecklistEmBDR implements Colecao
 	}
 
 	function atualizar(&$obj) {
-		if($this->validarCategoria($obj)){
+		if($this->validarChecklist($obj)){
 			try {	
 				DB::table(self::TABELA)->where('id', $obj->getId())->update(['titulo' => $obj->getTitulo()]);
 
@@ -74,7 +84,7 @@ class ColecaoChecklistEmBDR implements Colecao
 	 */
 	function todos($limite = 0, $pulo = 0) {
 		try {	
-			$checklists = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+			$checklists = Db::table(self::TABELA)->leftJoin(self::TABELA_RELACIONAL, self::TABELA_RELACIONAL . '.checklist_id', '=', self::TABELA . '.id')->offset($limite)->limit($pulo)->distinct()->get();
 			$checklistObjects = [];
 			// Debuger::printr($checklists);
 			foreach ($checklists as $checklist) {
@@ -100,20 +110,8 @@ class ColecaoChecklistEmBDR implements Colecao
 		return Db::table(self::TABELA)->count();
 	}
 	
-	private function validarCategoria(&$obj)
-	{
-		if(!is_string($obj->getTitulo()))
-		{
-			throw new ColecaoException('Valor inválido para bairro.');
-		}
-
-		$quantidade = DB::table(self::TABELA)->where('titulo', $obj->getTitulo())->where('id', '<>', $obj->getId())->count();
-
-		if($quantidade > 0){
-			throw new ColecaoException('Já exite uma categoria cadastrada com esse título');
-		}
-
-		if(strlen($obj->getTitulo()) <= 2 && strlen($obj->getTitulo()) > 85) throw new ColecaoException('O título deve conter no mínimo '. Categoria::TAM_TITULO_MIM . ' e no máximo '. Categoria::TAM_TITULO_MAX . '.');
+	private function validarChecklist(&$obj) {
+		if(strlen($obj->getDescricao()) <= Checklist::TAM_MIN_DESCRICAO && strlen($obj->getDescricao()) > Checklist::TAM_MAX_DESCRICAO) throw new ColecaoException('A Descrição deve conter no mínimo '.  Checklist::TAM_MIN_DESCRICAO. ' e no máximo '. Categoria::TAM_MAX_DESCRICAO . '.');
 
 		return true;
 	}

@@ -159,6 +159,10 @@
 		loader.script('assets/js/checklist/checklist.serv.js');
 		loader.script('assets/js/checklist/checklist.form.ctrl.js');
 		loader.script('assets/js/checklist/checklist.list.ctrl.js');
+
+		loader.script('assets/js/loja/loja.serv.js');
+		// loader.script('assets/js/loja/loja.form.ctrl.js');
+		// loader.script('assets/js/loja/loja.list.ctrl.js');
 	}});
 	
 

@@ -8,5 +8,6 @@
  */
 
 interface ColecaoLoja extends Colecao {
+    function todosComId($ids = []);
 }
 ?>

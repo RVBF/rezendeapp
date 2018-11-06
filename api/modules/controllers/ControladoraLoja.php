@@ -15,11 +15,11 @@ use \phputil\RTTI;
 class ControladoraLoja {
 
 	private $params;
-	private $colecaoCategoria;
+	private $colecaoLoja;
 	
 	function __construct($params) {
 		$this->params = $params;
-		$this->colecaoCategoria = Dice::instance()->create('ColecaoCategoria');
+		$this->colecaoLoja = Dice::instance()->create('ColecaoLoja');
 	}
 
 	function todos() {
@@ -30,9 +30,9 @@ class ControladoraLoja {
 
 		try
 		{
-			$objetos = $this->colecaoCategoria->todos($dtr->start, $dtr->length);
+			$objetos = $this->colecaoLoja->todos($dtr->start, $dtr->length);
 
-			$contagem = $this->colecaoCategoria->contagem();
+			$contagem = $this->colecaoLoja->contagem();
 		}
 		catch (\Exception $e )
 		{
@@ -48,70 +48,6 @@ class ControladoraLoja {
 		);
 
 		return $conteudo;
-	}
-
-	function adicionar() {
-		$inexistentes = \ArrayUtil::nonExistingKeys(['titulo'], $this->params);
-
-		$categoria = new Categoria(
-			0,
-			\ParamUtil::value($this->params, 'titulo')
-		);
-
-		$resposta = [];
-		
-		try {
-			$categoria = $this->colecaoCategoria->adicionar($categoria);
-			$resposta = ['categoria'=> RTTI::getAttributes( $categoria, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria cadastrada com sucesso.']; 
-		}
-		catch (\Exception $e) {
-			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
-		}
-
-		return $resposta;
-	}
-
-	function atualizar() {
-
-		$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo'], $this->params);
-
-		$resposta = [];
-		
-		try {
-			if (count($inexistentes) > 0) {
-				$msg = 'Os seguintes campos não foram enviados: ' . implode(', ', $inexistentesb);
-				throw new Exception($msg);
-			}
-	
-	
-			$categoria = new Categoria(
-				\ParamUtil::value($this->params, 'id'),
-				\ParamUtil::value($this->params, 'titulo')
-			);
-	
-			$this->colecaoCategoria->atualizar($categoria);
-			$resposta = ['categoria'=> RTTI::getAttributes( $categoria, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria atualizada com sucesso.']; 
-		}
-		catch (\Exception $e) {
-			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
-		}
-
-		return $resposta;
-	}
-
-	function remover($id) {
-		$resposta = [];
-
-		try {
-			$status = $this->colecaoCategoria->remover($id);
-			
-			$resposta = ['status' => true, 'mensagem'=> 'Categoria removida com sucesso.']; 
-		}
-		catch (\Exception $e) {
-			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
-		}
-
-		return $resposta;
 	}
 }
 ?>
