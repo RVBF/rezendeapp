@@ -67,6 +67,7 @@ class ControladoraChecklist {
 			if(!isset($categoria) and !($categoria instanceof Categoria)){
 				throw new Exception("Categoria não encontrada na base de dados.");
 			}
+			// Debuger::printr($this->params['lojas']);
 
 			$lojasObject = $this->colecaoLoja->todosComId($this->params['lojas']);
 
@@ -76,11 +77,11 @@ class ControladoraChecklist {
 				\ParamUtil::value($this->params, 'descricao'),
 				\ParamUtil::value($this->params, 'dataLimite'),
 				'',
-				$categoria,
-				$lojasObject
+				$categoria
 			);
 
-			$checklist = $this->colecaoChecklist->adicionar($checklist);
+			$checklist = $this->colecaoChecklist->adicionar($checklist, $lojasObject);
+
 			$resposta = ['checklist'=> RTTI::getAttributes( $checklist, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Checklist cadastrada com sucesso.']; 
 		}
 		catch (\Exception $e) {
