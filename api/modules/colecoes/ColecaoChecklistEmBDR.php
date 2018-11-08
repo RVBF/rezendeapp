@@ -7,7 +7,7 @@ use Illuminate\Database\Capsule\Manager as Db;
  *	@version	0.1
  */
 
-class ColecaoChecklistEmBDR implements Colecao
+class ColecaoChecklistEmBDR implements ColecaoChecklist
 {
 
 	const TABELA = 'checklist';
@@ -15,9 +15,10 @@ class ColecaoChecklistEmBDR implements Colecao
 
 	function __construct(){}
 
-	function adicionar(&$obj) {
+	function adicionar(&$obj, $lojasRelacionadas) {
 		if($this->validarChecklist($obj)){
 			try {	
+
 				$id = Db::table(self::TABELA)->insertGetId(['descricao' => $obj->getDescricao(),
 					'data_limite'=> $obj->getDataLimite(),
 					'categoria_id'=> $obj->getCategoria()->getId()
@@ -25,14 +26,12 @@ class ColecaoChecklistEmBDR implements Colecao
 				
 				$obj->setId($id);
 
-				$itensRelacionais = [];
-
-				foreach ($obj->getLojas() as $loja) {
-					$itensRelacionais[] = ['checklist_id' => $obj->getId(), 'loja_id'=> $loja->getId()];
+				$lojas = [];
+				foreach ($lojasRelacionadas as $loja) {
+					$lojas[] =  ['checklist_id' => $obj->getId(), 'loja_id'=> $loja->getId()];
 				}
 
-				DB::table(self::TABELA_RELACIONAL)->insert($itensRelacionais);
-
+				DB::table(self::TABELA_RELACIONAL)->insert($lojas);
 				return $obj;
 			}
 			catch (\Exception $e)
@@ -44,7 +43,14 @@ class ColecaoChecklistEmBDR implements Colecao
 
 	function remover($id) {
 		try {	
-			return DB::table(self::TABELA)->where('id', $id)->sharedLock()->delete();
+			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+			$removido = DB::table(self::TABELA)->where('id', $id)->delete();
+			
+			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+			return $removido;
+
 		}
 		catch (\Exception $e)
 		{
@@ -84,9 +90,8 @@ class ColecaoChecklistEmBDR implements Colecao
 	 */
 	function todos($limite = 0, $pulo = 0) {
 		try {	
-			$checklists = Db::table(self::TABELA)->leftJoin(self::TABELA_RELACIONAL, self::TABELA_RELACIONAL . '.checklist_id', '=', self::TABELA . '.id')->offset($limite)->limit($pulo)->distinct()->get();
+			$checklists = Db::table(self::TABELA)->join(self::TABELA_RELACIONAL, self::TABELA_RELACIONAL . '.checklist_id', '=', self::TABELA . '.id')->select(self::TABELA . '.*', self::TABELA_RELACIONAL . '.*')->offset($limite)->limit($pulo)->distinct()->get();
 			$checklistObjects = [];
-			// Debuger::printr($checklists);
 			foreach ($checklists as $checklist) {
 				$checklistObjects[] =  $this->construirObjeto($checklist);
 			}
@@ -102,7 +107,10 @@ class ColecaoChecklistEmBDR implements Colecao
 	function construirObjeto(array $row){
 		$categoria = Dice::instance()->create('ColecaoCategoria')->comId($row['categoria_id']);
 
-		$checklist = new Checklist($row['id'],$row['descricao'], $row['data_limite'], $row['data_cadastro'],$categoria);
+		$loja = Dice::instance()->create('ColecaoLoja')->comId($row['loja_id']);
+		Debuger::printr($loja);
+
+		$checklist = new Checklist($row['id'],$row['descricao'], $row['data_limite'], $row['data_cadastro'], $categoria, $loja);
 		return $checklist;
 	}
 

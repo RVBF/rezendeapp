@@ -13,18 +13,18 @@ class Checklist {
     private $dataLimite;
     private $dataCadastro;
     private $categoria;
-    private $lojas;
+    private $loja;
 
     const TAM_MIN_DESCRICAO = 15;
     const TAM_MAX_DESCRICAO = 255;
 
-    function __construct($id = 0, $descricao = '', $dataLimite = '', $dataCadastro = '', $categoria = null, $lojas = []) {
+    function __construct($id = 0, $descricao = '', $dataLimite = '', $dataCadastro = '', $categoria = null, $loja = null) {
 		$this->id = $id;
         $this->descricao = $descricao;
         $this->dataLimite = $dataLimite;
         $this->dataCadastro = $dataCadastro;
         $this->categoria = $categoria;
-        $this->lojas = $lojas;
+        $this->loja = $loja;
     }
 
     public function getId(){
@@ -63,16 +63,16 @@ class Checklist {
         return $this->categoria; 
     }
  
-    public function setCategoria($categoria){
+    public function setCategoria(Categoria $categoria){
         $this->categoria = $categoria;
     }
 
-    public function getlojas(){
-        return $this->lojas; 
+    public function getloja(){
+        return $this->loja; 
     }
  
-    public function setlojas($lojas){
-        $this->lojas = $lojas;
+    public function setloja(Loja $loja) {
+        $this->loja = $loja;
     }
 }
 ?>

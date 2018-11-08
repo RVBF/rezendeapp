@@ -57,9 +57,8 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 
 	function comId($id){
 		try {	
-			$categoria = $this->construirObjeto(DB::table(self::TABELA)->where('id', $obj->getId())->get());
-
-			return $categoria;
+			$loja = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get());
+			return $loja;
 		}
 		catch (\Exception $e)
 		{
