@@ -79,9 +79,9 @@
 			return servicoChecklist.criar(
                 $('#id').val(),
                 $('#descricao').val(),
-				$('#data_limite').pickadate('picker').get('select', 'yyyy-mm-dd') + ' ' + $('#hora_limite').pickatime('picker').get('select','hh:i'),
+				$('#data_limite').pickadate('picker').get('select', 'yyyy-mm-dd') + ' ' + $('#hora_limite').pickatime('picker').get('select','HH:i'),
 				$('#categoria').val(),
-				$('#lojas').val()
+				$('#loja').val()
 			);
 		};
 
@@ -119,16 +119,16 @@
 		_this.popularSelectLojas  =  function popularSelectLojas(valor = 0)
 		{
 			var sucesso = function (resposta) {
-				$("#lojas").empty();
+				$("#loja").empty();
 
 				$.each(resposta.data, function(i ,item) {
-					$("#lojas").append($('<option>', {
+					$("#loja").append($('<option>', {
 						value: item.id,
 						text: item.razaoSocial + '/' + item.nomeFantasia
 					}));
 				});
 
-				$('#lojas').trigger('change');
+				$('#loja').trigger('change');
 			};
 
 			var erro = function(resposta) {
@@ -168,8 +168,23 @@
 
 		// Desenha o objeto no formulário
 		_this.desenhar = function desenhar(obj) {
+			var dataPicker = $('#data_limite').pickadate('picker');
+			var horaPicker = $('#hora_limite').pickatime('picker');
+
+
+			var data  = obj.dataLimite.split('-');
+			var hora = obj.dataLimite.split(' ')[1].split(':');
+
 			_this.formulario.find('#id').val(obj.id);
-            _this.formulario.find('#titulo').val(obj.titulo);
+			_this.formulario.find('#categoria').val(obj.categoria.id).trigger('change');
+			_this.formulario.find('#loja').val(obj.categoria.id).trigger('change');
+			_this.formulario.find('#descricao').val(obj.descricao);
+
+			console.log(data);
+			console.log(hora);
+			dataPicker.set('select', new Date(data[0], data[1], data[2]))
+			horaPicker.set('select', hora[0] + ':' + hora[1], { format: 'hh:i' })
+
 		};
 
 		_this.salvar = function salvar() {

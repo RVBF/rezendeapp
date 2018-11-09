@@ -54,7 +54,7 @@ class ControladoraChecklist {
 	}
 
 	function adicionar() {
-		$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'descricao','dataLimite','categoria', 'lojas'], $this->params);
+		$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'descricao','dataLimite','categoria', 'loja'], $this->params);
 		$resposta = [];
 
 		try {
@@ -67,22 +67,20 @@ class ControladoraChecklist {
 			if(!isset($categoria) and !($categoria instanceof Categoria)){
 				throw new Exception("Categoria não encontrada na base de dados.");
 			}
-			// Debuger::printr($this->params['lojas']);
 
-			$lojasObject = $this->colecaoLoja->todosComId($this->params['lojas']);
+			$loja = $this->colecaoLoja->comId($this->params['loja']);
 
-			if(!count($lojasObject)) throw new Exception("As lojas selecionadas não se econtra no banco de dados");
+			if(!count($loja)) throw new Exception("As loja selecionadas não se econtra no banco de dados");
+		
 			$checklist = new Checklist(
 				0,
 				\ParamUtil::value($this->params, 'descricao'),
 				\ParamUtil::value($this->params, 'dataLimite'),
 				'',
-				$categoria
+				$categoria,
+				$loja
 			);
-
-			$checklist = $this->colecaoChecklist->adicionar($checklist, $lojasObject);
-
-			$resposta = ['checklist'=> RTTI::getAttributes( $checklist, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Checklist cadastrada com sucesso.']; 
+			$resposta = ['checklist'=> RTTI::getAttributes($this->colecaoChecklist->adicionar($checklist), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Checklist cadastrada com sucesso.']; 
 		}
 		catch (\Exception $e) {
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
@@ -92,24 +90,33 @@ class ControladoraChecklist {
 	}
 
 	function atualizar() {
-		$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo'], $this->params);
-
+		$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'descricao','dataLimite','categoria', 'loja'], $this->params);
 		$resposta = [];
-		
+
 		try {
-			if (count($inexistentes) > 0) {
-				$msg = 'Os seguintes campos não foram enviados: ' . implode(', ', $inexistentesb);
+			if(count($inexistentes) > 0) {
+				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
+
 				throw new Exception($msg);
 			}
-	
-	
-			$categoria = new Categoria(
+			$categoria = $this->colecaoCategoria->comId(\ParamUtil::value($this->params, 'categoria'));
+			if(!isset($categoria) and !($categoria instanceof Categoria)){
+				throw new Exception("Categoria não encontrada na base de dados.");
+			}
+
+			$loja = $this->colecaoLoja->comId($this->params['loja']);
+
+			if(!count($loja)) throw new Exception("As loja selecionadas não se econtra no banco de dados");
+			
+			$checklist = new Checklist(
 				\ParamUtil::value($this->params, 'id'),
-				\ParamUtil::value($this->params, 'titulo')
+				\ParamUtil::value($this->params, 'descricao'),
+				\ParamUtil::value($this->params, 'dataLimite'),
+				'',
+				$categoria,
+				$loja
 			);
-	
-			$this->colecaoChecklist->atualizar($categoria);
-			$resposta = ['categoria'=> RTTI::getAttributes( $categoria, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria atualizada com sucesso.']; 
+			$resposta = ['checklist'=> RTTI::getAttributes($this->colecaoChecklist->atualizar($checklist), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Checklist atualizada com sucesso.']; 
 		}
 		catch (\Exception $e) {
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 

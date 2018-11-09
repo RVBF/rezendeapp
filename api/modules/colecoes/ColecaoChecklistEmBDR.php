@@ -11,27 +11,21 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist
 {
 
 	const TABELA = 'checklist';
-	const TABELA_RELACIONAL = 'checklist_tem_loja';
 
 	function __construct(){}
 
-	function adicionar(&$obj, $lojasRelacionadas) {
+	function adicionar(&$obj) {
 		if($this->validarChecklist($obj)){
 			try {	
 
 				$id = Db::table(self::TABELA)->insertGetId(['descricao' => $obj->getDescricao(),
 					'data_limite'=> $obj->getDataLimite(),
-					'categoria_id'=> $obj->getCategoria()->getId()
+					'categoria_id'=> $obj->getCategoria()->getId(),
+					'loja_id'=> $obj->getLoja()->getId()
 				]);
 				
 				$obj->setId($id);
 
-				$lojas = [];
-				foreach ($lojasRelacionadas as $loja) {
-					$lojas[] =  ['checklist_id' => $obj->getId(), 'loja_id'=> $loja->getId()];
-				}
-
-				DB::table(self::TABELA_RELACIONAL)->insert($lojas);
 				return $obj;
 			}
 			catch (\Exception $e)
@@ -60,9 +54,16 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist
 
 	function atualizar(&$obj) {
 		if($this->validarChecklist($obj)){
-			try {	
-				DB::table(self::TABELA)->where('id', $obj->getId())->update(['titulo' => $obj->getTitulo()]);
+			try {
+				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
+				DB::table(self::TABELA)->where('id', $obj->getId())->update(['descricao' => $obj->getDescricao(),
+					'data_limite'=> $obj->getDataLimite(),
+					'categoria_id'=> $obj->getCategoria()->getId(),
+					'loja_id'=> $obj->getLoja()->getId()
+				]);
+
+				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 				return $obj;
 			}
 			catch (\Exception $e)
@@ -90,7 +91,8 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist
 	 */
 	function todos($limite = 0, $pulo = 0) {
 		try {	
-			$checklists = Db::table(self::TABELA)->join(self::TABELA_RELACIONAL, self::TABELA_RELACIONAL . '.checklist_id', '=', self::TABELA . '.id')->select(self::TABELA . '.*', self::TABELA_RELACIONAL . '.*')->offset($limite)->limit($pulo)->distinct()->get();
+			$checklists = Db::table(self::TABELA)->select(self::TABELA . '.*')->offset($limite)->limit($pulo)->get();
+
 			$checklistObjects = [];
 			foreach ($checklists as $checklist) {
 				$checklistObjects[] =  $this->construirObjeto($checklist);
@@ -106,10 +108,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist
 
 	function construirObjeto(array $row){
 		$categoria = Dice::instance()->create('ColecaoCategoria')->comId($row['categoria_id']);
-
 		$loja = Dice::instance()->create('ColecaoLoja')->comId($row['loja_id']);
-		Debuger::printr($loja);
-
 		$checklist = new Checklist($row['id'],$row['descricao'], $row['data_limite'], $row['data_cadastro'], $categoria, $loja);
 		return $checklist;
 	}
