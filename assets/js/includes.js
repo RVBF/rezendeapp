@@ -127,10 +127,11 @@
 		loader.script('vendor/bootstrap/dist/js/bootstrap.js');
 		loader.script('vendor/bootstrap/dist/js/bootstrap.bundle.js');       
 		loader.script('vendor/datatables/media/js/jquery.dataTables.js');
-		loader.script('vendor/datatables/media/js/dataTables.bootstrap.js');
-		loader.script('vendor/datatables/media/js/dataTables.dataTables.js');
 		loader.script('vendor/datatables/media/js/dataTables.bootstrap4.min.js');
+		// loader.script('vendor/datatables/media/js/dataTables.bootstrap.js');
+		loader.script('vendor/datatables/media/js/dataTables.dataTables.js');
 		loader.script('vendor/datatables.net-responsive-dt/js/responsive.dataTables.min.js');
+		loader.script('vendor/datatables.net-responsive-bs4/js/responsive.bootstrap4.js');
 		loader.script('vendor/datatables.net-select/js/dataTables.select.min.js');
 		loader.script('vendor/datatables.net-select-dt/js/select.dataTables.js');
 		loader.script('vendor/toastr/toastr.min.js');

@@ -7,12 +7,12 @@
  {
 	'use strict';
 
-	function Checklist(id, descricao, dataLimite, categoria, lojas) {
+	function Checklist(id, descricao, dataLimite, categoria, loja) {
 		this.id = id  || 0;
         this.descricao = descricao  || '';
         this.dataLimite = dataLimite  || '';
         this.categoria = categoria  || '';
-        this.lojas = lojas  || '';
+        this.loja = loja  || '';
 	};
 
 	function ServicoChecklist() { // Model
@@ -23,13 +23,13 @@
 		};
 
 		// Cria um objeto de categoria
-		this.criar = function criar(id, descricao, dataLimite, categoria, lojas) {
+		this.criar = function criar(id, descricao, dataLimite, categoria, loja) {
  			return {
                 id : id  || 0,
                 descricao : descricao  || '',
                 dataLimite : dataLimite  || '',
                 categoria : categoria  || '',
-                lojas : lojas  || ''
+                loja : loja  || ''
 			};
 		};
 

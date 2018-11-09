@@ -28,20 +28,25 @@
 			objeto.columnDefs = [ {
 					data: 'id',
 					targets: 0,
-					visible : false
+					responsivePriority: 5,
+					visible : true
 				}, {
-					data: 'categoria.titulo',
+					data: 'dataLimite',
 					responsivePriority: 1,
 					targets: 1
 				}, {
-					data: 'descricao',
-					responsivePriority: 1,
+					data: 'categoria.titulo',
+					responsivePriority: 2,
 					targets: 2
 				}, {
-					data: 'dataLimite',
-					responsivePriority: 2,
+					data: 'descricao',
+					responsivePriority: 3,
 					targets: 3
-				}
+				}, {
+					data: 'loja.nomeFantasia',
+					responsivePriority: 4,
+					targets: 4
+				},
 
 			];
 
@@ -77,7 +82,7 @@
 			BootstrapDialog.show({
 				type	: BootstrapDialog.TYPE_DANGER,
 				title	: 'Deseja remover esta Checklist?',
-				message	: 'Checklist: ' + objeto.descricao,
+				message	: 'Checklist da categoria: ' + objeto.categoria.titulo + ' e descrição : ' + objeto.descricao,
 				size	: BootstrapDialog.SIZE_LARGE,
 				buttons	: [ {
 						label	: '<u>S</u>im',

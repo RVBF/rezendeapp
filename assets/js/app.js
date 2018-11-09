@@ -75,7 +75,7 @@ var app = {
 	// Opções padrão para o DataTables ----------------------------------------
 	app.dtOptions = {
 		"responsive": true,
-		"autoWidth": false,
+		"autoWidth": true,
 		"processing":true,
 		"serverSide":true,
 		"destroy": true,

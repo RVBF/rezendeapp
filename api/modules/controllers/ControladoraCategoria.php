@@ -79,7 +79,7 @@ class ControladoraCategoria {
 		
 		try {
 			if (count($inexistentes) > 0) {
-				$msg = 'Os seguintes campos não foram enviados: ' . implode(', ', $inexistentesb);
+				$msg = 'Os seguintes campos não foram enviados: ' . implode(', ', $inexistentes);
 				throw new Exception($msg);
 			}
 	

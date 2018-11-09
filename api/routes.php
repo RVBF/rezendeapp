@@ -55,6 +55,14 @@ $app->post('/checklist', function(Request $req,  Response $res, $args = []) use 
 
 });
 
+$app->put('/checklist', function(Request $req,  Response $res, $args = []) use ($app) {
+	$this->logger->addInfo("Acessando a atualização de categorias");
+	$ctrl = new ControladoraChecklist($req->getParsedBody());
+	$response = $ctrl->atualizar();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+
+});
+
 $app->delete('/checklist/{id}', function(Request $req,  Response $res, $args = []) use ($app) {
 	$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
 	$ctrl = new ControladoraChecklist($req->getParsedBody());

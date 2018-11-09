@@ -57,7 +57,8 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 
 	function comId($id){
 		try {	
-			$loja = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get());
+			$loja = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
+
 			return $loja;
 		}
 		catch (\Exception $e)
@@ -101,7 +102,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 		}
 	}
 
-	function construirObjeto(array $row){
+	function construirObjeto(array $row) {
 		$loja = new Loja($row['id'],$row['razaoSocial'], $row['nomeFantasia']);
 
 		return $loja;

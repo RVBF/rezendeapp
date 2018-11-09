@@ -33,12 +33,19 @@
 					labelMonthPrev: 'Mês Anterior',
 					labelMonthSelect: 'Selecione o Mês',
 					labelYearSelect: 'Selecione o Ano',
+					min :  Date.now()
 				});
 			});
 
 			$(evento.target).find('.hora').each(function(){
                 $(this).pickatime({
-					clear: 'Limpar'
+					format: 'HH:i',
+					interval: 10,
+					clear: 'Limpar',
+					formatSubmit: 'HH:i',
+					min: [7,0],
+					max: [19,0],
+					hiddenName: true
 				});
 			});
 
