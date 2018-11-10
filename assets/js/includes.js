@@ -93,9 +93,9 @@
 	dependenciasCSS.push({ url : 'vendor/bootstrap/dist/css/bootstrap-reboot.css' });
 	dependenciasCSS.push({ url : 'vendor/bootstrap/dist/css/bootstrap-grid.css' });
 	dependenciasCSS.push({ url : 'vendor/datatables.net-dt/css/jquery.dataTables.min.css' });
-	dependenciasCSS.push({ url : 'vendor/datatables/media/css/dataTables.bootstrap.css' });
 	dependenciasCSS.push({ url : 'vendor/datatables/media/css/dataTables.bootstrap4.css' });
-	dependenciasCSS.push({ url : 'vendor/datatables.net-dt/css/jquery.dataTables.css' });
+	dependenciasCSS.push({ url : 'vendor/datatables.net-responsive-dt/css/responsive.dataTables.min.css' });
+
 	dependenciasCSS.push({ url : 'vendor/datatables.net-responsive-bs4/css/responsive.bootstrap4.css' });
 	dependenciasCSS.push({ url : 'vendor/datatables.net-select-dt/css/select.dataTables.min.css' });
 	dependenciasCSS.push({ url : 'vendor/bootstrap-dialog/dist/css/bootstrap-dialog.min.css' });
@@ -130,6 +130,8 @@
 		loader.script('vendor/datatables/media/js/dataTables.bootstrap4.min.js');
 		// loader.script('vendor/datatables/media/js/dataTables.bootstrap.js');
 		loader.script('vendor/datatables/media/js/dataTables.dataTables.js');
+		loader.script('vendor/datatables.net-responsive/js/dataTables.responsive.min.js');
+
 		loader.script('vendor/datatables.net-responsive-dt/js/responsive.dataTables.min.js');
 		loader.script('vendor/datatables.net-responsive-bs4/js/responsive.bootstrap4.js');
 		loader.script('vendor/datatables.net-select/js/dataTables.select.min.js');
@@ -164,6 +166,10 @@
 		loader.script('assets/js/loja/loja.serv.js');
 		// loader.script('assets/js/loja/loja.form.ctrl.js');
 		// loader.script('assets/js/loja/loja.list.ctrl.js');
+
+		loader.script('assets/js/tarefa/tarefa.serv.js');
+		loader.script('assets/js/tarefa/tarefa.form.ctrl.js');
+		loader.script('assets/js/tarefa/tarefa.list.ctrl.js');
 	}});
 	
 

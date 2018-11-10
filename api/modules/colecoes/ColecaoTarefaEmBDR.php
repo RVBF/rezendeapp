@@ -1,16 +1,16 @@
 <?php
 use Illuminate\Database\Capsule\Manager as Db;
 /**
- *	Coleção de Loja em Banco de Dados Relacional.
+ *	Coleção de Tarefa em Banco de Dados Relacional.
  *
  *  @author		Rafael Vinicius Barros Ferreira
  *	@version	0.1
  */
 
-class ColecaoLojaEmBDR implements ColecaoLoja
+class ColecaoTarefaEmBDR implements ColecaoTarefa
 {
 
-	const TABELA = 'loja';
+	const TABELA = 'tarefa';
 
 	function __construct(){}
 

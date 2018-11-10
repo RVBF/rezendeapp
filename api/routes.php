@@ -78,4 +78,36 @@ $app->get('/loja', function(Request $req,  Response $res, $args = []) use ($app)
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
 });
 
+// Início das rotas para tarefa
+$app->get('/tarefa', function(Request $req,  Response $res, $args = []) use ($app) {
+	$this->logger->addInfo("Acessando listagem de tarefa");	
+	$ctrl = new ControladoraTarefa($req->getQueryParams());
+	$response = $ctrl->todos();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
+
+});
+
+$app->post('/tarefa', function(Request $req,  Response $res, $args = []) use ($app) {
+	$this->logger->addInfo("Acessando o cadastro de tarefa");
+	$ctrl = new ControladoraTarefa($req->getParsedBody());
+	$response = $ctrl->adicionar();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+
+});
+
+$app->put('/tarefa', function(Request $req,  Response $res, $args = []) use ($app) {
+	$this->logger->addInfo("Acessando a atualização de tarefas");
+	$ctrl = new ControladoraTarefa($req->getParsedBody());
+	$response = $ctrl->atualizar();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+
+});
+
+$app->delete('/tarefa/{id}', function(Request $req,  Response $res, $args = []) use ($app) {
+	$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
+	$ctrl = new ControladoraTarefa($req->getParsedBody());
+	$response = $ctrl->remover($args['id']);
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+});
+
 ?>
