@@ -180,8 +180,6 @@
 			_this.formulario.find('#loja').val(obj.categoria.id).trigger('change');
 			_this.formulario.find('#descricao').val(obj.descricao);
 
-			console.log(data);
-			console.log(hora);
 			dataPicker.set('select', new Date(data[0], data[1], data[2]))
 			horaPicker.set('select', hora[0] + ':' + hora[1], { format: 'hh:i' })
 

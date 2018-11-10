@@ -140,5 +140,10 @@
 			event.preventDefault();
 			router.navigate('/');
 		});
+
+
+		$('.tarefa_link').on('click', function(){
+			router.navigate('/tarefa');
+		});
 	});
 })(window , app, document, jQuery);

@@ -7,12 +7,12 @@ use \phputil\RTTI;
 
 
 /**
- * Controladora de Loja
+ * Controladora de Tarefa
  *
  * @author	Rafael Vinicius Barros Ferreira
  * @version	0.1
  */
-class ControladoraLoja {
+class ControladoraTarefa {
 
 	private $params;
 	private $colecaoLoja;

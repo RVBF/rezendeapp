@@ -1,5 +1,5 @@
 <div class="card">
-    <div class="card-header  bg-secondary text-white">Checklist</div>
+    <div class="card-header  bg-secondary text-white">Tarefas</div>
 
     <div class="card bg-light text-dark">
         <div class="card-body">
@@ -18,42 +18,22 @@
     <div class="card desabilitado d-none" id="painel_formulario">
         <div class="card-body">
             <div class="col-xs-12  col-sm-12 col-md-12">
-                <form class="form-horizontal " id="checklist_form">
+                <form class="form-horizontal " id="tarefa_form">
                     <input type="hidden" id="id" name ="id" />
-
                     <div class="row form-row">
-                        <div class="col-xs-6 col-md-6 col-sm-6 col-6">
-                            <label for="categoria">Categoria</label>
-                            <select id ="categoria"  name="categoria" class="form-control select2"></select>
-                        </div>
-
-                        <div class="col-xs-6 col-md-6 col-sm-6 col-6">
-                            <label for="loja">Loja</label>
-                            <select id ="loja"  name="loja" class="form-control select2"></select>
+                        <div class="col-xs-12 col-md-12 col-sm-12 col-12">
+                            <label for="checkçist">Checkçist</label>
+                            <select id ="checkçist"  name="checkçist" class="form-control select2"></select>
                         </div>
                     </div>
-
-                    <div class="row form-row">
-                        <div class="col-xs-6 col-md-6 col-sm-6 col-6">
-                            <label for="data_limite">Data limite</label>
-                            <input type="text" class="form-control data" id="data_limite"/>
-                        </div>
-
-                        <div class="col-xs-6 col-md-6 col-sm-6 col-6">
-                            <div class="form-group">
-                                <label for="hora_limite">Hora limite</label>
-                                <input type="text" class="form-control hora" id="hora_limite"/>
-                            </div>
-                        </div>
-                    </div> 
 
                     <div class="row form-row">
                         <div class="col-xs-12 col-md-12 col-sm-12 col-12">
-                            <label for="descricao">Descrição</label>
-                            <textarea class="form-control" rows="2" id="descricao"></textarea>
+                            <label for="titulo">Título</label>
+                            <input type="text" class="form-control" id="titulo" name="titulo" required>
                         </div>
                     </div>
- 
+
                     <div  class="row">
                         <div class="col-xs-12  col-sm-12 col-md-12">
                             <br /><div id="msg" class="text-danger msg" ></div>
@@ -73,32 +53,20 @@
 
     <div class="card-body" id="painel_listagem">
         <div class="col-xs-12 col-sm-12 col-md-12">
-            <table class="table table-striped table-bordered dt-responsive nowrap" id="checklist" >
+            <table class="table table-striped table-bordered" id="tarefa" >
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Data Limite</th>
-                        <th>Categoria</th>
-                        <th>Descricão</th>
-                        <th>Loja</th>
+                        <th>Título</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
+                    <tr><td></td><td></td></tr>
                 </tbody>
                 <tfoot>
                     <tr>
                         <th>Id</th>
-                        <th>Data Limite</th>
-                        <th>Categoria</th>
-                        <th>Descricão</th>
-                        <th>Loja</th>
+                        <th>Título</th>
                     </tr>
                 </tfoot>
             </table>
@@ -106,10 +74,12 @@
     </div> 
 </div>
 <script>
-    $(document).ready(function() {
-		var servicoChecklist = new app.ServicoChecklist();
-        var crltChecklist = new app.ControladoraListagemChecklist(servicoChecklist);
+    $(document).ready(function()
+	{
+		var servicotarefa = new app.Servicotarefa();
 
-        crltChecklist.configurar();
+        var controladoraListagemtarefa = new app.ControladoraListagemtarefa(servicotarefa);
+
+        controladoraListagemtarefa.configurar();
 	});
 </script>

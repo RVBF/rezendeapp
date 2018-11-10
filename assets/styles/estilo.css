@@ -406,3 +406,9 @@ ul.rezende-menu-wrap li a {
 .picker{
     z-index: 1000000 !important;
 }
+
+@media (min-height: 33.875em){
+    .picker--opened .picker__frame {
+        top: 10em !important;
+    }
+}
