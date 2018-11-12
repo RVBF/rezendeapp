@@ -70,9 +70,9 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa
 	/**
 	 * @inheritDoc
 	 */
-	function todos($limite = 0, $pulo = 0) {
+	function todos($limite = 0, $pulo = 0, $idChecklist) {
 		try {	
-			$lojas = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+			$lojas = Db::table(self::TABELA)->where('checklist_id', $idChecklist)->offset($limite)->limit($pulo)->get();
 			$lojasObjects = [];
 			foreach ($lojas as $loja) {
 				$lojasObjects[] =  $this->construirObjeto($loja);

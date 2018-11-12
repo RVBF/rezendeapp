@@ -82,7 +82,7 @@
 
     // router.get('/categorias', verficarLogin , criarRotaPara('categoria.html'));
 	router.get('/categorias' , criarRotaPara('categoria.html'));
-	router.get('/tarefas' , criarRotaPara('tarefa.html'));
+	router.get('/checklist/:id/tarefa' , criarRotaPara('tarefa.html'));
 
     // router.get('/', verficarLogin , criarRotaPara('home.html'));
     // router.get('', verficarLogin , criarRotaPara('home.html'));

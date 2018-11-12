@@ -104,7 +104,6 @@
 	dependenciasCSS.push({ url : 'vendor/pickadate/lib/compressed/themes/default.time.css' });
 	dependenciasCSS.push({ url : 'vendor/pickadate/lib/compressed/themes/default.date.css' });
 	dependenciasCSS.push({ url : 'vendor/select2/dist/css/select2.min.css' });
-	dependenciasCSS.push({ url : 'vendor/select2-bootstrap-theme/dist/select2-bootstrap.min.css'});
 	dependenciasCSS.push({ url : 'vendor/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css'});
 
 	
@@ -158,18 +157,18 @@
 		loader.script('assets/js/categoria/categoria.serv.js');
 		loader.script('assets/js/categoria/categoria.form.ctrl.js');
 		loader.script('assets/js/categoria/categoria.list.ctrl.js');
-		
+
 		loader.script('assets/js/checklist/checklist.serv.js');
 		loader.script('assets/js/checklist/checklist.form.ctrl.js');
 		loader.script('assets/js/checklist/checklist.list.ctrl.js');
 
-		loader.script('assets/js/loja/loja.serv.js');
-		// loader.script('assets/js/loja/loja.form.ctrl.js');
-		// loader.script('assets/js/loja/loja.list.ctrl.js');
-
 		loader.script('assets/js/tarefa/tarefa.serv.js');
 		loader.script('assets/js/tarefa/tarefa.form.ctrl.js');
 		loader.script('assets/js/tarefa/tarefa.list.ctrl.js');
+
+		loader.script('assets/js/loja/loja.serv.js');
+		// loader.script('assets/js/loja/loja.form.ctrl.js');
+		// loader.script('assets/js/loja/loja.list.ctrl.js');
 	}});
 	
 

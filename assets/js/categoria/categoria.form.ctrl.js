@@ -128,6 +128,3 @@
 	app.ControladoraFormCategoria = ControladoraFormCategoria;
 
 })(window, app, jQuery, toastr);
-
-
-var url = window.location.href;

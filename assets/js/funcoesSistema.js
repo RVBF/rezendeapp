@@ -53,6 +53,21 @@
 				theme: 'bootstrap4',
 				width: '100%'
 			});
+
+			$(evento.target).find(".categoria_link").on('click', function(event){
+				event.preventDefault();
+				router.navigate('/categorias');
+			});
+	
+			$(evento.target).find('.checklist_link').on('click', function(event){
+				event.preventDefault();
+				router.navigate('/');
+			});
+	
+			$(evento.target).find('.tarefa_link').on('click', function(event){
+				event.preventDefault();
+				router.navigate('/tarefa');
+			});
 			
 		}
 	}
@@ -123,27 +138,10 @@
 			}
 			else{
 				contexto.desabilitar(false);
-
-				console.log(contexto.find('form').find('.msg'));
 				contexto.find('form').find('.msg').empty();
 				contexto.find('form').find('.msg').append(data.mensagem);
 
 			}
 		};
-
-		$(".categoria_link").on('click', function(event){
-			event.preventDefault();
-			router.navigate('/categorias');
-		});
-
-		$('.checklist_link').on('click', function(){
-			event.preventDefault();
-			router.navigate('/');
-		});
-
-
-		$('.tarefa_link').on('click', function(){
-			router.navigate('/tarefa');
-		});
 	});
 })(window , app, document, jQuery);
