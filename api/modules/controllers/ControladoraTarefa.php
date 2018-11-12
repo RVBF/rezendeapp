@@ -21,7 +21,7 @@ class ControladoraTarefa {
 	function __construct($params) {
 		$this->params = $params;
 		$this->colecaoTarefa = Dice::instance()->create('ColecaoTarefa');
-		$this->colecaoChecklist = Dice::isntance()->create('ColecaChecklist');
+		$this->colecaoChecklist = Dice::instance()->create('ColecaoChecklist');
 	}
 
 	function todos($idChecklist) {
@@ -58,12 +58,13 @@ class ControladoraTarefa {
 
 			throw new Exception($msg);
 		}
-		
+
 		$checklist = $this->colecaoChecklist->comId($checklistId);
-		
+
 		if(!isset($checklist) and !($checklist instanceof Checklist)){
 			throw new Exception("Checklist não encontrada na base de dados.");
 		}
+
 		$tarefa = new Tarefa(
 			0,
 			\ParamUtil::value($this->params, 'titulo'),
@@ -74,7 +75,44 @@ class ControladoraTarefa {
 		$resposta = [];
 		
 		try {
+
 			$tarefa = $this->colecaoTarefa->adicionar($tarefa);
+			$resposta = ['categoria'=> RTTI::getAttributes( $tarefa, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria cadastrada com sucesso.']; 
+		}
+		catch (\Exception $e) {
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+		}
+
+		return $resposta;
+	}
+
+	function atualizar($checklistId) {
+		$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo', 	'descricao'], $this->params);
+		
+		if(count($inexistentes) > 0) {
+			$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
+
+			throw new Exception($msg);
+		}
+
+		$checklist = $this->colecaoChecklist->comId($checklistId);
+
+		if(!isset($checklist) and !($checklist instanceof Checklist)){
+			throw new Exception("Checklist não encontrada na base de dados.");
+		}
+
+		$tarefa = new Tarefa(
+			\ParamUtil::value($this->params, 'id'),
+			\ParamUtil::value($this->params, 'titulo'),
+			\ParamUtil::value($this->params, 'descricao'),
+			$checklist
+		);
+
+		$resposta = [];
+		
+		try {
+
+			$tarefa = $this->colecaoTarefa->atualizar($tarefa);
 			$resposta = ['categoria'=> RTTI::getAttributes( $tarefa, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria cadastrada com sucesso.']; 
 		}
 		catch (\Exception $e) {

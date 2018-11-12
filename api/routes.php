@@ -90,7 +90,7 @@ $app->get('/checklist/{idChecklist}/tarefa', function(Request $req,  Response $r
 $app->post('/checklist/{idChecklist}/tarefa', function(Request $req,  Response $res, $args = []) use ($app) {
 	$this->logger->addInfo("Acessando o cadastro de tarefa");
 	$ctrl = new ControladoraTarefa($req->getParsedBody());
-	$response = $ctrl->adicionar();
+	$response = $ctrl->adicionar($args['idChecklist']);
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 
 });

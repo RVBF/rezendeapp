@@ -31,11 +31,14 @@
 					data: 'id',
 					targets: 0
 
-				},
-				{
+				}, {
 					data: 'titulo',
 					responsivePriority: 1,
 					targets: 1
+				}, {
+					data : 'descricao',
+					responsivePriority: 2,
+					targets : 2
 				}
 			];
 

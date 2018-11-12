@@ -19,8 +19,9 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist
 			try {	
 
 				$id = Db::table(self::TABELA)->insertGetId(['descricao' => $obj->getDescricao(),
-					'titulo'=> $obj->getTitulo(),
-					'checklist_id'=> $obj->getChecklist()->getId()
+					'data_limite'=> $obj->getDataLimite(),
+					'categoria_id'=> $obj->getCategoria()->getId(),
+					'loja_id'=> $obj->getLoja()->getId()
 				]);
 				
 				$obj->setId($id);
@@ -75,7 +76,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist
 
 	function comId($id){
 		try {	
-			$categoria = $this->construirObjeto(DB::table(self::TABELA)->where('id', $obj->getId())->get());
+			$categoria = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
 
 			return $categoria;
 		}
@@ -105,7 +106,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist
 		}
 	}
 
-	function construirObjeto(array $row){
+	function construirObjeto(array $row) {
 		$categoria = Dice::instance()->create('ColecaoCategoria')->comId($row['categoria_id']);
 		$loja = Dice::instance()->create('ColecaoLoja')->comId($row['loja_id']);
 		$checklist = new Checklist($row['id'],$row['descricao'], $row['data_limite'], $row['data_cadastro'], $categoria, $loja);
