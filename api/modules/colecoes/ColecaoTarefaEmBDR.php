@@ -16,8 +16,11 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa
 
 	function adicionar(&$obj) {
 		try {	
-			$id = Db::table(self::TABELA)->insertGetId(
-				['titulo' => $obj->getTitulo()]
+
+			$id = Db::table(self::TABELA)->insertGetId([ 'titulo' => $obj->getTitulo(),
+					'descricao' => $obj->getDescricao(),
+					'checklist_id' => $obj->getChecklist()->getId()
+				]
 			);
 			
 			$obj->setId($id);
@@ -41,16 +44,21 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa
 	}
 
 	function atualizar(&$obj) {
-		if($this->validarCategoria($obj)){
-			try {	
-				DB::table(self::TABELA)->where('id', $obj->getId())->update(['titulo' => $obj->getTitulo()]);
+		try {	
 
-				return $obj;
-			}
-			catch (\Exception $e)
-			{
-				throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
-			}
+			$id = Db::table(self::TABELA)->where('id', $obj->getId())->update([ 'titulo' => $obj->getTitulo(),
+					'descricao' => $obj->getDescricao(),
+					'checklist_id' => $obj->getChecklist()->getId()
+				]
+			);
+			
+			$obj->setId($id);
+
+			return $obj;
+		}
+		catch (\Exception $e)
+		{
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
 		}
 		
 	}
@@ -72,13 +80,14 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa
 	 */
 	function todos($limite = 0, $pulo = 0, $idChecklist) {
 		try {	
-			$lojas = Db::table(self::TABELA)->where('checklist_id', $idChecklist)->offset($limite)->limit($pulo)->get();
-			$lojasObjects = [];
-			foreach ($lojas as $loja) {
-				$lojasObjects[] =  $this->construirObjeto($loja);
+			$tarefas = Db::table(self::TABELA)->where('checklist_id', $idChecklist)->offset($limite)->limit($pulo)->get();
+
+			$tarefasObjects = [];
+			foreach ($tarefas as $loja) {
+				$tarefasObjects[] =  $this->construirObjeto($loja);
 			}
 
-			return $lojasObjects;
+			return $tarefasObjects;
 		}
 		catch (\Exception $e)
 		{
@@ -90,6 +99,7 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa
 		try {	
 			$lojas = Db::table(self::TABELA)->whereIn('id', $ids)->get();
 			$lojasObjects = [];
+
 			foreach ($lojas as $loja) {
 				$lojasObjects[] =  $this->construirObjeto($loja);
 			}
@@ -103,9 +113,12 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa
 	}
 
 	function construirObjeto(array $row) {
-		$loja = new Loja($row['id'],$row['razaoSocial'], $row['nomeFantasia']);
+		$checklist = Dice::instance()->create('ColecaoChecklist')->comId($row['checklist_id']);
 
-		return $loja;
+		$tarefa = new Tarefa($row['id'],$row['titulo'], $row['descricao'], $checklist);
+		// Debuger::printr($tarefa);
+
+		return $tarefa;
 	}	
 
     function contagem() {

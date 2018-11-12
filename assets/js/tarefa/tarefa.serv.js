@@ -7,9 +7,11 @@
  {
 	'use strict';
 
-	function Tarefa(id, titulo) {
+	function Tarefa(id, titulo, descricao) {
 		this.id = id  || 0;
 		this.titulo = titulo  || '';
+		this.descricao = descricao  || '';
+
 	};
 
 	function ServicoTarefa() { // Model
@@ -20,10 +22,11 @@
 		};
 
 		// Cria um objeto de Tarefa
-		this.criar = function criar(id, titulo) {
+		this.criar = function criar(id, titulo, descricao) {
  			return {
 				id : id  || 0,
-				titulo : titulo  || ''
+				titulo : titulo  || '',
+				descricao : descricao || ''
 			};
 		};
 
@@ -42,8 +45,7 @@
 			});
 		};
 
-		_this.atualizar = function atualizar(obj, idChecklist)
-		{
+		_this.atualizar = function atualizar(obj, idChecklist) {
 			return $.ajax({
 				type: "PUT",
 				url: _this.rota(idChecklist),

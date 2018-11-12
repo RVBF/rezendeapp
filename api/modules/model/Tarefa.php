@@ -17,7 +17,7 @@ class Tarefa {
 		$this->id = $id;
         $this->titulo = $titulo;
         $this->descricao = $descricao;
-        $this->tarefa = $checklist;
+        $this->checklist = $checklist;
     }
 
     public function getId(){
