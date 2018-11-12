@@ -12,13 +12,13 @@
 		var _this = this;
 		var _cont = 0;
 		var _tabela = null;
+		var ultimoObjetoSelecionado = null;
 		_this.botaoCadastrar = $('#cadastrar');
 		_this.botaoEditar = $('#editar');
 		_this.botaoRemover = $('#remover');
 		_this.botaoAtualizar = $('#atualizar');
 		_this.idTabela = $('#checklist');
 		var ctrlFormulario = new app.ControladoraFormChecklist(servicoCheckList, _this);
-
 
 		//Configura a tabela
 		_this.opcoesDaTabela = function opcoesDaTabela() {
@@ -123,6 +123,7 @@
 
 		_this.selecionar = function selecionar() {
 			var objeto = _tabela.row('.selected').data();
+			ultimoObjetoSelecionado = objeto;
 			if(objeto.id > 0){
 				$('.depende_selecao').each(function(){
 					$(this).prop('disabled', false);
@@ -142,8 +143,8 @@
 			_this.botaoAtualizar.on('click',_this.atualizar);
 			_this.botaoRemover.on('click', _this.remover)
 			_tabela.on('dblclick', 'tr', function(event){
-				console.log(':)');
-				$('.tarefa_link').trigger('click');
+				event.preventDefault();
+				router.navigate('/checklist/' + ultimoObjetoSelecionado.id +'/tarefa' );
 			});
 
 			_tabela.on('select',_this.selecionar);

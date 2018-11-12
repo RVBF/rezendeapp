@@ -16,27 +16,27 @@
 		_this.botaoEditar = $('#editar');
 		_this.botaoRemover = $('#remover');
 		_this.botaoAtualizar = $('#atualizar');
-		_this.idTabela = $('#tarefa');
-		var ctrlFormulario = new app.ControladoraListagemTarefa(servicoTarefa, _this);
+		_this.idTabela = $('#tarefa_table');
+		_this.idChecklist = window.location.href.split('#')[1].substring(1, url.length).split('/')[1];	
 
+		var ctrlFormulario = new app.ControladoraFormTarefa(servicoTarefa, _this);
+	
 
 		//Configura a tabela
 		_this.opcoesDaTabela = function opcoesDaTabela() {
 			var objeto = $.extend(true, {}, app.dtOptions);
-			objeto.ajax = servicoTarefa.rota();
+			objeto.ajax = servicoTarefa.rota(_this.idChecklist);
 
 			objeto.columnDefs = [ {
 					data: 'id',
 					targets: 0
-				}, {
+
+				},
+				{
 					data: 'titulo',
 					responsivePriority: 1,
 					targets: 1
-                }, {
-					data: 'tarefa.nome',
-					responsivePriority: 2,
-					targets: 2
-				},
+				}
 			];
 
 			return objeto;
@@ -133,7 +133,7 @@
 
 			_tabela.on('select',_this.selecionar);
 		};
-	} // ControladoraListagemTarefa
+	}; // ControladoraListagemTarefa
 
 	// Registrando
 	app.ControladoraListagemTarefa = ControladoraListagemTarefa;

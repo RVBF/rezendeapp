@@ -11,13 +11,13 @@ class Tarefa {
 	private $id;
     private $titulo;
     private $descricao;
-    private $tarefa;
+    private $checklist;
 
-    function __construct($id = 0, $titulo = '', $descricao = '', $tarefa = '') {
+    function __construct($id = 0, $titulo = '', $descricao = '', $checklist = '') {
 		$this->id = $id;
         $this->titulo = $titulo;
         $this->descricao = $descricao;
-        $this->tarefa = $tarefa;
+        $this->tarefa = $checklist;
     }
 
     public function getId(){
@@ -44,12 +44,12 @@ class Tarefa {
         $this->descricao = $descricao;
     }
 
-    public function getTarefa(){
-        return $this->tarefa; 
+    public function getChecklist(){
+        return $this->checklist; 
     }
  
-    public function setTarefa($tarefa){
-        $this->tarefa = $tarefa;
+    public function setChecklist($checklist){
+        $this->checklist = $checklist;
     }
 }
 ?>

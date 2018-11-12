@@ -79,15 +79,15 @@ $app->get('/loja', function(Request $req,  Response $res, $args = []) use ($app)
 });
 
 // Início das rotas para tarefa
-$app->get('/tarefa', function(Request $req,  Response $res, $args = []) use ($app) {
+$app->get('/checklist/{idChecklist}/tarefa', function(Request $req,  Response $res, $args = []) use ($app) {
 	$this->logger->addInfo("Acessando listagem de tarefa");	
 	$ctrl = new ControladoraTarefa($req->getQueryParams());
-	$response = $ctrl->todos();
+	$response = $ctrl->todos($args['idChecklist']);
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
 
 });
 
-$app->post('/tarefa', function(Request $req,  Response $res, $args = []) use ($app) {
+$app->post('/checklist/{idChecklist}/tarefa', function(Request $req,  Response $res, $args = []) use ($app) {
 	$this->logger->addInfo("Acessando o cadastro de tarefa");
 	$ctrl = new ControladoraTarefa($req->getParsedBody());
 	$response = $ctrl->adicionar();
@@ -95,7 +95,7 @@ $app->post('/tarefa', function(Request $req,  Response $res, $args = []) use ($a
 
 });
 
-$app->put('/tarefa', function(Request $req,  Response $res, $args = []) use ($app) {
+$app->put('/checklist/{idChecklist}/tarefa', function(Request $req,  Response $res, $args = []) use ($app) {
 	$this->logger->addInfo("Acessando a atualização de tarefas");
 	$ctrl = new ControladoraTarefa($req->getParsedBody());
 	$response = $ctrl->atualizar();
@@ -103,7 +103,7 @@ $app->put('/tarefa', function(Request $req,  Response $res, $args = []) use ($ap
 
 });
 
-$app->delete('/tarefa/{id}', function(Request $req,  Response $res, $args = []) use ($app) {
+$app->delete('/checklist/{idChecklist}/tarefa/{id}', function(Request $req,  Response $res, $args = []) use ($app) {
 	$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
 	$ctrl = new ControladoraTarefa($req->getParsedBody());
 	$response = $ctrl->remover($args['id']);

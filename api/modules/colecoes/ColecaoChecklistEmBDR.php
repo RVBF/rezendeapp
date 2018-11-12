@@ -19,9 +19,8 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist
 			try {	
 
 				$id = Db::table(self::TABELA)->insertGetId(['descricao' => $obj->getDescricao(),
-					'data_limite'=> $obj->getDataLimite(),
-					'categoria_id'=> $obj->getCategoria()->getId(),
-					'loja_id'=> $obj->getLoja()->getId()
+					'titulo'=> $obj->getTitulo(),
+					'checklist_id'=> $obj->getChecklist()->getId()
 				]);
 				
 				$obj->setId($id);

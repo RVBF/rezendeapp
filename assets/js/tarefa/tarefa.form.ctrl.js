@@ -8,21 +8,26 @@
 {
 	'use strict';
 
-	function ControladoraFormTarefa(servicotarefa, controladoraListagemtarefa) {
+	function ControladoraFormTarefa(servicoTarefa, controladoraListagemTarefa) {
 		var _this = this;
 
 		_this.alterar;
 		_this.formulario = $('#tarefa_form');
 		_this.botaoSubmissao = $('#salvar')
 		_this.cancelarModoEdicao = $('#cancelar_edicao')
+		_this.idChecklist = window.location.href.split('#')[1].substring(1, url.length).split('/')[1];	
 
 		// Cria as opções de validação do formulário
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
 			var opcoes = {
 				rules: {
 					"titulo": {
-						// required    : true,
-						// rangelength : [ 2, 85 ]
+						required    : true,
+						rangelength : [ 2, 85 ]
+					},
+
+					'descricao':{
+						rangelength : [10,255]
 					}
 				},
 
@@ -31,26 +36,24 @@
 					"titulo": {
 						required    : "O campo título é obrigatório.",
 						rangelength : $.validator.format("O campo nome deve ter no mínimo  {2} e no máximo {85} caracteres.")
+					},
+
+					"descricao": {
+						rangelength : $.validator.format("O campo nome deve ter no mínimo  {10} e no máximo {255} caracteres.")
 					}
 				}
 			};
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
-				_this.formulario.desabilitar(false);
-
-
-				var erro = function erro(jqXHR, textStatus, errorThrown) {
-					var mensagem = jqXHR.responseText;
-					_this.formulario.find('#msg').empty().append('<div class="error" >' + mensagem + '</div>');
-				};
+				_this.formulario.desabilitar(true);
 				
 				var terminado = function() {
-					_this.formulario.desabilitar(true);
+					_this.formulario.desabilitar(false);
 				};
 				
 				var obj = _this.conteudo();
-				var jqXHR = _this.alterar ? servicotarefa.atualizar(obj) : servicotarefa.adicionar(obj);
-				jqXHR.done(window.sucessoParaFormulario).fail(window.erro);
+				var jqXHR = _this.alterar ? servicoTarefa.atualizar(obj, _this.idChecklist) : servicoTarefa.adicionar(obj, _this.idChecklist);
+				jqXHR.done(window.sucessoParaFormulario).fail(window.erro).always(terminado);
 
 				if(_this.alterar){
 					$('.depende_selecao').each(function(){
@@ -64,9 +67,10 @@
         
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
-			return servicotarefa.criar(
-                $('#id').val(),
-                $('#titulo').val()
+			return servicoTarefa.criar(
+				$('#id').val(),
+				$('#titulo').val(),
+                $('#descricao').val()
 			);
 		};
 
@@ -101,7 +105,8 @@
 		// Desenha o objeto no formulário
 		_this.desenhar = function desenhar(obj) {
 			_this.formulario.find('#id').val(obj.id);
-            _this.formulario.find('#titulo').val(obj.titulo);
+			_this.formulario.find('#titulo').val(obj.titulo);
+			_this.formulario.find('#descricao').val(obj.descricao);
 		};
 
 		_this.salvar = function salvar() {
@@ -128,6 +133,3 @@
 	app.ControladoraFormTarefa = ControladoraFormTarefa;
 
 })(window, app, jQuery, toastr);
-
-
-var url = window.location.href;
