@@ -1,5 +1,5 @@
 /**
- *  tarefa.list.ctrl.js
+ *  pergunta.list.ctrl.js
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */
@@ -7,7 +7,7 @@
 {
 	'use strict';
 
-	function ControladoraListagemTarefa(servicoTarefa)
+	function ControladoraListagemPergunta(servicoPergunta)
 	{
 		var _this = this;
 		var _cont = 0;
@@ -16,29 +16,25 @@
 		_this.botaoEditar = $('#editar');
 		_this.botaoRemover = $('#remover');
 		_this.botaoAtualizar = $('#atualizar');
-		_this.idTabela = $('#tarefa_table');
-		_this.idChecklist = window.location.href.split('#')[1].substring(1, url.length).split('/')[1];	
+		_this.idTabela = $('#pergunta_table');
+		_this.idTarefa = window.location.href.split('#')[1].substring(1, url.length).split('/')[1];	
 
-		var ctrlFormulario = new app.ControladoraFormTarefa(servicoTarefa, _this);
+		var ctrlFormulario = new app.ControladoraFormPergunta(servicoPergunta, _this);
 	
 		//Configura a tabela
 		_this.opcoesDaTabela = function opcoesDaTabela() {
 			var objeto = $.extend(true, {}, app.dtOptions);
-			objeto.ajax = servicoTarefa.rota(_this.idChecklist);
+			objeto.ajax = servicoPergunta.rota(_this.idTarefa);
 
 			objeto.columnDefs = [ {
 					data: 'id',
 					targets: 0
 
 				}, {
-					data: 'titulo',
+					data: 'pergunta',
 					responsivePriority: 1,
-					targets: 1
-				}, {
-					data : 'descricao',
-					responsivePriority: 2,
-					targets : 2
-				}
+                    targets: 1
+                }
 			];
 
 			return objeto;
@@ -72,14 +68,14 @@
 
 			BootstrapDialog.show({
 				type	: BootstrapDialog.TYPE_DANGER,
-				title	: 'Deseja remover esta tarefa?',
-				message	: 'Tarefa de id:' + objeto.id + ' e título :' + objeto.titulo,
+				title	: 'Deseja remover esta pergunta?',
+				message	: 'Pergunta de id:' + objeto.id + ' e título :' + objeto.pergunta,
 				size	: BootstrapDialog.SIZE_LARGE,
 				buttons	: [ {
 						label	: '<u>S</u>im',
 						hotkey	: 'S'.charCodeAt(0),
 						action	: function(dialog){
-							servicoTarefa.remover(objeto.id, objeto.checklist.id).done(window.sucessoPadrao).fail(window.erro);
+							servicoPergunta.remover(objeto.id, objeto.checklist.id).done(window.sucessoPadrao).fail(window.erro);
 							
 							$('.depende_selecao').each(function(){
 								$(this).prop('disabled', true);
@@ -102,14 +98,11 @@
 					}
 				]
 			});
-
-
 		}; // remover
 
 		_this.visualizar = function visualizar(){
 			var objeto = _tabela.row($(this).parent(' td').parent('tr')).data();
-			router.navigate('/tarefa/visualizar/' +  objeto.id + '/');
-
+			router.navigate('/pergunta/visualizar/' +  objeto.id + '/');
 		};
 
 		_this.selecionar = function selecionar() {
@@ -139,29 +132,11 @@
 			_this.botaoEditar.on('click', _this.editar)
 			_this.botaoAtualizar.on('click',_this.atualizar);
 			_this.botaoRemover.on('click', _this.remover)
-			$('.gerenciar_perguntas').on('click', function (event) {
-				event.preventDefault();
-
-				var objeto = _tabela.row('.selected').data();
-
-				router.navigate('/tarefa/' + objeto.id + '/pergunta')
-				
-			});
-
-			$('.cadastrar_perguntas').on('click', function (event) {
-				event.preventDefault();
-
-				var objeto = _tabela.row('.selected').data();
-
-				router.navigate('/tarefa/' + objeto.id + '/pergunta/cadastrar-perguntas')
-				
-			});
-
 			_tabela.on('select',_this.selecionar);
 			_tabela.on('deselect', _this.deselect);
 		};
-	}; // ControladoraListagemTarefa
+	}; // ControladoraListagemPergunta
 
 	// Registrando
-	app.ControladoraListagemTarefa = ControladoraListagemTarefa;
+	app.ControladoraListagemPergunta = ControladoraListagemPergunta;
 })(window, app, jQuery, toastr, BootstrapDialog);

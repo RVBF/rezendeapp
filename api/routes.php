@@ -98,7 +98,7 @@ $app->post('/checklist/{idChecklist}/tarefa', function(Request $req,  Response $
 $app->put('/checklist/{idChecklist}/tarefa', function(Request $req,  Response $res, $args = []) use ($app) {
 	$this->logger->addInfo("Acessando a atualização de tarefas");
 	$ctrl = new ControladoraTarefa($req->getParsedBody());
-	$response = $ctrl->atualizar();
+	$response = $ctrl->atualizar($args['idChecklist']);
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 
 });
@@ -106,7 +106,39 @@ $app->put('/checklist/{idChecklist}/tarefa', function(Request $req,  Response $r
 $app->delete('/checklist/{idChecklist}/tarefa/{id}', function(Request $req,  Response $res, $args = []) use ($app) {
 	$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
 	$ctrl = new ControladoraTarefa($req->getParsedBody());
-	$response = $ctrl->remover($args['id']);
+	$response = $ctrl->remover($args['id'], $args['idChecklist']);
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+});
+
+// Início das rotas para pergunta
+$app->get('/tarefa/{idTarefa}/pergunta', function(Request $req,  Response $res, $args = []) use ($app) {
+	$this->logger->addInfo("Acessando listagem de tarefa");	
+	$ctrl = new ControladoraPergunta($req->getQueryParams());
+	$response = $ctrl->todos($args['idTarefa']);
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
+
+});
+
+$app->post('/tarefa/{idTarefa}/pergunta', function(Request $req,  Response $res, $args = []) use ($app) {
+	$this->logger->addInfo("Acessando o cadastro de tarefa");
+	$ctrl = new ControladoraPergunta($req->getParsedBody());
+	$response = $ctrl->adicionar($args['idTarefa']);
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+
+});
+
+$app->put('/tarefa/{idTarefa}/pergunta', function(Request $req,  Response $res, $args = []) use ($app) {
+	$this->logger->addInfo("Acessando a atualização de tarefas");
+	$ctrl = new ControladoraPergunta($req->getParsedBody());
+	$response = $ctrl->atualizar($args['idTarefa']);
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+
+});
+
+$app->delete('/tarefa/{idTarefa}/pergunta/{id}', function(Request $req,  Response $res, $args = []) use ($app) {
+	$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
+	$ctrl = new ControladoraPergunta($req->getParsedBody());
+	$response = $ctrl->remover($args['id'], $args['idTarefa']);
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 });
 

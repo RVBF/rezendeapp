@@ -33,9 +33,12 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa
 		}
 	}
 
-	function remover($id) {
+	function remover($id, $idChecklist) {
 		try {	
-			return DB::table(self::TABELA)->where('id', $id)->delete();
+			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+			$removido = DB::table(self::TABELA)->where('id', $id)->where('checklist_id', $idChecklist)->delete();
+			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+			return $removido;
 		}
 		catch (\Exception $e)
 		{
@@ -44,16 +47,17 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa
 	}
 
 	function atualizar(&$obj) {
-		try {	
+		try {
+			
+			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-			$id = Db::table(self::TABELA)->where('id', $obj->getId())->update([ 'titulo' => $obj->getTitulo(),
+			Db::table(self::TABELA)->where('id', $obj->getId())->update([ 'titulo' => $obj->getTitulo(),
 					'descricao' => $obj->getDescricao(),
 					'checklist_id' => $obj->getChecklist()->getId()
 				]
 			);
-			
-			$obj->setId($id);
 
+			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 			return $obj;
 		}
 		catch (\Exception $e)
@@ -65,9 +69,9 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa
 
 	function comId($id){
 		try {	
-			$loja = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
+			$tarefa = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
 
-			return $loja;
+			return $tarefa;
 		}
 		catch (\Exception $e)
 		{
@@ -83,8 +87,8 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa
 			$tarefas = Db::table(self::TABELA)->where('checklist_id', $idChecklist)->offset($limite)->limit($pulo)->get();
 
 			$tarefasObjects = [];
-			foreach ($tarefas as $loja) {
-				$tarefasObjects[] =  $this->construirObjeto($loja);
+			foreach ($tarefas as $tarefa) {
+				$tarefasObjects[] =  $this->construirObjeto($tarefa);
 			}
 
 			return $tarefasObjects;
@@ -97,14 +101,14 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa
 
 	function todosComId($ids = []) {
 		try {	
-			$lojas = Db::table(self::TABELA)->whereIn('id', $ids)->get();
-			$lojasObjects = [];
+			$tarefas = Db::table(self::TABELA)->whereIn('id', $ids)->get();
+			$tarefasObjects = [];
 
-			foreach ($lojas as $loja) {
-				$lojasObjects[] =  $this->construirObjeto($loja);
+			foreach ($tarefas as $tarefa) {
+				$tarefasObjects[] =  $this->construirObjeto($tarefa);
 			}
 
-			return $lojasObjects;
+			return $tarefasObjects;
 		}
 		catch (\Exception $e)
 		{
