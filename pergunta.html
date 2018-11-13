@@ -1,5 +1,5 @@
 <div class="card">
-    <div class="card-header  bg-secondary text-white">Categorias</div>
+    <div class="card-header  bg-secondary text-white">Perguntas</div>
 
     <div class="card bg-light text-dark">
         <div class="card-body">
@@ -18,26 +18,28 @@
     <div class="card desabilitado d-none" id="painel_formulario">
         <div class="card-body">
             <div class="col-xs-12  col-sm-12 col-md-12">
-                <form class="form-horizontal " id="categoria_form">
+                <form class="form-horizontal " id="pergunta_form">
                     <input type="hidden" id="id" name ="id" />
                     
                     <div class="row form-row">
-                        <div class="col-xs-11 col-md-11 col-sm-11 col-9">
-                            <label for="titulo">Título</label>
-                            <input type="text" class="form-control" id="titulo" name="titulo" required>
+                        <div class="col-xs-12 col-md-12 col-sm-12 col-12">
+                            <label for="pergunta">Pergunta :</label>
+                            <input type="text" class="form-control" id="pergunta" name="pergunta">
                         </div>
+                    </div> 
+                    
+                    <div  class="row">
+                        <div class="col-xs-12  col-sm-12 col-md-12">
+                            <br /><div id="msg" class="text-danger msg" ></div>
+                        </div>
+                    </div>
 
-                        <div class="col-xs-1 col-md-1 col-sm-1 col-3 button_add">
+                    <div class="row form-row card-footer">
+                        <div class="col-xs-12 col-md-12 col-sm-12 col-12 button_add">
                             <button type="submit" class="btn btn-success" id="salvar"><i class="fas fa-check"></i></i></button>
                             <button type="button" class="btn btn-default" id="cancelar_edicao"><i class="fas fa-sign-out-alt"></i></button>
                         </div>
-                    </div>  
-
-                    <div  lass="row">
-                        <div class="col-xs-12  col-sm-12 col-md-12">
-                            <br /><div id="msg" class="text-danger msg" ></div>
-                        </div
-                    ></div>
+                    </div>
                 </form>           
             </div>
         </div>
@@ -45,20 +47,23 @@
 
     <div class="card-body" id="painel_listagem">
         <div class="col-xs-12 col-sm-12 col-md-12">
-            <table class="table table-striped table-bordered dt-responsive nowrap" id="categoria" >
+            <table class="table table-striped table-bordered dt-responsive nowrap" id="pergunta_table">
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Título</th>
+                        <th>Pergunta</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td></td><td></td></tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
                 </tbody>
                 <tfoot>
                     <tr>
                         <th>Id</th>
-                        <th>Título</th>
+                        <th>Pergunta</th>
                     </tr>
                 </tfoot>
             </table>
@@ -67,10 +72,8 @@
 </div>
 <script>
     $(document).ready(function() {
-		var servicoCategoria = new app.ServicoCategoria();
-
-        var controladoraListagemCategoria = new app.ControladoraListagemCategoria(servicoCategoria);
-
-        controladoraListagemCategoria.configurar();
+		var servicoPergunta = new app.ServicoPergunta();
+        var crltListagemPergunta = new app.ControladoraListagemPergunta(servicoPergunta);
+        crltListagemPergunta.configurar();
 	});
 </script>

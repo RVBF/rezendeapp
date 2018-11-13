@@ -123,8 +123,9 @@
 	var dependenciasJavaScript = [];
 
 	dependenciasJavaScript.push({url : 'vendor/jquery/dist/jquery.js', async : true, onLoad : function(dependenciasJavaScript){
+		loader.script('vendor/popper.js/dist/umd/popper.min.js');
 		loader.script('vendor/bootstrap/dist/js/bootstrap.js');
-		loader.script('vendor/bootstrap/dist/js/bootstrap.bundle.js');       
+		loader.script('vendor/bootstrap/dist/js/bootstrap.bundle.js');
 		loader.script('vendor/datatables/media/js/jquery.dataTables.js');
 		loader.script('vendor/datatables/media/js/dataTables.bootstrap4.min.js');
 		// loader.script('vendor/datatables/media/js/dataTables.bootstrap.js');
@@ -144,7 +145,6 @@
 		loader.script('vendor/pickadate/lib/compressed/picker.date.js');
 		loader.script('vendor/pickadate/lib/compressed/picker.time.js');
 		loader.script('vendor/select2/dist/js/select2.min.js');
-
 
         // Inicialização
         loader.script('assets/js/jquery.meanmenu.js');
@@ -166,13 +166,14 @@
 		loader.script('assets/js/tarefa/tarefa.form.ctrl.js');
 		loader.script('assets/js/tarefa/tarefa.list.ctrl.js');
 
+		loader.script('assets/js/pergunta/pergunta.serv.js');
+		loader.script('assets/js/pergunta/pergunta.form.ctrl.js');
+		loader.script('assets/js/pergunta/pergunta.list.ctrl.js');
+
 		loader.script('assets/js/loja/loja.serv.js');
 		// loader.script('assets/js/loja/loja.form.ctrl.js');
 		// loader.script('assets/js/loja/loja.list.ctrl.js');
 	}});
-	
-
-
 	var loader = new window.Loader();
 
 	dependenciasJavaScript.forEach(function(e, index, arr)

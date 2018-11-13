@@ -1,14 +1,14 @@
 <?php
 
 /**
- *	Coleção de Tarefa
+ *	Coleção de Pergunta
  *
  *  @author		Rafael Vinicius Barros
  *  @version	0.1
  */
 
-interface ColecaoTarefa {
-
+interface ColecaoPergunta {
+    
     /**
      * Adiciona um objeto à coleção.
      *
@@ -32,7 +32,7 @@ interface ColecaoTarefa {
  	 * @param int $id	Identificação da checklist a qual o objeto pertence.
 	 * @throws	ColecaoException
 	 */
-	function remover($id, $idChecklist);
+    function remover($id, $idTarefa);
 	
 	/**
 	 * Obtém um objeto pelo seu id.
@@ -51,7 +51,7 @@ interface ColecaoTarefa {
 	 * @return array	Array de objetos a serem retornados.
 	 * @throws	ColecaoException
 	 */
-	function todos($limite = 0, $pulo = 0, $idChecklist);
+	function todos($limite = 0, $pulo = 0, $idTarefa);
 	
 	/**
 	 *  Retorna a contagem de elementos na coleção.

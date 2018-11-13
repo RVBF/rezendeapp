@@ -44,7 +44,7 @@ class Dice {
 		DI::config(DI::let('ColecaoChecklist')->create('ColecaoChecklistEmBDR'));
 		DI::config(DI::let('ColecaoLoja')->create('ColecaoLojaEmBDR'));
 		DI::config(DI::let('ColecaoTarefa')->create('ColecaoTarefaEmBDR'));
-
+		DI::config(DI::let('ColecaoPergunta')->create('ColecaoPerguntaEmBDR'));
 	}
 }
 

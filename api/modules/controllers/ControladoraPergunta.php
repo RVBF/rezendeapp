@@ -7,33 +7,33 @@ use \phputil\RTTI;
 
 
 /**
- * Controladora de Tarefa
+ * Controladora de Pergunta
  *
  * @author	Rafael Vinicius Barros Ferreira
  * @version	0.1
  */
-class ControladoraTarefa {
+class ControladoraPergunta {
 
 	private $params;
+	private $colecaoPergunta;
 	private $colecaoTarefa;
-	private $colecaoChecklist;
 	
 	function __construct($params) {
 		$this->params = $params;
+		$this->colecaoPergunta = Dice::instance()->create('ColecaoPergunta');
 		$this->colecaoTarefa = Dice::instance()->create('ColecaoTarefa');
-		$this->colecaoChecklist = Dice::instance()->create('ColecaoChecklist');
 	}
 
-	function todos($idChecklist) {
+	function todos($idTarefa) {
 		$dtr = new DataTablesRequest($this->params);
 		$contagem = 0;
 		$objetos = [];
 		$erro = null;
 
 		try {
-			$objetos = $this->colecaoTarefa->todos($dtr->start, $dtr->length, $idChecklist);
+            $objetos = $this->colecaoPergunta->todos($dtr->start, $dtr->length, $idTarefa);
 
-			$contagem = $this->colecaoTarefa->contagem();
+			$contagem = $this->colecaoPergunta->contagem();
 		}
 		catch (\Exception $e ) {
 			throw new Exception("Erro ao listar categorias");
@@ -50,8 +50,8 @@ class ControladoraTarefa {
 		return $conteudo;
 	}
 	
-	function adicionar($checklistId) {
-		$inexistentes = \ArrayUtil::nonExistingKeys(['titulo', 	'descricao'], $this->params);
+	function adicionar($tarefaId) {
+		$inexistentes = \ArrayUtil::nonExistingKeys(['pergunta'], $this->params);
 		
 		if(count($inexistentes) > 0) {
 			$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
@@ -59,25 +59,26 @@ class ControladoraTarefa {
 			throw new Exception($msg);
 		}
 
-		$checklist = $this->colecaoChecklist->comId($checklistId);
+		$tarefa = $this->colecaoTarefa->comId($tarefaId);
 
-		if(!isset($checklist) and !($checklist instanceof Checklist)){
+		if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
 			throw new Exception("Checklist não encontrada na base de dados.");
 		}
 
-		$tarefa = new Tarefa(
+		$pergunta = new Pergunta(
 			0,
-			\ParamUtil::value($this->params, 'titulo'),
-			\ParamUtil::value($this->params, 'descricao'),
-			$checklist
+            \ParamUtil::value($this->params, 'pergunta'),
+            null, 
+            null,
+            $tarefa
 		);
 
 		$resposta = [];
 		
 		try {
 
-			$tarefa = $this->colecaoTarefa->adicionar($tarefa);
-			$resposta = ['categoria'=> RTTI::getAttributes( $tarefa, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria cadastrada com sucesso.']; 
+			$pergunta = $this->colecaoPergunta->adicionar($pergunta);
+			$resposta = ['pergunta'=> RTTI::getAttributes( $pergunta, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Pergunta cadastrada com sucesso.']; 
 		}
 		catch (\Exception $e) {
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
@@ -95,7 +96,7 @@ class ControladoraTarefa {
 			throw new Exception($msg);
 		}
 
-		$checklist = $this->colecaoChecklist->comId($checklistId);
+		$checklist = $this->colecaoTarefa->comId($checklistId);
 
 		if(!isset($checklist) and !($checklist instanceof Checklist)){
 			throw new Exception("Checklist não encontrada na base de dados.");
@@ -112,7 +113,7 @@ class ControladoraTarefa {
 		
 		try {
 
-			$tarefa = $this->colecaoTarefa->atualizar($tarefa);
+			$tarefa = $this->colecaoPergunta->atualizar($tarefa);
 			$resposta = ['categoria'=> RTTI::getAttributes( $tarefa, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria cadastrada com sucesso.']; 
 		}
 		catch (\Exception $e) {
@@ -126,7 +127,7 @@ class ControladoraTarefa {
 		$resposta = [];
 
 		try {
-			$status = $this->colecaoTarefa->remover($id, $idChecklist);
+			$status = $this->colecaoPergunta->remover($id, $idChecklist);
 			
 			$resposta = ['status' => true, 'mensagem'=> 'Categoria removida com sucesso.']; 
 		}

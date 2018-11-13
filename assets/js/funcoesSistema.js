@@ -115,7 +115,10 @@
 		};
 
 		window.sucessoPadrao = function sucessoPadrao(data, textStatus, jqXHR){
+			var datatable = $('body').find('.table').DataTable();
+
 			if(data.status){
+				datatable.ajax.reload();
 				toastr.success(data.mensagem);
 			}
 			else{
@@ -124,13 +127,11 @@
 		};
 
 		window.sucessoParaFormulario = function sucessoParaFormulario( data, textStatus, jqXHR ) {
-			var datatable = $('body').find('.dataTable').DataTable();
 			var contexto = $('body').find('#painel_formulario');
 			
-			window.sucessoPadrao( data, textStatus, jqXHR );
+			window.sucessoPadrao(data, textStatus, jqXHR);
 
 			if(data.status){
-				datatable.ajax.reload();
 				contexto.find('form')[0].reset();
 				contexto.desabilitar(true);
 				contexto.addClass('desabilitado');
