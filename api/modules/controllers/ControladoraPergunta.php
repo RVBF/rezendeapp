@@ -6,6 +6,7 @@ use \phputil\JSON;
 use \phputil\RTTI;
 
 
+
 /**
  * Controladora de Pergunta
  *
@@ -87,8 +88,9 @@ class ControladoraPergunta {
 		return $resposta;
 	}
 
-	function atualizar($checklistId) {
-		$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo', 	'descricao'], $this->params);
+		
+	function adicionarTodas($tarefaId) {
+		$inexistentes = \ArrayUtil::nonExistingKeys(['data'], $this->params);
 		
 		if(count($inexistentes) > 0) {
 			$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
@@ -96,25 +98,31 @@ class ControladoraPergunta {
 			throw new Exception($msg);
 		}
 
-		$checklist = $this->colecaoTarefa->comId($checklistId);
+		$tarefa = $this->colecaoTarefa->comId($tarefaId);
 
-		if(!isset($checklist) and !($checklist instanceof Checklist)){
+		if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
 			throw new Exception("Checklist não encontrada na base de dados.");
 		}
+ 
+		$objetos = [];
 
-		$tarefa = new Tarefa(
-			\ParamUtil::value($this->params, 'id'),
-			\ParamUtil::value($this->params, 'titulo'),
-			\ParamUtil::value($this->params, 'descricao'),
-			$checklist
-		);
+		foreach ($this->params['data'] as $obj) {
+
+			$objetos[] = new Pergunta(
+				$obj['id'],
+				$obj['pergunta'],
+				null, 
+				null,
+				$tarefa
+			);
+		}
 
 		$resposta = [];
 		
 		try {
 
-			$tarefa = $this->colecaoPergunta->atualizar($tarefa);
-			$resposta = ['categoria'=> RTTI::getAttributes( $tarefa, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria cadastrada com sucesso.']; 
+			$objetos = $this->colecaoPergunta->adicionarTodas($objetos);
+			$resposta = ['perguntas'=> $objetos, 'status' => true, 'mensagem'=> 'Pergunta cadastrada com sucesso.']; 
 		}
 		catch (\Exception $e) {
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
@@ -123,11 +131,48 @@ class ControladoraPergunta {
 		return $resposta;
 	}
 
-	function remover($id, $idChecklist) {
+	function atualizar($tarefaId) {
+		$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'pergunta'], $this->params);
+		
+		if(count($inexistentes) > 0) {
+			$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
+
+			throw new Exception($msg);
+		}
+
+		$tarefa = $this->colecaoTarefa->comId($tarefaId);
+
+		if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
+			throw new Exception("Checklist não encontrada na base de dados.");
+		}
+
+		$pergunta = new Pergunta(
+			\ParamUtil::value($this->params, 'id'),
+            \ParamUtil::value($this->params, 'pergunta'),
+            null, 
+            null,
+            $tarefa
+		);
+
+		$resposta = [];
+		
+		try {
+
+			$pergunta = $this->colecaoPergunta->atualizar($pergunta);
+			$resposta = ['pergunta'=> RTTI::getAttributes( $pergunta, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Pergunta atualizada com sucesso.']; 
+		}
+		catch (\Exception $e) {
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+		}
+
+		return $resposta;
+	}
+
+	function remover($id, $tarefaId) {
 		$resposta = [];
 
 		try {
-			$status = $this->colecaoPergunta->remover($id, $idChecklist);
+			$status = $this->colecaoPergunta->remover($id, $tarefaId);
 			
 			$resposta = ['status' => true, 'mensagem'=> 'Categoria removida com sucesso.']; 
 		}

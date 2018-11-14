@@ -127,6 +127,14 @@ $app->post('/tarefa/{idTarefa}/pergunta', function(Request $req,  Response $res,
 
 });
 
+$app->post('/tarefa/{idTarefa}/pergunta/cadastrar-varias', function(Request $req,  Response $res, $args = []) use ($app) {
+	$this->logger->addInfo("Acessando o cadastro de tarefa");
+	$ctrl = new ControladoraPergunta($req->getParsedBody());
+	$response = $ctrl->adicionarTodas($args['idTarefa']);
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+
+});
+
 $app->put('/tarefa/{idTarefa}/pergunta', function(Request $req,  Response $res, $args = []) use ($app) {
 	$this->logger->addInfo("Acessando a atualização de tarefas");
 	$ctrl = new ControladoraPergunta($req->getParsedBody());

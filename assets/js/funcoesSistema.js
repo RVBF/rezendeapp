@@ -68,7 +68,11 @@
 				event.preventDefault();
 				router.navigate('/tarefa');
 			});
-			
+
+			$(evento.target).find('.tarefa_link').on('click', function(event){
+				event.preventDefault();
+				router.navigate('/tarefa');
+			});
 		}
 	}
 
@@ -83,6 +87,9 @@
 	$(document).ready(function()
 	{
 		window.router.navigate('/');
+		$.validator.addMethod("cRequired", $.validator.methods.required,
+		"Campo obrigatório.");
+		$.validator.addClassRules("campo_obrigatorio", {cRequired: true});
 
 		window.validarSeONavegadorSuporta  = function validarSeONavegadorSuporta() {
 			// Verificando se o navegador tem suporte aos recursos para redimensionamento

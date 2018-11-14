@@ -34,6 +34,29 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta
 		}
 	}
 
+	function adicionarTodas(&$objs){
+		try {	
+			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+			foreach ($objs as $key => $obj) {
+				$id = Db::table(self::TABELA)->insertGetId([ 'pergunta' => $obj->getPergunta(),
+						'tarefa_id' => $obj->getTarefa()->getId()
+					]
+				);
+				$obj->setId($id);
+				$objs[$key] = $obj;
+			}
+
+			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+
+			return $objs;
+		}
+		catch (\Exception $e) {
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		}
+	}
+
 	function remover($id, $idTarefa) {
 		try {	
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
@@ -52,11 +75,8 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta
 			
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-			Db::table(self::TABELA)->where('id', $obj->getId())->update([ 'pergunta' => $obj-perguntagetTitulo(),
-					'descricao' => $obj->getDescricao(),
-					'checklist_id' => $obj->getChecklist()->getId()
-				]
-			);
+			Db::table(self::TABELA)->where('id', $obj->getId())->update([ 'pergunta' => $obj->getPergunta(),
+			'tarefa_id' => $obj->getTarefa()->getId()]);
 
 			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 			return $obj;

@@ -16,6 +16,7 @@
 		_this.botaoEditar = $('#editar');
 		_this.botaoRemover = $('#remover');
 		_this.botaoAtualizar = $('#atualizar');
+		_this.botaoVoltar = $('#voltar');
 		_this.idTabela = $('#pergunta_table');
 		_this.idTarefa = window.location.href.split('#')[1].substring(1, url.length).split('/')[1];	
 
@@ -75,7 +76,7 @@
 						label	: '<u>S</u>im',
 						hotkey	: 'S'.charCodeAt(0),
 						action	: function(dialog){
-							servicoPergunta.remover(objeto.id, objeto.checklist.id).done(window.sucessoPadrao).fail(window.erro);
+							servicoPergunta.remover(objeto.id, objeto.tarefa.id).done(window.sucessoPadrao).fail(window.erro);
 							
 							$('.depende_selecao').each(function(){
 								$(this).prop('disabled', true);
@@ -125,13 +126,18 @@
 			$('.opcoes').desabilitar(true);
 		};
 
+		_this.voltar = function voltar() {
+			console.log('entrei');
+		};
+
 
 		_this.configurar = function configurar() {
 			_tabela = _this.idTabela.DataTable(_this.opcoesDaTabela());
 			_this.botaoCadastrar.on('click',_this.cadastrar);
 			_this.botaoEditar.on('click', _this.editar)
 			_this.botaoAtualizar.on('click',_this.atualizar);
-			_this.botaoRemover.on('click', _this.remover)
+			_this.botaoRemover.on('click', _this.remover);
+			_this.botaoVoltar.on('click', _this.voltar)
 			_tabela.on('select',_this.selecionar);
 			_tabela.on('deselect', _this.deselect);
 		};
