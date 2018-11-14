@@ -15,7 +15,15 @@ interface ColecaoPergunta {
      * @param object $obj	Objeto a ser adicionado.
      * @throws	ColecaoException
      */
-    function adicionar(&$obj);
+	function adicionar(&$obj);
+
+	/**
+     * Adiciona um objeto à coleção.
+     *
+     * @param object $obj	Objeto a ser adicionado.
+     * @throws	ColecaoException
+     */
+	function adicionarTodas(&$objs);
 	
 	/**
 	 * Atualiza um objeto.

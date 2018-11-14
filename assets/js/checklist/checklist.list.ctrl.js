@@ -12,7 +12,6 @@
 		var _this = this;
 		var _cont = 0;
 		var _tabela = null;
-		var ultimoObjetoSelecionado = null;
 		_this.botaoCadastrar = $('#cadastrar');
 		_this.botaoEditar = $('#editar');
 		_this.botaoRemover = $('#remover');
@@ -123,17 +122,22 @@
 
 		_this.selecionar = function selecionar() {
 			var objeto = _tabela.row('.selected').data();
-			ultimoObjetoSelecionado = objeto;
-			if(objeto.id > 0){
-				$('.depende_selecao').each(function(){
-					$(this).prop('disabled', false);
-				});
-			}
-			else{
-				$('.depende_selecao').each(function(){
-					$(this).prop('disabled', true);
-				});
-			}
+
+			$('.depende_selecao').each(function(){
+				$(this).prop('disabled', false);
+			});
+
+			$('.opcoes').removeClass('desabilitado').removeClass('d-none');
+			$('.opcoes').desabilitar(false);
+		};
+
+		_this.deselect = function deselect() {
+			$('.depende_selecao').each(function(){
+				$(this).prop('disabled', true);
+			});
+			
+			$('.opcoes').addClass('desabilitado').addClass('d-none');
+			$('.opcoes').desabilitar(true);
 		};
 
 		_this.configurar = function configurar() {
@@ -141,13 +145,16 @@
 			_this.botaoCadastrar.on('click',_this.cadastrar);
 			_this.botaoEditar.on('click', _this.editar)
 			_this.botaoAtualizar.on('click',_this.atualizar);
-			_this.botaoRemover.on('click', _this.remover)
-			_tabela.on('dblclick', 'tr', function(event){
+			_this.botaoRemover.on('click', _this.remover);
+			$('.ir_tarefas').on('click', function(){
 				event.preventDefault();
-				router.navigate('/checklist/' + ultimoObjetoSelecionado.id +'/tarefa' );
+				var objeto = _tabela.row('.selected').data();
+
+				router.navigate('/checklist/' + objeto.id +'/tarefa' );
 			});
 
 			_tabela.on('select',_this.selecionar);
+			_tabela.on('deselect', _this.deselect);		
 		};
 	} // ControladoraListagemChecklist
 
