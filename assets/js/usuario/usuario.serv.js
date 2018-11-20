@@ -10,7 +10,7 @@
 	function Usuario(id = 0, login = '', senha = '') {
 		this.id = id  || 0;
         this.login = login  || 0;
-        this.senha = senha;
+        this.senha = senha || '';
 	};
 
 	function ServicoUsuario() { // Model
@@ -21,7 +21,7 @@
 		};
 
 		// Cria um objeto de usuario
-		this.criar = function criar(id = 0, login = '') {
+		this.criar = function criar(id = 0, login = '', senha = '') {
  			return {
                 id : id  || 0,
 				login : login  || '',

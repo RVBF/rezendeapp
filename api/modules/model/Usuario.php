@@ -10,10 +10,13 @@ class Usuario {
 
 	private $id;
     private $login;
+    private $senha;
 
-    function __construct($id = 0, $login = '') {
+    function __construct($id = 0, $login = '', $senha = '') {
 		$this->id = $id;
         $this->login = $login;
+        $this->senha = $senha;
+
     }
 
     public function getId(){
@@ -30,6 +33,14 @@ class Usuario {
  
     public function setLogin($login){
         $this->login = $login;
+    }
+
+    public function getSenha(){
+        return $this->senha; 
+    }
+ 
+    public function setSenha($senha){
+        $this->senha = $senha;
     }
 }
 ?>
