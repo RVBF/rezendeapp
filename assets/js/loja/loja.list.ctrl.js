@@ -1,5 +1,5 @@
 /**
- *  tarefa.list.ctrl.js
+ *  loja.list.ctrl.js
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */
@@ -7,7 +7,7 @@
 {
 	'use strict';
 
-	function ControladoraListagemTarefa(servicoTarefa)
+	function ControladoraListagemLoja(Loja)
 	{
 		var _this = this;
 		var _cont = 0;
@@ -16,33 +16,32 @@
 		_this.botaoEditar = $('#editar');
 		_this.botaoRemover = $('#remover');
 		_this.botaoAtualizar = $('#atualizar');
-		_this.idTabela = $('#tarefa_table');
-		_this.idChecklist = window.location.href.split('#')[1].substring(1, url.length).split('/')[1];	
+		_this.idTabela = $('#loja');
+		var ctrlFormulario = new app.ControladoraFormLoja(Loja);
 
-		var ctrlFormulario = new app.ControladoraFormTarefa(servicoTarefa, _this);
-	
 		//Configura a tabela
 		_this.opcoesDaTabela = function opcoesDaTabela() {
 			var objeto = $.extend(true, {}, app.dtOptions);
-			objeto.ajax = servicoTarefa.rota(_this.idChecklist);
+			objeto.ajax = Loja.rota();
 
 			objeto.columnDefs = [ {
 					data: 'id',
-					targets: 0
-
+					targets: 0,
+					responsivePriority: 3,
+					visible : true
 				}, {
-					data: 'titulo',
-					responsivePriority: 1,
-					targets: 1
-				}, {
-					data : 'descricao',
+					data: 'razaoSocial',
 					responsivePriority: 2,
-					targets : 2
-				}
+					targets: 1
+                }, {
+					data: 'nomeFantasia',
+					responsivePriority: 1,
+					targets: 2
+                }
 			];
 
 			return objeto;
-		};
+		};'.selected'
 
 		_this.cadastrar = function cadastrar() {
 			var modoEdicao = false;
@@ -72,15 +71,15 @@
 
 			BootstrapDialog.show({
 				type	: BootstrapDialog.TYPE_DANGER,
-				title	: 'Deseja remover esta tarefa?',
-				message	: 'Tarefa de id:' + objeto.id + ' e título :' + objeto.titulo,
+				title	: 'Deseja remover esta Loja?',
+				message	: 'Loja: ' + objeto.razaoSocial + '/' + objeto.nomeFantasia,
 				size	: BootstrapDialog.SIZE_LARGE,
 				buttons	: [ {
 						label	: '<u>S</u>im',
 						hotkey	: 'S'.charCodeAt(0),
 						action	: function(dialog){
-							servicoTarefa.remover(objeto.id, objeto.checklist.id).done(window.sucessoPadrao).fail(window.erro);
-							
+							Loja.remover(objeto.id).done(window.sucessoPadrao).fail(window.erro);
+							_this.atualizar();
 							$('.depende_selecao').each(function(){
 								$(this).prop('disabled', true);
 							});
@@ -108,7 +107,7 @@
 
 		_this.visualizar = function visualizar(){
 			var objeto = _tabela.row($(this).parent(' td').parent('tr')).data();
-			router.navigate('/tarefa/visualizar/' +  objeto.id + '/');
+			router.navigate('/categoria/visualizar/' +  objeto.id + '/');
 
 		};
 
@@ -132,42 +131,25 @@
 			$('.opcoes').desabilitar(true);
 		};
 
-
 		_this.configurar = function configurar() {
 			_tabela = _this.idTabela.DataTable(_this.opcoesDaTabela());
 			_this.botaoCadastrar.on('click',_this.cadastrar);
 			_this.botaoEditar.on('click', _this.editar)
 			_this.botaoAtualizar.on('click',_this.atualizar);
-			_this.botaoRemover.on('click', _this.remover)
-			$('.gerenciar_perguntas').on('click', function (event) {
-				event.preventDefault();
-
-				var objeto = _tabela.row('.selected').data();
-
-				router.navigate('/tarefa/' + objeto.id + '/pergunta')
-				
-			});
-
-			$('.cadastrar_perguntas').on('click', function (event) {
-				event.preventDefault();
-
-				var objeto = _tabela.row('.selected').data();
-
-				router.navigate('/tarefa/' + objeto.id + '/pergunta/cadastrar-perguntas')
-				
-			});
-
-			$('.responder_perguntas').on('click', function (event) {
+			_this.botaoRemover.on('click', _this.remover);
+			$('.ir_tarefas').on('click', function(){
 				event.preventDefault();
 				var objeto = _tabela.row('.selected').data();
-				router.navigate('/tarefa/' + objeto.id + '/pergunta/responder-perguntas')
+
+				router.navigate('/checklist/' + objeto.id +'/tarefa' );
 			});
 
 			_tabela.on('select',_this.selecionar);
-			_tabela.on('deselect', _this.deselect);
+			_tabela.on('deselect', _this.deselect);		
 		};
-	}; // ControladoraListagemTarefa
+	} // ControladoraListagemLoja
 
 	// Registrando
-	app.ControladoraListagemTarefa = ControladoraListagemTarefa;
+	app.ControladoraListagemLoja = ControladoraListagemLoja;
 })(window, app, jQuery, toastr, BootstrapDialog);
+

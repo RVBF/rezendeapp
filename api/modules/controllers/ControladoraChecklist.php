@@ -131,7 +131,7 @@ class ControladoraChecklist {
 		try {
 			$status = $this->colecaoChecklist->remover($id);
 			
-			$resposta = ['status' => true, 'mensagem'=> 'Categoria removida com sucesso.']; 
+			$resposta = ['status' => true, 'mensagem'=> 'Checklist removida com sucesso.']; 
 		}
 		catch (\Exception $e) {
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 

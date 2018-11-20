@@ -1,0 +1,33 @@
+<div class="card">
+    <div class="card-header  bg-secondary text-white">Responder perguntas</div>
+
+    <div class="card" id="painel_formulario">
+        <div class="card-body">
+            <div class="col-xs-12  col-sm-12 col-md-12">
+                <form class="form-horizontal " id="repostas_form">
+                    <div class="perguntas"></div>                  
+                    
+                    <div  class="row">
+                        <div class="col-xs-12  col-sm-12 col-md-12">
+                            <br /><div id="msg" class="text-danger msg" ></div>
+                        </div>
+                    </div>
+
+                    <div class="row form-row card-footer">
+                        <div class="col-xs-12 col-md-12 col-sm-12 col-12 button_add">
+                            <button type="submit" class="btn btn-success" id="salvar"><i class="fas fa-check"></i></i></button>
+                            <button type="button" class="btn btn-default" id="cancelar_edicao"><i class="fas fa-sign-out-alt"></i></button>
+                        </div>
+                    </div>
+                </form>           
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+		var servicoResposta = new app.ServicoResposta();
+        var crltResposta = new app.ControladoraFormResposta(servicoResposta);
+        crltResposta.configurar();
+	});
+</script>

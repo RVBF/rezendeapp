@@ -16,6 +16,7 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa
 
 	function adicionar(&$obj) {
 		try {	
+			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
 			$id = Db::table(self::TABELA)->insertGetId([ 'titulo' => $obj->getTitulo(),
 					'descricao' => $obj->getDescricao(),
@@ -23,6 +24,8 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa
 				]
 			);
 			
+			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
 			$obj->setId($id);
 
 			return $obj;
@@ -98,7 +101,7 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa
 			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
 		}
 	}
-
+	
 	function todosComId($ids = []) {
 		try {	
 			$tarefas = Db::table(self::TABELA)->whereIn('id', $ids)->get();

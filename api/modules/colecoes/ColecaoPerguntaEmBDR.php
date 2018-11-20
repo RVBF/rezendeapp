@@ -137,6 +137,24 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta
 		}
 	}
 
+
+	function comTarefaId($limite = 0, $pulo = 0, $tarefaId){
+		try {	
+			$perguntas = Db::table(self::TABELA)->where('tarefa_id', $tarefaId)->offset($limite)->limit($pulo)->get();
+
+			$perguntasObjects = [];
+			foreach ($perguntas as $pergunta) {
+				$perguntasObjects[] =  $this->construirObjeto($pergunta);
+			}
+
+			return $perguntasObjects;
+		}
+		catch (\Exception $e)
+		{
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		}
+	}
+
 	function construirObjeto(array $row) {
 		$tarefa = Dice::instance()->create('ColecaoTarefa')->comId($row['tarefa_id']);
 

@@ -11,15 +11,15 @@ class Resposta {
 	private $id;
     private $opcaoSelecionada;
     private $comentario;
+    private $tarefa;
     private $anexos;
 
-    function __construct($id = 0, $opcaoSelecionada = '', $comentario = '', $anexos = []) {
+    function __construct($id = 0, $opcaoSelecionada = 0, $comentario = '', $tarefa = 0, $anexos = []) {
 		$this->id = $id;
         $this->opcaoSelecionada = $opcaoSelecionada;
         $this->comentario = $comentario;
         $this->anexos = $anexos;
         $this->tarefa = $tarefa;
-        $this->resposta = $resposta;
     }
 
     public function getId(){
@@ -44,6 +44,14 @@ class Resposta {
  
     public function setComentario($comentario){
         $this->comentario = $comentario;
+    }
+
+    public function getTarefa(){
+        return $this->tarefa; 
+    }
+ 
+    public function setTarefa($tarefa){
+        $this->tarefa = $tarefa;
     }
 
     public function getAnexos(){

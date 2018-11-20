@@ -1,22 +1,24 @@
 <?php
 use Illuminate\Database\Capsule\Manager as Db;
 /**
- *	Coleção de Loja em Banco de Dados Relacional.
+ *	Coleção de Anexo em Banco de Dados Relacional.
  *
  *  @author		Rafael Vinicius Barros Ferreira
  *	@version	0.1
  */
 
-class ColecaoLojaEmBDR implements ColecaoLoja
+class ColecaoAnexoEmBDR implements ColecaoAnexo
 {
 
-	const TABELA = 'loja';
+	const TABELA = 'anexo';
 
 	function __construct(){}
 
 	function adicionar(&$obj) {
 		try {	
-			$id = Db::table(self::TABELA)->insertGetId(['razaoSocial' => $obj->getRazaoSocial(), 'nomeFantasia' => $obj->getNomeFantasia()]);
+			$id = Db::table(self::TABELA)->insertGetId(
+				['titulo' => $obj->getTitulo()]
+			);
 			
 			$obj->setId($id);
 
@@ -39,14 +41,16 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 	}
 
 	function atualizar(&$obj) {
-		try {	
-			DB::table(self::TABELA)->where('id', $obj->getId())->update(['razaoSocial' => $obj->getRazaoSocial(), 'nomeFantasia' => $obj->getNomeFantasia()]);
+		if($this->validarCategoria($obj)){
+			try {	
+				DB::table(self::TABELA)->where('id', $obj->getId())->update(['titulo' => $obj->getTitulo()]);
 
-			return $obj;
-		}
-		catch (\Exception $e)
-		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+				return $obj;
+			}
+			catch (\Exception $e)
+			{
+				throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			}
 		}
 		
 	}

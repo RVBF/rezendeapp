@@ -167,6 +167,31 @@ class ControladoraPergunta {
 
 		return $resposta;
 	}
+	function comTarefaId($tarefaId){
+		$dtr = new DataTablesRequest($this->params);
+		$contagem = 0;
+		$objetos = [];
+		$erro = null;
+
+		try {
+            $objetos = $this->colecaoPergunta->todos($dtr->start, $dtr->length, $tarefaId);
+
+			$contagem = $this->colecaoPergunta->contagem();
+		}
+		catch (\Exception $e ) {
+			throw new Exception("Erro ao listar categorias");
+		}
+
+		$conteudo = new DataTablesResponse(
+			$contagem,
+			$contagem, //count($objetos ),
+			$objetos,
+			$dtr->draw,
+			$erro
+		);
+
+		return $conteudo;
+	}
 
 	function remover($id, $tarefaId) {
 		$resposta = [];

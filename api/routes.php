@@ -78,6 +78,29 @@ $app->get('/loja', function(Request $req,  Response $res, $args = []) use ($app)
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
 });
 
+$app->post('/loja', function(Request $req,  Response $res, $args = []) use ($app) {
+	$this->logger->addInfo("Acessando o cadastro de loja");
+	$ctrl = new ControladoraLoja($req->getParsedBody());
+	$response = $ctrl->adicionar();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+
+});
+
+$app->put('/loja', function(Request $req,  Response $res, $args = []) use ($app) {
+	$this->logger->addInfo("Acessando a atualização de categorias");
+	$ctrl = new ControladoraLoja($req->getParsedBody());
+	$response = $ctrl->atualizar();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+
+});
+
+$app->delete('/loja/{id}', function(Request $req,  Response $res, $args = []) use ($app) {
+	$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
+	$ctrl = new ControladoraLoja($req->getParsedBody());
+	$response = $ctrl->remover($args['id']);
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+});
+
 // Início das rotas para tarefa
 $app->get('/checklist/{idChecklist}/tarefa', function(Request $req,  Response $res, $args = []) use ($app) {
 	$this->logger->addInfo("Acessando listagem de tarefa");	
@@ -119,6 +142,14 @@ $app->get('/tarefa/{idTarefa}/pergunta', function(Request $req,  Response $res, 
 
 });
 
+$app->get('/tarefa/{idTarefa}/pergunta/tarefa-com-id', function(Request $req,  Response $res, $args = []) use ($app) {
+	$this->logger->addInfo("Acessando listagem de tarefa");	
+	$ctrl = new ControladoraPergunta($req->getQueryParams());
+	$response = $ctrl->comTarefaId($args['idTarefa']);
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
+
+});
+
 $app->post('/tarefa/{idTarefa}/pergunta', function(Request $req,  Response $res, $args = []) use ($app) {
 	$this->logger->addInfo("Acessando o cadastro de tarefa");
 	$ctrl = new ControladoraPergunta($req->getParsedBody());
@@ -145,9 +176,51 @@ $app->put('/tarefa/{idTarefa}/pergunta', function(Request $req,  Response $res, 
 
 $app->delete('/tarefa/{idTarefa}/pergunta/{id}', function(Request $req,  Response $res, $args = []) use ($app) {
 	$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
-	$ctrl = new ControladoraPergunta($req->getParsedBody());
+	$ctrl = new ControladoraPergunta($req->getParsedBody()->getStream());
 	$response = $ctrl->remover($args['id'], $args['idTarefa']);
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 });
 
+
+$app->post('/anexo/upload-anexo', function(Request $req,  Response $res, $args = []) use ($app) {
+	// $this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
+
+	Debuger::printr( $req->getUploadedFiles());
+	$ctrl = new ControladoraPergunta($req->getParsedBody());
+	// $response = $ctrl->remover($args['id'], $args['idTarefa']);
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+});
+
+
+// Início das rotas para usuario
+$app->get('/usuario', function(Request $req,  Response $res, $args = []) use ($app) {
+	$this->logger->addInfo("Acessando listagem de usuario");	
+	$ctrl = new ControladoraUsuario($req->getQueryParams());
+	$response = $ctrl->todos();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
+
+});
+
+$app->post('/usuario', function(Request $req,  Response $res, $args = []) use ($app) {
+	$this->logger->addInfo("Acessando o cadastro de usuario");
+	$ctrl = new ControladoraUsuario($req->getParsedBody());
+	$response = $ctrl->adicionar();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+
+});
+
+$app->put('/usuario', function(Request $req,  Response $res, $args = []) use ($app) {
+	$this->logger->addInfo("Acessando a atualização de usuario.");
+	$ctrl = new ControladoraUsuario($req->getParsedBody());
+	$response = $ctrl->atualizar();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+
+});
+
+$app->delete('/usuario/{id}', function(Request $req,  Response $res, $args = []) use ($app) {
+	$this->logger->addInfo("Deletando a usuario de id ". $args['id'] . '.');
+	$ctrl = new ControladoraUsuario($req->getParsedBody());
+	$response = $ctrl->remover($args['id']);
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+});
 ?>

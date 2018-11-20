@@ -1,5 +1,5 @@
 /**
- *  checklist.serv.js
+ *  usuario.serv.js
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */
@@ -7,31 +7,31 @@
  {
 	'use strict';
 
-	function Loja(id, razaoSocial, nomeFantasia) {
+	function Usuario(id = 0, login = '', senha = '') {
 		this.id = id  || 0;
-        this.razaoSocial = razaoSocial  || '';
-        this.nomeFantasia = nomeFantasia  || '';
+        this.login = login  || 0;
+        this.senha = senha;
 	};
 
-	function ServicoLoja() { // Model
+	function ServicoUsuario() { // Model
 		var _this = this;
 		// Rota no servidor
         _this.rota = function rota() {
-			return app.api + '/loja';
+			return app.api + '/usuario';
 		};
 
-		// Cria um objeto de categoria
-		this.criar = function criar(id, razaoSocial, nomeFantasia) {
+		// Cria um objeto de usuario
+		this.criar = function criar(id = 0, login = '') {
  			return {
                 id : id  || 0,
-                razaoSocial : razaoSocial  || '',
-                nomeFantasia : nomeFantasia  || ''
-            };
+				login : login  || '',
+                senha : senha  || ''	
+			};
 		};
 
 		_this.adicionar = function adicionar(obj) {
 			return $.ajax({
-                type: "POST",
+				type: "POST",
 				url: _this.rota(),
 				data: obj
 			});
@@ -68,6 +68,6 @@
 	}; // ServicoCategoria
 
 	// Registrando
-	app.Loja = Loja;
-	app.ServicoLoja = ServicoLoja;
+	app.Usuario = Usuario;
+	app.ServicoUsuario = ServicoUsuario;
 })(app, $);
