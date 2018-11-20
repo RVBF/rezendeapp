@@ -82,9 +82,14 @@
 
     // router.get('/categorias', verficarLogin , criarRotaPara('categoria.html'));
 	router.get('/categorias' , criarRotaPara('categoria.html'));
+	router.get('/loja' , criarRotaPara('loja.html'));
 	router.get('/checklist/:id/tarefa' , criarRotaPara('tarefa.html'));
 	router.get('/tarefa/:id/pergunta' , criarRotaPara('pergunta.html'));
 	router.get('/tarefa/:id/pergunta/cadastrar-perguntas' , criarRotaPara('perguntaCadastroMultiplo.html'));
+	router.get('/tarefa/:id/pergunta/responder-perguntas' , criarRotaPara('reponderPerguntas.html'));
+
+	router.get('/configuracao/usuario' , criarRotaPara('usuario.html'));
+
 
     // router.get('/', verficarLogin , criarRotaPara('home.html'));
     // router.get('', verficarLogin , criarRotaPara('home.html'));

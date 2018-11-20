@@ -49,5 +49,73 @@ class ControladoraLoja {
 
 		return $conteudo;
 	}
+
+	function adicionar() {
+		$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'razaoSocial','nomeFantasia'], $this->params);
+		$resposta = [];
+
+		try {
+			if(count($inexistentes) > 0) {
+				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
+
+				throw new Exception($msg);
+			}
+
+			$loja = new Loja(
+				0,
+				\ParamUtil::value($this->params, 'razaoSocial'),
+				\ParamUtil::value($this->params, 'nomeFantasia')
+			);
+
+			$resposta = ['loja'=> RTTI::getAttributes($this->colecaoLoja->adicionar($loja), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Loja cadastrada com sucesso.']; 
+		}
+		catch (\Exception $e) {
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+		}
+
+		return $resposta;
+	}
+
+	function atualizar() {
+		$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'razaoSocial','nomeFantasia'], $this->params);
+		$resposta = [];
+
+		try {
+			if(count($inexistentes) > 0) {
+				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
+
+				throw new Exception($msg);
+			}
+
+			$loja = new Loja(
+				\ParamUtil::value($this->params, 'id'),
+				\ParamUtil::value($this->params, 'razaoSocial'),
+				\ParamUtil::value($this->params, 'nomeFantasia')
+			);
+
+			$resposta = ['loja'=> RTTI::getAttributes($this->colecaoLoja->atualizar($loja), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Loja atualizada com sucesso.']; 
+		}
+		catch (\Exception $e) {
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+		}
+
+		return $resposta;
+	}
+	
+	
+	function remover($id) {
+		$resposta = [];
+
+		try {
+			$status = $this->colecaoLoja->remover($id);
+			
+			$resposta = ['status' => $status, 'mensagem'=> 'Loja removida com sucesso.']; 
+		}
+		catch (\Exception $e) {
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+		}
+
+		return $resposta;
+	}
 }
 ?>

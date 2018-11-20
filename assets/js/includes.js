@@ -105,6 +105,8 @@
 	dependenciasCSS.push({ url : 'vendor/pickadate/lib/compressed/themes/default.date.css' });
 	dependenciasCSS.push({ url : 'vendor/select2/dist/css/select2.min.css' });
 	dependenciasCSS.push({ url : 'vendor/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css'});
+	dependenciasCSS.push({ url : 'vendor/bootstrap-fileinput/css/fileinput.min.css'});
+
 
 	
 	var loader = new window.Loader();
@@ -145,11 +147,19 @@
 		loader.script('vendor/pickadate/lib/compressed/picker.date.js');
 		loader.script('vendor/pickadate/lib/compressed/picker.time.js');
 		loader.script('vendor/select2/dist/js/select2.min.js');
+		loader.script('vendor/piexifjs/piexif.js');
+		loader.script('vendor/Sortable/Sortable.min.js');
+		loader.script('vendor/DOMPurify/dist/purify.min.js');
+		loader.script('vendor/bootstrap-fileinput/js/fileinput.min.js');
+		// loader.script('vendor/bootstrap-fileinput/js/locales/pt-BR.js');
+		// loader.script('vendor/bootstrap-fileinput/themes/fa/theme.js');
+
 
         // Inicialização
         loader.script('assets/js/jquery.meanmenu.js');
 		loader.script('assets/js/main.js');
 		loader.script('assets/js/app.js');
+		loader.script('assets/js/usuario/usuario.serv.js');
 		loader.script('assets/js/rotas.js');
 		loader.script('assets/js/funcoesSistema.js');
 
@@ -171,8 +181,16 @@
 		loader.script('assets/js/pergunta/pergunta.list.ctrl.js');
 
 		loader.script('assets/js/loja/loja.serv.js');
-		// loader.script('assets/js/loja/loja.form.ctrl.js');
-		// loader.script('assets/js/loja/loja.list.ctrl.js');
+		loader.script('assets/js/loja/loja.form.ctrl.js');
+		loader.script('assets/js/loja/loja.list.ctrl.js');
+		
+		loader.script('assets/js/resposta/resposta.serv.js');
+		loader.script('assets/js/resposta/opcao.serv.js');
+		loader.script('assets/js/resposta/resposta.form.ctrl.js');
+
+		loader.script('assets/js/usuario/usuario.serv.js');
+		loader.script('assets/js/usuario/usuario.form.ctrl.js');
+		loader.script('assets/js/usuario/usuario.list.ctrl.js');
 	}});
 	var loader = new window.Loader();
 

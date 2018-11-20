@@ -1,5 +1,5 @@
 /**
- *  checklist.serv.js
+ *  resposta.serv.js
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */
@@ -7,31 +7,36 @@
  {
 	'use strict';
 
-	function Loja(id, razaoSocial, nomeFantasia) {
+	function Resposta(id = 0, opcaoSelecionada = 0, comentario = '', tarefa = undefined, anexos = []) {
 		this.id = id  || 0;
-        this.razaoSocial = razaoSocial  || '';
-        this.nomeFantasia = nomeFantasia  || '';
+        this.opcaoSelecionada = opcaoSelecionada  || 0;
+        this.comentario = comentario;
+        this.dataLimite = dataLimite  || '';
+        this.tarefa = tarefa  || undefined;
+        this.anexos = anexos  || [];
 	};
 
-	function ServicoLoja() { // Model
+	function ServicoResposta() { // Model
 		var _this = this;
 		// Rota no servidor
         _this.rota = function rota() {
-			return app.api + '/loja';
+			return app.api + '/resposta';
 		};
 
 		// Cria um objeto de categoria
-		this.criar = function criar(id, razaoSocial, nomeFantasia) {
+		this.criar = function criar(id = 0, opcaoSelecionada = 0, comentario = '', tarefa = undefined, anexos = []) {
  			return {
                 id : id  || 0,
-                razaoSocial : razaoSocial  || '',
-                nomeFantasia : nomeFantasia  || ''
-            };
+                opcaoSelecionada : opcaoSelecionada  || 0,
+                comentario : comentario  || '',
+                tarefa : tarefa || undefined,
+                anexos : anexos  || []
+			};
 		};
 
 		_this.adicionar = function adicionar(obj) {
 			return $.ajax({
-                type: "POST",
+				type: "POST",
 				url: _this.rota(),
 				data: obj
 			});
@@ -68,6 +73,6 @@
 	}; // ServicoCategoria
 
 	// Registrando
-	app.Loja = Loja;
-	app.ServicoLoja = ServicoLoja;
+	app.Resposta = Resposta;
+	app.ServicoResposta = ServicoResposta;
 })(app, $);

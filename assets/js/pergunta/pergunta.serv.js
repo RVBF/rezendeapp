@@ -76,6 +76,13 @@
 				url: _this.rota(idTarefa) + '/' + id
 			});
 		};
+
+		_this.comTarefaId = function comTarefaId(idTarefa){
+			return $.ajax({
+				type : "GET",
+				url: _this.rota(idTarefa) + '/tarefa-com-id'
+			});
+		};
 	}; // ServicoPergunta
 
 	// Registrando

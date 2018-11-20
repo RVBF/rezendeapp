@@ -32,14 +32,13 @@ class Dice {
 	/**
 	 *  Retorna um novo objeto para a classe informada.
 	 */
-	function create($className)
-	{
+	function create($className) {
 		$this->makeContainer();
 		return DI::create($className);
 	}
 
-	private function makeContainer()
-	{
+	private function makeContainer() {
+		DI::config(DI::let('ColecaoUsuario')->create('ColecaoUsuarioEmBDR'));
 		DI::config(DI::let('ColecaoCategoria')->create('ColecaoCategoriaEmBDR'));
 		DI::config(DI::let('ColecaoChecklist')->create('ColecaoChecklistEmBDR'));
 		DI::config(DI::let('ColecaoLoja')->create('ColecaoLojaEmBDR'));
