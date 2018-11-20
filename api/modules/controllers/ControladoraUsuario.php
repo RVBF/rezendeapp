@@ -55,12 +55,14 @@ class ControladoraUsuario {
 		$resposta = [];
 
 		try {
+			$hash = HashSenha::instance();
+			
 			if(count($inexistentes) > 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
 				throw new Exception($msg);
             }
-			$usuario = new Usuario( 0, \ParamUtil::value($this->params, 'login'), \ParamUtil::value($this->params, 'senha'));
+			$usuario = new Usuario( 0, \ParamUtil::value($this->params, 'login'), $hash->gerarHashDeSenhaComSaltEmMD5(\ParamUtil::value($this->params, 'senha')));
 			$resposta = ['checklist'=> RTTI::getAttributes($this->colecaoUsuario->adicionar($usuario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Usuário cadastrado com sucesso.']; 
 		}
 		catch (\Exception $e) {

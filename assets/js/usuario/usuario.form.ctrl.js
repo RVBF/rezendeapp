@@ -65,6 +65,7 @@
 				};
 				
 				var obj = _this.conteudo();
+				console.log(obj);
 				var jqXHR = _this.alterar ? servicoUsuario.alterar(obj) : servicoUsuario.adicionar(obj);
 				jqXHR.done(window.sucessoParaFormulario).fail(window.erro);
 

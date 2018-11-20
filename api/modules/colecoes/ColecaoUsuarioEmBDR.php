@@ -16,7 +16,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 
 	function adicionar(&$obj) {
 		try {	
-			$id = Db::table(self::TABELA)->insertGetId([ 'login' => $obj->getTitulo()]);
+			$id = Db::table(self::TABELA)->insertGetId([ 'login' => $obj->getLogin(), 'senha' => $obj->getSenha()]);
 			
 			$obj->setId($id);
 
@@ -48,7 +48,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 			
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-			Db::table(self::TABELA)->where('id', $obj->getId())->update([ 'login' => $obj->getTitulo()]);
+			Db::table(self::TABELA)->where('id', $obj->getId())->update([ 'login' => $obj->getTitulo(), 'senha' => $obj->getSenha()]);
 
 			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 			return $obj;
@@ -111,7 +111,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 	}
 
 	function construirObjeto(array $row) {
-		$usuario = new usuario($row['id'],$row['login']);
+		$usuario = new Usuario($row['id'],$row['login']);
 		// Debuger::printr($usuario);
 
 		return $usuario;
