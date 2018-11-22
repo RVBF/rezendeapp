@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9c3d293c16afcd71a6cd536c3b3e0f79",
-    "content-hash": "50f431f5fe16541623fe4ea68bf80e61",
+    "hash": "11714b8ec79d2d0a4a22c5d8c43d23b4",
+    "content-hash": "a9c479231912357e79687ed7e8e13541",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -298,7 +298,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/d0fc759da07da74bbd13f09ae37bd85cc74d8032",
+                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/b9998af1f26d9fca0df35b4d00f48034a8f8f697",
                 "reference": "d0fc759da07da74bbd13f09ae37bd85cc74d8032",
                 "shasum": ""
             },
@@ -701,6 +701,47 @@
                 "run-time"
             ],
             "time": "2018-01-27 17:00:23"
+        },
+        {
+            "name": "phputil/session",
+            "version": "2.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thiagodp/session.git",
+                "reference": "0c0c87ee65ed727b24aaceefb23e34652821b644"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thiagodp/session/zipball/0c0c87ee65ed727b24aaceefb23e34652821b644",
+                "reference": "0c0c87ee65ed727b24aaceefb23e34652821b644",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "phputil\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3"
+            ],
+            "authors": [
+                {
+                    "name": "Thiago Delgado Pinto"
+                }
+            ],
+            "description": "A simple object-oriented wrapper to PHP's session functions.",
+            "homepage": "http://github.com/thiagodp/session",
+            "keywords": [
+                "cookie",
+                "php",
+                "session"
+            ],
+            "time": "2017-05-05 07:46:26"
         },
         {
             "name": "phputil/traits",

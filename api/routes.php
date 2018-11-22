@@ -2,11 +2,11 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \phputil\JSON;
+use phputil\FileBasedSession as Session;
 
 // Início das rotas para categorias
 $app->get('/categorias', function(Request $req,  Response $res, $args = []) use ($app) {
 	$this->logger->addInfo("Acessando listagem de categorias");
-	
 	$ctrl = new ControladoraCategoria($req->getQueryParams());
 	$response = $ctrl->todos();
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
@@ -223,4 +223,30 @@ $app->delete('/usuario/{id}', function(Request $req,  Response $res, $args = [])
 	$response = $ctrl->remover($args['id']);
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 });
+
+
+// Início das rotas para login
+$app->post('/login', function(Request $req,  Response $res, $args = []) use ($app) {
+	$session = new Session();
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraLogin($req->getParsedBody(), $sessaoUsuario);
+	return $ctrl->logar();
+});
+
+$app->delete('/logout', function(Request $req,  Response $res, $args = []) use ($app) {
+	$session = new Session();
+	$sessaoUsuario = new Sessao($session);
+	$ctrl->sair();
+});
+// Fim das rotas para login
+
+// Início das rotas para sessão
+$app->post('/sessao/verificar-sessao', function(Request $req,  Response $res, $args = []) use ($app) {
+	$session = new Session();
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraSessao($req->getParsedBody(), $sessaoUsuario);
+	return $res->withStatus(401)->withJson(JSON::decode(json_encode($ctrl->estaAtiva())));
+});
+// Fim das rotas para sessão
+
 ?>
