@@ -8,5 +8,7 @@
  */
 
 interface ColecaoUsuario extends Colecao {
+    function novaSenha($senhaAtual, $novaSenha, $confirmacaoSenha);
+	function comLogin($login);
 }
 ?>

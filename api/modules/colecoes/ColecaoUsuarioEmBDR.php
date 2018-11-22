@@ -111,7 +111,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 	}
 
 	function construirObjeto(array $row) {
-		$usuario = new Usuario($row['id'],$row['login']);
+		$usuario = new Usuario($row['id'],$row['login'], $row['senha']);
 		// Debuger::printr($usuario);
 
 		return $usuario;
@@ -120,6 +120,46 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
     function contagem() {
 		return Db::table(self::TABELA)->count();
 	}
+
+	function comLogin($login)
+	{
+		try {
+			$usuario = $this->construirObjeto(DB::table(self::TABELA)->where('login', $login)->get()[0]);
+
+			return $usuario;
+		}
+		catch (\Exception $e)
+		{
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		}
+	}
+
+	function novaSenha($senhaAtual, $novaSenha, $confirmacaoSenha)
+	{
+		$this->validarTrocaDeSenha($senhaAtual, $novaSenha, $confirmacaoSenha);
+
+		$hash = new HashSenha($novaSenha);
+
+		$novaSenha = $hash->gerarHashDeSenhaComSaltEmMD5();
+
+		try
+		{
+			$sql = 'UPDATE ' . self::TABELA . ' SET
+			 	senha = :senha
+			 	WHERE id = :id';
+
+			$this->pdoW->execute($sql, [
+				'senha' => $novaSenha,
+				'id' => $this->getUsuario()->getId()
+			]);
+		}
+		catch (\Exception $e)
+		{
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		}
+	}
+
+
 }
 
 ?>

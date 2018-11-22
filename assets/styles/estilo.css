@@ -43,8 +43,8 @@ ul {
 }
 
 .logo-area img{
-    height: 4em;
-    width: 18em;
+	height: 4em !important;
+	width: auto !important;
 }
 
 @media print {

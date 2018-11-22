@@ -10,95 +10,83 @@
 	var router = new Grapnel();
 	var conteudo = $('#app');
 
-	var mudarConteudo = function mudarConteudo(valor)
-	{
+	var mudarConteudo = function mudarConteudo(valor) {
 		conteudo.empty().html(valor);
 		setarCaminho();
 	};
 
 	var carregarPagina = function carregarPagina(pagina) {
-		conteudo.empty().load(pagina);
+		if('login.html' ==  pagina) $('body').empty().load(pagina);
+		else conteudo.empty().load(pagina);
 	};
 
-	// var verficarLogin = function (req, event, next)
-	// {
-	// 	var servicoSessao = new app.ServicoSessao();
+	var naoEstaLogado = function (req, event, next) {
+		var sessao = new app.Sessao();
 
-	// 	var erro = function erro(jqXHR, textStatus, errorThrown)
-	// 	{
-	// 		var mensagem = jqXHR.responseText || 'Erro ao acessar página.';
-	// 		toastr.error(mensagem);
+		var erro = function erro(jqXHR, textStatus, errorThrown)
+		{
+			if( typeof next == 'function')
+			{
+				next();
+			}
+		};
 
-	// 		if(servicoSessao.getSessao() == null || servicoSessao.getSessao() == '')
-	// 		{
-	// 			servicoSessao.limparSessionStorage();
-	// 		}
+		var sucesso = function sucesso(data, textStatus, jqXHR)
+		{
+			return;
+		};
 
-	// 		servicoSessao.redirecionarParalogin();
+		var jqXHR = sessao.verificarSessao();
+		jqXHR.fail(erro);
+	};
 
-	// 		return;
-	// 	};
+	let verficarLogin = function (req, event, next) {
+		var sessao = new app.Sessao();
 
-	// 	var, verficarLogin  jqXHR = servicoSessao.verificarSessao();
-	// 	jqXHR.fail(erro);
+		var erro = function erro(jqXHR, textStatus, errorThrown)  {
+			var mensagem = jqXHR.responseText || 'Erro ao acessar página.';
+			toastr.error(mensagem);
 
-	// 	if( typeof next == 'function')
-	// 	{
-	// 		next();
-	// 	}
-	// };
+			if(sessao.getSessao() == null || sessao.getSessao() == '') {
+				sessao.limparSessionStorage();
+			}
 
-	// var naoEstaLogado = function (req, event, next)
-	// {
-	// 	var servicoSessao = new app.ServicoSessao();
+			router.navigate('/login');
+		};
 
-	// 	var erro = function erro(jqXHR, textStatus, errorThrown)
-	// 	{
-	// 		if( typeof next == 'function')
-	// 		{
-	// 			next();
-	// 		}
-	// 	};
+		var jqXHR = sessao.verificarSessao();
+		jqXHR.fail(erro);
 
-	// 	var sucesso = function sucesso(data, textStatus, jqXHR)
-	// 	{
-	// 		return;
-	// 	};
+		if( typeof next == 'function') { next(); }
+	};
 
-	// 	var jqXHR = servicoSessao.verificarSessao();
-	// 	jqXHR.fail(erro);
-	// };
-
-	var criarRotaPara = function criarRotaPara(pagina)
-	{
+	var criarRotaPara = function criarRotaPara(pagina) {
 		return function()
 		{
 			carregarPagina(pagina);
 		};
 	};
 
+
 	// Rotas: adicione sua rota ACIMA das existentes, a seguir. -Thiago
-    router.get('/logout', criarRotaPara('login.html'));
+    router.get('/logout', naoEstaLogado, criarRotaPara('login.html'));
+    router.get('/login', naoEstaLogado, criarRotaPara('login.html'));
 
-    // router.get('/categorias', verficarLogin , criarRotaPara('categoria.html'));
-	router.get('/categorias' , criarRotaPara('categoria.html'));
-	router.get('/loja' , criarRotaPara('loja.html'));
-	router.get('/checklist/:id/tarefa' , criarRotaPara('tarefa.html'));
-	router.get('/tarefa/:id/pergunta' , criarRotaPara('pergunta.html'));
-	router.get('/tarefa/:id/pergunta/cadastrar-perguntas' , criarRotaPara('perguntaCadastroMultiplo.html'));
-	router.get('/tarefa/:id/pergunta/responder-perguntas' , criarRotaPara('reponderPerguntas.html'));
+	router.get('/categorias', verficarLogin, criarRotaPara('categoria.html'));
+	router.get('/loja', verficarLogin, criarRotaPara('loja.html'));
+	
+	router.get('/checklist/:id/tarefa', verficarLogin, criarRotaPara('tarefa.html'));
 
-	router.get('/configuracao/usuario' , criarRotaPara('usuario.html'));
+	router.get('/tarefa/:id/pergunta', verficarLogin, criarRotaPara('pergunta.html'));
+	router.get('/tarefa/:id/pergunta/cadastrar-perguntas', verficarLogin, criarRotaPara('perguntaCadastroMultiplo.html'));
+	router.get('/tarefa/:id/pergunta/responder-perguntas', verficarLogin, criarRotaPara('reponderPerguntas.html'));
 
+	router.get('/configuracao/usuario', verficarLogin, criarRotaPara('usuario.html'));
 
-    // router.get('/', verficarLogin , criarRotaPara('home.html'));
-    // router.get('', verficarLogin , criarRotaPara('home.html'));
-    router.get('/', criarRotaPara('checklist.html'));
-
+    router.get('/', verficarLogin, criarRotaPara('checklist.html'));
 
 	// // 404
-	router.get('/*', function(req, e)
-	{
+	router.get('/*', function(req, e) {
 		if(! e.parent())
 		{
 			carregarPagina('404.html');

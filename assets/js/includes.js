@@ -74,21 +74,21 @@
 })(window);
 
 
-(function(window)
-{
+(function(window) {
     'use strict';
     var dependenciasCSS = [];
-	dependenciasCSS.push({ url :'assets/styles/estilo.css' });
-	dependenciasCSS.push({ url :'assets/styles/meanmenu.min.css' });
-	dependenciasCSS.push({ url :'assets/styles/animate.css' });
-	dependenciasCSS.push({ url :'assets/styles/normalize.css' });
-	dependenciasCSS.push({ url :'assets/styles/responsive.css' });
+	dependenciasCSS.push({ url : 'assets/styles/estilo.css' });
+	dependenciasCSS.push({ url : 'assets/styles/login.css'})
+	dependenciasCSS.push({ url : 'assets/styles/meanmenu.min.css' });
+	dependenciasCSS.push({ url : 'assets/styles/animate.css' });
+	dependenciasCSS.push({ url : 'assets/styles/normalize.css' });
+	dependenciasCSS.push({ url : 'assets/styles/responsive.css' });
 
 	dependenciasCSS.push({ url : 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900' });
 	dependenciasCSS.push({ url : 'assets/styles/main.css' });
 	dependenciasCSS.push({ url : 'vendor/font-awesome/web-fonts-with-css/css/fontawesome-all.css' });
 	dependenciasCSS.push({ url : 'vendor/bootstrap/dist/css/bootstrap.css' });
-	dependenciasCSS.push({ url :'assets/styles/bootstrap.css' });
+	dependenciasCSS.push({ url : 'assets/styles/bootstrap.css' });
 
 	dependenciasCSS.push({ url : 'vendor/bootstrap/dist/css/bootstrap-reboot.css' });
 	dependenciasCSS.push({ url : 'vendor/bootstrap/dist/css/bootstrap-grid.css' });
@@ -159,7 +159,11 @@
         loader.script('assets/js/jquery.meanmenu.js');
 		loader.script('assets/js/main.js');
 		loader.script('assets/js/app.js');
+
+		loader.script('assets/js/sessao/sessao.serv.js');
 		loader.script('assets/js/usuario/usuario.serv.js');
+		loader.script('assets/js/login/login.serv.js');
+
 		loader.script('assets/js/rotas.js');
 		loader.script('assets/js/funcoesSistema.js');
 
@@ -173,6 +177,7 @@
 		loader.script('assets/js/checklist/checklist.list.ctrl.js');
 
 		loader.script('assets/js/tarefa/tarefa.serv.js');
+		
 		loader.script('assets/js/tarefa/tarefa.form.ctrl.js');
 		loader.script('assets/js/tarefa/tarefa.list.ctrl.js');
 
@@ -191,6 +196,8 @@
 		loader.script('assets/js/usuario/usuario.serv.js');
 		loader.script('assets/js/usuario/usuario.form.ctrl.js');
 		loader.script('assets/js/usuario/usuario.list.ctrl.js');
+		loader.script('assets/js/login/login.form.ctrl.js');
+
 	}});
 	var loader = new window.Loader();
 
