@@ -18,7 +18,7 @@ class ControladoraTarefa {
 	private $colecaoTarefa;
 	private $colecaoChecklist;
 	
-	function __construct($params) {
+	function __construct($params,  Sessao $sessao) {
 		$this->params = $params;
 		$this->colecaoTarefa = Dice::instance()->create('ColecaoTarefa');
 		$this->colecaoChecklist = Dice::instance()->create('ColecaoChecklist');

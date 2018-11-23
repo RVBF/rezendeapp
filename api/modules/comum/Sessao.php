@@ -9,7 +9,7 @@ use phputil\FileBasedSession as Session;
 class Sessao
 {
 	const ID_USUARIO = 'idUsuario';
-	const LOGIN_USUARIO = 'loginUsuario';
+	const LOGIN_USUARIO = 'user_name';
 	const ULTIMA_REQUISICAO = 'ultimaRequisicao';
 
 	private $session;
@@ -19,13 +19,14 @@ class Sessao
 	}
 	
 	function existe() {
-		return $this->session->has( self::ID_USUARIO );
+		return $this->session->get(self::ID_USUARIO) >  0;
 	}
 	
-	function criar( $id, $login, $ultimaRequisicao ) {
-		$this->set( self::ID_USUARIO, $id );
-		$this->set( self::LOGIN_USUARIO, $login );
-		$this->set( self::ULTIMA_REQUISICAO, $ultimaRequisicao );
+	function criar($id, $login, $ultimaRequisicao) {
+		$this->session->put(self::LOGIN_USUARIO, $login); // Set a value in the session
+		$this->session->put(self::ID_USUARIO, $id);
+		$this->session->put(self::ULTIMA_REQUISICAO, $ultimaRequisicao);
+
 	}
 	
 	function destruir() {
@@ -33,27 +34,27 @@ class Sessao
 	}
 	
 	function idUsuario() {
-		return (int) $this->get( self::ID_USUARIO );
+		return (int) $this->get(self::ID_USUARIO);
 	}
 	
 	function loginUsuario() {
-		return $this->session->get( self::LOGIN_USUARIO );
+		return $this->session->get(self::LOGIN_USUARIO);
 	}	
 	
 	function ultimaRequisicao() {
-		return $this->session->get( self::ULTIMA_REQUISICAO );
+		return $this->session->get(self::ULTIMA_REQUISICAO);
 	}
 
-	function atualizarUltimaRequisicao( $valor = null ) {
-		$this->session->put( self::ULTIMA_REQUISICAO, null === $valor ? time() : $valor);
+	function atualizarUltimaRequisicao($valor = null) {
+		$this->session->put(self::ULTIMA_REQUISICAO, null === $valor ? time() : $valor);
 	}
 	
-	private function get( $chave ) {
-		return $this->session->get( $chave );
+	private function get($chave) {
+		return $this->session->get($chave);
 	}
 	
-	private function set( $chave, $valor ) {
-		return $this->session->put( $chave, $valor );
+	private function set($chave, $valor) {
+		return $this->session->put($chave, $valor);
 	}
 }
 ?>

@@ -19,7 +19,7 @@ class ControladoraPergunta {
 	private $colecaoPergunta;
 	private $colecaoTarefa;
 	
-	function __construct($params) {
+	function __construct($params,  Sessao $sessao) {
 		$this->params = $params;
 		$this->colecaoPergunta = Dice::instance()->create('ColecaoPergunta');
 		$this->colecaoTarefa = Dice::instance()->create('ColecaoTarefa');

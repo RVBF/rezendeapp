@@ -17,7 +17,16 @@
 
 	var carregarPagina = function carregarPagina(pagina) {
 		if('login.html' ==  pagina) $('body').empty().load(pagina);
-		else conteudo.empty().load(pagina);
+		else {
+			if(conteudo.length > 0){
+				conteudo.empty().load(pagina);
+			}
+			else{
+				$('body').empty().load('index.html', function(){
+					router.navigate('/');
+				});
+			}
+		}
 	};
 
 	var naoEstaLogado = function (req, event, next) {

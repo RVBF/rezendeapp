@@ -12,22 +12,18 @@ class ServicoLogin {
 	private $sessaoUsuario;
 	private $colecaoUsuario;
 	
-	function __construct(
-		Sessao $sessaoUsuario,
-		ColecaoUsuario $colecaoUsuario = null
-	) 
+	function __construct(Sessao $sessaoUsuario,ColecaoUsuario $colecaoUsuario = null ) 
 	{
 		$this->sessaoUsuario = $sessaoUsuario;
 		$this->colecaoUsuario = $colecaoUsuario;
 	}
 	
-	function login($login, $senha)
-	{
+	function login($login, $senha) {
 		$this->validarSenha($senha);
 
 		$usuario = null;
-		$hashSenha = HashSenha::instance();
-		$hashSenha = $hashSenha->gerarHashDeSenhaComSaltEmMD5($senha);		
+		$senhaCriptografada = HashSenha::instance();
+		$senhaCriptografada = $senhaCriptografada->gerarHashDeSenhaComSaltEmMD5($senha);		
 
 		if($this->validarFormatoDeEmail($login))
 		{
@@ -37,7 +33,7 @@ class ServicoLogin {
 				{
 					$usuario = $resultado;
 
-					if($usuario->getSenha() === $hashSenha || $usuario->getSenha() == $senha)
+					if($usuario->getSenha() === $senhaCriptografada || $usuario->getSenha() == $senha)
 					{
 						$this->sessaoUsuario->criar(
 							$usuario->getId(),
@@ -63,11 +59,9 @@ class ServicoLogin {
 			{
 				$usuario = $resultado;
 
-				// Debuger::printr($usuario);
-
-				if($usuario->getSenha() === $hashSenha || $usuario->getSenha() == $senha)
+				if($usuario->getSenha() === $senhaCriptografada || $usuario->getSenha() == $senha)
 				{
-					$this->sessaoUsuario->criar(
+					$this->sessaoUsuario->criar(		
 						$usuario->getId(),
 						$usuario->getLogin(), 
 						$ultimaRequisicao = time()
@@ -75,7 +69,7 @@ class ServicoLogin {
 				}
 				else
 				{
-					throw new Exception("A senha digitada está incorreta.");
+					throw new Exception("Senha incorreta!");
 				}
 			}
 			else
