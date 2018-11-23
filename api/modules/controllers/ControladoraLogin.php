@@ -30,21 +30,18 @@ class ControladoraLogin {
 			return $this->geradoraResposta->erro($msg, GeradoraResposta::TIPO_TEXTO);
 		}
 
-		try
-		{
-			$usuario = $this->servico->login(
-				\ParamUtil::value($this->params, 'login'),
-				\ParamUtil::value($this->params, 'senha')
-			);
-			Debuger::printr($this->usuario);
+		try {
+			$usuario = $this->servico->login(\ParamUtil::value($this->params, 'login'), \ParamUtil::value($this->params, 'senha'));
+
 			$conteudo = ['id' => $usuario->getId(), 'nome'=> $usuario->getLogin()];
 
 			$resposta = ['usuario'=> $conteudo, 'status' => true, 'mensagem'=> 'Logado Com sucesso.']; 
 		}
-		catch (\Exception $e)
-		{
+		catch (\Exception $e) {
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
+
+		return $resposta;
 	}
 	/**
 	 *	Método de Logout  que utiliza o método sair do serviço.

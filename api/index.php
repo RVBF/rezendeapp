@@ -1,6 +1,8 @@
 <?php
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
+use phputil\FileBasedSession as Session;
+
 /**
 *  @author Rafael Vinicius Barros Fereira
 */
@@ -9,6 +11,9 @@ use \Psr\Http\Message\ResponseInterface as Response;
 date_default_timezone_set('America/Sao_Paulo' );
 
 require_once 'bootstrap.php';
+
+$session = new Session();
+$session->start();
 
 require_once 'routes.php';
 

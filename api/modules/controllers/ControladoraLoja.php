@@ -17,7 +17,7 @@ class ControladoraLoja {
 	private $params;
 	private $colecaoLoja;
 	
-	function __construct($params) {
+	function __construct($params,  Sessao $sessao) {
 		$this->params = $params;
 		$this->colecaoLoja = Dice::instance()->create('ColecaoLoja');
 	}

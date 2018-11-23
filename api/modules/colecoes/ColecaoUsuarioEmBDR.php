@@ -112,7 +112,6 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 
 	function construirObjeto(array $row) {
 		$usuario = new Usuario($row['id'],$row['login'], $row['senha']);
-		// Debuger::printr($usuario);
 
 		return $usuario;
 	}	

@@ -61,23 +61,25 @@
 					window.sucessoPadrao(data, textStatus, jqXHR);
 
 					if(data.status){
-						window.sessionStorage.setItem('usuario', JSON.stringify(data));
-						router.navigate('/')
+						window.sessionStorage.setItem('usuario', JSON.stringify(data.usuario));
+						if(!$('#app').length){
+							$('body').empty().load('index.html', function(){
+								router.navigate('/');
+							});
+						}
 					}
 				};
 
 				var terminado = function() {
-					_this.formulario.desabilitar(true);
+					_this.formulario.desabilitar(false);
 				};
 
 				var obj = _this.conteudo();
 				var jqXHR = servico.logar(obj);
 
-				jqXHR
-					.done(sucesso)
-					.fail(erro)
-					.always(terminado)
-					;
+				_this.formulario.desabilitar(true);
+
+				jqXHR.done(sucesso).fail(erro).always(terminado);
 			}; // submitHandler
 
 			return opcoes;

@@ -123,7 +123,6 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa
 		$checklist = Dice::instance()->create('ColecaoChecklist')->comId($row['checklist_id']);
 
 		$tarefa = new Tarefa($row['id'],$row['titulo'], $row['descricao'], $checklist);
-		// Debuger::printr($tarefa);
 
 		return $tarefa;
 	}	
