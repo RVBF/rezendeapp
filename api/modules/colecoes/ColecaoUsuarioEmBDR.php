@@ -32,7 +32,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 		try {	
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
             
-            $removido = DB::table(self::TABELA)->where('id', $id)->where('checklist_id', $idChecklist)->delete();
+            $removido = DB::table(self::TABELA)->where('id', $id)->delete();
             
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 			return $removido;
@@ -111,7 +111,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 	}
 
 	function construirObjeto(array $row) {
-		$usuario = new Usuario($row['id'],$row['login'], $row['senha']);
+		$usuario = new Usuario($row['id'], $row['nome'], $row['login'], $row['senha']);
 
 		return $usuario;
 	}	

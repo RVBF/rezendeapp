@@ -78,7 +78,6 @@
 
 
 	// Rotas: adicione sua rota ACIMA das existentes, a seguir. -Thiago
-    router.get('/logout', naoEstaLogado, criarRotaPara('login.html'));
     router.get('/login', naoEstaLogado, criarRotaPara('login.html'));
 
 	router.get('/categorias', verficarLogin, criarRotaPara('categoria.html'));
@@ -104,5 +103,6 @@
 
 	// Registra como global
 	window.router = router;
+	app.verficarLogin = verficarLogin;
 
 })(window ,app, document, jQuery, Grapnel);

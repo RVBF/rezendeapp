@@ -4,8 +4,6 @@ use phputil\datatables\DataTablesResponse;
 use Symfony\Component\Validator\Validation as Validacao;
 use \phputil\JSON;
 use \phputil\RTTI;
-
-
 /**
  * Controladora de Usuario
  *
@@ -16,53 +14,56 @@ class ControladoraUsuario {
 
 	private $params;
 	private $colecaoUsuario;
+	private $servicologin;
+	private $session;
+
 	
-	function __construct($params,  Sessao $sessao) {
+	function __construct($params, Sessao $sessao) {
 		$this->params = $params;
 		$this->colecaoUsuario = Dice::instance()->create('ColecaoUsuario');
+		$this->servicoLogin = new ServicoLogin($sessao);
+		$this->sessao = $sessao;
 	}
 
 	function todos() {
-		$dtr = new DataTablesRequest($this->params);
-		$contagem = 0;
-		$objetos = [];
-		$erro = null;
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}
 
-		try
-		{
+			$dtr = new DataTablesRequest($this->params);
+			$contagem = 0;
+			$objetos = [];
+			$erro = null;	
+
 			$objetos = $this->colecaoUsuario->todos($dtr->start, $dtr->length);
 
 			$contagem = $this->colecaoUsuario->contagem();
 		}
-		catch (\Exception $e )
-		{
-			throw new Exception("Erro ao listar categorias");
+		catch (\Exception $e ) {
+			throw new Exception($e->getMessage());
 		}
 
-		$conteudo = new DataTablesResponse(
-			$contagem,
-			$contagem, //count($objetos ),
-			$objetos,
-			$dtr->draw,
-			$erro
-		);
+		$conteudo = new DataTablesResponse($contagem, $contagem, $objetos, $dtr->draw, $erro);
 
 		return $conteudo;
     }
     
     function adicionar() {
-		$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'login','senha'], $this->params);
-		$resposta = [];
-
 		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}
+
 			$hash = HashSenha::instance();
 			
 			if(count($inexistentes) > 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
 				throw new Exception($msg);
-            }
-			$usuario = new Usuario( 0, \ParamUtil::value($this->params, 'login'), $hash->gerarHashDeSenhaComSaltEmMD5(\ParamUtil::value($this->params, 'senha')));
+			}
+			
+			$usuario = new Usuario( 0, \ParamUtil::value($this->params, 'nome'), \ParamUtil::value($this->params, 'login'), $hash->gerarHashDeSenhaComSaltEmMD5(\ParamUtil::value($this->params, 'senha')));
 			$resposta = ['checklist'=> RTTI::getAttributes($this->colecaoUsuario->adicionar($usuario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Usuário cadastrado com sucesso.']; 
 		}
 		catch (\Exception $e) {
@@ -70,6 +71,27 @@ class ControladoraUsuario {
 		}
 
 		return $resposta;
+	}
+
+	function remover($id) {
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}
+			if (! is_numeric($id)) {
+				$msg = 'O id informado não é numérico.';
+				return $this->geradoraResposta->erro($msg, GeradoraResposta::TIPO_TEXTO);
+			}
+
+			$this->colecaoUsuario->remover($id);
+
+			$resposta = ['status' => true, 'mensagem'=> 'Usuário removido com sucesso.']; 
+
+			return $this->geradoraResposta->semConteudo();
+		}
+		catch (\Exception $e) {
+			$resposta = ['status' => true, 'mensagem'=> 'Usuário removido com sucesso.']; 
+		}
 	}
 }
 ?>

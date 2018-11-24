@@ -64,6 +64,13 @@
 				event.preventDefault();
 				router.navigate('/categorias');
 			});
+
+			$(evento.target).find(".efetuar_logout").on('click', function(event){
+				var servico = new app.ServicoLogout();
+
+				var controladoraLogout = new app.ControladoraLogout(servico);
+				controladoraLogout.configurar();
+			});
 	
 			$(evento.target).find('.checklist_link').on('click', function(event){
 				event.preventDefault();
@@ -90,6 +97,18 @@
 				router.navigate('/loja');
 			});
 		}
+	}
+
+	function definirVerificacaoSessao(){
+		var servicoSessao = new app.ServicoSessao();
+
+		var index = new app.ControladoraIndex(servico, servicoSessao);
+		index.configurar();
+
+		setTimeout(function() {
+			console.log('entrie');
+			app.verficarLogin();
+		}, 60000);
 	}
 
 	var bodyEvento = {target: 'body'};

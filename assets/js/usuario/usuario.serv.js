@@ -7,8 +7,9 @@
  {
 	'use strict';
 
-	function Usuario(id = 0, login = '', senha = '') {
+	function Usuario(id = 0, nome = '', login = '', senha = '') {
 		this.id = id  || 0;
+        this.nome = nome || '';
         this.login = login  || 0;
         this.senha = senha || '';
 	};
@@ -21,9 +22,10 @@
 		};
 
 		// Cria um objeto de usuario
-		this.criar = function criar(id = 0, login = '', senha = '') {
+		this.criar = function criar(id = 0, nome = '', login = '', senha = '') {
  			return {
-                id : id  || 0,
+				id : id  || 0,
+				nome : nome || '',
 				login : login  || '',
                 senha : senha  || ''	
 			};

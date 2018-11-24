@@ -261,9 +261,9 @@ $app->post('/login', function(Request $req,  Response $res, $args = []) use ($ap
 
 $app->post('/logout', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 	$sessaoUsuario = new Sessao($session);
-	$ctrl = new ControladoraSessao($req->getParsedBody(), $sessaoUsuario);
+	$ctrl = new ControladoraLogin($req->getParsedBody(), $sessaoUsuario);
 	$resposta = $ctrl->sair();
-	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($resposta)));
 });
 // Fim das rotas para login
 

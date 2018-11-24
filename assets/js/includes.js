@@ -163,6 +163,7 @@
 		loader.script('assets/js/sessao/sessao.serv.js');
 		loader.script('assets/js/usuario/usuario.serv.js');
 		loader.script('assets/js/login/login.serv.js');
+		loader.script('assets/js/logout/logout.serv.js');
 
 		loader.script('assets/js/rotas.js');
 		loader.script('assets/js/funcoesSistema.js');
