@@ -20,12 +20,7 @@
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
 			var opcoes = {
 				rules: {
-					"login": {
-						required : true
-					},
-
 					"senha": {
-						required	: true,
 						rangelength : [ 8, 50 ]
 					},
 
@@ -36,12 +31,7 @@
 				},
 
 				messages: { 
-					"login": { 
-						required    : "O campo login é obrigatório."
-					},
-
 					"senha": {
-						required	: "O campo senha é obrigatório.",
 						rangelength	: $.validator.format("A senha deve ter entre {0} e {1} caracteres.")
 					},
 
@@ -81,7 +71,7 @@
         
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
-			return servicoUsuario.criar($('#id').val(), $('#login').val(), $('#senha').val());
+			return servicoUsuario.criar($('#id').val(), $('#nome').val(), $('#login').val(), $('#senha').val());
 		};
 
 		_this.configurarBotoes = function configurarBotoes() {
@@ -114,8 +104,9 @@
 
 		// Desenha o objeto no formulário
 		_this.desenhar = function desenhar(obj) {
-			$('#id').val(obj.getId());
-			$('#login').val(obj.getLogin());
+			$('#id').val(obj.id);
+			$('#nome').val(obj.nome);
+			$('#login').val(obj.login);
 		};
 
 		_this.salvar = function salvar() {

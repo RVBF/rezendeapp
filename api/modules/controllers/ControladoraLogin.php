@@ -43,25 +43,23 @@ class ControladoraLogin {
 
 		return $resposta;
 	}
+	
 	/**
-	 *	Método de Logout  que utiliza o método sair do serviço.
-	 *
-	 * @throws Exception
-	 */
-	function sair()
-	{
-		try
-		{
-			if($this->servico->estaLogado())
-			{
-				$this->servico->logout();
-			}
+	*	Método de Logout  que utiliza o método sair do serviço.
+	*
+	* @throws Exception
+	*/
+	
+	function sair() {
+		try {
+			if($this->servico->estaLogado()) $this->servico->logout();
 
-			return $this->geradoraResposta->semConteudo();
+			$resposta = ['status' => true, 'mensagem'=> 'Logout efetuado com sucesso.']; 
+
+		} catch(\Exception $e) {
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
-		catch(\Exception $e)
-		{
-			return $this->geradoraResposta->erro($e->getMessage(), GeradoraResposta::TIPO_TEXTO);
-		}
+
+		return $resposta;
 	}
 }
