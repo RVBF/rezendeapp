@@ -7,7 +7,7 @@
 
 class ServicoLogin {
 	
-	private $inatividadeEmMinutos = 100;
+	private $inatividadeEmMinutos = 30;
 	
 	private $sessaoUsuario;
 	private $colecaoUsuario;
@@ -24,7 +24,6 @@ class ServicoLogin {
 		$usuario = null;
 		$senhaCriptografada = HashSenha::instance();
 		$senhaCriptografada = $senhaCriptografada->gerarHashDeSenhaComSaltEmMD5($senha);		
-
 		if($this->validarFormatoDeEmail($login))
 		{
 			if($this->validarEmail($login) and $resultado = $this->colecaoUsuario->comEmail($login))

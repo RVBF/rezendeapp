@@ -96,21 +96,13 @@
 				event.preventDefault();
 				router.navigate('/loja');
 			});
+
+			$(evento.target).find('.grupo_usuario_link').on('click', function(event){
+				event.preventDefault();
+				router.navigate('/configuracao/grupo-usuario');
+			});
 		}
 	}
-
-	function definirVerificacaoSessao(){
-		var servicoSessao = new app.ServicoSessao();
-
-		var index = new app.ControladoraIndex(servico, servicoSessao);
-		index.configurar();
-
-		setTimeout(function() {
-			console.log('entrie');
-			app.verficarLogin();
-		}, 60000);
-	}
-
 	var bodyEvento = {target: 'body'};
 	iniciarFuncoesPadroesSistema(bodyEvento);
 
@@ -121,10 +113,13 @@
 
 	$(document).ready(function()
 	{
-		window.router.navigate('/');
-		$.validator.addMethod("cRequired", $.validator.methods.required,
++		$.validator.addMethod("cRequired", $.validator.methods.required,
 		"Campo obrigatório.");
 		$.validator.addClassRules("campo_obrigatorio", {cRequired: true});
+		
+		setInterval(function() {
+			app.verficarLogin();
+		}, 1800000);
 
 		window.validarSeONavegadorSuporta  = function validarSeONavegadorSuporta() {
 			// Verificando se o navegador tem suporte aos recursos para redimensionamento

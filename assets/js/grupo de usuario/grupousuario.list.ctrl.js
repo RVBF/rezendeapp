@@ -1,5 +1,5 @@
 /**
- *  usuario.list.ctrl.js
+ *  grupousuario.list.ctrl.js
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */
@@ -7,7 +7,7 @@
 {
 	'use strict';
 
-	function ControladoraListagemUsuario(servicoUsuario)
+	function ControladoraListagemGrupoUsuario(servicoGrupoUsuario)
 	{
 		var _this = this;
 		var _cont = 0;
@@ -16,15 +16,15 @@
 		_this.botaoEditar = $('#editar');
 		_this.botaoRemover = $('#remover');
 		_this.botaoAtualizar = $('#atualizar');
-		_this.idTabela = $('#usuario');
-		var ctrlFormulario = new app.ControladoraFormUsuario(servicoUsuario);
+		_this.idTabela = $('#grupousuario');
+		var ctrlFormulario = new app.ControladoraFormGrupoUsuario(servicoGrupoUsuario);
 
 		//Configura a tabela
 		_this.opcoesDaTabela = function opcoesDaTabela() {
 			var objeto = $.extend(true, {}, app.dtOptions);
-			objeto.ajax = servicoUsuario.rota();
+			objeto.ajax = servicoGrupoUsuario.rota();
 
-			objeto.columnDefs = [ {
+			objeto.columnDefs = [{
 					data: 'id',
 					targets: 0,
 					responsivePriority: 2,
@@ -34,14 +34,14 @@
 					responsivePriority: 1,
 					targets: 1
                 }, {
-					data: 'login',
+					data: 'descricao',
 					responsivePriority: 1,
 					targets: 2
                 }
 			];
 
 			return objeto;
-		};'.selected'
+		};
 
 		_this.cadastrar = function cadastrar() {
 			var modoEdicao = false;
@@ -71,14 +71,14 @@
 
 			BootstrapDialog.show({
 				type	: BootstrapDialog.TYPE_DANGER,
-				title	: 'Deseja remover esta Grupo?',
+				title	: 'Deseja remover esta usuário?',
 				message	: 'ID : ' + objeto.id + ', Login: '+ objeto.login + '.',
 				size	: BootstrapDialog.SIZE_LARGE,
 				buttons	: [ {
 						label	: '<u>S</u>im',
 						hotkey	: 'S'.charCodeAt(0),
 						action	: function(dialog){
-							servicoUsuario.remover(objeto.id).done(window.sucessoPadrao).fail(window.erro);
+							servicoGrupoUsuario.remover(objeto.id).done(window.sucessoPadrao).fail(window.erro);
 							_this.atualizar();
 							$('.depende_selecao').each(function(){
 								$(this).prop('disabled', true);
@@ -130,12 +130,13 @@
 			_this.botaoCadastrar.on('click',_this.cadastrar);
 			_this.botaoEditar.on('click', _this.editar)
 			_this.botaoAtualizar.on('click',_this.atualizar);
-			_this.botaoRemover.on('click', _this.remover);;
+			_this.botaoRemover.on('click', _this.remover);
+
 			_tabela.on('select',_this.selecionar);
 			_tabela.on('deselect', _this.deselect);		
 		};
-	} // ControladoraListagemUsuario
+	} // ControladoraListagemGrupoUsuario
 
 	// Registrando
-	app.ControladoraListagemUsuario = ControladoraListagemUsuario;
+	app.ControladoraListagemGrupoUsuario = ControladoraListagemGrupoUsuario;
 })(window, app, jQuery, toastr, BootstrapDialog);

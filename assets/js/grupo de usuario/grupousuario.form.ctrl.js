@@ -1,5 +1,5 @@
 /**
- *  usuario.form.ctrl.js
+ *  grupousuario.form.ctrl.js
  *
  *  @author  Rafael Vinicius Barros Ferreira
  *	 @version 1.0
@@ -8,11 +8,11 @@
 {
 	'use strict';
 
-	function ControladoraFormUsuario(servicoUsuario) {
+	function ControladoraFormGrupoUsuario(servicoGrupoUsuario) {
 		var _this = this;
 
 		_this.alterar;
-		_this.formulario = $('#usuario_form');
+		_this.formulario = $('#grupousuario_form');
 		_this.botaoSubmissao = $('#salvar')
 		_this.cancelarModoEdicao = $('#cancelar_edicao')
 
@@ -56,7 +56,7 @@
 				};
 				
 				var obj = _this.conteudo();
-				var jqXHR = _this.alterar ? servicoUsuario.atualizar(obj) : servicoUsuario.adicionar(obj);
+				var jqXHR = _this.alterar ? servicoGrupoUsuario.atualizar(obj) : servicoGrupoUsuario.adicionar(obj);
 				jqXHR.done(window.sucessoParaFormulario).fail(window.erro);
 
 				if(_this.alterar){
@@ -71,7 +71,7 @@
         
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
-			return servicoUsuario.criar($('#id').val(), $('#nome').val(), $('#login').val(), $('#senha').val());
+			return servicoGrupoUsuario.criar($('#id').val(), $('#nome').val(), $('#login').val(), $('#senha').val());
 		};
 
 		_this.configurarBotoes = function configurarBotoes() {
@@ -130,9 +130,9 @@
 		_this.configurar = function configurar(status = false) {
 			_this.definirForm(status);
 		};
-	}; // ControladoraFormUsuario
+	}; // ControladoraFormGrupoUsuario
 
 	// Registrando
-	app.ControladoraFormUsuario = ControladoraFormUsuario;
+	app.ControladoraFormGrupoUsuario = ControladoraFormGrupoUsuario;
 
 })(window, app, jQuery, toastr);

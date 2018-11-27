@@ -90,6 +90,8 @@
 	router.get('/tarefa/:id/pergunta/responder-perguntas', verficarLogin, criarRotaPara('reponderPerguntas.html'));
 
 	router.get('/configuracao/usuario', verficarLogin, criarRotaPara('usuario.html'));
+	router.get('/configuracao/grupo-usuario', verficarLogin, criarRotaPara('grupo_usuario.html'));
+
 
     router.get('/', verficarLogin, criarRotaPara('checklist.html'));
 

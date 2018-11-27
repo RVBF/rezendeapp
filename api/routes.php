@@ -19,9 +19,7 @@ $app->post('/categorias', function(Request $req,  Response $res, $args = []) use
 	$ctrl = new ControladoraCategoria($req->getParsedBody(), $sessaoUsuario);
 	$response = $ctrl->adicionar();
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
-
 });
-
 
 $app->put('/categorias', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 	$this->logger->addInfo("Acessando a atualização de categorias");
@@ -146,7 +144,7 @@ $app->delete('/checklist/{idChecklist}/tarefa/{id}', function(Request $req,  Res
 	$ctrl = new ControladoraTarefa($req->getParsedBody(), $sessaoUsuario);
 	$response = $ctrl->remover($args['id'], $args['idChecklist']);
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
-});use phputil\FileBasedSession as Session;
+});
 
 
 // Início das rotas para pergunta
@@ -250,7 +248,6 @@ $app->delete('/usuario/{id}', function(Request $req,  Response $res, $args = [])
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 });
 
-
 // Início das rotas para login
 $app->post('/login', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 	$sessaoUsuario = new Sessao($session);
@@ -276,5 +273,42 @@ $app->post('/sessao/verificar-sessao', function(Request $req,  Response $res, $a
 	else return $res->withStatus(401)->withJson(JSON::decode(json_encode($resposta)));
 });
 // Fim das rotas para sessão
+
+// Início das rotas para grupos de usuário
+$app->get('/grupo-usuario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Acessando listagem de Grupos de usuario");	
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraGrupoUsuario($req->getQueryParams(), $sessaoUsuario);
+	$response = $ctrl->todos();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
+
+});
+
+$app->post('/grupo-usuario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Acessando o cadastro de tarefa");
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraTarefa($req->getParsedBody(), $sessaoUsuario);
+	$response = $ctrl->adicionar($args['idChecklist']);
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+
+});
+
+$app->put('/grupo-usuario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Acessando a atualização de tarefas");
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraTarefa($req->getParsedBody(), $sessaoUsuario);
+	$response = $ctrl->atualizar($args['idChecklist']);
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+
+});
+
+$app->delete('/grupo-usuario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraTarefa($req->getParsedBody(), $sessaoUsuario);
+	$response = $ctrl->remover($args['id'], $args['idChecklist']);
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+});
+
 
 ?>

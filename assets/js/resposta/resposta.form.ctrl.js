@@ -195,7 +195,6 @@
 
 			var files = $('.file_input').fileinput('getFileStack'); // returns file list selected
 
-			console.log(files);
         };
 		
 		_this.cancelar = function cancelar(event) {

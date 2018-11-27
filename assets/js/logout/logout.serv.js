@@ -37,7 +37,6 @@
 			event.preventDefault();
 			var sucesso = function sucesso(data, textStatus, jqXHR) {
                 window.sucessoPadrao(data, textStatus, jqXHR);
-                console.log(data);
                 if(data.status) {
                     window.sessionStorage.clear();
                     irProLogin();
