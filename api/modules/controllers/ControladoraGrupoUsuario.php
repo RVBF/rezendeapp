@@ -5,22 +5,21 @@ use Symfony\Component\Validator\Validation as Validacao;
 use \phputil\JSON;
 use \phputil\RTTI;
 /**
- * Controladora de Usuario
+ * Controladora de Grupo de Usuario
  *
  * @author	Rafael Vinicius Barros Ferreira
  * @version	0.1
  */
-class ControladoraUsuario {
+class ControladoraGrupoUsuario {
 
 	private $params;
-	private $colecaoUsuario;
-	private $servicologin;
+	private $colecaoGrupoUsuario;
 	private $session;
 
 	
 	function __construct($params, Sessao $sessao) {
 		$this->params = $params;
-		$this->colecaoUsuario = Dice::instance()->create('ColecaoUsuario');
+		$this->colecaoGrupoUsuario = Dice::instance()->create('ColecaoGrupoUsuario');
 		$this->servicoLogin = new ServicoLogin($sessao);
 		$this->sessao = $sessao;
 	}
@@ -36,8 +35,8 @@ class ControladoraUsuario {
 			$objetos = [];
 			$erro = null;	
 
-			$objetos = $this->colecaoUsuario->todos($dtr->start, $dtr->length);
-			$contagem = $this->colecaoUsuario->contagem();
+			$objetos = $this->colecaoGrupoUsuario->todos($dtr->start, $dtr->length);
+			$contagem = $this->colecaoGrupoUsuario->contagem();
 		}
 		catch (\Exception $e ) {
 			throw new Exception($e->getMessage());
@@ -64,7 +63,7 @@ class ControladoraUsuario {
 			$hash = HashSenha::instance();
 
 			$usuario = new Usuario( 0, \ParamUtil::value($this->params, 'nome'), \ParamUtil::value($this->params, 'login'), $hash->gerarHashDeSenhaComSaltEmMD5(\ParamUtil::value($this->params, 'senha')));
-			$resposta = ['checklist'=> RTTI::getAttributes($this->colecaoUsuario->adicionar($usuario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Usuário cadastrado com sucesso.']; 
+			$resposta = ['checklist'=> RTTI::getAttributes($this->colecaoGrupoUsuario->adicionar($usuario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Usuário cadastrado com sucesso.']; 
 		}
 		catch (\Exception $e) {
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
@@ -89,7 +88,7 @@ class ControladoraUsuario {
 			$hash = HashSenha::instance();
 
 			$usuario = new Usuario( \ParamUtil::value($this->params, 'id'), \ParamUtil::value($this->params, 'nome'), \ParamUtil::value($this->params, 'login'), $hash->gerarHashDeSenhaComSaltEmMD5(\ParamUtil::value($this->params, 'senha')));
-			$resposta = ['checklist'=> RTTI::getAttributes($this->colecaoUsuario->atualizar($usuario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Usuário atualizado com sucesso.']; 
+			$resposta = ['checklist'=> RTTI::getAttributes($this->colecaoGrupoUsuario->atualizar($usuario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Usuário atualizado com sucesso.']; 
 		}
 		catch (\Exception $e) {
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
@@ -108,7 +107,7 @@ class ControladoraUsuario {
 				return $this->geradoraResposta->erro($msg, GeradoraResposta::TIPO_TEXTO);
 			}
 
-			$this->colecaoUsuario->remover($id);
+			$this->colecaoGrupoUsuario->remover($id);
 
 			$resposta = ['status' => true, 'mensagem'=> 'Usuário removido com sucesso.']; 
 

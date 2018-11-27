@@ -7,16 +7,17 @@ use Illuminate\Database\Capsule\Manager as Db;
  *	@version	0.1
  */
 
-class ColecaoUsuarioEmBDR implements ColecaoUsuario
+class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
 {
 
-	const TABELA = 'usuario';
+    const TABELA = 'grupo_usuario';
+    
 
 	function __construct(){}
 
 	function adicionar(&$obj) {
 		try {	
-			$id = Db::table(self::TABELA)->insertGetId([ 'nome' => $obj->getNome() ,'login' => $obj->getLogin(), 'senha' => $obj->getSenha()]);
+			$id = Db::table(self::TABELA)->insertGetId([ 'nome' => $obj->getNome() ,'descricao' => $obj->getDescricao()]);
 			
 			$obj->setId($id);
 
@@ -77,16 +78,16 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 	 */
 	function todos($limite = 0, $pulo = 0) {
 		try {	
-			$usuarios = Db::table(self::TABELA)->select('id', 'nome', 'login')->offset($limite)->limit($pulo)->get();
+			$grupoDeusuarios = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
 
-            $usuariosObjects = [];
+            $grupoDeusuariosObjects = [];
 
-			foreach($usuarios as $usuario) {
+			foreach($grupoDeusuarios as $grupo) {
 
-				$usuariosObjects[] =  $this->construirObjeto($usuario);
+				$grupoDeusuariosObjects[] =  $this->construirObjeto($grupo);
 			}
 
-			return $usuariosObjects;
+			return $grupoDeusuariosObjects;
 		}
 		catch (\Exception $e)
 		{
@@ -112,7 +113,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 	}
 
 	function construirObjeto(array $row) {
-		$usuario = new Usuario($row['id'], $row['nome'], $row['login'], isset($row['senha']) ? $row['senha'] : '');
+		$usuario = new Usuario($row['id'], $row['nome'], $row['descricao']);
 
 		return $usuario;
 	}	
@@ -125,7 +126,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 	{
 		try {
 			$usuario = $this->construirObjeto(DB::table(self::TABELA)->where('login', $login)->get()[0]);
-		
+
 			return $usuario;
 		}
 		catch (\Exception $e)

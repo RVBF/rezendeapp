@@ -12,14 +12,6 @@
 	
 		var _this = this;
 		
-		// var irParaLogin = function irParaLogin() {
-		// 	window.location.href = 'login.html';
-		// };
-	
-		// _this.redirecionarParalogin = function redirecionarParalogin() {
-		// 	irParaLogin();
-		// };
-
 		_this.adicionarUsuarioSessao = function adicionarUsuarioSessao(usuario) {
 			window.sessionStorage.setItem('usuario', usuario);
 		}

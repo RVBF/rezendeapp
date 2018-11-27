@@ -38,7 +38,6 @@
 		};
 
 		_this.adicionarTodas = function adicionarTodas(objs, idTarefa) {
-			console.log(objs);
 			return $.ajax({
 				type: "POST",
 				dataType: "json",

@@ -23,9 +23,9 @@ class Usuario {
 	const TAMANHO_MINIMO_SENHA = 8;
 	const TAMANHO_MAXIMO_SENHA = 50;
 
-    function __construct($id = 0, $usuario = '', $login = '', $senha = '') {
+    function __construct($id = 0, $nome = '', $login = '', $senha = '') {
         $this->id = $id;
-		$this->usuario = $usuario;        
+        $this->nome =  $nome;
         $this->login = $login;
         $this->senha = $senha;
     }
