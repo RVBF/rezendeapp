@@ -421,12 +421,6 @@ ul.rezende-menu-wrap li a {
     padding-left: 15px !important;
     padding-top: 15px !important;
 } */
-.row-no-padding {
-    [class*="col-"] {
-      padding-left: 0 !important;
-      padding-right: 0 !important;
-    }
-  }
 
 .dataTables_wrapper{
     font-size: 15px;
