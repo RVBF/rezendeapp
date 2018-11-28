@@ -71,8 +71,8 @@
 
 			BootstrapDialog.show({
 				type	: BootstrapDialog.TYPE_DANGER,
-				title	: 'Deseja remover esta usuário?',
-				message	: 'ID : ' + objeto.id + ', Login: '+ objeto.login + '.',
+				title	: 'Deseja remover esta grupo de usuário?',
+				message	: 'ID : ' + objeto.id + ', Nome: '+ objeto.nome + '.',
 				size	: BootstrapDialog.SIZE_LARGE,
 				buttons	: [ {
 						label	: '<u>S</u>im',

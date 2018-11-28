@@ -16,20 +16,26 @@ class ControladoraCategoria {
 
 	private $params;
 	private $colecaoCategoria;
-	
+	private $servicoLogin;
+
 	function __construct($params,  Sessao $sessao) {
 		$this->params = $params;
+		$this->servicoLogin = new ServicoLogin($sessao);
 		$this->colecaoCategoria = Dice::instance()->create('ColecaoCategoria');
 	}
 
 	function todos() {
-		$dtr = new DataTablesRequest($this->params);
-		$contagem = 0;
-		$objetos = [];
-		$erro = null;
 
-		try
-		{
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}
+	
+			$dtr = new DataTablesRequest($this->params);
+			$contagem = 0;
+			$objetos = [];
+			$erro = null;
+
 			$objetos = $this->colecaoCategoria->todos($dtr->start, $dtr->length);
 
 			$contagem = $this->colecaoCategoria->contagem();
@@ -51,16 +57,21 @@ class ControladoraCategoria {
 	}
 
 	function adicionar() {
-		$inexistentes = \ArrayUtil::nonExistingKeys(['titulo'], $this->params);
-
-		$categoria = new Categoria(
-			0,
-			\ParamUtil::value($this->params, 'titulo')
-		);
-
-		$resposta = [];
-		
 		try {
+
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}
+	
+			$inexistentes = \ArrayUtil::nonExistingKeys(['titulo'], $this->params);
+	
+			$categoria = new Categoria(
+				0,
+				\ParamUtil::value($this->params, 'titulo')
+			);
+	
+			$resposta = [];
+
 			$categoria = $this->colecaoCategoria->adicionar($categoria);
 			$resposta = ['categoria'=> RTTI::getAttributes( $categoria, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria cadastrada com sucesso.']; 
 		}
@@ -71,13 +82,16 @@ class ControladoraCategoria {
 		return $resposta;
 	}
 
-	function atualizar() {
+	function atualizar() {		
+		try {	
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}
 
-		$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo'], $this->params);
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo'], $this->params);
 
-		$resposta = [];
-		
-		try {
+			$resposta = [];
+
 			if (count($inexistentes) > 0) {
 				$msg = 'Os seguintes campos não foram enviados: ' . implode(', ', $inexistentes);
 				throw new Exception($msg);
@@ -100,9 +114,12 @@ class ControladoraCategoria {
 	}
 
 	function remover($id) {
-		$resposta = [];
-
-		try {
+		try {	
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}
+			$resposta = [];
+			
 			$status = $this->colecaoCategoria->remover($id);
 			
 			$resposta = ['status' => true, 'mensagem'=> 'Categoria removida com sucesso.']; 

@@ -150,7 +150,13 @@
 				event.preventDefault();
 				var objeto = _tabela.row('.selected').data();
 
-				router.navigate('/checklist/' + objeto.id +'/tarefa' );
+				if(objeto != undefined){
+					router.navigate('/checklist/' + objeto.id +'/tarefa' );
+				}
+				else{
+					router.navigate('/checklist/tarefa' );
+
+				}
 			});
 
 			_tabela.on('select',_this.selecionar);

@@ -16,20 +16,26 @@ class ControladoraLoja {
 
 	private $params;
 	private $colecaoLoja;
+	private $servicoLogin;
 	
 	function __construct($params,  Sessao $sessao) {
 		$this->params = $params;
 		$this->colecaoLoja = Dice::instance()->create('ColecaoLoja');
+		$this->servicoLogin = new ServicoLogin($sessao);
+
 	}
 
 	function todos() {
-		$dtr = new DataTablesRequest($this->params);
-		$contagem = 0;
-		$objetos = [];
-		$erro = null;
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}
 
-		try
-		{
+			$dtr = new DataTablesRequest($this->params);
+			$contagem = 0;
+			$objetos = [];
+			$erro = null;
+
 			$objetos = $this->colecaoLoja->todos($dtr->start, $dtr->length);
 
 			$contagem = $this->colecaoLoja->contagem();
@@ -51,10 +57,14 @@ class ControladoraLoja {
 	}
 
 	function adicionar() {
-		$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'razaoSocial','nomeFantasia'], $this->params);
-		$resposta = [];
-
 		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}		
+			
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'razaoSocial','nomeFantasia'], $this->params);
+			$resposta = [];
+
 			if(count($inexistentes) > 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
@@ -77,10 +87,14 @@ class ControladoraLoja {
 	}
 
 	function atualizar() {
-		$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'razaoSocial','nomeFantasia'], $this->params);
-		$resposta = [];
-
 		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}		
+			
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'razaoSocial','nomeFantasia'], $this->params);
+			$resposta = [];
+
 			if(count($inexistentes) > 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
@@ -104,9 +118,12 @@ class ControladoraLoja {
 	
 	
 	function remover($id) {
-		$resposta = [];
-
 		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}		
+			$resposta = [];
+
 			$status = $this->colecaoLoja->remover($id);
 			
 			$resposta = ['status' => $status, 'mensagem'=> 'Loja removida com sucesso.']; 

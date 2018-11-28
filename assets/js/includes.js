@@ -105,9 +105,6 @@
 	dependenciasCSS.push({ url : 'vendor/pickadate/lib/compressed/themes/default.date.css' });
 	dependenciasCSS.push({ url : 'vendor/select2/dist/css/select2.min.css' });
 	dependenciasCSS.push({ url : 'vendor/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css'});
-	dependenciasCSS.push({ url : 'vendor/bootstrap-fileinput/css/fileinput.min.css'});
-
-
 	
 	var loader = new window.Loader();
 
@@ -150,9 +147,6 @@
 		loader.script('vendor/piexifjs/piexif.js');
 		loader.script('vendor/Sortable/Sortable.min.js');
 		loader.script('vendor/DOMPurify/dist/purify.min.js');
-		loader.script('vendor/bootstrap-fileinput/js/fileinput.min.js');
-		// loader.script('vendor/bootstrap-fileinput/js/locales/pt-BR.js');
-		// loader.script('vendor/bootstrap-fileinput/themes/fa/theme.js');
 
 
         // Inicialização

@@ -16,15 +16,20 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 
 	function adicionar(&$obj) {
 		try {	
+
+			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
 			$id = Db::table(self::TABELA)->insertGetId([ 'nome' => $obj->getNome() ,'login' => $obj->getLogin(), 'senha' => $obj->getSenha()]);
 			
+			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
 			$obj->setId($id);
 
 			return $obj;
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao adicionar usuário.", $e->getCode(), $e);
 		}
 	}
 

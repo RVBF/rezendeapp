@@ -1,17 +1,20 @@
 <div class="card">
-    <div class="card-header  bg-secondary text-white">Grupo de Usuário</div>
+    <div class="card-header  bg-dark text-white">
+        <div class="row">
+            <div class="col-md-4 col-sm-4 col-xs-4 col-4">
+                <h5 class="card-title">Grupo de Usuário</h5>
+            </div>
 
-    <div class="card bg-light text-dark">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6 col-sm-6 col-xs-6 col-6">
-                    <button aria-hidden="true" role="presentation" type="button" aria-label="cadastrar" class="btn  btn-sm btn-dark" id="atualizar"><i class="fas fa-sync-alt"></i></button>
+
+            <div class="col-md-8 col-sm-8 col-xs-8 col-8">
+                <div class="justify-content-end row opcoes_modulos">
+                    <button aria-hidden="true" role="presentation" type="button" aria-label="cadastrar" class="btn  btn-sm btn-light" id="atualizar"><i class="fas fa-sync-alt"></i></button>
                     <button aria-hidden="true" role="presentation" type="button" aria-label="cadastrar" class="btn  btn-sm btn-primary" id="cadastrar"><i class="fas fa-plus"></i></button>
                     <button disabled="disabled" aria-hidden="true" role="presentation" type="button" aria-label="editar" class="btn  btn-sm btn-warning depende_selecao" id="editar"><i class="far fa-edit"></i></button>
-                    <button disabled="disabled" aria-hidden="true" role="presentation" type="button" aria-label="remover" class="btn  btn-sm btn-danger depende_selecao" id="remover"><i class="far fa-trash-alt"></i></button> 
+                    <button disabled="disabled" aria-hidden="true" role="presentation" type="button" aria-label="remover" class="btn  btn-sm btn-danger depende_selecao" id="remover"><i class="far fa-trash-alt"></i></button>         
                 </div>
-            </div>                     
-        </div>
+            </div>
+        </div>                     
     </div>
 
     <div class="card desabilitado d-none" id="painel_formulario">
@@ -29,8 +32,8 @@
 
                     <div class="row form-row">
                         <div class="col-xs-12 col-md-12 col-sm-12 col-12">
-                            <label for="decricao">*Descrição: </label>
-                            <textarea class="form-control campo_obrigatorio" rows="2" id="decricao"></textarea>
+                            <label for="descricao">*Descrição: </label>
+                            <textarea class="form-control campo_obrigatorio" rows="2" id="descricao"></textarea>
                         </div>
                     </div>
     

@@ -19,9 +19,7 @@ class ControladoraLogin {
 		$this->servico = new ServicoLogin($this->sessao, $this->colecaoUsuario);
 	}
 
-	function logar()
-	{
-
+	function logar() {
 		$inexistentes = \ArrayUtil::nonExistingKeys([ 'login', 'senha' ], $this->params);
 
 		if(count($inexistentes) > 0)

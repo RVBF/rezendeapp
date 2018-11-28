@@ -46,10 +46,10 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
 
 	function atualizar(&$obj) {
 		try {
-			
+
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-			Db::table(self::TABELA)->where('id', $obj->getId())->update(['nome' => $obj->getNome(), 'login' => $obj->getLogin(), 'senha' => $obj->getSenha()]);
+			Db::table(self::TABELA)->where('id', $obj->getId())->update(['nome' => $obj->getNome() ,'descricao' => $obj->getDescricao()]);
 
 			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 			return $obj;
@@ -113,7 +113,7 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
 	}
 
 	function construirObjeto(array $row) {
-		$usuario = new Usuario($row['id'], $row['nome'], $row['descricao']);
+		$usuario = new GrupoUsuario($row['id'], $row['nome'], $row['descricao']);
 
 		return $usuario;
 	}	

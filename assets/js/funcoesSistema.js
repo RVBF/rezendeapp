@@ -16,7 +16,11 @@
 
 			$(evento.target).find('.file_input').each(function(){
 				$(this).fileinput({
-					showRemove : true
+					theme: "explorer",
+					// uploadUrl: "/file-upload-batch/2",
+					allowedFileExtensions: ['jpg', 'png', 'gif'],
+					overwriteInitial: false,
+					initialPreviewAsData: true
 				});
 			});
 
@@ -67,7 +71,6 @@
 
 			$(evento.target).find(".efetuar_logout").on('click', function(event){
 				var servico = new app.ServicoLogout();
-
 				var controladoraLogout = new app.ControladoraLogout(servico);
 				controladoraLogout.configurar();
 			});
@@ -113,8 +116,7 @@
 
 	$(document).ready(function()
 	{
-+		$.validator.addMethod("cRequired", $.validator.methods.required,
-		"Campo obrigatório.");
+		$.validator.addMethod("cRequired", $.validator.methods.required, "Campo obrigatório.");
 		$.validator.addClassRules("campo_obrigatorio", {cRequired: true});
 		
 		setInterval(function() {

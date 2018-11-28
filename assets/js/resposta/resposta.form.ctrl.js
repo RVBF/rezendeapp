@@ -63,7 +63,7 @@
 				};
 				
 				var obj = _this.conteudo();
-				var jqXHR = _this.alterar ? servicoResposta.atualizar(obj) : servicoResposta.adicionar(obj);
+				// var jqXHR = _this.alterar ? servicoResposta.atualizar(obj) : servicoResposta.adicionar(obj);
 				jqXHR.done(window.sucessoParaFormulario).fail(window.erro);
 
 				if(_this.alterar){
@@ -78,13 +78,18 @@
         
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
-			return servicoResposta.criar(
-                $('#id').val(),
-                $('#descricao').val(),
-				$('#data_limite').pickadate('picker').get('select', 'yyyy-mm-dd') + ' ' + $('#hora_limite').pickatime('picker').get('select','HH:i'),
-				$('#categoria').val(),
-				$('#loja').val()
-			);
+			var files = $('#input-44').fileinput('getFilesCount'); // returns file list selected
+			console.log($('#input-44' ).fileinput('readFiles' , files)); // onde `files` é um objeto FileList 
+			
+
+			// console . log ( $ ( '#input-44' ). fileinput ( 'getPreview' , 'yourThumbFrameId' )); 
+			// return servicoResposta.criar(
+            //     $('#id').val(),
+            //     $('#descricao').val(),
+			// 	$('#data_limite').pickadate('picker').get('select', 'yyyy-mm-dd') + ' ' + $('#hora_limite').pickatime('picker').get('select','HH:i'),
+			// 	$('#categoria').val(),
+			// 	$('#loja').val()
+			// );
         };
 
         _this.pergutasParaHtml = function pergutasParaHtml(perguntas){
@@ -116,7 +121,7 @@
 
 				html += '<div class="row form-row">';
 				html += '<div class="col-xs-12  col-sm-12 col-md-12 col-12">';
-				html += '<input id="input-44" name="input44[]" type="file" class="file file_input" data-show-preview="false" multiple>';
+				html += '<input id="input-44" name="input44[]" type="file" class="file_input"  multiple>';
 				html += '</div>';
 				html += '</div>';
 
@@ -191,10 +196,7 @@
 		};
 
 		_this.salvar = function salvar() {
-			// _this.formulario.validate(criarOpcoesValidacao());
-
-			var files = $('.file_input').fileinput('getFileStack'); // returns file list selected
-
+			_this.formulario.validate(criarOpcoesValidacao());
         };
 		
 		_this.cancelar = function cancelar(event) {

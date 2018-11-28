@@ -84,6 +84,7 @@
 	router.get('/loja', verficarLogin, criarRotaPara('loja.html'));
 	
 	router.get('/checklist/:id/tarefa', verficarLogin, criarRotaPara('tarefa.html'));
+	router.get('/checklist/tarefa', verficarLogin, criarRotaPara('tarefa.html'));
 
 	router.get('/tarefa/:id/pergunta', verficarLogin, criarRotaPara('pergunta.html'));
 	router.get('/tarefa/:id/pergunta/cadastrar-perguntas', verficarLogin, criarRotaPara('perguntaCadastroMultiplo.html'));

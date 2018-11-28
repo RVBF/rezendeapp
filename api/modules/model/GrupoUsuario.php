@@ -6,7 +6,7 @@
  *  @author Rafael Vinicius Barros Ferreira
  *  @version	0.1
  */
-class GrupoDeUsuario {
+class GrupoUsuario {
 
     private $id;
     private $nome;
@@ -16,7 +16,6 @@ class GrupoDeUsuario {
         $this->id = $id;
         $this->nome =  $nome;
         $this->descricao = $descricao;
-        $this->senha = $senha;
     }
 
     public function getId(){
@@ -34,6 +33,7 @@ class GrupoDeUsuario {
     public function setDescricao($descricao){
         $this->descricao = $descricao;
     }
+    
     public function getNome(){
         return $this->nome; 
     }
