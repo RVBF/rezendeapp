@@ -16,36 +16,36 @@
 		_this.botaoSubmissao = $('#salvar')
         _this.cancelarModoEdicao = $('#cancelar_edicao');
         _this.idTarefa = window.location.href.split('#')[1].substring(1, url.length).split('/')[1];	
-
+		_this.formData = new FormData();
 
 		// Cria as opções de validação do formulário
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
 			var opcoes = {
 				rules: {
-					"categoria": {required : true},
-					"lojas" :{required : true},
-					"data_limite" : { required : true},
-					"hora_limite" : { required : true},
-					"descricao" : {required : true}
+					// "categoria": {required : true},
+					// "lojas" :{required : true},
+					// "data_limite" : { required : true},
+					// "hora_limite" : { required : true},
+					// "descricao" : {required : true}
 
 				},
 
 				messages: {
-					"categoria": {
-						required    : "O campo categoria é obrigatório.",
-					},
-					"lojas": {
-						required    : "O campo lojas é obrigatório.",
-					},
-					"data_limite": {
-						required    : "O campo data limite é obrigatório.",
-					},
-					"hora_limite": {
-						required    : "O campo hora limite é obrigatório.",
-					},
-					"descricao": {
-						required    : "O campo descrição é obrigatório.",
-					}
+					// "categoria": {
+					// 	required    : "O campo categoria é obrigatório.",
+					// },
+					// "lojas": {
+					// 	required    : "O campo lojas é obrigatório.",
+					// },
+					// "data_limite": {
+					// 	required    : "O campo data limite é obrigatório.",
+					// },
+					// "hora_limite": {
+					// 	required    : "O campo hora limite é obrigatório.",
+					// },
+					// "descricao": {
+					// 	required    : "O campo descrição é obrigatório.",
+					// }
 				}
 			};
 			// Irá disparar quando a validação passar, após chamar o método validate().
@@ -63,7 +63,7 @@
 				};
 				
 				var obj = _this.conteudo();
-				// var jqXHR = _this.alterar ? servicoResposta.atualizar(obj) : servicoResposta.adicionar(obj);
+				var jqXHR = _this.alterar ? servicoResposta.atualizar(obj) : servicoResposta.adicionar(obj);
 				jqXHR.done(window.sucessoParaFormulario).fail(window.erro);
 
 				if(_this.alterar){
@@ -78,18 +78,14 @@
         
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
-			var files = $('#input-44').fileinput('getFilesCount'); // returns file list selected
-			console.log($('#input-44' ).fileinput('readFiles' , files)); // onde `files` é um objeto FileList 
-			
-
-			// console . log ( $ ( '#input-44' ). fileinput ( 'getPreview' , 'yourThumbFrameId' )); 
-			// return servicoResposta.criar(
-            //     $('#id').val(),
-            //     $('#descricao').val(),
-			// 	$('#data_limite').pickadate('picker').get('select', 'yyyy-mm-dd') + ' ' + $('#hora_limite').pickatime('picker').get('select','HH:i'),
-			// 	$('#categoria').val(),
-			// 	$('#loja').val()
-			// );
+			console.log($('#file').val());
+			return servicoResposta.criar(
+                $('#id').val(),
+                $('#opcao').val(),
+				_this.formData.file,
+				$('#categoria').val(),
+				$('#loja').val()
+			);
         };
 
         _this.pergutasParaHtml = function pergutasParaHtml(perguntas){
@@ -114,17 +110,15 @@
 					html += '</div>';    
 				}
 				
-								
 				html += '</fieldset>';
 				html += '</div>';    
 				html += '</div>';
-
 				html += '<div class="row form-row">';
 				html += '<div class="col-xs-12  col-sm-12 col-md-12 col-12">';
-				html += '<input id="input-44" name="input44[]" type="file" class="file_input"  multiple>';
+				html += '<input type="file" id="files" name="files[]" multiple />';
+				html += '<output id="list"></output>';
 				html += '</div>';
 				html += '</div>';
-
             }
 
             return html;
@@ -133,6 +127,20 @@
         _this.popularPerguntas  =  function popularPerguntas(valor = 0) {
 			var sucesso = function (resposta) {
 				_this.formulario.find('.perguntas:first').append(_this.pergutasParaHtml(resposta.data));
+
+				$('#files').change(function(e){
+					var files = e.target.files; // FileList object
+
+					// files is a FileList of File objects. List some properties.
+					var output = [];
+					for (var i = 0, f; f = files[i]; i++) {
+					  output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+								  f.size, ' bytes, last modified: ',
+								  f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a','</li>');
+					}
+					console.log(output.join(''));
+					$('#list').append(output.join('') + '</ul>');
+				});
 			};
 
 			var erro = function(resposta)
