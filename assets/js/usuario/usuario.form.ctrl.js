@@ -88,7 +88,7 @@
 
 		_this.iniciarFormularioModoEdicao = function iniciarFormularioModoEdicao() {
 			_this.iniciarFormularioModoCadastro();
-
+			$('#msg').empty();
 			$('#senha').removeClass('campo_obrigatorio');
 			$('#confirmacao_senha ').removeClass('campo_obrigatorio');
 

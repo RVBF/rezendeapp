@@ -287,8 +287,8 @@ $app->get('/grupo-usuario', function(Request $req,  Response $res, $args = []) u
 $app->post('/grupo-usuario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 	$this->logger->addInfo("Acessando o cadastro de tarefa");
 	$sessaoUsuario = new Sessao($session);
-	$ctrl = new ControladoraTarefa($req->getParsedBody(), $sessaoUsuario);
-	$response = $ctrl->adicionar($args['idChecklist']);
+	$ctrl = new ControladoraGrupoUsuario($req->getParsedBody(), $sessaoUsuario);
+	$response = $ctrl->adicionar();
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 
 });
@@ -296,17 +296,17 @@ $app->post('/grupo-usuario', function(Request $req,  Response $res, $args = []) 
 $app->put('/grupo-usuario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 	$this->logger->addInfo("Acessando a atualização de tarefas");
 	$sessaoUsuario = new Sessao($session);
-	$ctrl = new ControladoraTarefa($req->getParsedBody(), $sessaoUsuario);
-	$response = $ctrl->atualizar($args['idChecklist']);
+	$ctrl = new ControladoraGrupoUsuario($req->getParsedBody(), $sessaoUsuario);
+	$response = $ctrl->atualizar();
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 
 });
 
-$app->delete('/grupo-usuario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-	$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
+$app->delete('/grupo-usuario/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Deletando o grupo de usuário de id ". $args['id'] . '.');
 	$sessaoUsuario = new Sessao($session);
-	$ctrl = new ControladoraTarefa($req->getParsedBody(), $sessaoUsuario);
-	$response = $ctrl->remover($args['id'], $args['idChecklist']);
+	$ctrl = new ControladoraGrupoUsuario($req->getParsedBody(), $sessaoUsuario);
+	$response = $ctrl->remover($args['id']);
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 });
 

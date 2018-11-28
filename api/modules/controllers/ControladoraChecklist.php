@@ -18,7 +18,10 @@ class ControladoraChecklist {
 	private $colecaoChecklist;
 	private $colecaoCategoria;
 	private $colecaoLoja;
+	private $servicoLogin;
+	
 	function __construct($params,  Sessao $sessao) {
+		$this->servicoLogin = new ServicoLogin($sessao);
 		$this->params = $params;
 		$this->colecaoChecklist = Dice::instance()->create('ColecaoChecklist');
 		$this->colecaoCategoria = Dice::instance()->create('ColecaoCategoria');
@@ -27,12 +30,17 @@ class ControladoraChecklist {
 	}
 
 	function todos() {
-		$dtr = new DataTablesRequest($this->params);
-		$contagem = 0;
-		$objetos = [];
-		$erro = null;
 		try
 		{
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}
+
+			$dtr = new DataTablesRequest($this->params);
+			$contagem = 0;
+			$objetos = [];
+			$erro = null;
+
 			$objetos = $this->colecaoChecklist->todos($dtr->start, $dtr->length);
 
 			$contagem = $this->colecaoChecklist->contagem();
@@ -42,22 +50,20 @@ class ControladoraChecklist {
 			throw new Exception("Erro ao listar checklist.");
 		}
 
-		$conteudo = new DataTablesResponse(
-			$contagem,
-			$contagem, //count($objetos ),
-			$objetos,
-			$dtr->draw,
-			$erro
-		);
+		$conteudo = new DataTablesResponse($contagem,$contagem, $objetos, $dtr->draw, $erro);
 
 		return $conteudo;
 	}
 
 	function adicionar() {
-		$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'descricao','dataLimite','categoria', 'loja'], $this->params);
-		$resposta = [];
-
 		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}
+
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'descricao','dataLimite','categoria', 'loja'], $this->params);
+			$resposta = [];
+
 			if(count($inexistentes) > 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
@@ -90,10 +96,14 @@ class ControladoraChecklist {
 	}
 
 	function atualizar() {
-		$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'descricao','dataLimite','categoria', 'loja'], $this->params);
-		$resposta = [];
-
 		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}		
+			
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'descricao','dataLimite','categoria', 'loja'], $this->params);
+			$resposta = [];
+
 			if(count($inexistentes) > 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
@@ -126,9 +136,13 @@ class ControladoraChecklist {
 	}
 
 	function remover($id) {
-		$resposta = [];
-
 		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}	
+			
+			$resposta = [];
+
 			$status = $this->colecaoChecklist->remover($id);
 			
 			$resposta = ['status' => true, 'mensagem'=> 'Checklist removida com sucesso.']; 

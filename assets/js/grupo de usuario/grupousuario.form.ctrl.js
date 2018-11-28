@@ -71,7 +71,7 @@
         
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
-			return servicoGrupoUsuario.criar($('#id').val(), $('#nome').val(), $('#login').val(), $('#senha').val());
+			return servicoGrupoUsuario.criar($('#id').val(), $('#nome').val(), $('#descricao').val());
 		};
 
 		_this.configurarBotoes = function configurarBotoes() {
@@ -82,16 +82,12 @@
 		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro() {
 			_this.formulario.parents('#painel_formulario').removeClass('desabilitado').desabilitar(false);
 			_this.formulario.parents('#painel_formulario').removeClass('d-none');
-			_this.formulario.find('#login').focus();
+			_this.formulario.find('#nome').focus();
 			_this.configurarBotoes();
 		};
 
 		_this.iniciarFormularioModoEdicao = function iniciarFormularioModoEdicao() {
 			_this.iniciarFormularioModoCadastro();
-
-			$('#senha').removeClass('campo_obrigatorio');
-			$('#confirmacao_senha ').removeClass('campo_obrigatorio');
-
 		};
 
 		_this.definirForm = function definirForm(status) {			
@@ -110,7 +106,7 @@
 		_this.desenhar = function desenhar(obj) {
 			$('#id').val(obj.id);
 			$('#nome').val(obj.nome);
-			$('#login').val(obj.login);
+			$('#descricao').val(obj.descricao);
 		};
 
 		_this.salvar = function salvar() {

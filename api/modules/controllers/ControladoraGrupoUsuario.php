@@ -15,7 +15,7 @@ class ControladoraGrupoUsuario {
 	private $params;
 	private $colecaoGrupoUsuario;
 	private $session;
-
+	private $servicoLogin;
 	
 	function __construct($params, Sessao $sessao) {
 		$this->params = $params;
@@ -52,7 +52,8 @@ class ControladoraGrupoUsuario {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
-			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'nome','login','senha'], $this->params);
+
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'nome','descricao'], $this->params);
 
 			if(count($inexistentes) > 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
@@ -60,10 +61,9 @@ class ControladoraGrupoUsuario {
 				throw new Exception($msg);
 			}
 
-			$hash = HashSenha::instance();
+			$grupoUsuario = new GrupoUsuario( 0, \ParamUtil::value($this->params, 'nome'), \ParamUtil::value($this->params, 'descricao'));
 
-			$usuario = new Usuario( 0, \ParamUtil::value($this->params, 'nome'), \ParamUtil::value($this->params, 'login'), $hash->gerarHashDeSenhaComSaltEmMD5(\ParamUtil::value($this->params, 'senha')));
-			$resposta = ['checklist'=> RTTI::getAttributes($this->colecaoGrupoUsuario->adicionar($usuario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Usuário cadastrado com sucesso.']; 
+			$resposta = ['grupoUsuario'=> RTTI::getAttributes($this->colecaoGrupoUsuario->adicionar($grupoUsuario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Grupo de usuário cadastrado com sucesso.']; 
 		}
 		catch (\Exception $e) {
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
@@ -72,23 +72,23 @@ class ControladoraGrupoUsuario {
 		return $resposta;
 	}
 
-	function atualizar() {
+    function atualizar() {
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
-			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'nome','login','senha'], $this->params);
-			
+
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'nome','descricao'], $this->params);
+
 			if(count($inexistentes) > 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
 				throw new Exception($msg);
 			}
 
-			$hash = HashSenha::instance();
+			$grupoUsuario = new GrupoUsuario( \ParamUtil::value($this->params, 'id'), \ParamUtil::value($this->params, 'nome'), \ParamUtil::value($this->params, 'descricao'));
 
-			$usuario = new Usuario( \ParamUtil::value($this->params, 'id'), \ParamUtil::value($this->params, 'nome'), \ParamUtil::value($this->params, 'login'), $hash->gerarHashDeSenhaComSaltEmMD5(\ParamUtil::value($this->params, 'senha')));
-			$resposta = ['checklist'=> RTTI::getAttributes($this->colecaoGrupoUsuario->atualizar($usuario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Usuário atualizado com sucesso.']; 
+			$resposta = ['grupoUsuario'=> RTTI::getAttributes($this->colecaoGrupoUsuario->atualizar($grupoUsuario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Grupo de usuário cadastrado com sucesso.']; 
 		}
 		catch (\Exception $e) {
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
@@ -109,13 +109,13 @@ class ControladoraGrupoUsuario {
 
 			$this->colecaoGrupoUsuario->remover($id);
 
-			$resposta = ['status' => true, 'mensagem'=> 'Usuário removido com sucesso.']; 
-
-			return $this->geradoraResposta->semConteudo();
+			$resposta = ['status' => true, 'mensagem'=> 'Grupo de usuário removido com sucesso.']; 
 		}
 		catch (\Exception $e) {
-			$resposta = ['status' => true, 'mensagem'=> 'Usuário removido com sucesso.']; 
+			$resposta = ['status' => true, 'mensagem'=> 'Grupo de usuário removido com sucesso.']; 
 		}
+		
+		return $resposta;
 	}
 }
 ?>

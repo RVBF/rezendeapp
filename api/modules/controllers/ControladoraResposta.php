@@ -18,22 +18,26 @@ class ControladoraResposta {
 	private $colecaoTarefa;
 	private $colecaoResposta;
 	private $colecaoAnexo;
+	private $servicoLogin;
 	
 	function __construct($params,  Sessao $sessao) {
 		$this->params = $params;
 		$this->colecaoTarefa = Dice::instance()->create('ColecaoTarefa');
 		$this->colecaoResposta = Dice::instance()->create('ColecaoResposta');
 		$this->colecaoAnexo = Dice::instance()->create('ColecaoAnexo');
-
+		$this->servicoLogin = new ServicoLogin($sessao);
 	}
 
 	function todos() {
-		$dtr = new DataTablesRequest($this->params);
-		$contagem = 0;
-		$objetos = [];
-		$erro = null;
-		try
-		{
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}
+
+			$dtr = new DataTablesRequest($this->params);
+			$contagem = 0;
+			$objetos = [];
+			$erro = null;
 			$objetos = $this->colecaoTarefa->todos($dtr->start, $dtr->length);
 
 			$contagem = $this->colecaoTarefa->contagem();
@@ -55,10 +59,15 @@ class ControladoraResposta {
 	}
 
 	function adicionar() {
-		$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'descricao','dataLimite','categoria', 'loja'], $this->params);
-		$resposta = [];
-
 		try {
+
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}
+
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'descricao','dataLimite','categoria', 'loja'], $this->params);
+			$resposta = [];
+			
 			if(count($inexistentes) > 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 

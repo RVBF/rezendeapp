@@ -27,10 +27,7 @@
     "select2": "^4.0.5",
     "select2-bootstrap4-theme": "^2.0.0",
     "popper.js": "^1.14.5",
-    "piexifjs": "1.0.4",
-    "bootstrap-fileinput": "^4.5.1",
-    "DOMPurify": "1.0.8",
-    "Sortable": "sortablejs#^1.6.0"
+    "piexifjs": "1.0.4"
   },
   "devDependencies": {}
 }

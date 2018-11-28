@@ -18,20 +18,25 @@ class ControladoraPergunta {
 	private $params;
 	private $colecaoPergunta;
 	private $colecaoTarefa;
+	private $servicoLogin;
 	
 	function __construct($params,  Sessao $sessao) {
 		$this->params = $params;
 		$this->colecaoPergunta = Dice::instance()->create('ColecaoPergunta');
 		$this->colecaoTarefa = Dice::instance()->create('ColecaoTarefa');
+		$this->servicoLogin = new ServicoLogin($sessao);
 	}
 
 	function todos($idTarefa) {
-		$dtr = new DataTablesRequest($this->params);
-		$contagem = 0;
-		$objetos = [];
-		$erro = null;
-
 		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}
+
+			$dtr = new DataTablesRequest($this->params);
+			$contagem = 0;
+			$objetos = [];
+			$erro = null;
             $objetos = $this->colecaoPergunta->todos($dtr->start, $dtr->length, $idTarefa);
 
 			$contagem = $this->colecaoPergunta->contagem();
@@ -52,32 +57,35 @@ class ControladoraPergunta {
 	}
 	
 	function adicionar($tarefaId) {
-		$inexistentes = \ArrayUtil::nonExistingKeys(['pergunta'], $this->params);
-		
-		if(count($inexistentes) > 0) {
-			$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
-
-			throw new Exception($msg);
-		}
-
-		$tarefa = $this->colecaoTarefa->comId($tarefaId);
-
-		if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
-			throw new Exception("Checklist não encontrada na base de dados.");
-		}
-
-		$pergunta = new Pergunta(
-			0,
-            \ParamUtil::value($this->params, 'pergunta'),
-            null, 
-            null,
-            $tarefa
-		);
-
-		$resposta = [];
-		
 		try {
 
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}
+			$inexistentes = \ArrayUtil::nonExistingKeys(['pergunta'], $this->params);
+			
+			if(count($inexistentes) > 0) {
+				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
+
+				throw new Exception($msg);
+			}
+
+			$tarefa = $this->colecaoTarefa->comId($tarefaId);
+
+			if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
+				throw new Exception("Checklist não encontrada na base de dados.");
+			}
+
+			$pergunta = new Pergunta(
+				0,
+				\ParamUtil::value($this->params, 'pergunta'),
+				null, 
+				null,
+				$tarefa
+			);
+
+			$resposta = [];
+			
 			$pergunta = $this->colecaoPergunta->adicionar($pergunta);
 			$resposta = ['pergunta'=> RTTI::getAttributes( $pergunta, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Pergunta cadastrada com sucesso.']; 
 		}
@@ -90,37 +98,40 @@ class ControladoraPergunta {
 
 		
 	function adicionarTodas($tarefaId) {
-		$inexistentes = \ArrayUtil::nonExistingKeys(['data'], $this->params);
-		
-		if(count($inexistentes) > 0) {
-			$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
-			throw new Exception($msg);
-		}
-
-		$tarefa = $this->colecaoTarefa->comId($tarefaId);
-
-		if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
-			throw new Exception("Checklist não encontrada na base de dados.");
-		}
- 
-		$objetos = [];
-
-		foreach ($this->params['data'] as $obj) {
-
-			$objetos[] = new Pergunta(
-				$obj['id'],
-				$obj['pergunta'],
-				null, 
-				null,
-				$tarefa
-			);
-		}
-
-		$resposta = [];
-		
 		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}
+			$inexistentes = \ArrayUtil::nonExistingKeys(['data'], $this->params);
+			
+			if(count($inexistentes) > 0) {
+				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
+				throw new Exception($msg);
+			}
+
+			$tarefa = $this->colecaoTarefa->comId($tarefaId);
+
+			if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
+				throw new Exception("Checklist não encontrada na base de dados.");
+			}
+	
+			$objetos = [];
+
+			foreach ($this->params['data'] as $obj) {
+
+				$objetos[] = new Pergunta(
+					$obj['id'],
+					$obj['pergunta'],
+					null, 
+					null,
+					$tarefa
+				);
+			}
+
+			$resposta = [];
+			
 			$objetos = $this->colecaoPergunta->adicionarTodas($objetos);
 			$resposta = ['perguntas'=> $objetos, 'status' => true, 'mensagem'=> 'Pergunta cadastrada com sucesso.']; 
 		}
@@ -132,32 +143,36 @@ class ControladoraPergunta {
 	}
 
 	function atualizar($tarefaId) {
-		$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'pergunta'], $this->params);
-		
-		if(count($inexistentes) > 0) {
-			$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
-			throw new Exception($msg);
-		}
-
-		$tarefa = $this->colecaoTarefa->comId($tarefaId);
-
-		if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
-			throw new Exception("Checklist não encontrada na base de dados.");
-		}
-
-		$pergunta = new Pergunta(
-			\ParamUtil::value($this->params, 'id'),
-            \ParamUtil::value($this->params, 'pergunta'),
-            null, 
-            null,
-            $tarefa
-		);
-
-		$resposta = [];
-		
 		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}		
 
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'pergunta'], $this->params);
+			
+			if(count($inexistentes) > 0) {
+				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
+
+				throw new Exception($msg);
+			}
+
+			$tarefa = $this->colecaoTarefa->comId($tarefaId);
+
+			if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
+				throw new Exception("Checklist não encontrada na base de dados.");
+			}
+
+			$pergunta = new Pergunta(
+				\ParamUtil::value($this->params, 'id'),
+				\ParamUtil::value($this->params, 'pergunta'),
+				null, 
+				null,
+				$tarefa
+			);
+
+			$resposta = [];
+			
 			$pergunta = $this->colecaoPergunta->atualizar($pergunta);
 			$resposta = ['pergunta'=> RTTI::getAttributes( $pergunta, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Pergunta atualizada com sucesso.']; 
 		}
@@ -168,12 +183,16 @@ class ControladoraPergunta {
 		return $resposta;
 	}
 	function comTarefaId($tarefaId){
-		$dtr = new DataTablesRequest($this->params);
-		$contagem = 0;
-		$objetos = [];
-		$erro = null;
-
 		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}
+
+			$dtr = new DataTablesRequest($this->params);
+			$contagem = 0;
+			$objetos = [];
+			$erro = null;
+
             $objetos = $this->colecaoPergunta->todos($dtr->start, $dtr->length, $tarefaId);
 
 			$contagem = $this->colecaoPergunta->contagem();
@@ -192,11 +211,13 @@ class ControladoraPergunta {
 
 		return $conteudo;
 	}
-
 	function remover($id, $tarefaId) {
-		$resposta = [];
-
 		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}
+			$resposta = [];
+
 			$status = $this->colecaoPergunta->remover($id, $tarefaId);
 			
 			$resposta = ['status' => true, 'mensagem'=> 'Categoria removida com sucesso.']; 
