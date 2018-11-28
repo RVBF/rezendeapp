@@ -201,17 +201,6 @@ $app->delete('/tarefa/{idTarefa}/pergunta/{id}', function(Request $req,  Respons
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 });
 
-
-$app->post('/anexo/upload-anexo', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-	$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
-	$sessaoUsuario = new Sessao($session);//, $sessaoUsuario 
-
-	$ctrl = new ControladoraPergunta($req->getParsedBody());
-	// $response = $ctrl->remover($args['id'], $args['idTarefa']);
-	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
-});
-
-
 // Início das rotas para usuario
 $app->get('/usuario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 	$this->logger->addInfo("Acessando listagem de usuario");	
@@ -310,5 +299,13 @@ $app->delete('/grupo-usuario/{id}', function(Request $req,  Response $res, $args
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 });
 
+$app->post('/resposta', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Acessando o cadastro de tarefa");
+	Debuger::printr($req->getParsedBody());
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraGrupoUsuario($req->getParsedBody(), $sessaoUsuario);
+	$response = $ctrl->adicionar();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 
+});
 ?>
