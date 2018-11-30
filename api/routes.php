@@ -201,6 +201,14 @@ $app->delete('/tarefa/{idTarefa}/pergunta/{id}', function(Request $req,  Respons
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 });
 
+$app->get('/pergunta/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraPergunta($req->getParsedBody(), $sessaoUsuario);
+	$response = $ctrl->comIdPergunta($args['id']);
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+});
+
 // Início das rotas para usuario
 $app->get('/usuario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 	$this->logger->addInfo("Acessando listagem de usuario");	

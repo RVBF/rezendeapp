@@ -7,13 +7,12 @@
  {
 	'use strict';
 
-	function Resposta(id = 0, opcaoSelecionada = 0, comentario = '', tarefa = undefined, anexos = []) {
+	function Resposta(id = 0, opcaoSelecionada = 0, files = [], comentario, pergunta = null) {
 		this.id = id  || 0;
         this.opcaoSelecionada = opcaoSelecionada  || 0;
-        this.comentario = comentario;
-        this.dataLimite = dataLimite  || '';
-        this.tarefa = tarefa  || undefined;
-        this.anexos = anexos  || [];
+		this.files = files || [];
+		this.comentario = comentario;
+		this.pergunta = pergunta;
 	};
 
 	function ServicoResposta() { // Model
@@ -24,13 +23,13 @@
 		};
 
 		// Cria um objeto de categoria
-		this.criar = function criar(id = 0, opcaoSelecionada = 0, comentario = '', tarefa = undefined, anexos = []) {
+		this.criar = function criar(id = 0,  opcaoSelecionada = 0, files = [], comentario, pergunta = null) {
  			return {
                 id : id  || 0,
                 opcaoSelecionada : opcaoSelecionada  || 0,
-                comentario : comentario  || '',
-                tarefa : tarefa || undefined,
-                anexos : anexos  || []
+				files : files  || [],
+				comentario : comentario || '',
+				pergunta : pergunta || null             
 			};
 		};
 
@@ -38,7 +37,7 @@
 			return $.ajax({
 				type: "POST",
 				url: _this.rota(),
-				data: obj
+				data: {obj},
 			});
 		};
 

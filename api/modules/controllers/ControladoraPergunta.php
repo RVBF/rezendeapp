@@ -211,6 +211,25 @@ class ControladoraPergunta {
 
 		return $conteudo;
 	}
+
+	function comIdPergunta($id){
+		$resposta = [];
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}
+			$resposta = [];
+			
+			$pergunta = $this->colecaoPergunta->comId($id);
+
+			$resposta = ['pergunta'=> RTTI::getAttributes($pergunta, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Pergunta  encontrada com sucesso.']; 
+		}
+		catch (\Exception $e ) {
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+		}
+
+		return $resposta;
+	}
 	function remover($id, $tarefaId) {
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {

@@ -458,3 +458,22 @@ ul.rezende-menu-wrap li a {
     margin-left: 1rem  !important;
 
 }
+
+.element {
+    display: inline-flex;
+    align-items: center;
+  }
+ 
+.element i {
+    margin: 10px;
+    cursor: pointer;
+    font-size: 30px;
+}
+
+.element  i:hover {
+    opacity: 0.6;
+}
+
+.element  input {
+    display: none;
+}
