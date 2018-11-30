@@ -104,6 +104,11 @@
 				event.preventDefault();
 				router.navigate('/configuracao/grupo-usuario');
 			});
+
+
+			$(evento.target).find('.toltip').each(function(){
+			    $(this).tooltip(); 
+			});
 		}
 	}
 	var bodyEvento = {target: 'body'};
@@ -116,6 +121,8 @@
 
 	$(document).ready(function()
 	{
+		$('.toltip').tooltip(); 
+
 		$.validator.addMethod("cRequired", $.validator.methods.required, "Campo obrigatório.");
 		$.validator.addClassRules("campo_obrigatorio", {cRequired: true});
 		

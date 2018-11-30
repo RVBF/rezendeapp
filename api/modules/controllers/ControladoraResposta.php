@@ -15,14 +15,14 @@ use Carbon\Carbon;
 class ControladoraResposta {
 
 	private $params;
-	private $colecaoTarefa;
+	private $colecaoPergunta;
 	private $colecaoResposta;
 	private $colecaoAnexo;
 	private $servicoLogin;
 	
 	function __construct($params,  Sessao $sessao) {
 		$this->params = $params;
-		$this->colecaoTarefa = Dice::instance()->create('ColecaoTarefa');
+		$this->colecaoPergunta = Dice::instance()->create('ColecaoPergunta');
 		$this->colecaoResposta = Dice::instance()->create('ColecaoResposta');
 		$this->colecaoAnexo = Dice::instance()->create('ColecaoAnexo');
 		$this->servicoLogin = new ServicoLogin($sessao);
@@ -38,9 +38,9 @@ class ControladoraResposta {
 			$contagem = 0;
 			$objetos = [];
 			$erro = null;
-			$objetos = $this->colecaoTarefa->todos($dtr->start, $dtr->length);
+			$objetos = $this->colecaoPergunta->todos($dtr->start, $dtr->length);
 
-			$contagem = $this->colecaoTarefa->contagem();
+			$contagem = $this->colecaoPergunta->contagem();
 		}
 		catch (\Exception $e )
 		{
@@ -64,8 +64,8 @@ class ControladoraResposta {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
-
-			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'descricao','dataLimite','categoria', 'loja'], $this->params);
+			
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'opcao','files', 'pergunta'], $this->params);
 			$resposta = [];
 			
 			if(count($inexistentes) > 0) {
@@ -73,6 +73,7 @@ class ControladoraResposta {
 
 				throw new Exception($msg);
 			}
+
 			$categoria = $this->colecaoResposta->comId(\ParamUtil::value($this->params, 'categoria'));
 			if(!isset($categoria) and !($categoria instanceof Categoria)){
 				throw new Exception("Categoria não encontrada na base de dados.");
@@ -90,7 +91,7 @@ class ControladoraResposta {
 				$categoria,
 				$loja
 			);
-			$resposta = ['Resposta'=> RTTI::getAttributes($this->colecaoTarefa->adicionar($Resposta), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Resposta cadastrada com sucesso.']; 
+			$resposta = ['Resposta'=> RTTI::getAttributes($this->colecaoPergunta->adicionar($Resposta), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Resposta cadastrada com sucesso.']; 
 		}
 		catch (\Exception $e) {
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 

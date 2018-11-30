@@ -16,7 +16,8 @@
 		_this.botaoSubmissao = $('#salvar')
         _this.cancelarModoEdicao = $('#cancelar_edicao');
         _this.idTarefa = window.location.href.split('#')[1].substring(1, url.length).split('/')[1];	
-		_this.formData = new FormData();
+		
+		_this.respostas = [];
 
 		// Cria as opções de validação do formulário
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
@@ -50,21 +51,28 @@
 			};
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
-				_this.formulario.desabilitar(false);
+				_this.formulario.desabilitar(true);
 
 
 				var erro = function erro(jqXHR, textStatus, errorThrown) {
 					var mensagem = jqXHR.responseText;
 					_this.formulario.find('#msg').empty().append('<div class="error" >' + mensagem + '</div>');
+
+					_this.respostas = [];
 				};
 				
 				var terminado = function() {
-					_this.formulario.desabilitar(true);
+					_this.respostas = [];
+
+					_this.formulario.desabilitar(false);
 				};
 				
-				var obj = _this.conteudo();
-				var jqXHR = _this.alterar ? servicoResposta.atualizar(obj) : servicoResposta.adicionar(obj);
-				jqXHR.done(window.sucessoParaFormulario).fail(window.erro);
+				var obj =  JSON.stringify(_this.conteudo()).toString();
+				// console.log(obj);
+
+				// obj.replace('[', '{');
+				var jqXHR = _this.alterar ? servicoResposta.atualizar(JSON.parse(obj)) : servicoResposta.adicionar(JSON.parse(obj));
+				jqXHR.done(window.sucessoParaFormulario).fail(erro).always(terminado);
 
 				if(_this.alterar){
 					$('.depende_selecao').each(function(){
@@ -78,24 +86,45 @@
         
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
-			console.log($('#file').val());
-			return servicoResposta.criar(
-                $('#id').val(),
-                $('#opcao').val(),
-				_this.formData.file,
-				$('#categoria').val(),
-				$('#loja').val()
-			);
+			var perguntas = $('.pergunta');
+
+			perguntas.each(function(){
+				var temResposta = false;
+				var pergunta = $(this);
+				var id = pergunta.find('.ids:first').val();
+				var opcao = $('[name=pergunta_' + id + ']:checked').val();
+				for(var posicaoAtual in _this.respostas) {
+					var atual = _this.respostas[posicaoAtual];
+
+					if(atual.pergunta == id){
+						atual.opcaoSelecionada = opcao;
+						temResposta = true;;
+						_this.respostas[posicaoAtual] = atual;
+						break;
+					}
+				};
+
+				if(!temResposta){
+					var obj = new app.Resposta(0, opcao);
+
+					_this.respostas.push(obj);
+				}
+			});
+
+			return _this.respostas;
         };
 
         _this.pergutasParaHtml = function pergutasParaHtml(perguntas){
     		var html = '';
-            var opcao = new app.Opcao();
-
+			var opcao = new app.Opcao();
+		
             for(var posicao in perguntas){
-				html +=  ' <div class="row form-row">';
+				html += ' <div class="pergunta">';
+
+				html += ' <div class="row form-row">';
 				html += '<div class="col-xs-12  col-sm-12 col-md-12 col-12">';
 				html += '<fieldset class="form-group row">';
+				html += '<input type= "hidden" class="ids" name="pergunta_id_' + perguntas[posicao].id + '" id="pergunta_id_' + perguntas[posicao].id + '" value ="'+  perguntas[posicao].id +'">';
 
                 html += '<legend class="col-form-legend col-xs-12  col-sm-12 col-md-12 col-12">' + perguntas[posicao].pergunta + '</legend>';
 
@@ -103,43 +132,102 @@
 					html += '<div class="col-xs-12  col-sm-12 col-md-12 col-12">';
                     html += '<div class="form-check">';
 					html += ' <label class="form-check-label">';
-					html += ' <input class="form-check-input" type="radio" name="pergunta_' + perguntas[posicao].id + '" id="pergunta_' + opcao.getpcoes()[posicaoOp] + '"value="'  + posicaoOp + '" />';
+					if(posicaoOp == 1) html += ' <input class="form-check-input" type="radio" name="pergunta_' + perguntas[posicao].id + '" id="pergunta_' + perguntas[posicao].id + '_'+ opcao.getpcoes()[posicaoOp] + '" value="'  + posicaoOp + '" checked="checked"/>';
+					else html += ' <input class="form-check-input" type="radio" name="pergunta_' + perguntas[posicao].id + '" id="pergunta_' + perguntas[posicao].id + '_'+ opcao.getpcoes()[posicaoOp] + '" value="'  + posicaoOp + '"/>';					
 					html += opcao.getpcoes()[posicaoOp];
 					html += '</label>';
 					html += '</div>';
 					html += '</div>';    
-				}
+				}	
 				
 				html += '</fieldset>';
 				html += '</div>';    
 				html += '</div>';
+
 				html += '<div class="row form-row">';
-				html += '<div class="col-xs-12  col-sm-12 col-md-12 col-12">';
-				html += '<input type="file" id="files" name="files[]" multiple />';
-				html += '<output id="list"></output>';
+				html += '<div class="col-xs-2  col-sm-2 col-md-2 col-2">';
+				html += '<div class="element">';
+				html += '<i class="fas fa-camera"></i></i><span class="name toltip" title="Nenhum arquivo selecionado.">Nenhum arquivo...</span>';
+				html += '<input type="file" name="pergunta_foto_' + perguntas[posicao].id + '" id="pergunta_foto_' + perguntas[posicao].id + '" accept="image/*">';
 				html += '</div>';
 				html += '</div>';
-            }
+
+				html += '<div class="col-xs-2  col-sm-2 col-md-2 col-2">';
+				html += '<div class="element">';
+				html += '<i class="fas fa-file-audio"></i><span class="name toltip" title="Nenhum arquivo selecionado.">Nenhum arquivo...</span>';
+				html += '<input type="file" name="pergunta_audio_' + perguntas[posicao].id + '" id="pergunta_audio_' + perguntas[posicao].id + '" accept="audio/*">';
+				html += '</div>';
+				html += '</div>';
+
+				html += '<div class="col-xs-2  col-sm-2 col-md-2 col-2">';
+				html += '<div class="element">';
+				html += '<i class="fas fa-file-import"></i></i><span class="name toltip" title="Nenhum arquivo selecionado.">Nenhum arquivo...</span>';
+				html += '<input type="file" name="pergunta_file_' + perguntas[posicao].id + '" id="pergunta_file_' + perguntas[posicao].id + '" class="carregar_arquivo" accept="pdf/*;text/*;html/*;.csv; application/vnd.ms-excel;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">';
+				html += '</div>';
+				html += '</div>';
+				
+				html += '</div>';
+				html += '</div>';
+			}
 
             return html;
         };
         
         _this.popularPerguntas  =  function popularPerguntas(valor = 0) {
 			var sucesso = function (resposta) {
-				_this.formulario.find('.perguntas:first').append(_this.pergutasParaHtml(resposta.data));
+				_this.formulario.find('.perguntas').append(_this.pergutasParaHtml(resposta.data));
 
-				$('#files').change(function(e){
-					var files = e.target.files; // FileList object
+				$('input[type="file"]').change(function(evt){
+					var elemento = $(this);
+					var file = evt.target.files[0];
+					var reader = new FileReader();
+					var idPergunta = elemento.attr('name').split('_')[2];
+					
+					reader.readAsDataURL(file);
 
-					// files is a FileList of File objects. List some properties.
-					var output = [];
-					for (var i = 0, f; f = files[i]; i++) {
-					  output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
-								  f.size, ' bytes, last modified: ',
-								  f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a','</li>');
-					}
-					console.log(output.join(''));
-					$('#list').append(output.join('') + '</ul>');
+					reader.onload = function () {
+						if(_this.respostas.length > 0){
+							var estaAdicionado = false;
+							for(var posicaoAtual in _this.respostas){
+								var atual = _this.respostas[posicaoAtual];
+								if(atual.pergunta == idPergunta){
+									atual.files.push({'arquivo': reader.result, 'tipo' : file.type});
+									estaAdicionado = true;
+									_this.respostas[posicaoAtual] = atual;
+									break;
+								}
+							}
+							
+							if(!estaAdicionado) {
+								var resposta = new app.Resposta();
+								resposta.pergunta = idPergunta;
+								resposta.files.push({'arquivo': reader.result, 'tipo' : file.type});
+								_this.respostas.push(resposta);
+							}
+						}
+						else{
+							
+							var resposta = new app.Resposta();
+							resposta.pergunta = idPergunta;
+							resposta.files.push({'arquivo': reader.result, 'tipo' : file.type});
+							_this.respostas.push(resposta);
+						}
+					};
+					reader.onerror = function (error) {
+					};
+				});
+	
+	
+				$('i').on('click', function () {
+					$(this).parents('.element').find("input[type='file']").trigger('click');
+				});
+		
+				$('input[type="file"]').on('change', function() {
+					var val = $(this).val().split('\\');
+					val = val[val.length -1];
+
+					$(this).siblings('span').attr('data-original-title', val)
+					$(this).siblings('span').html(val.substring( 0, 12) + '...');
 				});
 			};
 
@@ -165,7 +253,7 @@
 			_this.formulario.parents('#painel_formulario').removeClass('desabilitado').desabilitar(false);
 			_this.formulario.parents('#painel_formulario').removeClass('d-none');
             _this.configurarBotoes();
-            _this.popularPerguntas();
+			_this.popularPerguntas();
         };
 
 		_this.iniciarFormularioModoEdicao = function iniciarFormularioModoEdicao() {

@@ -76,6 +76,13 @@
 			});
 		};
 
+		_this.comIdPergunta = function comIdPergunt(id, idTarefa) {
+			return $.ajax({
+				type: "GET",
+				url: app.api + '/pergunta/' + id
+			});
+		};
+
 		_this.comTarefaId = function comTarefaId(idTarefa){
 			return $.ajax({
 				type : "GET",
