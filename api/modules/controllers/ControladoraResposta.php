@@ -17,6 +17,7 @@ class ControladoraResposta {
 	private $params;
 	private $colecaoPergunta;
 	private $colecaoResposta;
+	private $colecaoTarefa;
 	private $colecaoAnexo;
 	private $servicoLogin;
 	
@@ -25,6 +26,8 @@ class ControladoraResposta {
 		$this->colecaoPergunta = Dice::instance()->create('ColecaoPergunta');
 		$this->colecaoResposta = Dice::instance()->create('ColecaoResposta');
 		$this->colecaoAnexo = Dice::instance()->create('ColecaoAnexo');
+		$this->colecaoTarefa = Dice::instance()->create('ColecaoTarefa');
+		$this->servicoArquivo = ServicoArquivo::instance();
 		$this->servicoLogin = new ServicoLogin($sessao);
 	}
 
@@ -64,34 +67,64 @@ class ControladoraResposta {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
-			
-			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'opcao','files', 'pergunta'], $this->params);
 			$resposta = [];
-			
-			if(count($inexistentes) > 0) {
-				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
-				throw new Exception($msg);
+			foreach($this->params['obj'] as $key => $parametros){
+				$pergunta = $this->colecaoPergunta->comId($parametros['pergunta']);
+				Debuger::printr($pergunta);
+
+				if(!isset($pergunta) and !($pergunta instanceof pergunta)){
+					throw new Exception("Pergunta não encontrada na base de dados.");
+				}
+
+				$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'opcaoSelecionada','pergunta'], $parametros);
+
+				if(count($inexistentes) > 0) {
+					$msg = 'Os seguintes campos obrigatórios da pergunta de id   não foram enviados: ' . implode(', ', $inexistentes);
+	
+					throw new Exception($msg);
+				}
+
+				$resposta = new Resposta(0, \ParamUtil::value($parametros, 'opcaoSelecionada'), '', $pergunta);
+
+				$this->colecaoResposta->adicionar($resposta);
+
+				$pergunta->setResposta($resposta);
+
+				$this->colecaoPergunta->atualizar($pergunta);
+
+				if(isset($parametros['files'])){
+					$pastaPergunta = 'pergunta_'. $pergunta->getId();
+
+					foreach($parametros['files'] as $arquivo) {
+						$patch = $this->servicoArquivo->validarESalvarImagem($arquivo, $pastaPergunta);
+						$anexo = new Anexo(
+							0,
+							$patch,
+							$arquivo['tipo'],
+							$resposta
+						);
+
+						$this->colecaoAnexo->adicionar($anexo);
+					}
+				}
 			}
 
-			$categoria = $this->colecaoResposta->comId(\ParamUtil::value($this->params, 'categoria'));
-			if(!isset($categoria) and !($categoria instanceof Categoria)){
-				throw new Exception("Categoria não encontrada na base de dados.");
-			}
 
-			$loja = $this->colecaoAnexo->comId($this->params['loja']);
+			// $loja = $this->colecaoAnexo->comId($this->params['loja']);
 
-			if(!count($loja)) throw new Exception("As loja selecionadas não se econtra no banco de dados");
+			// if(!count($loja)) throw new Exception("As loja selecionadas não se econtra no banco de dados");
 		
-			$Resposta = new Resposta(
-				0,
-				\ParamUtil::value($this->params, 'descricao'),
-				\ParamUtil::value($this->params, 'dataLimite'),
-				'',
-				$categoria,
-				$loja
-			);
-			$resposta = ['Resposta'=> RTTI::getAttributes($this->colecaoPergunta->adicionar($Resposta), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Resposta cadastrada com sucesso.']; 
+			// $Resposta = new Resposta(
+			// 	0,
+			// 	\ParamUtil::value($this->params, 'descricao'),
+			// 	\ParamUtil::value($this->params, 'dataLimite'),
+			// 	'',
+			// 	$categoria,
+			// 	$loja
+			// );
+			// $resposta = ['Resposta'=> RTTI::getAttributes($this->colecaoPergunta->adicionar($Resposta), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Resposta cadastrada com sucesso.']; 
+				
 		}
 		catch (\Exception $e) {
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 

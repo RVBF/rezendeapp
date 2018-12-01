@@ -58,11 +58,11 @@
 					var mensagem = jqXHR.responseText;
 					_this.formulario.find('#msg').empty().append('<div class="error" >' + mensagem + '</div>');
 
-					_this.respostas = [];
+					// _this.respostas = [];
 				};
 				
 				var terminado = function() {
-					_this.respostas = [];
+					// _this.respostas = [];
 
 					_this.formulario.desabilitar(false);
 				};
@@ -105,7 +105,9 @@
 				};
 
 				if(!temResposta){
-					var obj = new app.Resposta(0, opcao);
+					var obj = new app.Resposta();
+					obj.pergunta = id;
+					obj.opcaoSelecionada = opcao;
 
 					_this.respostas.push(obj);
 				}
@@ -183,6 +185,9 @@
 					var reader = new FileReader();
 					var idPergunta = elemento.attr('name').split('_')[2];
 					
+					var nomeArquivo = $(this).val().split('\\');
+					nomeArquivo = nomeArquivo[nomeArquivo.length -1];
+
 					reader.readAsDataURL(file);
 
 					reader.onload = function () {
@@ -191,7 +196,7 @@
 							for(var posicaoAtual in _this.respostas){
 								var atual = _this.respostas[posicaoAtual];
 								if(atual.pergunta == idPergunta){
-									atual.files.push({'arquivo': reader.result, 'tipo' : file.type});
+									atual.files.push({'nome': nomeArquivo, 'arquivo': reader.result, 'tipo' : file.type});
 									estaAdicionado = true;
 									_this.respostas[posicaoAtual] = atual;
 									break;
@@ -201,7 +206,7 @@
 							if(!estaAdicionado) {
 								var resposta = new app.Resposta();
 								resposta.pergunta = idPergunta;
-								resposta.files.push({'arquivo': reader.result, 'tipo' : file.type});
+								resposta.files.push({'nome': nomeArquivo, 'arquivo': reader.result, 'tipo' : file.type});
 								_this.respostas.push(resposta);
 							}
 						}
@@ -209,7 +214,7 @@
 							
 							var resposta = new app.Resposta();
 							resposta.pergunta = idPergunta;
-							resposta.files.push({'arquivo': reader.result, 'tipo' : file.type});
+							resposta.files.push({'nome': nomeArquivo,'arquivo': reader.result, 'tipo' : file.type});
 							_this.respostas.push(resposta);
 						}
 					};

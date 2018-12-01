@@ -202,7 +202,7 @@ $app->delete('/tarefa/{idTarefa}/pergunta/{id}', function(Request $req,  Respons
 });
 
 $app->get('/pergunta/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-	$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
+	$this->logger->addInfo("Procurando a categoria de id ". $args['id'] . '.');
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraPergunta($req->getParsedBody(), $sessaoUsuario);
 	$response = $ctrl->comIdPergunta($args['id']);
@@ -309,9 +309,8 @@ $app->delete('/grupo-usuario/{id}', function(Request $req,  Response $res, $args
 
 $app->post('/resposta', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 	$this->logger->addInfo("Acessando o cadastro de tarefa");
-	Debuger::printr($req->getParsedBody());
 	$sessaoUsuario = new Sessao($session);
-	$ctrl = new ControladoraGrupoUsuario($req->getParsedBody(), $sessaoUsuario);
+	$ctrl = new ControladoraResposta($req->getParsedBody(), $sessaoUsuario);
 	$response = $ctrl->adicionar();
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 
