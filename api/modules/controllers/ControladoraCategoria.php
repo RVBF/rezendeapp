@@ -82,7 +82,7 @@ class ControladoraCategoria {
 		return $resposta;
 	}
 
-	function atualizar() {		
+	function atualizar() {
 		try {	
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
