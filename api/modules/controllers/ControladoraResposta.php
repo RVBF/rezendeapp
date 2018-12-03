@@ -5,6 +5,8 @@ use Symfony\Component\Validator\Validation as Validacao;
 use \phputil\JSON;
 use \phputil\RTTI;
 use Carbon\Carbon;
+use Illuminate\Database\Capsule\Manager as Db;
+
 
 /**
  * Controladora de Resposta
@@ -20,6 +22,8 @@ class ControladoraResposta {
 	private $colecaoTarefa;
 	private $colecaoAnexo;
 	private $servicoLogin;
+	private $colecaoUsuario;
+	private $colecaoFormularioRespondido;
 	
 	function __construct($params,  Sessao $sessao) {
 		$this->params = $params;
@@ -27,6 +31,8 @@ class ControladoraResposta {
 		$this->colecaoResposta = Dice::instance()->create('ColecaoResposta');
 		$this->colecaoAnexo = Dice::instance()->create('ColecaoAnexo');
 		$this->colecaoTarefa = Dice::instance()->create('ColecaoTarefa');
+		$this->colecaoUsuario = Dice::instance()->create('ColecaoUsuario');
+		$this->colecaoFormularioRespondido = Dice::instance()->create('ColecaoFormularioRespondido'); 
 		$this->servicoArquivo = ServicoArquivo::instance();
 		$this->servicoLogin = new ServicoLogin($sessao);
 	}
@@ -63,19 +69,28 @@ class ControladoraResposta {
 
 	function adicionar() {
 		try {
-
+			DB::raw('SET autocommit=0');
+			DB::raw('START TRANSACTION');
+			
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
-			$resposta = [];
-
+			$respostaFront = $respostasCadastradas = [];
+			$formularioRespondido = new FormularioRespondido();
+			$formularioRespondido->setDataHora(Carbon::now());
+			$formularioRespondido->setRespondedor($this->colecaoUsuario->comId($this->servicoLogin->getIdUsuario()));
+			
+			$this->colecaoFormularioRespondido->adicionar($formularioRespondido);
+			
 			foreach($this->params['obj'] as $key => $parametros){
-				$pergunta = $this->colecaoPergunta->comId($parametros['pergunta']);
-				Debuger::printr($pergunta);
+				$tarefa = $this->colecaoPergunta->comId($parametros['pergunta'])->getTarefa();
 
-				if(!isset($pergunta) and !($pergunta instanceof pergunta)){
+				if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
 					throw new Exception("Pergunta não encontrada na base de dados.");
 				}
+
+				$tarefa->setFormularioRespondido($formularioRespondido);
+				$this->colecaoTarefa->atualizar($tarefa);
 
 				$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'opcaoSelecionada','pergunta'], $parametros);
 
@@ -85,19 +100,17 @@ class ControladoraResposta {
 					throw new Exception($msg);
 				}
 
-				$resposta = new Resposta(0, \ParamUtil::value($parametros, 'opcaoSelecionada'), '', $pergunta);
+				$resposta = new Resposta(0, \ParamUtil::value($parametros, 'opcaoSelecionada'), '');
 
-				$this->colecaoResposta->adicionar($resposta);
+				$this->colecaoResposta->adicionarComFormularioID($resposta, $formularioRespondido->getId());
 
-				$pergunta->setResposta($resposta);
+				$formularioRespondido->addResposta($resposta);
 
-				$this->colecaoPergunta->atualizar($pergunta);
-
-				if(isset($parametros['files'])){
-					$pastaPergunta = 'pergunta_'. $pergunta->getId();
+				if(isset($parametros['files']) and count($parametros['files']) > 0){
+					$pastaTarefa = 'tarefa_'. $tarefa->getId();
 
 					foreach($parametros['files'] as $arquivo) {
-						$patch = $this->servicoArquivo->validarESalvarImagem($arquivo, $pastaPergunta);
+						$patch = $this->servicoArquivo->validarESalvarImagem($arquivo, $pastaTarefa, $resposta->getId());
 						$anexo = new Anexo(
 							0,
 							$patch,
@@ -108,29 +121,22 @@ class ControladoraResposta {
 						$this->colecaoAnexo->adicionar($anexo);
 					}
 				}
+
+				$respostasCadastradas[] = $resposta;		
 			}
 
-
-			// $loja = $this->colecaoAnexo->comId($this->params['loja']);
-
-			// if(!count($loja)) throw new Exception("As loja selecionadas não se econtra no banco de dados");
-		
-			// $Resposta = new Resposta(
-			// 	0,
-			// 	\ParamUtil::value($this->params, 'descricao'),
-			// 	\ParamUtil::value($this->params, 'dataLimite'),
-			// 	'',
-			// 	$categoria,
-			// 	$loja
-			// );
-			// $resposta = ['Resposta'=> RTTI::getAttributes($this->colecaoPergunta->adicionar($Resposta), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Resposta cadastrada com sucesso.']; 
-				
+			$respostaFront = ['Resposta'=> $respostasCadastradas, 'status' => true, 'mensagem'=> 'Resposta cadastrada com sucesso.']; 
+			
+			DB::raw('COMMIT');
+			DB::raw('SET autocommit=1');
 		}
 		catch (\Exception $e) {
-			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+			DB::raw('ROLLBACK');
+
+			$respostaFront = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 
-		return $resposta;
+		return $respostaFront;
 	}
 }
 ?>

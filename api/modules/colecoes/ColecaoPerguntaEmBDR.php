@@ -7,8 +7,7 @@ use Illuminate\Database\Capsule\Manager as Db;
  *	@version	0.1
  */
 
-class ColecaoPerguntaEmBDR implements ColecaoPergunta
-{
+class ColecaoPerguntaEmBDR implements ColecaoPergunta {
 
 	const TABELA = 'pergunta';
 
@@ -20,9 +19,9 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta
 
 			$id = Db::table(self::TABELA)->insertGetId([ 'pergunta' => $obj->getPergunta(),
 					'tarefa_id' => $obj->getTarefa()->getId(),
-					'resposta_id' => $obj->getResposta()->getId()
 				]
 			);
+
 			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
 			$obj->setId($id);
@@ -40,11 +39,7 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
 			foreach ($objs as $key => $obj) {
-				$id = Db::table(self::TABELA)->insertGetId([ 'pergunta' => $obj->getPergunta(),
-						'tarefa_id' => $obj->getTarefa()->getId(),
-						'resposta_id' => $obj->getResposta()->getId()
-					]
-				);
+				$id = Db::table(self::TABELA)->insertGetId([ 'pergunta' => $obj->getPergunta(), 'tarefa_id' => $obj->getTarefa()->getId()]);
 				$obj->setId($id);
 				$objs[$key] = $obj;
 			}
@@ -110,9 +105,10 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta
 	function todos($limite = 0, $pulo = 0, $idTarefa) {
 		try {	
 			$perguntas = Db::table(self::TABELA)->where('tarefa_id', $idTarefa)->offset($limite)->limit($pulo)->get();
-
 			$perguntasObjects = [];
-			foreach ($perguntas as $pergunta) {
+		
+			foreach ($perguntas as $key => $pergunta) {
+
 				$perguntasObjects[] =  $this->construirObjeto($pergunta);
 			}
 
@@ -162,9 +158,7 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta
 	function construirObjeto(array $row) {
 		$tarefa = Dice::instance()->create('ColecaoTarefa')->comId($row['tarefa_id']);
 
-		$resposta = null;
-		if($row['resposta_id'] > 0) $resposta = Dice::instance()->create('ColecaoResposta')->comId($row['resposta_id']);
-		$pergunta = new Pergunta($row['id'],$row['pergunta'], null, null, $tarefa, $resposta);
+		$pergunta = new Pergunta($row['id'],$row['pergunta'], $tarefa);
 
 		return $pergunta;
 	}	

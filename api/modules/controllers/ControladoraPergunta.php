@@ -79,8 +79,6 @@ class ControladoraPergunta {
 			$pergunta = new Pergunta(
 				0,
 				\ParamUtil::value($this->params, 'pergunta'),
-				null, 
-				null,
 				$tarefa
 			);
 
@@ -124,8 +122,6 @@ class ControladoraPergunta {
 				$objetos[] = new Pergunta(
 					$obj['id'],
 					$obj['pergunta'],
-					null, 
-					null,
 					$tarefa
 				);
 			}
@@ -166,8 +162,6 @@ class ControladoraPergunta {
 			$pergunta = new Pergunta(
 				\ParamUtil::value($this->params, 'id'),
 				\ParamUtil::value($this->params, 'pergunta'),
-				null, 
-				null,
 				$tarefa
 			);
 
@@ -198,7 +192,7 @@ class ControladoraPergunta {
 			$contagem = $this->colecaoPergunta->contagem();
 		}
 		catch (\Exception $e ) {
-			throw new Exception("Erro ao listar categorias");
+			throw new Exception("Erro ao listar Peergunta");
 		}
 
 		$conteudo = new DataTablesResponse(

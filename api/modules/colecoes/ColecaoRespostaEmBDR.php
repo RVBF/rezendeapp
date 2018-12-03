@@ -11,6 +11,7 @@ class ColecaoRespostaEmBDR implements ColecaoResposta
 {
 
 	const TABELA = 'resposta';
+	const TABELA_RELACIONAL = 'resposta_formulariorespondido';
 
 	function __construct(){}
 
@@ -26,6 +27,24 @@ class ColecaoRespostaEmBDR implements ColecaoResposta
 		catch (\Exception $e)
 		{
 			throw new ColecaoException("Erro ao cadastrar resposta.", $e->getCode(), $e);
+		}
+	}
+
+	function adicionarComFormularioID(&$obj, $idFormulario) {
+		try {	
+			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+			$id = Db::table(self::TABELA)->insertGetId([ 'opcaoSelecionada' => $obj->getOpcaoSelecionada(), 'comentario' => $obj->getComentario()]);
+			Db::table(self::TABELA_RELACIONAL)->insertGetId([ 'resposta_Id' =>$id, 'formulario_respondido_id' => $idFormulario] );
+
+			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+			$obj->setId($id);
+
+			return $obj;
+		}
+		catch (\Exception $e) {
+			throw new ColecaoException("Erro ao cadastrar formulário de resposta.", $e->getCode(), $e);
 		}
 	}
 
@@ -85,10 +104,9 @@ class ColecaoRespostaEmBDR implements ColecaoResposta
 
 	function comId($id){
 		try {
-            // Debuger::printr(DB::table(self::TABELA)->where('id', $id)->get());	
-            $pergunta = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
+            $resposta = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
 
-			return $pergunta;
+			return $resposta;
 		}
 		catch (\Exception $e)
 		{
@@ -117,13 +135,8 @@ class ColecaoRespostaEmBDR implements ColecaoResposta
 	}
 
 	function construirObjeto(array $row) {
-		$tarefa = Dice::instance()->create('ColecaoTarefa')->comId($row['tarefa_id']);
-
-		$resposta = null;
-		if($row['resposta_id'] > 0) $resposta = Dice::instance()->create('ColecaoResposta')->comId($row['resposta_id']);
-		$pergunta = new Pergunta($row['id'],$row['pergunta'], null, null, $tarefa, $resposta);
-
-		return $pergunta;
+		$resposta = new Resposta($row['id'], $row['opcaoSelecionada'], $row['comentario']);
+		return $resposta;
 	}	
 
     function contagem() {

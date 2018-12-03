@@ -10,7 +10,7 @@ use Illuminate\Database\Capsule\Manager as Db;
 class ColecaoAnexoEmBDR implements ColecaoAnexo
 {
 
-	const TABELA = 'anexo';
+	const TABELA = 'anexos';
 
 	function __construct(){}
 
@@ -18,7 +18,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 		try {	
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-			$id = Db::table(self::TABELA)->insertGetId([ 'pergunta' => $obj->getPergunta(), 'tarefa_id' => $obj->getTarefa()->getId()]);
+			$id = Db::table(self::TABELA)->insertGetId([ 'caminho' => $obj->getPatch(), 'tipo' => $obj->getTipo(), 'resposta_id' => $obj->getResposta()->getId()]);
             
 			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 

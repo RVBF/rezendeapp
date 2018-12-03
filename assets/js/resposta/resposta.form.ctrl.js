@@ -72,7 +72,10 @@
 
 				// obj.replace('[', '{');
 				var jqXHR = _this.alterar ? servicoResposta.atualizar(JSON.parse(obj)) : servicoResposta.adicionar(JSON.parse(obj));
-				jqXHR.done(window.sucessoParaFormulario).fail(erro).always(terminado);
+				jqXHR.done(function(data, textStatus, jqXHR){
+					window.sucessoParaFormulario(data, textStatus, jqXHR);
+					if(data.status) router.navigate('/tarefa')
+				}).fail(window.erro).always(terminado);
 
 				if(_this.alterar){
 					$('.depende_selecao').each(function(){
