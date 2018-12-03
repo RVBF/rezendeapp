@@ -20,7 +20,8 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa
 
 			$id = Db::table(self::TABELA)->insertGetId([ 'titulo' => $obj->getTitulo(),
 					'descricao' => $obj->getDescricao(),
-					'checklist_id' => $obj->getChecklist()->getId()
+					'checklist_id' => $obj->getChecklist()->getId(),
+					'questionador_id' =>$obj->getQuestionador()->getId()
 				]
 			);
 			
@@ -56,7 +57,8 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa
 
 			Db::table(self::TABELA)->where('id', $obj->getId())->update([ 'titulo' => $obj->getTitulo(),
 					'descricao' => $obj->getDescricao(),
-					'checklist_id' => $obj->getChecklist()->getId()
+					'checklist_id' => $obj->getChecklist()->getId(),
+					'formulario_respondido_id' => $obj->getFormularioRespondido()->getId()
 				]
 			);
 
@@ -120,9 +122,12 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa
 	}
 
 	function construirObjeto(array $row) {
-		$checklist = Dice::instance()->create('ColecaoChecklist')->comId($row['checklist_id']);
+		$checklist = ($row['checklist_id'] > 0) ? Dice::instance()->create('ColecaoChecklist')->comId($row['checklist_id']) : '';
+		$questionador = ($row['questionador_id'] > 0) ? Dice::instance()->create('ColecaoUsuario')->comId($row['questionador_id']) : '';
+		$formularioRespondido = ($row['questionador_id'] > 0) ? Dice::instance()->create('ColecaoUsuario')->comId($row['questionador_id']) : '';
 
-		$tarefa = new Tarefa($row['id'],$row['titulo'], $row['descricao'], $checklist);
+
+		$tarefa = new Tarefa($row['id'],$row['titulo'], $row['descricao'], $checklist, $questionador, $formularioRespondido);
 
 		return $tarefa;
 	}	

@@ -1,0 +1,101 @@
+<div class="card">
+    <div class="card-header  bg-dark text-white">
+        <div class="row">
+            <div class="col-md-4 col-sm-4 col-xs-4 col-4">
+                <h5 class="card-title">Tarefa</h5>
+            </div>
+
+
+            <div class="col-md-7 col-sm-7 col-xs-7 col-7">
+                <div class="justify-content-end row opcoes_modulos">
+                    <button aria-hidden="true" role="presentation" type="button" aria-label="cadastrar" class="btn  btn-sm btn-light" id="atualizar"><i class="fas fa-sync-alt"></i></button>
+                    <button aria-hidden="true" role="presentation" type="button" aria-label="cadastrar" class="btn  btn-sm btn-primary" id="cadastrar"><i class="fas fa-plus"></i></button>
+                    <button disabled="disabled" aria-hidden="true" role="presentation" type="button" aria-label="editar" class="btn  btn-sm btn-warning depende_selecao" id="editar"><i class="far fa-edit"></i></button>
+                    <button disabled="disabled" aria-hidden="true" role="presentation" type="button" aria-label="remover" class="btn  btn-sm btn-danger depende_selecao" id="remover"><i class="far fa-trash-alt"></i></button>         
+                </div>
+            </div>
+
+            <div class= "col-md-1 col-sm-1 col-xs-1 col-1">
+                <div class="btn-group row justify-content-end  mr-3 dropleft opcoes">
+                    <button type="button" class="btn btn-success  btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Opções
+                    </button>
+
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item gerenciar_perguntas" href="#">Ver Perguntas</a>
+                        <a class="dropdown-item cadastrar_perguntas" href="#">Cadastrar Perguntas</a>
+                        <a class="dropdown-item responder_perguntas" href="#">Responder Perguntas</a>
+                    </div>
+                </div>
+            </div>
+        </div>                     
+    </div>
+
+    <div class="card desabilitado d-none" id="painel_formulario">
+        <div class="card-body">
+            <div class="col-xs-12  col-sm-12 col-md-12">
+                <form class="form-horizontal " id="tarefa_form">
+                    <input type="hidden" id="id" name ="id" />
+                    
+                    <div class="row form-row">
+                        <div class="col-xs-12 col-md-12 col-sm-12 col-12">
+                            <label for="titulo">Título</label>
+                            <input type="text" class="form-control" id="titulo" name="titulo">
+                        </div>
+                    </div> 
+                    
+                    <div class="row form-row">
+                        <div class="col-xs-12 col-md-12 col-sm-12 col-12">
+                            <label for="descricao">Descrição</label>
+                            <textarea class="form-control" rows="2" id="descricao"></textarea>
+                        </div>
+                    </div>  
+
+                    <div  class="row">
+                        <div class="col-xs-12  col-sm-12 col-md-12">
+                            <br /><div id="msg" class="text-danger msg" ></div>
+                        </div>
+                    </div>
+
+                    <div class="row form-row card-footer">
+                        <div class="col-xs-12 col-md-12 col-sm-12 col-12 button_add">
+                            <button type="submit" class="btn btn-success" id="salvar"><i class="fas fa-check"></i></i></button>
+                            <button type="button" class="btn btn-default" id="cancelar_edicao"><i class="fas fa-sign-out-alt"></i></button>
+                        </div>
+                    </div>
+                </form>           
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body" id="painel_listagem">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <table class="table table-striped table-bordered dt-responsive nowrap" id="tarefa_table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Título</th>
+                        <th>Descrição</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td></td><td></td></tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Id</th>
+                        <th>Título</th>
+                        <th>Descrição</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div> 
+    </div> 
+</div>
+<script>
+    $(document).ready(function() {
+		var servicoTarefa = new app.ServicoTarefa();
+        var controladoraListagemTarefa = new app.ControladoraListagemTarefa(servicoTarefa);
+        controladoraListagemTarefa.configurar();
+	});
+</script>

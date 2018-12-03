@@ -82,7 +82,8 @@
 
 	router.get('/categorias', verficarLogin, criarRotaPara('categoria.html'));
 	router.get('/loja', verficarLogin, criarRotaPara('loja.html'));
-	
+	router.get('/tarefa', verficarLogin, criarRotaPara('tarefaListagemCompleta.html'));
+
 	router.get('/checklist/:id/tarefa', verficarLogin, criarRotaPara('tarefa.html'));
 	router.get('/checklist/tarefa', verficarLogin, criarRotaPara('tarefa.html'));
 

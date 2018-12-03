@@ -23,7 +23,7 @@ class ServicoArquivo {
 		return self::$singleton;
     }
     
-    public function validarESalvarImagem($arquivo, $nomePasta) {
+    public function validarESalvarImagem($arquivo, $nomePasta, $idDiferencial) {
         $valorArquivo = base64_decode($arquivo['arquivo']);
 
 		$dimensoes = getimagesize($arquivo['arquivo']);
@@ -37,14 +37,23 @@ class ServicoArquivo {
         $mime_split_without_base64=explode(';', $mime,2);
         $mime_split=explode('/', $mime_split_without_base64[0],2);
 
-        $output = realpath(dirname('..\\..\\')) . Anexo::CAMINHO_ARQUIVOS. '/' . $nomePasta . '/' . $extensao;
-        if(is_dir(realpath(dirname('..\\..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta)) file_put_contents($output, base64_decode($data));
+        $output = realpath(dirname('..\\..\\')) . Anexo::CAMINHO_ARQUIVOS. '/' . $nomePasta . '/' . $idDiferencial . '/' . $extensao;
+
+        if(is_dir(realpath(dirname('..\\..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta)) {
+
+            if(is_dir(realpath(dirname('..\\..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta . '/' . $idDiferencial)) file_put_contents($output, base64_decode($data));
+            else{
+                mkdir(realpath(dirname('..\\..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta . '/' . $idDiferencial, 0777);
+                file_put_contents($output, base64_decode($data));
+            }
+
+        }
         else {
-            Debuger::printr('entrei');
-            mkdir($output, 0777);
+            mkdir(realpath(dirname('..\\..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta, 0777);
+            mkdir(realpath(dirname('..\\..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta . '/' . $idDiferencial, 0777);
+
             file_put_contents($output, base64_decode($data));
         }
-
    	    return $output;
 	}
 

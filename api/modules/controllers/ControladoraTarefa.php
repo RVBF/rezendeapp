@@ -18,12 +18,14 @@ class ControladoraTarefa {
 	private $colecaoTarefa;
 	private $colecaoChecklist;
 	private $servicoLogin;
+	private $colecaoUsuario;
 	
 	function __construct($params,  Sessao $sessao) {
 		$this->params = $params;
 		$this->servicoLogin = new ServicoLogin($sessao);
 		$this->colecaoTarefa = Dice::instance()->create('ColecaoTarefa');
 		$this->colecaoChecklist = Dice::instance()->create('ColecaoChecklist');
+		$this->colecaoUsuario = Dice::instance()->create('ColecaoUsuario');
 	}
 
 	function todos($idChecklist) {
@@ -80,7 +82,8 @@ class ControladoraTarefa {
 				0,
 				\ParamUtil::value($this->params, 'titulo'),
 				\ParamUtil::value($this->params, 'descricao'),
-				$checklist
+				$checklist,
+				$this->colecaoUsuario->comId($this->servicoLogin->getIdUsuario())
 			);
 	
 			$resposta = [];

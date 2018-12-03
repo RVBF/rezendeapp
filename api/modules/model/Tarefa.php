@@ -12,12 +12,16 @@ class Tarefa {
     private $titulo;
     private $descricao;
     private $checklist;
+    private $questionador;
+    private $formularioRespondido;
 
-    function __construct($id = 0, $titulo = '', $descricao = '', $checklist = '') {
+    function __construct($id = 0, $titulo = '', $descricao = '', $checklist = null, $questionador = null, $formularioRespondido = null) {
 		$this->id = $id;
         $this->titulo = $titulo;
         $this->descricao = $descricao;
         $this->checklist = $checklist;
+        $this->questionador = $questionador;
+        $this->formularioRespondido = $formularioRespondido;
     }
 
     public function getId(){
@@ -50,6 +54,22 @@ class Tarefa {
  
     public function setChecklist($checklist){
         $this->checklist = $checklist;
+    }
+
+    public function getQuestionador(){
+        return $this->questionador; 
+    }
+ 
+    public function setQuestionador($questionador){
+        $this->questionador = $questionador;
+    }
+
+    public function getformularioRespondido(){
+        return $this->formularioRespondido; 
+    }
+ 
+    public function setFormularioRespondido($formularioRespondido){
+        $this->formularioRespondido = $formularioRespondido;
     }
 }
 ?>
