@@ -12,11 +12,13 @@ class FormularioRespondido {
     private $dataHora;
     private $respondedor;
     private $respostas;
-
-    function __construct($id = 0, $dataHora = '', $respondedor = null, $respostas = []) {
+    private $pergunta;
+    
+    function __construct($id = 0, $dataHora = '', $respondedor = null, $pergunta = null, $respostas = []) {
 		$this->id = $id;
         $this->dataHora = $dataHora;
         $this->respondedor = $respondedor;
+        $this->pergunta = $pergunta;
         $this->respostas = $respostas;
     }
 
@@ -42,6 +44,14 @@ class FormularioRespondido {
  
     public function setRespondedor($respondedor){
         $this->respondedor = $respondedor;
+    }
+
+    public function getPergunta(){
+        return $this->pergunta; 
+    }
+ 
+    public function setPergunta($pergunta){
+        $this->pergunta = $pergunta;
     }
 
     public function getRespostas(){

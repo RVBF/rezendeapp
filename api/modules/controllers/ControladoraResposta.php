@@ -35,21 +35,23 @@ class ControladoraResposta {
 		$this->colecaoFormularioRespondido = Dice::instance()->create('ColecaoFormularioRespondido'); 
 		$this->servicoArquivo = ServicoArquivo::instance();
 		$this->servicoLogin = new ServicoLogin($sessao);
+
 	}
 
 	function todos() {
 		try {
+
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
-
 			$dtr = new DataTablesRequest($this->params);
 			$contagem = 0;
 			$objetos = [];
 			$erro = null;
-			$objetos = $this->colecaoPergunta->todos($dtr->start, $dtr->length);
 
-			$contagem = $this->colecaoPergunta->contagem();
+			$objetos = $this->colecaoResposta->todos($dtr->start, $dtr->length);
+
+			$contagem = $this->colecaoResposta->contagem();
 		}
 		catch (\Exception $e )
 		{
@@ -69,21 +71,21 @@ class ControladoraResposta {
 
 	function adicionar() {
 		try {
-			DB::raw('SET autocommit=0');
-			DB::raw('START TRANSACTION');
-			
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
 			$respostaFront = $respostasCadastradas = [];
-			$formularioRespondido = new FormularioRespondido();
-			$formularioRespondido->setDataHora(Carbon::now());
-			$formularioRespondido->setRespondedor($this->colecaoUsuario->comId($this->servicoLogin->getIdUsuario()));
-			
-			$this->colecaoFormularioRespondido->adicionar($formularioRespondido);
-			
-			foreach($this->params['obj'] as $key => $parametros){
-				$tarefa = $this->colecaoPergunta->comId($parametros['pergunta'])->getTarefa();
+
+			foreach($this->params['obj'] as $key => $parametros) {
+				$pergunta = $this->colecaoPergunta->comId($parametros['pergunta']);
+				$tarefa = $pergunta->getTarefa();
+				$formularioRespondido = new FormularioRespondido();
+				$formularioRespondido->setDataHora(Carbon::now());
+				$formularioRespondido->setRespondedor($this->colecaoUsuario->comId($this->servicoLogin->getIdUsuario()));
+
+				$formularioRespondido->setPergunta($pergunta);
+
+				$this->colecaoFormularioRespondido->adicionar($formularioRespondido);
 
 				if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
 					throw new Exception("Pergunta não encontrada na base de dados.");
@@ -105,7 +107,7 @@ class ControladoraResposta {
 				$this->colecaoResposta->adicionarComFormularioID($resposta, $formularioRespondido->getId());
 
 				$formularioRespondido->addResposta($resposta);
-
+				
 				if(isset($parametros['files']) and count($parametros['files']) > 0){
 					$pastaTarefa = 'tarefa_'. $tarefa->getId();
 
@@ -121,18 +123,14 @@ class ControladoraResposta {
 						$this->colecaoAnexo->adicionar($anexo);
 					}
 				}
-
+			
 				$respostasCadastradas[] = $resposta;		
 			}
 
 			$respostaFront = ['Resposta'=> $respostasCadastradas, 'status' => true, 'mensagem'=> 'Resposta cadastrada com sucesso.']; 
 			
-			DB::raw('COMMIT');
-			DB::raw('SET autocommit=1');
 		}
 		catch (\Exception $e) {
-			DB::raw('ROLLBACK');
-
 			$respostaFront = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 

@@ -7,11 +7,11 @@
  {
 	'use strict';
 
-	function Tarefa(id, titulo, descricao) {
+	function Tarefa(id, titulo, descricao, checklist) {
 		this.id = id  || 0;
 		this.titulo = titulo  || '';
 		this.descricao = descricao  || '';
-
+		this.checklist = checklist  || 0;
 	};
 
 	function ServicoTarefa() { // Model
@@ -22,18 +22,29 @@
 		};
 
 		// Cria um objeto de Tarefa
-		this.criar = function criar(id, titulo, descricao) {
- 			return {
+		this.criar = function criar(id, titulo, descricao, checklist) {
+		 
+			return {
 				id : id  || 0,
 				titulo : titulo  || '',
-				descricao : descricao || ''
+				descricao : descricao || '',
+				checklist : checklist || ''
+
 			};
 		};
 
-		_this.adicionar = function adicionar(obj, idChecklist) {
+		_this.adicionarComChecklistId = function adicionarComChecklistId(obj, idChecklist) {
 			return $.ajax({
 				type: "POST",
 				url: _this.rota(idChecklist),
+				data: obj
+			});
+		};
+
+		_this.adcionar = function adcionar(obj) {
+			return $.ajax({
+				type: "POST",
+				url: _this.rota(),
 				data: obj
 			});
 		};
@@ -45,13 +56,22 @@
 			});
 		};
 
-		_this.atualizar = function atualizar(obj, idChecklist) {
+		_this.atualizarComChecklistId = function atualizarComChecklistId(obj, idChecklist) {
 			return $.ajax({
 				type: "PUT",
 				url: _this.rota(idChecklist),
 				data: obj
 			});
 		};
+
+		_this.atualizar = function atualizar(obj) {
+			return $.ajax({
+				type: "PUT",
+				url: _this.rota(),
+				data: obj
+			});
+		};
+
 
 		_this.remover = function remover(id, idCheklist) {
 			return $.ajax({

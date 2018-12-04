@@ -18,7 +18,7 @@ class ColecaoFormularioRespondidoEmBDR implements ColecaoFormularioRespondido
 		try {	
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-			$id = Db::table(self::TABELA)->insertGetId([ 'data_resposta' => $obj->getDataHora()->toDateTimeString(), 'respondedor_id' => $obj->getRespondedor()->getId() ] );
+			$id = Db::table(self::TABELA)->insertGetId([ 'data_resposta' => $obj->getDataHora()->toDateTimeString(), 'respondedor_id' => $obj->getRespondedor()->getId(), 'pergunta_id'=> $obj->getPergunta()->getId()]);
 			
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
@@ -97,9 +97,12 @@ class ColecaoFormularioRespondidoEmBDR implements ColecaoFormularioRespondido
     }
     
 	function construirObjeto(array $row) {
-		$respondedor_id = ($row['respondedor_id'] > 0) ? Dice::instance()->create('ColecaoUsuario')->comId($row['respondedor_id']) : null;
 
-		$formularioRespondido = new formularioRespondido($row['id'],$row['titulo'], $row['descricao'], $checklist, $questionador, $formularioRespondido);
+		$respondedor = ($row['respondedor_id'] > 0) ? Dice::instance()->create('ColecaoUsuario')->comId($row['respondedor_id']) : null;
+		$respostas = Dice::instance()->create('ColecaoResposta')->comFormularioId($row['id']);
+		$pergunta = ($row['pergunta_id'] > 0) ? Dice::instance()->create('ColecaoPergunta')->comId($row['pergunta_id']) : null;
+
+		$formularioRespondido = new FormularioRespondido($row['id'], $row['data_resposta'], $respondedor, $pergunta, $respostas);
 
 		return $formularioRespondido;
 	}	

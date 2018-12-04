@@ -138,6 +138,24 @@ $app->put('/checklist/{idChecklist}/tarefa', function(Request $req,  Response $r
 
 });
 
+$app->post('/tarefa', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Acessando o cadastro de tarefa");
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraTarefa($req->getParsedBody(), $sessaoUsuario);
+	$response = $ctrl->adicionar();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+
+});
+
+$app->put('/tarefa', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Acessando a atualização de tarefas");
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraTarefa($req->getParsedBody(), $sessaoUsuario);
+	$response = $ctrl->atualizar();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+
+});
+
 $app->delete('/checklist/{idChecklist}/tarefa/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 	$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
 	$sessaoUsuario = new Sessao($session);
@@ -307,12 +325,20 @@ $app->delete('/grupo-usuario/{id}', function(Request $req,  Response $res, $args
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 });
 
+$app->get('/resposta', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Acessando o cadastro de tarefa");
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraResposta($req->getQueryParams(), $sessaoUsuario);
+	$response = $ctrl->todos();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
+
+});
+
 $app->post('/resposta', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 	$this->logger->addInfo("Acessando o cadastro de tarefa");
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraResposta($req->getParsedBody(), $sessaoUsuario);
 	$response = $ctrl->adicionar();
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
-
 });
 ?>
