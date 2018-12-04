@@ -15,6 +15,9 @@ class Tarefa {
     private $questionador;
     private $formularioRespondido;
 
+    const TAM_TITULO_MIM = 2;
+    const TAM_TITULO_MAX = 100;
+
     function __construct($id = 0, $titulo = '', $descricao = '', $checklist = null, $questionador = null, $formularioRespondido = null) {
 		$this->id = $id;
         $this->titulo = $titulo;

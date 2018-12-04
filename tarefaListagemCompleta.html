@@ -38,9 +38,14 @@
                     <input type="hidden" id="id" name ="id" />
                     
                     <div class="row form-row">
-                        <div class="col-xs-12 col-md-12 col-sm-12 col-12">
+                        <div class="col-xs-6 col-md-6 col-sm-6 col-6">
                             <label for="titulo">Título</label>
-                            <input type="text" class="form-control" id="titulo" name="titulo">
+                            <input type="text" class="form-control campo_obrigatorio" id="titulo" name="titulo">
+                        </div>
+
+                        <div class="col-xs-6 col-md-6 col-sm-6 col-6">
+                            <label for="checklist">Checklist</label>
+                            <select id="checklist"  name="checklist" class="form-control select2 campo_obrigatorio"></select>
                         </div>
                     </div> 
                     
@@ -70,22 +75,31 @@
 
     <div class="card-body" id="painel_listagem">
         <div class="col-xs-12 col-sm-12 col-md-12">
-            <table class="table table-striped table-bordered dt-responsive nowrap" id="tarefa_table">
+            <table class="table table-striped table-bordered dt-responsive nowrap" id="tarefacompleta_table">
                 <thead>
                     <tr>
                         <th>Id</th>
                         <th>Título</th>
                         <th>Descrição</th>
+                        <th>Checklist</th>
+                        <th>Questionador</th>
+                        <th>Respondida</th>
+
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td></td><td></td></tr>
+                    <tr>
+                        <td></td><td></td><td></td><td></td><td></td>
+                    </tr>
                 </tbody>
                 <tfoot>
                     <tr>
                         <th>Id</th>
                         <th>Título</th>
                         <th>Descrição</th>
+                        <th>Checklist</th>
+                        <th>Questionador</th>
+                        <th>Respondida</th>
                     </tr>
                 </tfoot>
             </table>

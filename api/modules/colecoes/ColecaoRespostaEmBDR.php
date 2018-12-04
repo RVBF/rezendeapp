@@ -48,6 +48,25 @@ class ColecaoRespostaEmBDR implements ColecaoResposta
 		}
 	}
 
+	function comFormularioId($id){
+		try {	
+
+			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+			$respostas = Db::table(self::TABELA_RELACIONAL)->join(self::TABELA, self::TABELA . '.id', '=', self::TABELA_RELACIONAL . '.resposta_id')->where('formulario_respondido_id', $id)->get();
+
+			$respostasObjects = [];
+			foreach ($respostas as $resposta) {
+				$respostasObjects[] =  $this->construirObjeto($resposta);
+			}
+
+			return $respostasObjects;
+		}
+		catch (\Exception $e) {
+			throw new ColecaoException("Erro ao cadastrar formulário de resposta.", $e->getCode(), $e);
+		}
+	}
+
 	function adicionarTodas(&$objs){
 		try {	
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
@@ -120,8 +139,8 @@ class ColecaoRespostaEmBDR implements ColecaoResposta
 	function todos($limite = 0, $pulo = 0) {
 		try {	
 			$perguntas = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
-
 			$perguntasObjects = [];
+
 			foreach ($perguntas as $pergunta) {
 				$perguntasObjects[] =  $this->construirObjeto($pergunta);
 			}

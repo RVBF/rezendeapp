@@ -7,69 +7,91 @@ use Illuminate\Database\Capsule\Manager as Db;
  *	@version	0.1
  */
 
-class ColecaoTarefaEmBDR implements ColecaoTarefa
-{
-
+class ColecaoTarefaEmBDR implements ColecaoTarefa {
 	const TABELA = 'tarefa';
 
 	function __construct(){}
 
 	function adicionar(&$obj) {
-		try {	
-			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-			$id = Db::table(self::TABELA)->insertGetId([ 'titulo' => $obj->getTitulo(),
-					'descricao' => $obj->getDescricao(),
-					'checklist_id' => $obj->getChecklist()->getId(),
-					'questionador_id' =>$obj->getQuestionador()->getId()
-				]
-			);
-			
-			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-			$obj->setId($id);
-
-			return $obj;
-		}
-		catch (\Exception $e)
-		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		if($this->validarCadastroTarefa($obj)){
+			try {	
+				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+	
+				$id = Db::table(self::TABELA)->insertGetId([ 'titulo' => $obj->getTitulo(),
+						'descricao' => $obj->getDescricao(),
+						'checklist_id' => $obj->getChecklist()->getId(),
+						'questionador_id' =>$obj->getQuestionador()->getId()
+					]
+				);
+				
+				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+	
+				$obj->setId($id);
+	
+				return $obj;
+			}
+			catch (\Exception $e)
+			{
+				throw new ColecaoException("Erro ao adicionar tarefa ", $e->getCode(), $e);
+			}
 		}
 	}
 
-	function remover($id, $idChecklist) {
-		try {	
-			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-			$removido = DB::table(self::TABELA)->where('id', $id)->where('checklist_id', $idChecklist)->delete();
-			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-			return $removido;
+	function removerComChecklistId($id, $idChecklist) {
+		if($this->validarRemocaoTarefa($id)){
+			try {	
+				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+				$removido = DB::table(self::TABELA)->where('id', $id)->where('checklist_id', $idChecklist)->delete();
+				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+				return $removido;
+			}
+			catch (\Exception $e) {
+				throw new ColecaoException("Erro ao remover categoria com o id do checklist.", $e->getCode(), $e);
+			}
 		}
-		catch (\Exception $e)
-		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+
+	}
+
+	function remover($id) {
+		if($this->validarRemocaoTarefa($id)){
+			try {	
+				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+				$removido = DB::table(self::TABELA)->where('id', $id)->delete();
+				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+				return $removido;
+			}
+			catch (\Exception $e)
+			{
+				throw new ColecaoException("Erro ao remover categoria.", $e->getCode(), $e);
+			}
 		}
+
 	}
 
 	function atualizar(&$obj) {
-		try {
-			
-			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+		if($this->validarEdicaoTarefa($obj)) {
+			try {
+				
+				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-			Db::table(self::TABELA)->where('id', $obj->getId())->update([ 'titulo' => $obj->getTitulo(),
+				$filds = [ 'titulo' => $obj->getTitulo(),
 					'descricao' => $obj->getDescricao(),
-					'checklist_id' => $obj->getChecklist()->getId(),
-					'formulario_respondido_id' => $obj->getFormularioRespondido()->getId()
-				]
-			);
+					'checklist_id' => $obj->getChecklist()->getId()
+				];
 
-			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-			return $obj;
+				if($obj->getFormularioRespondido()->getId() > 0 && $obj->getFormularioRespondido() instanceof FormularioRespondido) $filds['formulario_respondido_id'] = $obj->getFormularioRespondido()->getId();
+				
+				Db::table(self::TABELA)->where('id', $obj->getId())->update($filds);
+
+				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+				return $obj;
+			}
+			catch (\Exception $e)
+			{
+				throw new ColecaoException("Erro ao atualizar tarefa.", $e->getCode(), $e);
+			}
 		}
-		catch (\Exception $e)
-		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
-		}
-		
 	}
 
 	function comId($id){
@@ -84,13 +106,11 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa
 		}
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	function todos($limite = 0, $pulo = 0, $idChecklist) {
 		try {	
-			$tarefas = Db::table(self::TABELA)->where('checklist_id', $idChecklist)->offset($limite)->limit($pulo)->get();
 
+			if($idChecklist > 0) $tarefas = Db::table(self::TABELA)->where('checklist_id', $idChecklist)->offset($limite)->limit($pulo)->get();
+			else $tarefas = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
 			$tarefasObjects = [];
 			foreach ($tarefas as $tarefa) {
 				$tarefasObjects[] =  $this->construirObjeto($tarefa);
@@ -124,8 +144,7 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa
 	function construirObjeto(array $row) {
 		$checklist = ($row['checklist_id'] > 0) ? Dice::instance()->create('ColecaoChecklist')->comId($row['checklist_id']) : '';
 		$questionador = ($row['questionador_id'] > 0) ? Dice::instance()->create('ColecaoUsuario')->comId($row['questionador_id']) : '';
-		$formularioRespondido = ($row['questionador_id'] > 0) ? Dice::instance()->create('ColecaoUsuario')->comId($row['questionador_id']) : '';
-
+		$formularioRespondido = ($row['formulario_respondido_id'] > 0) ? Dice::instance()->create('ColecaoFormularioRespondido')->comId($row['formulario_respondido_id']) : '';
 
 		$tarefa = new Tarefa($row['id'],$row['titulo'], $row['descricao'], $checklist, $questionador, $formularioRespondido);
 
@@ -134,6 +153,43 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa
 
     function contagem() {
 		return Db::table(self::TABELA)->count();
+	}
+
+	private function validarCadastroTarefa(&$obj) {
+		if(!is_string($obj->getTitulo())) throw new ColecaoException('Valor inválido para titulo.');
+		
+		if(!is_string($obj->getDescricao())) throw new ColecaoException('Valor inválido para a descrição.');
+
+		$quantidade = DB::table(ColecaoUsuarioEmBDR::TABELA)->where('id', $obj->getQuestionador()->getId())->count();
+
+		if($quantidade == 0) throw new ColecaoException('O usuário questionador não foi encontrado na base de dados.');
+
+
+		$quantidade = DB::table(ColecaoChecklistEmBDR::TABELA)->where('id', $obj->getChecklist()->getId())->count();
+
+		if($quantidade == 0)throw new ColecaoException('Check questionador não foi encontrado na base de dados.');
+
+		if(strlen($obj->getTitulo()) <= Tarefa::TAM_TITULO_MIM && strlen($obj->getTitulo()) > Tarefa::TAM_TITULO_MAX) throw new ColecaoException('O título deve conter no mínimo '. Tarefa::TAM_TITULO_MIM . ' e no máximo '. Tarefa::TAM_TITULO_MAX . '.');
+		if(strlen($obj->getdescricao()) <= 255 and $obj->getdescricao() <> '') throw new ColecaoException('A Descrição  deve conter no máximo '. 255 . ' e no máximo '. 1 . '.');
+
+		return true;
+	}
+
+	private function validarEdicaoTarefa(&$obj){
+		$status = $this->validarCadastroTarefa($obj);
+
+		if($obj->getFormularioRespondido()->getId() > 0 and $obj->getFormularioRespondido() instanceof FormularioRespondido) {
+			$quantidade = DB::table(ColecaoFormularioRespondidoEmBDR::TABELA)->where('id', $obj->getFormularioRespondido()->getId())->count();
+			if($quantidade == 0)throw new ColecaoException('FormularioRespondido não encontrado na base de dados.');
+		}
+
+		return true;
+	}
+
+	private function validarRemocaoTarefa($id){
+		$quantidade = DB::table(ColecaoPerguntaEmBDR::TABELA)->where('tarefa_id', $id)->count();
+		if($quantidade == 0)throw new ColecaoException('Não foi possível excluir a tarefa por que ela possui perguntas relacionadas a ela. Exclua todas as perguntas relacionadas e tente novamente.');
+		
 	}
 }
 

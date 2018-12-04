@@ -95,10 +95,8 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 		return Db::table(self::TABELA)->count();
 	}
 	
-	private function validarCategoria(&$obj)
-	{
-		if(!is_string($obj->getTitulo()))
-		{
+	private function validarCategoria(&$obj) {
+		if(!is_string($obj->getTitulo())) {
 			throw new ColecaoException('Valor inválido para bairro.');
 		}
 

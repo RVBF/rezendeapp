@@ -192,7 +192,7 @@ class ControladoraPergunta {
 			$contagem = $this->colecaoPergunta->contagem();
 		}
 		catch (\Exception $e ) {
-			throw new Exception("Erro ao listar Peergunta");
+			throw new Exception("Erro ao listar Pergunta");
 		}
 
 		$conteudo = new DataTablesResponse(
