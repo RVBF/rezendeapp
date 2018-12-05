@@ -25,16 +25,9 @@
 			var objeto = $.extend(true, {}, app.dtOptions);
 			objeto.ajax = servicoCategoria.rota();
 
-			objeto.columnDefs = [ {
-					data: 'id',
-					targets: 0
-
-				},
-				{
-					data: 'titulo',
-					responsivePriority: 1,
-					targets: 1
-				}
+			objeto.columnDefs = [ 
+				{ data: 'id', targets: 0 },
+				{ data: 'titulo', responsivePriority: 1, targets: 1 }
 			];
 
 			return objeto;
@@ -69,7 +62,7 @@
 			BootstrapDialog.show({
 				type	: BootstrapDialog.TYPE_DANGER,
 				title	: 'Deseja remover esta categoria?',
-				message	: 'Categoria' + objeto.titulo,
+				message	: 'Categoria de id :'+ objeto.id + 'e título :' + objeto.titulo,
 				size	: BootstrapDialog.SIZE_LARGE,
 				buttons	: [ {
 						label	: '<u>S</u>im',

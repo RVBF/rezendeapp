@@ -19,38 +19,24 @@
 		// Cria as opções de validação do formulário
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
 			var opcoes = {
-				rules: {
-					"titulo": {
-						// required    : true,
-						// rangelength : [ 2, 85 ]
-					}
-				},
-
-				messages:
-				{
-					"titulo": {
-						required    : "O campo título é obrigatório.",
-						rangelength : $.validator.format("O campo nome deve ter no mínimo  {2} e no máximo {85} caracteres.")
-					}
-				}
+				rules: { "titulo": { rangelength : [ 2, 85 ] } },
+				messages: { "titulo": { rangelength : $.validator.format("O campo nome deve ter no mínimo  {2} e no máximo {85} caracteres.") } }
 			};
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
-				_this.formulario.desabilitar(false);
-
+				_this.formulario.desabilitar(true);
 
 				var erro = function erro(jqXHR, textStatus, errorThrown) {
 					var mensagem = jqXHR.responseText;
 					_this.formulario.find('#msg').empty().append('<div class="error" >' + mensagem + '</div>');
 				};
 				
-				var terminado = function() {
-					_this.formulario.desabilitar(true);
-				};
-				
 				var obj = _this.conteudo();
 				var jqXHR = _this.alterar ? servicoCategoria.atualizar(obj) : servicoCategoria.adicionar(obj);
-				jqXHR.done(window.sucessoParaFormulario).fail(window.erro);
+				
+				jqXHR.done(window.sucessoParaFormulario).fail(window.erro).always(function(){
+						_this.formulario.desabilitar(false);
+				});
 
 				if(_this.alterar){
 					$('.depende_selecao').each(function(){
@@ -64,10 +50,7 @@
         
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
-			return servicoCategoria.criar(
-                $('#id').val(),
-                $('#titulo').val()
-			);
+			return servicoCategoria.criar( $('#id').val(), $('#titulo').val());
 		};
 
 		_this.configurarBotoes = function configurarBotoes() {

@@ -25,7 +25,6 @@ class ControladoraCategoria {
 	}
 
 	function todos() {
-
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
