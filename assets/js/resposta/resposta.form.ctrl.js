@@ -224,7 +224,7 @@
 					reader.onerror = function (error) {
 					};
 				});
-	
+
 	
 				$('i').on('click', function () {
 					$(this).parents('.element').find("input[type='file']").trigger('click');

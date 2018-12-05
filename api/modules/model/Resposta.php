@@ -11,12 +11,14 @@ class Resposta {
 	private $id;
     private $opcaoSelecionada;
     private $comentario;
+    private $pergunta;
     private $anexos;
 
-    function __construct($id = 0, $opcaoSelecionada = 0, $comentario = '', $anexos = []) {
+    function __construct($id = 0, $opcaoSelecionada = 0, $comentario = '', $pergunta,  $anexos = []) {
 		$this->id = $id;
         $this->opcaoSelecionada = $opcaoSelecionada;
         $this->comentario = $comentario;
+        $this->pergunta = $pergunta;
         $this->anexos = $anexos;
     }
 
@@ -50,6 +52,14 @@ class Resposta {
  
     public function setAnexos($anexos){
         $this->anexos = $anexos;
+    }
+
+    public function getPergunta(){
+        return $this->pergunta; 
+    }
+ 
+    public function setPergunta($pergunta){
+        $this->pergunta = $pergunta;
     }
 }
 ?>

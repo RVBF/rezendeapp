@@ -109,6 +109,11 @@
 			$(evento.target).find('.toltip').each(function(){
 			    $(this).tooltip(); 
 			});
+
+			$(evento.target).find('.tarefaListagemCompleta_link').on('click', function(event){
+				event.preventDefault();
+				router.navigate('/tarefa');
+			});
 		}
 	}
 	var bodyEvento = {target: 'body'};

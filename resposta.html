@@ -1,0 +1,80 @@
+<div class="card">
+    <div class="card-header  bg-dark text-white">
+        <div class="row">
+            <div class="col-md-4 col-sm-4 col-xs-4 col-4">
+                <h5 class="card-title">Resposta</h5>
+            </div>
+
+            <div class="col-md-7 col-sm-7 col-xs-7 col-7">
+                <div class="justify-content-end row opcoes_modulos">
+                    <button aria-hidden="true" role="presentation" type="button" aria-label="cadastrar" class="btn  btn-sm btn-light" id="atualizar"><i class="fas fa-sync-alt"></i></button>
+                </div>
+            </div>
+        </div>                     
+    </div>
+
+    <div class="card-body" id="painel_listagem">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <table class="table table-striped nowrap table-responsive-sm" style="width:100%" id="resposta" >
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Pergunta</th>
+                            <th>Opção Selecionada</th>
+                            <th>Anexos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Id</th>
+                            <th>Pergunta</th>
+                            <th>Opção Selecionada</th>
+                            <th>Anexos</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div> 
+    </div> 
+</div>   
+
+<div class="modal" tabindex="-1" role="dialog" id="anexos">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Anexos</h5>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="upload-drop-zone" id="drop-zone">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        var servicoResposta = new app.ServicoResposta();
+        var crltResposta = new app.ControladoraListagemResposta(servicoResposta);
+
+        crltResposta.configurar();
+    });
+</script>
+
+    

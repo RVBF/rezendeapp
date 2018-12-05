@@ -11,14 +11,12 @@ class ColecaoRespostaEmBDR implements ColecaoResposta
 {
 
 	const TABELA = 'resposta';
-	const TABELA_RELACIONAL = 'resposta_formulariorespondido';
 
 	function __construct(){}
 
 	function adicionar(&$obj) {
 		try {	
-
-			$id = Db::table(self::TABELA)->insertGetId([ 'opcaoSelecionada' => $obj->getOpcaoSelecionada(), 'comentario' => $obj->getComentario()]);
+			$id = Db::table(self::TABELA)->insertGetId([ 'opcaoSelecionada' => $obj->getOpcaoSelecionada(), 'comentario' => $obj->getComentario(), 'pergunta_id' => $obj->getPergunta()->getId()]);
 
 			$obj->setId($id);
 
@@ -27,47 +25,6 @@ class ColecaoRespostaEmBDR implements ColecaoResposta
 		catch (\Exception $e)
 		{
 			throw new ColecaoException("Erro ao cadastrar resposta.", $e->getCode(), $e);
-		}
-	}
-
-	function adicionarComFormularioID(&$obj, $idFormulario) {
-		try {	
-			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-			$id = Db::table(self::TABELA)->insertGetId([ 'opcaoSelecionada' => $obj->getOpcaoSelecionada(), 'comentario' => $obj->getComentario()]);
-			Db::table(self::TABELA_RELACIONAL)->insertGetId([ 'resposta_Id' =>$id, 'formulario_respondido_id' => $idFormulario] );
-
-			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-			$obj->setId($id);
-
-			return $obj;
-		}
-		catch (\Exception $e) {
-			throw new ColecaoException("Erro ao cadastrar formulário de resposta.", $e->getCode(), $e);
-		}
-	}
-
-	function adicionarTodas(&$objs){
-		try {	
-			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-			foreach ($objs as $key => $obj) {
-				$id = Db::table(self::TABELA)->insertGetId([ 'pergunta' => $obj->getPergunta(),
-						'tarefa_id' => $obj->getTarefa()->getId()
-					]
-				);
-				$obj->setId($id);
-				$objs[$key] = $obj;
-			}
-
-			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-
-
-			return $objs;
-		}
-		catch (\Exception $e) {
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
 		}
 	}
 
@@ -89,8 +46,7 @@ class ColecaoRespostaEmBDR implements ColecaoResposta
 			
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-			Db::table(self::TABELA)->where('id', $obj->getId())->update([ 'pergunta' => $obj->getPergunta(),
-			'tarefa_id' => $obj->getTarefa()->getId()]);
+			Db::table(self::TABELA)->where('id', $obj->getId())->update([ 'opcaoSelecionada' => $obj->getOpcaoSelecionada(), 'comentario' => $obj->getComentario(), 'pergunta_id' => $obj->getPergunta()->getId()]);
 
 			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 			return $obj;
@@ -99,7 +55,6 @@ class ColecaoRespostaEmBDR implements ColecaoResposta
 		{
 			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
 		}
-		
 	}
 
 	function comId($id){
@@ -120,8 +75,8 @@ class ColecaoRespostaEmBDR implements ColecaoResposta
 	function todos($limite = 0, $pulo = 0) {
 		try {	
 			$perguntas = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
-
 			$perguntasObjects = [];
+
 			foreach ($perguntas as $pergunta) {
 				$perguntasObjects[] =  $this->construirObjeto($pergunta);
 			}
@@ -135,7 +90,10 @@ class ColecaoRespostaEmBDR implements ColecaoResposta
 	}
 
 	function construirObjeto(array $row) {
-		$resposta = new Resposta($row['id'], $row['opcaoSelecionada'], $row['comentario']);
+		$pergunta  = ($row['pergunta_id'] > 0 ) ? Dice::instance()->create('ColecaoPergunta')->comId($row['pergunta_id']) : null;
+		$anexos = Dice::instance()->create('ColecaoAnexo')->comRespostaId($row['id']);	
+		$resposta = new Resposta($row['id'], $row['opcaoSelecionada'], $row['comentario'], $pergunta, $anexos);
+
 		return $resposta;
 	}	
 

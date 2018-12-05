@@ -108,6 +108,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist
 
 	function construirObjeto(array $row) {
 		$categoria = Dice::instance()->create('ColecaoCategoria')->comId($row['categoria_id']);
+
 		$loja = Dice::instance()->create('ColecaoLoja')->comId($row['loja_id']);
 		$checklist = new Checklist($row['id'],$row['descricao'], $row['data_limite'], $row['data_cadastro'], $categoria, $loja);
 		return $checklist;

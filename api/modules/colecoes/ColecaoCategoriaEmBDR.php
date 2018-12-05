@@ -108,17 +108,7 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
     function contagem(){
 		return Db::table(self::TABELA)->count();
 	}
-
-	private function validarDeleteCategoria($id)
-	{
-		$quantidade = DB::table(ColecaoChecklistEmBDR::TABELA)->where('categoria_id', $id)->count();
-
-		if($quantidade > 0) {
-			throw new ColecaoException('Não foi possível excluir essa categoria por ter checklists vinculado a mesma! Exclua todas as checklists e seus filhos, e após tente novamente.');
-		}
-		return true;
-	}
-
+	
 	private function validarCategoria(&$obj) {
 		if(!is_string($obj->getTitulo())) {
 			throw new ColecaoException('Valor inválido para bairro.');
