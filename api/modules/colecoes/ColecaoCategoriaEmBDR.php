@@ -27,31 +27,41 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 			}
 			catch (\Exception $e)
 			{
-				throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+				throw new ColecaoException('Erro ao cadastrar categoria.', $e->getCode(), $e);
 			}
 		}
 	}
 
 	function remover($id) {
-		try {	
-			return DB::table(self::TABELA)->where('id', $id)->delete();
+		if($this->validarDeleteCategoria($id)) {
+			try {	
+				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+	
+				$resultado  = DB::table(self::TABELA)->where('id', $id)->delete();
+	
+				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+				return $resultado;
+	
+			}
+			catch (\Exception $e) {
+				throw new ColecaoException('Erro ao remover categoria', $e->getCode(), $e);
+			}
 		}
-		catch (\Exception $e)
-		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
-		}
+		
 	}
 
 	function atualizar(&$obj) {
 		if($this->validarCategoria($obj)){
 			try {	
+
 				DB::table(self::TABELA)->where('id', $obj->getId())->update(['titulo' => $obj->getTitulo()]);
 
 				return $obj;
 			}
 			catch (\Exception $e)
 			{
-				throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+				throw new ColecaoException("Erro ao atualizar caregoria.", $e->getCode(), $e);
 			}
 		}
 		
@@ -63,7 +73,7 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Ero ao buscar categoria", $e->getCode(), $e);
 		}
 	}
 
@@ -81,24 +91,36 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 
 			return $categoriasObjects;
 		}
-		catch (\Exception $e)
-		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		catch (\Exception $e) {
+			throw new ColecaoException("Erro ao buscar categorias no banco de dados.", $e->getCode(), $e);
 		}
 	}
 
 	function construirObjeto(array $row){
-		return new Categoria($row['id'],$row['titulo']);
+		try{
+			return new Categoria($row['id'], $row['titulo']);
+		}
+		catch (\Exception $e) {
+			throw new ColecaoException("Erro ao construir o objeto categoria.", $e->getCode(), $e);
+		}
 	}
 
-    function contagem() {
+    function contagem(){
 		return Db::table(self::TABELA)->count();
 	}
-	
-	private function validarCategoria(&$obj)
+
+	private function validarDeleteCategoria($id)
 	{
-		if(!is_string($obj->getTitulo()))
-		{
+		$quantidade = DB::table(ColecaoChecklistEmBDR::TABELA)->where('categoria_id', $id)->count();
+
+		if($quantidade > 0) {
+			throw new ColecaoException('Não foi possível excluir essa categoria por ter checklists vinculado a mesma! Exclua todas as checklists e seus filhos, e após tente novamente.');
+		}
+		return true;
+	}
+
+	private function validarCategoria(&$obj) {
+		if(!is_string($obj->getTitulo())) {
 			throw new ColecaoException('Valor inválido para bairro.');
 		}
 
@@ -108,7 +130,7 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 			throw new ColecaoException('Já exite uma categoria cadastrada com esse título');
 		}
 
-		if(strlen($obj->getTitulo()) <= 2 && strlen($obj->getTitulo()) > 85) throw new ColecaoException('O título deve conter no mínimo '. Categoria::TAM_TITULO_MIM . ' e no máximo '. Categoria::TAM_TITULO_MAX . '.');
+		if(strlen($obj->getTitulo()) <= Categoria::TAM_TITULO_MIM && strlen($obj->getTitulo()) > Categoria::TAM_TITULO_MAX) throw new ColecaoException('O título deve conter no mínimo '. Categoria::TAM_TITULO_MIM . ' e no máximo '. Categoria::TAM_TITULO_MAX . '.');
 
 		return true;
 	}

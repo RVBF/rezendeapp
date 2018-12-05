@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS `rezendeapp`.`pergunta` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `pergunta` VARCHAR(255) NULL,
   `tarefa_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `tarefa_id`),
+  PRIMARY KEY (`id`),
   INDEX `fk_pergunta_tarefa1_idx` (`tarefa_id` ASC),
   CONSTRAINT `fk_pergunta_tarefa1`
     FOREIGN KEY (`tarefa_id`)
