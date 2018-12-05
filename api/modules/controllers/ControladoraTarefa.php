@@ -28,7 +28,7 @@ class ControladoraTarefa {
 		$this->colecaoUsuario = Dice::instance()->create('ColecaoUsuario');
 	}
 
-	function todos($idChecklist) {
+	function todos($idChecklist = 0) {
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
@@ -57,23 +57,23 @@ class ControladoraTarefa {
 		return $conteudo;
 	}
 	
-	function adicionar($checklistId) {
+	function adicionar($checklistId = 0) {
 		try {
 
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
 
-			$inexistentes = \ArrayUtil::nonExistingKeys(['titulo', 	'descricao'], $this->params);
-		
+			$inexistentes = \ArrayUtil::nonExistingKeys(['titulo', 	'descricao', 'checklist'], $this->params);
+
 			if(count($inexistentes) > 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 	
 				throw new Exception($msg);
 			}
 	
-			$checklist = $this->colecaoChecklist->comId($checklistId);
-	
+			$checklist = $this->colecaoChecklist->comId(($checklistId> 0) ? $checklistId : \ParamUtil::value($this->params, 'checklist'));
+
 			if(!isset($checklist) and !($checklist instanceof Checklist)){
 				throw new Exception("Checklist não encontrada na base de dados.");
 			}
@@ -85,7 +85,7 @@ class ControladoraTarefa {
 				$checklist,
 				$this->colecaoUsuario->comId($this->servicoLogin->getIdUsuario())
 			);
-	
+			
 			$resposta = [];
 
 			$tarefa = $this->colecaoTarefa->adicionar($tarefa);
@@ -98,7 +98,7 @@ class ControladoraTarefa {
 		return $resposta;
 	}
 
-	function atualizar($checklistId) {
+	function atualizar($checklistId = 0) {
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
@@ -112,7 +112,7 @@ class ControladoraTarefa {
 				throw new Exception($msg);
 			}
 	
-			$checklist = $this->colecaoChecklist->comId($checklistId);
+			$checklist = $this->colecaoChecklist->comId(($checklistId> 0) ? $checklistId : \ParamUtil::value($this->params, 'descricao'));
 	
 			if(!isset($checklist) and !($checklist instanceof Checklist)){
 				throw new Exception("Checklist não encontrada na base de dados.");
@@ -137,7 +137,7 @@ class ControladoraTarefa {
 		return $resposta;
 	}
 
-	function remover($id, $idChecklist) {
+	function remover($id, $idChecklist = 0) {
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
@@ -145,7 +145,7 @@ class ControladoraTarefa {
 			
 			$resposta = [];
 
-			$status = $this->colecaoTarefa->remover($id, $idChecklist);
+			$status = ($idChecklist > 0) ? $this->colecaoTarefa->removerComChecklistId($id, $idChecklist) :  $this->colecaoTarefa->remover($id);
 			
 			$resposta = ['status' => true, 'mensagem'=> 'Categoria removida com sucesso.']; 
 		}

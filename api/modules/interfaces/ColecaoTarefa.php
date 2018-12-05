@@ -32,8 +32,9 @@ interface ColecaoTarefa {
  	 * @param int $id	Identificação da checklist a qual o objeto pertence.
 	 * @throws	ColecaoException
 	 */
-	function remover($id, $idChecklist);
-	
+	function remover($id);
+
+	function removerComChecklistId($id, $idChecklist);
 	/**
 	 * Obtém um objeto pelo seu id.
 	 *

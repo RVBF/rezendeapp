@@ -35,21 +35,23 @@ class ControladoraResposta {
 		$this->colecaoFormularioRespondido = Dice::instance()->create('ColecaoFormularioRespondido'); 
 		$this->servicoArquivo = ServicoArquivo::instance();
 		$this->servicoLogin = new ServicoLogin($sessao);
+
 	}
 
 	function todos() {
 		try {
+
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
-
 			$dtr = new DataTablesRequest($this->params);
 			$contagem = 0;
 			$objetos = [];
 			$erro = null;
-			$objetos = $this->colecaoPergunta->todos($dtr->start, $dtr->length);
 
-			$contagem = $this->colecaoPergunta->contagem();
+			$objetos = $this->colecaoResposta->todos($dtr->start, $dtr->length);
+
+			$contagem = $this->colecaoResposta->contagem();
 		}
 		catch (\Exception $e )
 		{
@@ -69,29 +71,17 @@ class ControladoraResposta {
 
 	function adicionar() {
 		try {
-			DB::raw('SET autocommit=0');
-			DB::raw('START TRANSACTION');
-			
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
+
 			$respostaFront = $respostasCadastradas = [];
 			$formularioRespondido = new FormularioRespondido();
-			$formularioRespondido->setDataHora(Carbon::now());
 			$formularioRespondido->setRespondedor($this->colecaoUsuario->comId($this->servicoLogin->getIdUsuario()));
-			
-			$this->colecaoFormularioRespondido->adicionar($formularioRespondido);
-			
-			foreach($this->params['obj'] as $key => $parametros){
-				$tarefa = $this->colecaoPergunta->comId($parametros['pergunta'])->getTarefa();
-
-				if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
-					throw new Exception("Pergunta não encontrada na base de dados.");
-				}
-
-				$tarefa->setFormularioRespondido($formularioRespondido);
-				$this->colecaoTarefa->atualizar($tarefa);
-
+			$formularioRespondido->setDataHora(Carbon::now());
+			$tarefa = null;
+			Debuger::printr($this->params['obj']);
+			foreach($this->params['obj'] as $key => $parametros) {
 				$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'opcaoSelecionada','pergunta'], $parametros);
 
 				if(count($inexistentes) > 0) {
@@ -100,17 +90,23 @@ class ControladoraResposta {
 					throw new Exception($msg);
 				}
 
-				$resposta = new Resposta(0, \ParamUtil::value($parametros, 'opcaoSelecionada'), '');
+				$pergunta = $this->colecaoPergunta->comId($parametros['pergunta']);
+				if($tarefa == null) $tarefa = $pergunta->getTarefa();
+				$formularioRespondido->addPergunta($pergunta);
 
-				$this->colecaoResposta->adicionarComFormularioID($resposta, $formularioRespondido->getId());
+				if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
+					throw new Exception("Pergunta não encontrada na base de dados.");
+				}
 
-				$formularioRespondido->addResposta($resposta);
+				$resposta = new Resposta(0, \ParamUtil::value($parametros, 'opcaoSelecionada'), '', $pergunta);
 
+				$this->colecaoResposta->adicionar($resposta);
+				
 				if(isset($parametros['files']) and count($parametros['files']) > 0){
-					$pastaTarefa = 'tarefa_'. $tarefa->getId();
+					$pastaTarefa = 'pergunta_'. $tarefa->getId();
 
 					foreach($parametros['files'] as $arquivo) {
-						$patch = $this->servicoArquivo->validarESalvarImagem($arquivo, $pastaTarefa, $resposta->getId());
+						$patch = $this->servicoArquivo->validarESalvarImagem($arquivo, $pastaTarefa, 'resposta_' . $resposta->getId());
 						$anexo = new Anexo(
 							0,
 							$patch,
@@ -121,18 +117,16 @@ class ControladoraResposta {
 						$this->colecaoAnexo->adicionar($anexo);
 					}
 				}
-
+			
 				$respostasCadastradas[] = $resposta;		
 			}
-
+			$this->colecaoFormularioRespondido->adicionar($formularioRespondido);
+			$tarefa->setEncerrada(true);
+			$this->colecaoTarefa->atualizar($tarefa);
 			$respostaFront = ['Resposta'=> $respostasCadastradas, 'status' => true, 'mensagem'=> 'Resposta cadastrada com sucesso.']; 
 			
-			DB::raw('COMMIT');
-			DB::raw('SET autocommit=1');
 		}
 		catch (\Exception $e) {
-			DB::raw('ROLLBACK');
-
 			$respostaFront = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 

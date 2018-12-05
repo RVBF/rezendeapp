@@ -16,7 +16,8 @@
 		_this.botaoEditar = $('#editar');
 		_this.botaoRemover = $('#remover');
 		_this.botaoAtualizar = $('#atualizar');
-		_this.idTabela = $('#tarefa_table');
+		_this.idTabela = ($('#tarefa_table').length) ? $('#tarefa_table') :  $('#tarefacompleta_table');
+		
 		_this.idChecklist = window.location.href.split('#')[1].substring(1, url.length).split('/')[1];	
 
 		var ctrlFormulario = new app.ControladoraFormTarefa(servicoTarefa, _this);
@@ -43,6 +44,48 @@
 
 			return objeto;
 		};
+
+		_this.opcoesDaTabelaComListagemCompleta = function opcoesDaTabelaComListagemCompleta() {
+			var objeto = $.extend(true, {}, app.dtOptions);
+			objeto.ajax = servicoTarefa.rota(_this.idChecklist);
+
+			objeto.columnDefs = [ {
+					data: 'id',
+					targets: 0
+
+				}, {
+					data: 'titulo',
+					responsivePriority: 1,
+					targets: 1
+				}, {
+					data: 'descricao',
+					responsivePriority: 1,
+					targets: 2
+				}, {
+					data : 'checklist.descricao',
+					responsivePriority: 2,
+					targets : 3
+				}, {
+					data : 'questionador.nome',
+					responsivePriority: 3,
+					targets : 4
+				}, {
+					data :function(data){
+
+						var texto = (data.encerrada) ? "Sim" : "Não";
+						var classe = (data.encerrada) ? "success" : "danger"
+
+						return  '<div class="p-1 mb-1 bg-' + classe + ' text-white">'+ texto + '</div>';
+					},
+					responsivePriority: 3,
+					targets : 5
+				}
+			];
+
+			return objeto;
+		};
+		
+		
 
 		_this.cadastrar = function cadastrar() {
 			var modoEdicao = false;
@@ -134,7 +177,8 @@
 
 
 		_this.configurar = function configurar() {
-			_tabela = _this.idTabela.DataTable(_this.opcoesDaTabela());
+			var funcao =  ($('#tarefa_table').length) ? _this.opcoesDaTabela:  _this.opcoesDaTabelaComListagemCompleta;
+			_tabela = _this.idTabela.DataTable(funcao());
 			_this.botaoCadastrar.on('click',_this.cadastrar);
 			_this.botaoEditar.on('click', _this.editar)
 			_this.botaoAtualizar.on('click',_this.atualizar);

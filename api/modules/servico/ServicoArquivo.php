@@ -23,7 +23,7 @@ class ServicoArquivo {
 		return self::$singleton;
     }
     
-    public function validarESalvarImagem($arquivo, $nomePasta, $idDiferencial) {
+    public function validarESalvarImagem($arquivo, $nomePasta, $pastaEntidadeSalva) {
         $valorArquivo = base64_decode($arquivo['arquivo']);
 
 		$dimensoes = getimagesize($arquivo['arquivo']);
@@ -37,25 +37,33 @@ class ServicoArquivo {
         $mime_split_without_base64=explode(';', $mime,2);
         $mime_split=explode('/', $mime_split_without_base64[0],2);
 
-        $output = realpath(dirname('..\\..\\')) . Anexo::CAMINHO_ARQUIVOS. '/' . $nomePasta . '/' . $idDiferencial . '/' . $extensao;
+        $output = realpath(dirname('..\\..\\')) . Anexo::CAMINHO_ARQUIVOS. '/' . $nomePasta . '/' . $pastaEntidadeSalva . '/' . $extensao;
 
         if(is_dir(realpath(dirname('..\\..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta)) {
 
-            if(is_dir(realpath(dirname('..\\..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta . '/' . $idDiferencial)) file_put_contents($output, base64_decode($data));
+            if(is_dir(realpath(dirname('..\\..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta . '/' . $pastaEntidadeSalva)) file_put_contents($output, base64_decode($data));
             else{
-                mkdir(realpath(dirname('..\\..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta . '/' . $idDiferencial, 0777);
+                mkdir(realpath(dirname('..\\..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta . '/' . $pastaEntidadeSalva, 0777);
                 file_put_contents($output, base64_decode($data));
             }
 
         }
         else {
             mkdir(realpath(dirname('..\\..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta, 0777);
-            mkdir(realpath(dirname('..\\..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta . '/' . $idDiferencial, 0777);
+            mkdir(realpath(dirname('..\\..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta . '/' . $pastaEntidadeSalva, 0777);
 
             file_put_contents($output, base64_decode($data));
         }
    	    return $output;
 	}
 
+
+    public function imagemParaBase64($caminho){
+        $data = file_get_contents($caminho);
+
+        $valorArquivo = base64_encode($data);
+
+       return $valorArquivo;
+    }
 }
 ?>

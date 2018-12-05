@@ -21,26 +21,13 @@
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
 			var opcoes = {
 				rules: {
-					"titulo": {
-						required    : true,
-						rangelength : [ 2, 85 ]
-					},
-
-					'descricao':{
-						rangelength : [10,255]
-					}
+					"titulo": { rangelength : [ 2, 100 ] },
+					'descricao':{ rangelength : [10,255] }
 				},
 
-				messages:
-				{
-					"titulo": {
-						required    : "O campo título é obrigatório.",
-						rangelength : $.validator.format("O campo nome deve ter no mínimo  {2} e no máximo {85} caracteres.")
-					},
-
-					"descricao": {
-						rangelength : $.validator.format("O campo nome deve ter no mínimo  {10} e no máximo {255} caracteres.")
-					}
+				messages: {
+					"titulo": { rangelength : $.validator.format("O campo nome deve ter no mínimo  {2} e no máximo {100} caracteres.") },
+					"descricao": { rangelength : $.validator.format("O campo nome deve ter no mínimo  {0} e no máximo {255} caracteres.") }
 				}
 			};
 			// Irá disparar quando a validação passar, após chamar o método validate().
@@ -52,7 +39,7 @@
 				};
 				
 				var obj = _this.conteudo();
-				var jqXHR = _this.alterar ? servicoTarefa.atualizar(obj, _this.idChecklist) : servicoTarefa.adicionar(obj, _this.idChecklist);
+				var jqXHR = _this.alterar ? servicoTarefa.atualizarComChecklistId(obj, _this.idChecklist) : servicoTarefa.adicionarComChecklistId(obj, _this.idChecklist);
 				jqXHR.done(window.sucessoParaFormulario).fail(window.erro).always(terminado);
 
 				if(_this.alterar){
@@ -70,7 +57,8 @@
 			return servicoTarefa.criar(
 				$('#id').val(),
 				$('#titulo').val(),
-                $('#descricao').val()
+				$('#descricao').val(),
+				$('#checklist option:selected').val()
 			);
 		};
 
@@ -84,6 +72,35 @@
 			_this.formulario.parents('#painel_formulario').removeClass('d-none');
 			_this.formulario.find('#tiulo').focus();
 			_this.configurarBotoes();
+
+			if(_this.idChecklist == undefined) _this.popularChecklists();
+		};
+
+		_this.popularChecklists  =  function popularChecklists(valor = 0)
+		{
+			var sucesso = function (resposta) {
+				$("#checklist").empty();
+
+				$.each(resposta.data, function(i ,item) {
+					$("#checklist").append($('<option>', {
+						value: item.id,
+						text: item.descricao
+					}));
+				});
+
+				$('#checklist').trigger('change');
+			};
+
+			var erro = function(resposta)
+			{
+				var mensagem = jqXHR.responseText || 'Erro ao popular select de farmácias.';
+				toastr.error(mensagem);
+				return false;
+			}
+
+			var servicoChecklist = new app.ServicoChecklist();
+			var  jqXHR = servicoChecklist.todos();
+			jqXHR.done(sucesso).fail(erro);
 		};
 
 		_this.iniciarFormularioModoEdicao = function iniciarFormularioModoEdicao() {

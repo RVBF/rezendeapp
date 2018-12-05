@@ -10,17 +10,15 @@ use Illuminate\Database\Capsule\Manager as Db;
 class ColecaoPerguntaEmBDR implements ColecaoPergunta {
 
 	const TABELA = 'pergunta';
+	const TABELA_RELACIONAL = 'resposta_formulariorespondido';
 
 	function __construct(){}
 
 	function adicionar(&$obj) {
 		try {	
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-			$id = Db::table(self::TABELA)->insertGetId([ 'pergunta' => $obj->getPergunta(),
-					'tarefa_id' => $obj->getTarefa()->getId(),
-				]
-			);
+			
+			$id = Db::table(self::TABELA)->insertGetId(['pergunta' => $obj->getPergunta(), 'tarefa_id' => $obj->getTarefa()->getId()]);
 
 			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
@@ -72,9 +70,7 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta {
 			
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-			Db::table(self::TABELA)->where('id', $obj->getId())->update([ 'pergunta' => $obj->getPergunta(),
-				'tarefa_id' => $obj->getTarefa()->getId(),
-				'resposta_id' => $obj->getResposta()->getId()
+			Db::table(self::TABELA)->where('id', $obj->getId())->update([ 'pergunta' => $obj->getPergunta(), 'tarefa_id' => $obj->getTarefa()->getId(),'resposta_id' => $obj->getResposta()->getId()
 			]);
 
 			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
@@ -155,6 +151,23 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta {
 		}
 	}
 
+	function comFormularioId($id){
+		try {	
+			$perguntas = Db::table(self::TABELA)->join(self::TABELA_RELACIONAL, self::TABELA.'.id', '=', self::TABELA . 'pergunta_id')->where(self::TABELA_RELACIONAL . '.formulario_respondido_id', $id)->get();
+
+			$perguntasObjects = [];
+			foreach ($perguntas as $pergunta) {
+				$perguntasObjects[] =  $this->construirObjeto($pergunta);
+			}
+
+			return $perguntasObjects;
+		}
+		catch (\Exception $e)
+		{
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		}
+	}
+
 	function construirObjeto(array $row) {
 		$tarefa = Dice::instance()->create('ColecaoTarefa')->comId($row['tarefa_id']);
 
@@ -167,5 +180,4 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta {
 		return Db::table(self::TABELA)->count();
 	}
 }
-
 ?>

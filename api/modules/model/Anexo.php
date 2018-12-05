@@ -12,6 +12,7 @@ class Anexo {
     private $patch;
     private $tipo;
     private $resposta;
+    private $arquivoBase64;
 
 	const CAMINHO_ARQUIVOS = '/../assets/images/anexos/';
 
@@ -52,6 +53,14 @@ class Anexo {
  
     public function setResposta($resposta){
         $this->resposta = $resposta;
+    }
+
+    public function setArquivoBase64($arquivoBase64){
+        $this->arquivoBase64 = $arquivoBase64;
+    }
+
+    public function getArquivoBase64() {
+        return $this->arquivoBase64;
     }
 }
 ?>
