@@ -38,8 +38,6 @@ class ControladoraTarefa {
 			$contagem = 0;
 			$objetos = [];
 			$erro = null;
-			Debuger::printr($tarefa);
-
 			$objetos = $this->colecaoTarefa->todos($dtr->start, $dtr->length, $idChecklist);
 
 			$contagem = $this->colecaoTarefa->contagem();

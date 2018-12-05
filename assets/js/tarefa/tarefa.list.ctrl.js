@@ -72,8 +72,10 @@
 				}, {
 					data :function(data){
 
-						var texto = (data.formularioRespondido.id > 0) ? "Sim" : "Não"
-						return (data.formularioRespondido.id > 0) ? '<div class="p-1 mb-1 bg-success text-white">'+ texto + '</div>' : '<div class="p-1 mb-1 bg-danger text-white">'+ texto + '</div>';
+						var texto = (data.encerrada) ? "Sim" : "Não";
+						var classe = (data.encerrada) ? "success" : "danger"
+
+						return  '<div class="p-1 mb-1 bg-' + classe + ' text-white">'+ texto + '</div>';
 					},
 					responsivePriority: 3,
 					targets : 5

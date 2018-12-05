@@ -74,26 +74,14 @@ class ControladoraResposta {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
+
 			$respostaFront = $respostasCadastradas = [];
-
+			$formularioRespondido = new FormularioRespondido();
+			$formularioRespondido->setRespondedor($this->colecaoUsuario->comId($this->servicoLogin->getIdUsuario()));
+			$formularioRespondido->setDataHora(Carbon::now());
+			$tarefa = null;
+			Debuger::printr($this->params['obj']);
 			foreach($this->params['obj'] as $key => $parametros) {
-				$pergunta = $this->colecaoPergunta->comId($parametros['pergunta']);
-				$tarefa = $pergunta->getTarefa();
-				$formularioRespondido = new FormularioRespondido();
-				$formularioRespondido->setDataHora(Carbon::now());
-				$formularioRespondido->setRespondedor($this->colecaoUsuario->comId($this->servicoLogin->getIdUsuario()));
-
-				$formularioRespondido->setPergunta($pergunta);
-
-				$this->colecaoFormularioRespondido->adicionar($formularioRespondido);
-
-				if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
-					throw new Exception("Pergunta não encontrada na base de dados.");
-				}
-
-				$tarefa->setFormularioRespondido($formularioRespondido);
-				$this->colecaoTarefa->atualizar($tarefa);
-
 				$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'opcaoSelecionada','pergunta'], $parametros);
 
 				if(count($inexistentes) > 0) {
@@ -102,17 +90,23 @@ class ControladoraResposta {
 					throw new Exception($msg);
 				}
 
-				$resposta = new Resposta(0, \ParamUtil::value($parametros, 'opcaoSelecionada'), '');
+				$pergunta = $this->colecaoPergunta->comId($parametros['pergunta']);
+				if($tarefa == null) $tarefa = $pergunta->getTarefa();
+				$formularioRespondido->addPergunta($pergunta);
 
-				$this->colecaoResposta->adicionarComFormularioID($resposta, $formularioRespondido->getId());
+				if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
+					throw new Exception("Pergunta não encontrada na base de dados.");
+				}
 
-				$formularioRespondido->addResposta($resposta);
+				$resposta = new Resposta(0, \ParamUtil::value($parametros, 'opcaoSelecionada'), '', $pergunta);
+
+				$this->colecaoResposta->adicionar($resposta);
 				
 				if(isset($parametros['files']) and count($parametros['files']) > 0){
-					$pastaTarefa = 'tarefa_'. $tarefa->getId();
+					$pastaTarefa = 'pergunta_'. $tarefa->getId();
 
 					foreach($parametros['files'] as $arquivo) {
-						$patch = $this->servicoArquivo->validarESalvarImagem($arquivo, $pastaTarefa, $resposta->getId());
+						$patch = $this->servicoArquivo->validarESalvarImagem($arquivo, $pastaTarefa, 'resposta_' . $resposta->getId());
 						$anexo = new Anexo(
 							0,
 							$patch,
@@ -126,7 +120,9 @@ class ControladoraResposta {
 			
 				$respostasCadastradas[] = $resposta;		
 			}
-
+			$this->colecaoFormularioRespondido->adicionar($formularioRespondido);
+			$tarefa->setEncerrada(true);
+			$this->colecaoTarefa->atualizar($tarefa);
 			$respostaFront = ['Resposta'=> $respostasCadastradas, 'status' => true, 'mensagem'=> 'Resposta cadastrada com sucesso.']; 
 			
 		}

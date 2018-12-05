@@ -11,15 +11,24 @@ class ColecaoFormularioRespondidoEmBDR implements ColecaoFormularioRespondido
 {
 
 	const TABELA = 'formulario_respondido';
-
+	const TABELA_RELACIONAL = 'fomulario_pergunta';
+	
 	function __construct(){}
 
 	function adicionar(&$obj) {
 		try {	
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-			$id = Db::table(self::TABELA)->insertGetId([ 'data_resposta' => $obj->getDataHora()->toDateTimeString(), 'respondedor_id' => $obj->getRespondedor()->getId(), 'pergunta_id'=> $obj->getPergunta()->getId()]);
+			$id = Db::table(self::TABELA)->insertGetId([ 'data_resposta' => $obj->getDataHora()->toDateTimeString(), 'respondedor_id' => $obj->getRespondedor()->getId()]);
 			
+			$perguntasFormulario = [];
+
+			foreach($obj->getPerguntas() as $pergunta){
+				
+				$perguntasFormulario[] = ['pergunta_id' => $pergunta->getId(), 'formulario_respondido_id' =>  $id];
+			}
+			Db::table(self::TABELA_RELACIONAL)->insert($perguntasFormulario);
+
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
 			$obj->setId($id);
@@ -35,7 +44,7 @@ class ColecaoFormularioRespondidoEmBDR implements ColecaoFormularioRespondido
 	function remover($id) {
 		try {	
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-			$removido = DB::table(self::TABELA)->where('id', $id)->where('checklist_id', $idChecklist)->delete();
+			$removido = DB::table(self::TABELA)->where('id', $id)->delete();
 			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 			return $removido;
 		}
@@ -99,10 +108,9 @@ class ColecaoFormularioRespondidoEmBDR implements ColecaoFormularioRespondido
 	function construirObjeto(array $row) {
 
 		$respondedor = ($row['respondedor_id'] > 0) ? Dice::instance()->create('ColecaoUsuario')->comId($row['respondedor_id']) : null;
-		$respostas = Dice::instance()->create('ColecaoResposta')->comFormularioId($row['id']);
-		$pergunta = ($row['pergunta_id'] > 0) ? Dice::instance()->create('ColecaoPergunta')->comId($row['pergunta_id']) : null;
+		$perguntas = Dice::instance()->create('ColecaoPergunta')->comFormularioId($row[id]);
 
-		$formularioRespondido = new FormularioRespondido($row['id'], $row['data_resposta'], $respondedor, $pergunta, $respostas);
+		$formularioRespondido = new FormularioRespondido($row['id'], $row['data_resposta'], $respondedor, $perguntas);
 
 		return $formularioRespondido;
 	}	

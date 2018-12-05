@@ -34,16 +34,33 @@
 					responsivePriority: 1,
 					targets: 1
 				}, {
-					data: 'opcaoSelecionada',
+					data: function(data){
+						var opcao = new app.Opcao();
+						var opcaoSelecionada = data.opcaoSelecionada;
+
+						return opcao.getpcoes()[opcaoSelecionada];
+					},
 					responsivePriority: 2,
 					targets: 2
 				}, {
-					data: 'anexos',
+					data: function() {
+						return '<a href="anexos.html" class="anexos"><i class="fas fa-paperclip"></i></a>';
+					},
 					responsivePriority: 3,
 					targets: 3
 				}
 
 			];
+
+			objeto.fnDrawCallback = function(settings){
+				$('tbody tr').on('click', '.anexos', function (event) {
+					event.preventDefault();
+					var objeto = _tabela.row($(this).parents('tr')).data();
+
+
+					$('#anexos').modal();
+				});
+			};
 
 			return objeto;
 		};
