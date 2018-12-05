@@ -13,12 +13,13 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 	function __construct(){}
 
 	function adicionar(&$obj) {
-		if($this->validarCadastroTarefa($obj)){
+		if($this->validarTarefa($obj)){
 			try {	
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 	
 				$id = Db::table(self::TABELA)->insertGetId([ 'titulo' => $obj->getTitulo(),
 						'descricao' => $obj->getDescricao(),
+						'encerrada' => $obj->getEncerrada(),
 						'checklist_id' => $obj->getChecklist()->getId(),
 						'questionador_id' =>$obj->getQuestionador()->getId()
 					]
@@ -69,17 +70,16 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 	}
 
 	function atualizar(&$obj) {
-		if($this->validarEdicaoTarefa($obj)) {
+		if($this->validarTarefa($obj)) {
 			try {
 				
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
 				$filds = [ 'titulo' => $obj->getTitulo(),
 					'descricao' => $obj->getDescricao(),
+					'encerrada' => $obj->getEncerrada(),
 					'checklist_id' => $obj->getChecklist()->getId()
 				];
-
-				if($obj->getFormularioRespondido()->getId() > 0 && $obj->getFormularioRespondido() instanceof FormularioRespondido) $filds['formulario_respondido_id'] = $obj->getFormularioRespondido()->getId();
 				
 				Db::table(self::TABELA)->where('id', $obj->getId())->update($filds);
 
@@ -144,9 +144,7 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 	function construirObjeto(array $row) {
 		$checklist = ($row['checklist_id'] > 0) ? Dice::instance()->create('ColecaoChecklist')->comId($row['checklist_id']) : '';
 		$questionador = ($row['questionador_id'] > 0) ? Dice::instance()->create('ColecaoUsuario')->comId($row['questionador_id']) : '';
-		$formularioRespondido = ($row['formulario_respondido_id'] > 0) ? Dice::instance()->create('ColecaoFormularioRespondido')->comId($row['formulario_respondido_id']) : '';
-
-		$tarefa = new Tarefa($row['id'],$row['titulo'], $row['descricao'], $checklist, $questionador, $formularioRespondido);
+		$tarefa = new Tarefa($row['id'],$row['titulo'], $row['descricao'], $checklist, $questionador, [],($row['encerrada']) ? true : false);
 
 		return $tarefa;
 	}	
@@ -155,7 +153,7 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 		return Db::table(self::TABELA)->count();
 	}
 
-	private function validarCadastroTarefa(&$obj) {
+	private function validarTarefa(&$obj) {
 		if(!is_string($obj->getTitulo())) throw new ColecaoException('Valor inválido para titulo.');
 		
 		if(!is_string($obj->getDescricao())) throw new ColecaoException('Valor inválido para a descrição.');
@@ -171,17 +169,6 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 
 		if(strlen($obj->getTitulo()) <= Tarefa::TAM_TITULO_MIM && strlen($obj->getTitulo()) > Tarefa::TAM_TITULO_MAX) throw new ColecaoException('O título deve conter no mínimo '. Tarefa::TAM_TITULO_MIM . ' e no máximo '. Tarefa::TAM_TITULO_MAX . '.');
 		if(strlen($obj->getdescricao()) <= 255 and $obj->getdescricao() <> '') throw new ColecaoException('A Descrição  deve conter no máximo '. 255 . ' e no máximo '. 1 . '.');
-
-		return true;
-	}
-
-	private function validarEdicaoTarefa(&$obj){
-		$status = $this->validarCadastroTarefa($obj);
-
-		if($obj->getFormularioRespondido()->getId() > 0 and $obj->getFormularioRespondido() instanceof FormularioRespondido) {
-			$quantidade = DB::table(ColecaoFormularioRespondidoEmBDR::TABELA)->where('id', $obj->getFormularioRespondido()->getId())->count();
-			if($quantidade == 0)throw new ColecaoException('FormularioRespondido não encontrado na base de dados.');
-		}
 
 		return true;
 	}

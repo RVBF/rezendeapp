@@ -13,18 +13,18 @@ class Tarefa {
     private $descricao;
     private $checklist;
     private $questionador;
-    private $formularioRespondido;
+    private $encerrada;
 
     const TAM_TITULO_MIM = 2;
     const TAM_TITULO_MAX = 100;
 
-    function __construct($id = 0, $titulo = '', $descricao = '', $checklist = null, $questionador = null, $formularioRespondido = null) {
+    function __construct($id = 0, $titulo = '', $descricao = '', $checklist = null, $questionador = null, $perguntas = [], $encerrada = false) {
 		$this->id = $id;
         $this->titulo = $titulo;
         $this->descricao = $descricao;
         $this->checklist = $checklist;
         $this->questionador = $questionador;
-        $this->formularioRespondido = $formularioRespondido;
+        $this->encerrada = $encerrada;
     }
 
     public function getId(){
@@ -67,12 +67,12 @@ class Tarefa {
         $this->questionador = $questionador;
     }
 
-    public function getformularioRespondido(){
-        return $this->formularioRespondido; 
+    public function getEncerrada(){
+        return $this->encerrada; 
     }
  
-    public function setFormularioRespondido($formularioRespondido){
-        $this->formularioRespondido = $formularioRespondido;
+    public function setEncerrada($encerrada){
+        $this->encerrada = $encerrada;
     }
 }
 ?>

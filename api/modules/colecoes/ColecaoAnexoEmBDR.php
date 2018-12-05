@@ -88,7 +88,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 
 	function comId($id){
 		try {	
-			$pergunta = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
+			$anexo = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
 
 			return $pergunta;
 		}
@@ -97,20 +97,35 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
 		}
 	}
+	
+	public function comRespostaId($id){
+		try {	
 
+			$anexos = Db::table(self::TABELA)->where('resposta_id', $id)->get();
+			$anexosObjects = [];
+			foreach ($anexos as $anexo) {
+				$anexosObjects[] =  $this->construirObjeto($anexo);
+			}
+
+			return $anexosObjects;
+		}
+		catch (\Exception $e) {
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		}
+	}
 	/**
 	 * @inheritDoc
 	 */
 	function todos($limite = 0, $pulo = 0) {
 		try {	
-			$perguntas = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+			$anexos = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
 
-			$perguntasObjects = [];
-			foreach ($perguntas as $pergunta) {
-				$perguntasObjects[] =  $this->construirObjeto($pergunta);
+			$anexosObjects = [];
+			foreach ($anexos as $pergunta) {
+				$anexosObjects[] =  $this->construirObjeto($pergunta);
 			}
 
-			return $perguntasObjects;
+			return $anexosObjects;
 		}
 		catch (\Exception $e)
 		{
@@ -119,13 +134,12 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 	}
 
 	function construirObjeto(array $row) {
-		$tarefa = Dice::instance()->create('ColecaoTarefa')->comId($row['tarefa_id']);
+		$arquivo = ServicoArquivo::instance();
 
-		$resposta = null;
-		if($row['resposta_id'] > 0) $resposta = Dice::instance()->create('ColecaoResposta')->comId($row['resposta_id']);
-		$pergunta = new Pergunta($row['id'],$row['pergunta'], null, null, $tarefa, $resposta);
-
-		return $pergunta;
+		$base64 =  'data:'. $row['tipo'] . ';base64,'. $arquivo->imagemParaBase64($row['caminho']);
+		$anexo = new Anexo($row['id'], $row['caminho'], $row['tipo']);
+		$anexo->setArquivoBase64($base64);
+		return $anexo;
 	}	
 
     function contagem() {

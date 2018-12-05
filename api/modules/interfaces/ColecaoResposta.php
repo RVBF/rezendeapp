@@ -8,7 +8,5 @@
  */
 
 interface ColecaoResposta extends Colecao {
-    function adicionarComFormularioID(&$obj, $idFormulario);
-    function comFormularioId($id);
 }
 ?>
