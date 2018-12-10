@@ -39,38 +39,38 @@ $app->delete('/categorias/{id}', function(Request $req,  Response $res, $args = 
 
 });
 
-// Início das rotas para checklist
-$app->get('/checklist', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-	$this->logger->addInfo("Acessando listagem de checklist");	
+// Início das rotas para setor
+$app->get('/setor', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Acessando listagem de setor");	
 	$sessaoUsuario = new Sessao($session);
-	$ctrl = new ControladoraChecklist($req->getQueryParams(), $sessaoUsuario);
+	$ctrl = new ControladoraSetor($req->getQueryParams(), $sessaoUsuario);
 	$response = $ctrl->todos();
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
 
 });
 
-$app->post('/checklist', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-	$this->logger->addInfo("Acessando o cadastro de checklist");
+$app->post('/setor', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Acessando o cadastro de setor");
 	$sessaoUsuario = new Sessao($session);
-	$ctrl = new ControladoraChecklist($req->getParsedBody(), $sessaoUsuario);
+	$ctrl = new ControladoraSetor($req->getParsedBody(), $sessaoUsuario);
 	$response = $ctrl->adicionar();
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 
 });
 
-$app->put('/checklist', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+$app->put('/setor', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 	$this->logger->addInfo("Acessando a atualização de categorias");
 	$sessaoUsuario = new Sessao($session);
-	$ctrl = new ControladoraChecklist($req->getParsedBody(), $sessaoUsuario);
+	$ctrl = new ControladoraSetor($req->getParsedBody(), $sessaoUsuario);
 	$response = $ctrl->atualizar();
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 
 });
 
-$app->delete('/checklist/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+$app->delete('/setor/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 	$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
 	$sessaoUsuario = new Sessao($session);
-	$ctrl = new ControladoraChecklist($req->getParsedBody(), $sessaoUsuario);
+	$ctrl = new ControladoraSetor($req->getParsedBody(), $sessaoUsuario);
 	$response = $ctrl->remover($args['id']);
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 });
@@ -111,29 +111,29 @@ $app->delete('/loja/{id}', function(Request $req,  Response $res, $args = []) us
 });
 
 // Início das rotas para tarefa
-$app->get('/checklist/{idChecklist}/tarefa', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+$app->get('/setor/{idSetor}/tarefa', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 	$this->logger->addInfo("Acessando listagem de tarefa");	
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraTarefa($req->getQueryParams(), $sessaoUsuario);
-	$response = $ctrl->todos($args['idChecklist']);
+	$response = $ctrl->todos($args['idSetor']);
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
 
 });
 
-$app->post('/checklist/{idChecklist}/tarefa', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+$app->post('/setor/{idSetor}/tarefa', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 	$this->logger->addInfo("Acessando o cadastro de tarefa");
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraTarefa($req->getParsedBody(), $sessaoUsuario);
-	$response = $ctrl->adicionar($args['idChecklist']);
+	$response = $ctrl->adicionar($args['idSetor']);
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 
 });
 
-$app->put('/checklist/{idChecklist}/tarefa', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+$app->put('/setor/{idSetor}/tarefa', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 	$this->logger->addInfo("Acessando a atualização de tarefas");
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraTarefa($req->getParsedBody(), $sessaoUsuario);
-	$response = $ctrl->atualizar($args['idChecklist']);
+	$response = $ctrl->atualizar($args['idSetor']);
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 
 });
@@ -156,11 +156,11 @@ $app->put('/tarefa', function(Request $req,  Response $res, $args = []) use ($ap
 
 });
 
-$app->delete('/checklist/{idChecklist}/tarefa/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+$app->delete('/setor/{idSetor}/tarefa/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 	$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraTarefa($req->getParsedBody(), $sessaoUsuario);
-	$response = $ctrl->remover($args['id'], $args['idChecklist']);
+	$response = $ctrl->remover($args['id'], $args['idSetor']);
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 });
 

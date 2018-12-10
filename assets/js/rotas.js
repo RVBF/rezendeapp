@@ -82,12 +82,8 @@
 
 	router.get('/categorias', verficarLogin, criarRotaPara('categoria.html'));
 	router.get('/loja', verficarLogin, criarRotaPara('loja.html'));
-	router.get('/tarefa', verficarLogin, criarRotaPara('tarefaListagemCompleta.html'));
+	router.get('/tarefa', verficarLogin, criarRotaPara('tarefa.html'));
 	router.get('/resposta', verficarLogin, criarRotaPara('resposta.html'));
-
-
-	router.get('/checklist/:id/tarefa', verficarLogin, criarRotaPara('tarefa.html'));
-	router.get('/checklist/tarefa', verficarLogin, criarRotaPara('tarefa.html'));
 
 	router.get('/tarefa/:id/pergunta', verficarLogin, criarRotaPara('pergunta.html'));
 	router.get('/tarefa/:id/pergunta/cadastrar-perguntas', verficarLogin, criarRotaPara('perguntaCadastroMultiplo.html'));
@@ -97,7 +93,7 @@
 	router.get('/configuracao/grupo-usuario', verficarLogin, criarRotaPara('grupo_usuario.html'));
 
 
-    router.get('/', verficarLogin, criarRotaPara('checklist.html'));
+    router.get('/', verficarLogin, criarRotaPara('setor.html'));
 
 	// // 404
 	router.get('/*', function(req, e) {

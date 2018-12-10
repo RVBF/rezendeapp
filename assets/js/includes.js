@@ -76,7 +76,8 @@
 
 (function(window) {
     'use strict';
-    var dependenciasCSS = [];
+	var dependenciasCSS = [];
+	
 	dependenciasCSS.push({ url : 'assets/styles/estilo.css' });
 	dependenciasCSS.push({ url : 'assets/styles/login.css'})
 	dependenciasCSS.push({ url : 'assets/styles/meanmenu.min.css' });
@@ -164,9 +165,9 @@
 		loader.script('assets/js/categoria/categoria.form.ctrl.js');
 		loader.script('assets/js/categoria/categoria.list.ctrl.js');
 
-		loader.script('assets/js/checklist/checklist.serv.js');
-		loader.script('assets/js/checklist/checklist.form.ctrl.js');
-		loader.script('assets/js/checklist/checklist.list.ctrl.js');
+		loader.script('assets/js/setor/setor.serv.js');
+		loader.script('assets/js/setor/setor.form.ctrl.js');
+		loader.script('assets/js/setor/setor.list.ctrl.js');
 
 		loader.script('assets/js/tarefa/tarefa.serv.js');
 		

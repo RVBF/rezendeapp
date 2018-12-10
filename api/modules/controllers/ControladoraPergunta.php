@@ -73,7 +73,7 @@ class ControladoraPergunta {
 			$tarefa = $this->colecaoTarefa->comId($tarefaId);
 
 			if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
-				throw new Exception("Checklist não encontrada na base de dados.");
+				throw new Exception("Setor não encontrada na base de dados.");
 			}
 
 			$pergunta = new Pergunta(
@@ -112,7 +112,7 @@ class ControladoraPergunta {
 			$tarefa = $this->colecaoTarefa->comId($tarefaId);
 
 			if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
-				throw new Exception("Checklist não encontrada na base de dados.");
+				throw new Exception("Setor não encontrada na base de dados.");
 			}
 	
 			$objetos = [];
@@ -156,7 +156,7 @@ class ControladoraPergunta {
 			$tarefa = $this->colecaoTarefa->comId($tarefaId);
 
 			if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
-				throw new Exception("Checklist não encontrada na base de dados.");
+				throw new Exception("Setor não encontrada na base de dados.");
 			}
 
 			$pergunta = new Pergunta(

@@ -1,5 +1,5 @@
 /**
- *  checklist.form.ctrl.js
+ *  setor.form.ctrl.js
  *
  *  @author  Rafael Vinicius Barros Ferreira
  *	 @version 1.0
@@ -8,11 +8,11 @@
 {
 	'use strict';
 
-	function ControladoraFormChecklist(servicoChecklist, controladoraListagemChecklist) {
+	function ControladoraFormSetor(servicoSetor, controladoraListagemSetor) {
 		var _this = this;
 
 		_this.alterar;
-		_this.formulario = $('#checklist_form');
+		_this.formulario = $('#setor_form');
 		_this.botaoSubmissao = $('#salvar')
 		_this.cancelarModoEdicao = $('#cancelar_edicao')
 
@@ -20,29 +20,20 @@
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
 			var opcoes = {
 				rules: {
-					"categoria": {required : true},
-					"lojas" :{required : true},
-					"data_limite" : { required : true},
-					"hora_limite" : { required : true},
-					"descricao" : {required : true}
+					"titulo": {required : true,
+						rangelength : [ 2, 100 ] 
+					},
+					"categoria" :{required : true}
 
 				},
 
 				messages: {
 					"categoria": {
-						required    : "O campo categoria é obrigatório.",
+						required    : "O campo categoria é obrigatório."
 					},
-					"lojas": {
-						required    : "O campo lojas é obrigatório.",
-					},
-					"data_limite": {
-						required    : "O campo data limite é obrigatório.",
-					},
-					"hora_limite": {
-						required    : "O campo hora limite é obrigatório.",
-					},
-					"descricao": {
-						required    : "O campo descrição é obrigatório.",
+					"titulo": {
+						required    : "O campo título é obrigatório.",
+						rangelength : "O campo deve conter no mínimo {2} e no máximo {100} caracteres."
 					}
 				}
 			};
@@ -50,19 +41,15 @@
 			opcoes.submitHandler = function submitHandler(form) {
 				_this.formulario.desabilitar(false);
 
-
-				var erro = function erro(jqXHR, textStatus, errorThrown) {
-					var mensagem = jqXHR.responseText;
-					_this.formulario.find('#msg').empty().append('<div class="error" >' + mensagem + '</div>');
-				};
-				
 				var terminado = function() {
 					_this.formulario.desabilitar(true);
 				};
 				
 				var obj = _this.conteudo();
-				var jqXHR = _this.alterar ? servicoChecklist.atualizar(obj) : servicoChecklist.adicionar(obj);
-				jqXHR.done(window.sucessoParaFormulario).fail(window.erro);
+				var jqXHR = _this.alterar ? servicoSetor.atualizar(obj) : servicoSetor.adicionar(obj);
+				jqXHR.done(window.sucessoParaFormulario).always(function(){
+					_this.formulario.desabilitar(false);
+				});
 
 				if(_this.alterar){
 					$('.depende_selecao').each(function(){
@@ -76,12 +63,11 @@
         
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
-			return servicoChecklist.criar(
+			return servicoSetor.criar(
                 $('#id').val(),
-                $('#descricao').val(),
-				$('#data_limite').pickadate('picker').get('select', 'yyyy-mm-dd') + ' ' + $('#hora_limite').pickatime('picker').get('select','HH:i'),
-				$('#categoria').val(),
-				$('#loja').val()
+                $('#titulo').val(),
+				$('#descricao').val(),
+				$('#categoria').val()
 			);
 		};
 
@@ -116,30 +102,6 @@
 			jqXHR.done(sucesso).fail(erro);
 		};
 
-		_this.popularSelectLojas  =  function popularSelectLojas(valor = 0)
-		{
-			var sucesso = function (resposta) {
-				$("#loja").empty();
-
-				$.each(resposta.data, function(i ,item) {
-					$("#loja").append($('<option>', {
-						value: item.id,
-						text: item.razaoSocial + '/' + item.nomeFantasia
-					}));
-				});
-
-				$('#loja').trigger('change');
-			};
-
-			var erro = function(resposta) {
-				var mensagem = jqXHR.responseText || 'Erro ao popular select de farmácias.';
-				toastr.error(mensagem);
-				return false;
-			};
-			var servicoLoja = new app.ServicoLoja();
-			var  jqXHR = servicoLoja.todos();
-			jqXHR.done(sucesso).fail(erro);
-		};
 
 		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro() {
 			_this.formulario.parents('#painel_formulario').removeClass('desabilitado').desabilitar(false);
@@ -147,7 +109,6 @@
 			_this.formulario.find('#tiulo').focus();
 			_this.configurarBotoes();
 			_this.popularSelectCategorias();
-			_this.popularSelectLojas();
 		};
 
 		_this.iniciarFormularioModoEdicao = function iniciarFormularioModoEdicao() {
@@ -168,21 +129,10 @@
 
 		// Desenha o objeto no formulário
 		_this.desenhar = function desenhar(obj) {
-			var dataPicker = $('#data_limite').pickadate('picker');
-			var horaPicker = $('#hora_limite').pickatime('picker');
-
-
-			var data  = obj.dataLimite.split('-');
-			var hora = obj.dataLimite.split(' ')[1].split(':');
-
 			_this.formulario.find('#id').val(obj.id);
+			_this.formulario.find('#titulo').val(obj.titulo);
 			_this.formulario.find('#categoria').val(obj.categoria.id).trigger('change');
-			_this.formulario.find('#loja').val(obj.categoria.id).trigger('change');
 			_this.formulario.find('#descricao').val(obj.descricao);
-
-			dataPicker.set('select', new Date(data[0], data[1], data[2]))
-			horaPicker.set('select', hora[0] + ':' + hora[1], { format: 'hh:i' })
-
 		};
 
 		_this.salvar = function salvar() {
@@ -192,7 +142,9 @@
 		_this.cancelar = function cancelar(event) {
 			var contexto = _this.formulario.parents('#painel_formulario');
 			contexto.addClass('desabilitado');
+			
 			_this.formulario.find('.msg').empty();
+			_this.formulario.find('.msg').parents('.row').addClass('d-none');
 
 			contexto.addClass('d-none');
 			contexto.desabilitar(true);
@@ -202,14 +154,11 @@
 		// Configura os eventos do formulário
 		_this.configurar = function configurar(status = false) {
 			_this.definirForm(status);
-			$('#data_limite').on('click', function(event){
-				event.preventDefault();
-			});
 		};
-	}; // ControladoraFormChecklist
+	}; // ControladoraFormSetor
 
 	// Registrando
-	app.ControladoraFormChecklist = ControladoraFormChecklist;
+	app.ControladoraFormSetor = ControladoraFormSetor;
 
 })(window, app, jQuery, toastr);
 

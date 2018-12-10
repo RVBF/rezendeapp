@@ -15,7 +15,7 @@
 		_this.formulario = $('#tarefa_form');
 		_this.botaoSubmissao = $('#salvar')
 		_this.cancelarModoEdicao = $('#cancelar_edicao')
-		_this.idChecklist = window.location.href.split('#')[1].substring(1, url.length).split('/')[1];	
+		_this.idSetor = window.location.href.split('#')[1].substring(1, url.length).split('/')[1];	
 
 		// Cria as opções de validação do formulário
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
@@ -39,7 +39,7 @@
 				};
 				
 				var obj = _this.conteudo();
-				var jqXHR = _this.alterar ? servicoTarefa.atualizarComChecklistId(obj, _this.idChecklist) : servicoTarefa.adicionarComChecklistId(obj, _this.idChecklist);
+				var jqXHR = _this.alterar ? servicoTarefa.atualizarComSetorId(obj, _this.idSetor) : servicoTarefa.adicionarComSetorId(obj, _this.idSetor);
 				jqXHR.done(window.sucessoParaFormulario).fail(window.erro).always(terminado);
 
 				if(_this.alterar){
@@ -58,7 +58,8 @@
 				$('#id').val(),
 				$('#titulo').val(),
 				$('#descricao').val(),
-				$('#checklist option:selected').val()
+				$('#data_limite').pickadate('picker').get('select', 'yyyy-mm-dd') + ' ' + $('#hora_limite').pickatime('picker').get('select','HH:i'),
+				$('#setor option:selected').val()
 			);
 		};
 
@@ -73,22 +74,22 @@
 			_this.formulario.find('#tiulo').focus();
 			_this.configurarBotoes();
 
-			if(_this.idChecklist == undefined) _this.popularChecklists();
+			if(_this.idSetor == undefined) _this.popularSetors();
 		};
 
-		_this.popularChecklists  =  function popularChecklists(valor = 0)
+		_this.popularSetors  =  function popularSetors(valor = 0)
 		{
 			var sucesso = function (resposta) {
-				$("#checklist").empty();
+				$("#setor").empty();
 
 				$.each(resposta.data, function(i ,item) {
-					$("#checklist").append($('<option>', {
+					$("#setor").append($('<option>', {
 						value: item.id,
-						text: item.descricao
+						text: item.titulo
 					}));
 				});
 
-				$('#checklist').trigger('change');
+				$('#setor').trigger('change');
 			};
 
 			var erro = function(resposta)
@@ -98,8 +99,8 @@
 				return false;
 			}
 
-			var servicoChecklist = new app.ServicoChecklist();
-			var  jqXHR = servicoChecklist.todos();
+			var servicoSetor = new app.ServicoSetor();
+			var  jqXHR = servicoSetor.todos();
 			jqXHR.done(sucesso).fail(erro);
 		};
 

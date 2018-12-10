@@ -1,5 +1,5 @@
 /**
- *  checklist.serv.js
+ *  setor.serv.js
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */

@@ -1,12 +1,12 @@
 <?php
 
 /**
- *	Coleção de Checklist
+ *	Coleção de Setor
  *
  *  @author		Rafael Vinicius Barros
  *  @version	0.1
  */
 
-interface ColecaoChecklist extends Colecao{
+interface ColecaoSetor extends Colecao{
 }
 ?>

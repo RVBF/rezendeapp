@@ -1,5 +1,5 @@
 /**
- *  checklist.list.ctrl.js
+ *  setor.list.ctrl.js
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */
@@ -7,7 +7,7 @@
 {
 	'use strict';
 
-	function ControladoraListagemChecklist(servicoCheckList)
+	function ControladoraListagemSetor(servicoSetor)
 	{
 		var _this = this;
 		var _cont = 0;
@@ -16,37 +16,28 @@
 		_this.botaoEditar = $('#editar');
 		_this.botaoRemover = $('#remover');
 		_this.botaoAtualizar = $('#atualizar');
-		_this.idTabela = $('#checklist');
-		var ctrlFormulario = new app.ControladoraFormChecklist(servicoCheckList, _this);
+		_this.idTabela = $('#setor');
+		var ctrlFormulario = new app.ControladoraFormSetor(servicoSetor, _this);
 
 		//Configura a tabela
 		_this.opcoesDaTabela = function opcoesDaTabela() {
 			var objeto = $.extend(true, {}, app.dtOptions);
-			objeto.ajax = servicoCheckList.rota();
+			objeto.ajax = servicoSetor.rota();
 
 			objeto.columnDefs = [ {
 					data: 'id',
 					targets: 0,
-					responsivePriority: 5,
 					visible : true
 				}, {
-					data: 'dataLimite',
-					responsivePriority: 1,
+					data: 'titulo',
 					targets: 1
 				}, {
-					data: 'categoria.titulo',
-					responsivePriority: 2,
+					data: 'descricao',
 					targets: 2
 				}, {
-					data: 'descricao',
-					responsivePriority: 3,
+					data: 'categoria.titulo',
 					targets: 3
-				}, {
-					data: 'loja.nomeFantasia',
-					responsivePriority: 4,
-					targets: 4
-				},
-
+				}
 			];
 
 			return objeto;
@@ -80,14 +71,14 @@
 
 			BootstrapDialog.show({
 				type	: BootstrapDialog.TYPE_DANGER,
-				title	: 'Deseja remover esta Checklist?',
-				message	: 'Checklist da categoria: ' + objeto.categoria.titulo + ' e descrição : ' + objeto.descricao,
+				title	: 'Deseja remover esta Setor?',
+				message	: 'Setor de id: ' + objeto.id + ' e titulo : ' + objeto.titulo + '.',
 				size	: BootstrapDialog.SIZE_LARGE,
 				buttons	: [ {
 						label	: '<u>S</u>im',
 						hotkey	: 'S'.charCodeAt(0),
 						action	: function(dialog){
-							servicoCheckList.remover(objeto.id).done(window.sucessoPadrao).fail(window.erro);
+							servicoSetor.remover(objeto.id).done(window.sucessoPadrao).fail(window.erro);
 							_this.atualizar();
 							$('.depende_selecao').each(function(){
 								$(this).prop('disabled', true);
@@ -113,12 +104,6 @@
 
 
 		}; // remover
-
-		_this.visualizar = function visualizar(){
-			var objeto = _tabela.row($(this).parent(' td').parent('tr')).data();
-			router.navigate('/categoria/visualizar/' +  objeto.id + '/');
-
-		};
 
 		_this.selecionar = function selecionar() {
 			var objeto = _tabela.row('.selected').data();
@@ -146,24 +131,12 @@
 			_this.botaoEditar.on('click', _this.editar)
 			_this.botaoAtualizar.on('click',_this.atualizar);
 			_this.botaoRemover.on('click', _this.remover);
-			$('.ir_tarefas').on('click', function(){
-				event.preventDefault();
-				var objeto = _tabela.row('.selected').data();
-
-				if(objeto != undefined){
-					router.navigate('/checklist/' + objeto.id +'/tarefa' );
-				}
-				else{
-					router.navigate('/checklist/tarefa' );
-
-				}
-			});
 
 			_tabela.on('select',_this.selecionar);
 			_tabela.on('deselect', _this.deselect);		
 		};
-	} // ControladoraListagemChecklist
+	} // ControladoraListagemSetor
 
 	// Registrando
-	app.ControladoraListagemChecklist = ControladoraListagemChecklist;
+	app.ControladoraListagemSetor = ControladoraListagemSetor;
 })(window, app, jQuery, toastr, BootstrapDialog);

@@ -75,7 +75,8 @@
 				controladoraLogout.configurar();
 			});
 	
-			$(evento.target).find('.checklist_link').on('click', function(event){
+			$(evento.target).find('.setor_link').on('click', function(event){
+				console.log('entrei');
 				event.preventDefault();
 				router.navigate('/');
 			});
@@ -127,7 +128,7 @@
 	$(document).ready(function()
 	{
 		$('.toltip').tooltip(); 
-
+		
 		$.validator.addMethod("cRequired", $.validator.methods.required, "Campo obrigatório.");
 		$.validator.addClassRules("campo_obrigatorio", {cRequired: true});
 		
@@ -192,7 +193,7 @@
 				contexto.desabilitar(false);
 				contexto.find('form').find('.msg').empty();
 				contexto.find('form').find('.msg').append(data.mensagem);
-
+				contexto.find('form').find('.msg').parents('.row').removeClass('d-none');
 			}
 		};
 	});

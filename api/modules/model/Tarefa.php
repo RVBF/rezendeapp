@@ -11,18 +11,22 @@ class Tarefa {
 	private $id;
     private $titulo;
     private $descricao;
-    private $checklist;
+    private $dataLimite;
+    private $dataCadastro;
+    private $setor;
     private $questionador;
     private $encerrada;
 
     const TAM_TITULO_MIM = 2;
     const TAM_TITULO_MAX = 100;
 
-    function __construct($id = 0, $titulo = '', $descricao = '', $checklist = null, $questionador = null, $perguntas = [], $encerrada = false) {
+    function __construct($id = 0, $titulo = '', $descricao = '', $dataLimite = '', $dataCadastro = '', $setor = null, $questionador = null, $perguntas = [], $encerrada = false) {
 		$this->id = $id;
         $this->titulo = $titulo;
         $this->descricao = $descricao;
-        $this->checklist = $checklist;
+        $this->dataLimite = $dataLimite;
+        $this->dataCadastro = $dataCadastro;
+        $this->setor = $setor;
         $this->questionador = $questionador;
         $this->encerrada = $encerrada;
     }
@@ -51,12 +55,28 @@ class Tarefa {
         $this->descricao = $descricao;
     }
 
-    public function getChecklist(){
-        return $this->checklist; 
+    public function getDataLimite(){
+        return $this->dataLimite; 
+    }
+
+    public function setDataLimite($dataLimite){
+        $this->dataLimite = $dataLimite;
+    }
+
+    public function getDataCadastro(){
+        return $this->dataCadastro; 
     }
  
-    public function setChecklist($checklist){
-        $this->checklist = $checklist;
+    public function setDataCadastro($dataCadastro){
+        $this->dataCadastro = $dataCadastro;
+    }
+
+    public function getSetor(){
+        return $this->setor; 
+    }
+ 
+    public function setSetor($setor){
+        $this->setor = $setor;
     }
 
     public function getQuestionador(){

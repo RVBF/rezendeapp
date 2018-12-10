@@ -26,16 +26,11 @@
 			opcoes.submitHandler = function submitHandler(form) {
 				_this.formulario.desabilitar(true);
 
-				var erro = function erro(jqXHR, textStatus, errorThrown) {
-					var mensagem = jqXHR.responseText;
-					_this.formulario.find('#msg').empty().append('<div class="error" >' + mensagem + '</div>');
-				};
-				
 				var obj = _this.conteudo();
 				var jqXHR = _this.alterar ? servicoCategoria.atualizar(obj) : servicoCategoria.adicionar(obj);
 				
-				jqXHR.done(window.sucessoParaFormulario).fail(window.erro).always(function(){
-						_this.formulario.desabilitar(false);
+				jqXHR.done(window.sucessoParaFormulario).always(function(){
+					_this.formulario.desabilitar(false);
 				});
 
 				if(_this.alterar){
@@ -95,7 +90,7 @@
 			var contexto = _this.formulario.parents('#painel_formulario');
 			contexto.addClass('desabilitado');
 			_this.formulario.find('.msg').empty();
-
+			_this.formulario.find('.msg').parents('.row').addClass('d-none');
 			contexto.addClass('d-none');
 			contexto.desabilitar(true);
 

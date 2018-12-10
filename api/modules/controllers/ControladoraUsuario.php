@@ -64,7 +64,7 @@ class ControladoraUsuario {
 			$hash = HashSenha::instance();
 
 			$usuario = new Usuario( 0, \ParamUtil::value($this->params, 'nome'), \ParamUtil::value($this->params, 'login'), $hash->gerarHashDeSenhaComSaltEmMD5(\ParamUtil::value($this->params, 'senha')));
-			$resposta = ['checklist'=> RTTI::getAttributes($this->colecaoUsuario->adicionar($usuario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Usuário cadastrado com sucesso.']; 
+			$resposta = ['setor'=> RTTI::getAttributes($this->colecaoUsuario->adicionar($usuario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Usuário cadastrado com sucesso.']; 
 		}
 		catch (\Exception $e) {
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
@@ -89,7 +89,7 @@ class ControladoraUsuario {
 			$hash = HashSenha::instance();
 
 			$usuario = new Usuario( \ParamUtil::value($this->params, 'id'), \ParamUtil::value($this->params, 'nome'), \ParamUtil::value($this->params, 'login'), $hash->gerarHashDeSenhaComSaltEmMD5(\ParamUtil::value($this->params, 'senha')));
-			$resposta = ['checklist'=> RTTI::getAttributes($this->colecaoUsuario->atualizar($usuario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Usuário atualizado com sucesso.']; 
+			$resposta = ['setor'=> RTTI::getAttributes($this->colecaoUsuario->atualizar($usuario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Usuário atualizado com sucesso.']; 
 		}
 		catch (\Exception $e) {
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 

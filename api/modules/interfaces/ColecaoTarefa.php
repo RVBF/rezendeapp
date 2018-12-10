@@ -29,12 +29,12 @@ interface ColecaoTarefa {
 	 * Remove um objeto.
 	 *
 	 * @param int $id	Identificação do objeto a ser removido.
- 	 * @param int $id	Identificação da checklist a qual o objeto pertence.
+ 	 * @param int $id	Identificação da setor a qual o objeto pertence.
 	 * @throws	ColecaoException
 	 */
 	function remover($id);
 
-	function removerComChecklistId($id, $idChecklist);
+	function removerComSetorId($id, $idSetor);
 	/**
 	 * Obtém um objeto pelo seu id.
 	 *
@@ -52,7 +52,7 @@ interface ColecaoTarefa {
 	 * @return array	Array de objetos a serem retornados.
 	 * @throws	ColecaoException
 	 */
-	function todos($limite = 0, $pulo = 0, $idChecklist);
+	function todos($limite = 0, $pulo = 0, $idSetor);
 	
 	/**
 	 *  Retorna a contagem de elementos na coleção.

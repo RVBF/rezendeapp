@@ -1,5 +1,5 @@
 /**
- *  checklist.serv.js
+ *  setor.serv.js
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */
@@ -7,29 +7,28 @@
  {
 	'use strict';
 
-	function Checklist(id, descricao, dataLimite, categoria, loja) {
+	function Setor(id, titulo, descricao, categoria) {
 		this.id = id  || 0;
+		this.titulo = titulo  || '';
         this.descricao = descricao  || '';
-        this.dataLimite = dataLimite  || '';
-        this.categoria = categoria  || '';
+        this.categoria = categoria  || undefined;
         this.loja = loja  || '';
 	};
 
-	function ServicoChecklist() { // Model
+	function ServicoSetor() { // Model
 		var _this = this;
 		// Rota no servidor
         _this.rota = function rota() {
-			return app.api + '/checklist';
+			return app.api + '/setor';
 		};
 
 		// Cria um objeto de categoria
-		this.criar = function criar(id, descricao, dataLimite, categoria, loja) {
+		this.criar = function criar(id, titulo, descricao, categoria) {
  			return {
                 id : id  || 0,
+                titulo : titulo  || '',
                 descricao : descricao  || '',
-                dataLimite : dataLimite  || '',
-                categoria : categoria  || '',
-                loja : loja  || ''
+                categoria : categoria  || null
 			};
 		};
 
@@ -72,6 +71,6 @@
 	}; // ServicoCategoria
 
 	// Registrando
-	app.Checklist = Checklist;
-	app.ServicoChecklist = ServicoChecklist;
+	app.Setor = Setor;
+	app.ServicoSetor = ServicoSetor;
 })(app, $);

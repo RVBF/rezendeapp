@@ -24,89 +24,43 @@
   </head>
 
   <body>
-    <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 col-12">
-            <nav class="navbar navbar-expand-lg static-top header-top-area">
-                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2  tab-content custom-menu-content">                    
-                        <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 col-12 logo-area navbar-brand">
-                            <a  class="checklist_link"><img alt="logo rezende" src="assets/images/logoRezende.png"></a>
-                        </div>
-                    </div>
-            
-                    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10"> 
-                        <ul class="nav nav-tabs justify-content-first">
-                            <li class="nav-item">
-                                <a data-toggle="tab" href="#tarefa" aria-expanded="false" class="checklist_link nav-link active"><i class="rezende-icon fas fa-tasks"></i>CheckList</a>
-                            </li>
-                            <!-- <li class="nav-item">
-                                <a data-toggle="tab" href="#plano_acao" aria-expanded="false" class="nav-link" ><i class="rezende-icon fas fa-clipboard"></i>Plano de Ação</a>
-                            </li> -->
-                            <li class="nav-item">
-                                <a data-toggle="tab" href="#config" aria-expanded="false" class="nav-link"><i class="rezende-icon fas fa-cog"></i>Configuração</a>
-                            </li>
-                            <li class="nav-item">
-                                <a data-toggle="tab" href="#opc_user" aria-expanded="false" class="nav-link"><i class="rezende-icon fas fa-sign-out-alt"></i>Opções de usuário</a>
-                            </li>
-                        </ul>
-                    </div>
-            </nav>
+    <nav class="navbar navbar-expand-lg static-top header-top-area">
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2  tab-content custom-menu-content">                    
+            <div class="col-lg-1 col-md-1 col-sm-12 col-xs-12 col-12 logo-area navbar-brand">
+                <a  class="setor_link"><img alt="logo rezende" src="assets/images/logoRezende.png"></a>
+            </div>
         </div>
-
-        <div class="col-md-12 col-sm-12 col-xs-12 col-lg-12 col-12 mobile-menu-area mobile-menu">
-            <nav id="dropdown">
-                <ul class="mobile-menu-nav">
-                    <li>
-                        <a data-toggle="collapse" data-target="#checklist" class="checklist_link">CheckList</a>
     
-                        <ul class="collapse dropdown-header-top">
-                            <li>
-                                <a href="categoria.html" class="categoria_link">Categoria</a>
-                            </li>
-                        </ul>
-    
-                        <ul class="collapse dropdown-header-top">
-                            <li>
-                                <a href="loja.html" class="loja_link">Lojas</a>
-                            </li>
-                        </ul>
-
-                        <ul class="collapse dropdown-header-top">
-                            <li>
-                                <a href="tarefaListagemCompleta.html" class="tarefaListagemCompleta_link">Tarefa</a>
-                            </li>
-                        </ul>
-                    </li>
-    
-                    <li>
-                        <a data-toggle="collapse" data-target="#checklist" class="configuracoes_link">Configurações</a>
-    
-                        <ul class="collapse dropdown-header-top">
-                            <li>
-                                <a href="usuario.html" class="usuario_link">Usuário</a>
-                            </li>
-    
-                            <li>
-                                <a href="grupo_usuario.html" class="grupo_usuario_link">Grupo de  Usuário</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
+        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10"> 
+            <ul class="nav nav-tabs justify-content-first">
+                <li class="nav-item">
+                    <a data-toggle="tab" href="#tarefa" aria-expanded="false" class="setor_link nav-link active"><i class="rezende-icon fas fa-tasks"></i>CheckList</a>
+                </li>
+                <li class="nav-item">
+                    <a data-toggle="tab" href="#plano_acao" aria-expanded="false" class="nav-link" ><i class="rezende-icon fas fa-clipboard"></i>Plano de Ação</a>
+                </li>
+                <li class="nav-item">
+                    <a data-toggle="tab" href="#config" aria-expanded="false" class="nav-link"><i class="rezende-icon fas fa-cog"></i>Configuração</a>
+                </li>
+                <li class="nav-item">
+                    <a data-toggle="tab" href="#opc_user" aria-expanded="false" class="nav-link"><i class="rezende-icon fas fa-sign-out-alt"></i>Opções de usuário</a>
+                </li>
+            </ul>
         </div>
-    </div>
+    </nav>
 
-        <div class="row justify-content-first">
+    <div class="justify-content-first">
             <div class="tab-content custom-menu-content">
                 <div id="tarefa" class="tab-pane notika-tab-menu-bg animated flipInX show active">
                         <div class="col-lg-12 col-md-9 col-sm-12 col-xs-12">                    
                             <ul class="notika-main-menu-dropdown">
                                 <li><a href="categoria.html" class="categoria_link">Categoria</a></li>
                                 <li><a href="loja.html" class="loja_link">Loja</a></li>
-                                 <li><a href="tarefaListagemCompleta.html" class="tarefaListagemCompleta_link">Tarefa</a></li>
+                                    <li><a href="tarefaListagemCompleta.html" class="tarefaListagemCompleta_link">Tarefa</a></li>
                             </ul>
                     </div>
                 </div>
-
+    
                 <div id="config" class="tab-pane notika-tab-menu-bg animated flipInX">
                     <div class="col-lg-12 col-md-9 col-sm-12 col-xs-12">                    
                         <ul class="notika-main-menu-dropdown">
@@ -115,7 +69,7 @@
                         </ul>
                     </div>           
                 </div>
-
+    
                 <div id="opc_user" class="tab-pane notika-tab-menu-bg animated flipInX">
                     <div class="col-lg-12 col-md-9 col-sm-12 col-xs-12">                    
                         <ul class="notika-main-menu-dropdown">
@@ -124,52 +78,65 @@
                     </div>
                 </div>
             </div>
-        </div>
+    </div>
 
+    <div class="mobile-menu-area mobile-menu">
+        <nav id="dropdown">
+            <ul class="mobile-menu-nav">
+                <li>
+                    <a data-toggle="collapse" data-target="#setor" class="setor_link">CheckList</a>
 
-            <!-- <div id="config" class="tab-pane notika-tab-menu-bg animated flipInX">
-                <ul class="notika-main-menu-dropdown">
-                    <li><a href="usuario.html" class="usuario_link">Usuário</a></li>
-                    <li><a href="grupo_usuario.html" class="grupo_usuario_link">Grupo de Usuário</a></li>
-                </ul>
-            </div>
+                    <ul class="collapse dropdown-header-top">
+                        <li>
+                            <a href="categoria.html" class="categoria_link">Categoria</a>
+                        </li>
 
-            <div id="opc_user" class="tab-pane notika-tab-menu-bg animated flipInX">
-                <ul class="notika-main-menu-dropdown">
-                    <li><a href="login.html" class="efetuar_logout">Sair</a></li>
-                </ul>
-            </div>
-        </div> -->
-    <!-- </div> -->
-    <!-- <div class="row">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 main-menu-area">
-            <div class="row justify-content-center">
-                <ul class="nav nav-tabs rezende-menu-wrap menu-it-icon-pro">
-                    <li class="">
-                        <a data-toggle="tab" href="#tarefa" aria-expanded="false" class="checklist_link"><i class="rezende-icon fas fa-tasks"></i>CheckList</a>
-                    </li>
-                    
-                    <li class="">
-                            <a data-toggle="tab" href="#plano_acao" aria-expanded="false"><i class="rezende-icon fas fa-clipboard"></i>Plano de Ação</a>
-                    </li>
-                    
-                    <li class="">
-                        <a data-toggle="tab" href="#config" aria-expanded="false"><i class="rezende-icon fas fa-cog"></i>Configuração</a>
-                    </li>
+                        <li>
+                            <a href="loja.html" class="loja_link">Lojas</a>
+                        </li>
+
+                        <li>
+                            <a href="tarefaListagemCompleta.html" class="tarefaListagemCompleta_link">Tarefa</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a data-toggle="collapse" data-target="#setor" class="configuracoes_link">Configurações</a>
+
+                    <ul class="collapse dropdown-header-top">
+                        <li>
+                            <a href="usuario.html" class="usuario_link">Usuário</a>
+                        </li>
+
+                        <li>
+                            <a href="grupo_usuario.html" class="grupo_usuario_link">Grupo de  Usuário</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a data-toggle="collapse" data-target="#setor" class="configuracoes_link">Opções de usuário</a>
+
+                    <ul class="collapse dropdown-header-top">
+                        <li>
+                            <a href="login.html" class="efetuar_logout">Sair</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
     
-                    <li class="">
-                        <a data-toggle="tab" href="#opc_user" aria-expanded="false"><i class="rezende-icon fas fa-sign-out-alt"></i>Opções de usuário</a>
-                    </li>
-                </ul>
+    <div class="main-panel">
+        <div class="main-content">
+            <div class="content-wrapper">
+                <div id="app">
+                </div>
             </div>
-
-         
-        </div>
-    </div> -->
-    <div class="row">
-        <div id="app" class="col-md-12 col-sm-12 col-xs-12 col-lg-12 col-12">
-        </div>
+        </div> 
     </div>          
+                
 
     <noscript>
       <p>Por favor habilite o JavaScript!</p>

@@ -57,8 +57,11 @@
 					event.preventDefault();
 					var objeto = _tabela.row($(this).parents('tr')).data();
 
-
 					$('#anexos').modal();
+
+					// $('#anexos').find('#drop-zone').empty().append('<div class="row"><div class="col-md-4 anexo"><div class="element"><i class="fas fa-file-audio"></i></div></div>');
+
+					$('#anexos').find('#drop-zone').empty().append('<div class="row"><div class="col-md-4" ><img src="' + objeto.anexos[0].arquivoBase64 + '" alt="..." class="img-thumbnail"></div>');
 				});
 			};
 

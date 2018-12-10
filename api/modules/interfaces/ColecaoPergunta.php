@@ -37,7 +37,7 @@ interface ColecaoPergunta {
 	 * Remove um objeto.
 	 *
 	 * @param int $id	Identificação do objeto a ser removido.
- 	 * @param int $id	Identificação da checklist a qual o objeto pertence.
+ 	 * @param int $id	Identificação da setor a qual o objeto pertence.
 	 * @throws	ColecaoException
 	 */
     function remover($id, $idTarefa);

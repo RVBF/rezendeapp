@@ -40,7 +40,7 @@ class Dice {
 	private function makeContainer() {
 		DI::config(DI::let('ColecaoUsuario')->create('ColecaoUsuarioEmBDR'));
 		DI::config(DI::let('ColecaoCategoria')->create('ColecaoCategoriaEmBDR'));
-		DI::config(DI::let('ColecaoChecklist')->create('ColecaoChecklistEmBDR'));
+		DI::config(DI::let('ColecaoSetor')->create('ColecaoSetorEmBDR'));
 		DI::config(DI::let('ColecaoLoja')->create('ColecaoLojaEmBDR'));
 		DI::config(DI::let('ColecaoTarefa')->create('ColecaoTarefaEmBDR'));
 		DI::config(DI::let('ColecaoPergunta')->create('ColecaoPerguntaEmBDR'));
