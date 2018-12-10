@@ -248,15 +248,10 @@ class ServicoLogin {
 	*  Valida o formato do e-mail do usuário, lançando uma exceção caso haja algo inválido.
 	*  @throws ColecaoException
 	*/
-	private function validarFormatoDeEmail($email)
-	{
-		$conta = "^[a-zA-Z0-9\._-]+@";
-		$domino = "[a-zA-Z0-9\._-]+.";
-		$extensao = "([a-zA-Z]{2,4})$";
+	private function validarFormatoDeEmail($email) {
+		$pattern = '/^[^!@#$%¨&*()0-9][a-zA-Z0-9_.]+([.][a-zA-Z0-9_]+)*[@][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,4}$/';
 
-		$pattern = $conta.$domino.$extensao;
-
-		if(ereg($pattern, $email))
+		if(preg_match($pattern, $email))
 		{
 			return true;	
 		}
@@ -270,11 +265,11 @@ class ServicoLogin {
 	*  Valida formato do login do usuário, lançando uma exceção caso haja algo inválido.
 	*  @throws ColecaoException
 	*/
-	private function validarFormatoLogin($email)
+	private function validarFormatoLogin($login)
 	{
-		$formato = "[a-zA-Z0-9\. _-]+.";
+		$formato = '/[a-zA-Z0-9\. _-]+./';
 
-		if (ereg($formato, $email))
+		if (preg_match($formato, $login))
 		{
 			return true;	
 		}

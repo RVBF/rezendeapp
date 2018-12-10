@@ -141,7 +141,7 @@
 				event.preventDefault();
 				var objeto = _tabela.row('.selected').data();
 
-				router.navigate('/checklist/' + objeto.id +'/tarefa' );
+				router.navigate('/setor/' + objeto.id +'/tarefa' );
 			});
 
 			_tabela.on('select',_this.selecionar);

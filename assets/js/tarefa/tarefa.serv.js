@@ -7,36 +7,38 @@
  {
 	'use strict';
 
-	function Tarefa(id, titulo, descricao, checklist) {
+	function Tarefa(id, titulo, descricao, dataLimite, setor) {
 		this.id = id  || 0;
 		this.titulo = titulo  || '';
 		this.descricao = descricao  || '';
-		this.checklist = checklist  || 0;
+		this.dataLimite = dataLimite || '';
+		this.setor = setor  || 0;
 	};
 
 	function ServicoTarefa() { // Model
 		var _this = this;
 		// Rota no servidor
         _this.rota = function rota(idCheklist) {
-			return app.api + '/checklist/' + idCheklist  + '/tarefa';
+			return app.api + '/setor/' + idCheklist  + '/tarefa';
 		};
 
 		// Cria um objeto de Tarefa
-		this.criar = function criar(id, titulo, descricao, checklist) {
+		this.criar = function criar(id, titulo, descricao, dataLimite, setor) {
 		 
 			return {
 				id : id  || 0,
 				titulo : titulo  || '',
 				descricao : descricao || '',
-				checklist : checklist || ''
+				dataLimite : dataLimite || '',
+				setor : setor || ''
 
 			};
 		};
 
-		_this.adicionarComChecklistId = function adicionarComChecklistId(obj, idChecklist) {
+		_this.adicionarComSetorId = function adicionarComSetorId(obj, idSetor) {
 			return $.ajax({
 				type: "POST",
-				url: _this.rota(idChecklist),
+				url: _this.rota(idSetor),
 				data: obj
 			});
 		};
@@ -49,17 +51,17 @@
 			});
 		};
 
-		_this.todos = function todos(idChecklist) {
+		_this.todos = function todos(idSetor) {
 			return $.ajax({
 				type : "GET",
-				url: _this.rota(idChecklist)
+				url: _this.rota(idSetor)
 			});
 		};
 
-		_this.atualizarComChecklistId = function atualizarComChecklistId(obj, idChecklist) {
+		_this.atualizarComSetorId = function atualizarComSetorId(obj, idSetor) {
 			return $.ajax({
 				type: "PUT",
-				url: _this.rota(idChecklist),
+				url: _this.rota(idSetor),
 				data: obj
 			});
 		};
@@ -80,10 +82,10 @@
 			});
 		};
 
-		_this.comId = function comId(id, idChecklist) {
+		_this.comId = function comId(id, idSetor) {
 			return $.ajax({
 				type: "GET",
-				url: _this.rota(idChecklist) + '/' + id
+				url: _this.rota(idSetor) + '/' + id
 			});
 		};
 	}; // ServicoTarefa

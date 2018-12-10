@@ -16,7 +16,7 @@ class ControladoraTarefa {
 
 	private $params;
 	private $colecaoTarefa;
-	private $colecaoChecklist;
+	private $colecaoSetor;
 	private $servicoLogin;
 	private $colecaoUsuario;
 	
@@ -24,11 +24,11 @@ class ControladoraTarefa {
 		$this->params = $params;
 		$this->servicoLogin = new ServicoLogin($sessao);
 		$this->colecaoTarefa = Dice::instance()->create('ColecaoTarefa');
-		$this->colecaoChecklist = Dice::instance()->create('ColecaoChecklist');
+		$this->colecaoSetor = Dice::instance()->create('ColecaoSetor');
 		$this->colecaoUsuario = Dice::instance()->create('ColecaoUsuario');
 	}
 
-	function todos($idChecklist = 0) {
+	function todos($idSetor = 0) {
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
@@ -38,7 +38,7 @@ class ControladoraTarefa {
 			$contagem = 0;
 			$objetos = [];
 			$erro = null;
-			$objetos = $this->colecaoTarefa->todos($dtr->start, $dtr->length, $idChecklist);
+			$objetos = $this->colecaoTarefa->todos($dtr->start, $dtr->length, $idSetor);
 
 			$contagem = $this->colecaoTarefa->contagem();
 		}
@@ -57,14 +57,14 @@ class ControladoraTarefa {
 		return $conteudo;
 	}
 	
-	function adicionar($checklistId = 0) {
+	function adicionar($setorId = 0) {
 		try {
 
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
 
-			$inexistentes = \ArrayUtil::nonExistingKeys(['titulo', 	'descricao', 'checklist'], $this->params);
+			$inexistentes = \ArrayUtil::nonExistingKeys(['titulo', 	'descricao', 'setor'], $this->params);
 
 			if(count($inexistentes) > 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
@@ -72,20 +72,23 @@ class ControladoraTarefa {
 				throw new Exception($msg);
 			}
 	
-			$checklist = $this->colecaoChecklist->comId(($checklistId> 0) ? $checklistId : \ParamUtil::value($this->params, 'checklist'));
+			$setor = $this->colecaoSetor->comId(($setorId> 0) ? $setorId : \ParamUtil::value($this->params, 'setor'));
 
-			if(!isset($checklist) and !($checklist instanceof Checklist)){
-				throw new Exception("Checklist não encontrada na base de dados.");
+			if(!isset($setor) and !($setor instanceof Setor)){
+				throw new Exception("Setor não encontrada na base de dados.");
 			}
-	
+
 			$tarefa = new Tarefa(
 				0,
 				\ParamUtil::value($this->params, 'titulo'),
 				\ParamUtil::value($this->params, 'descricao'),
-				$checklist,
+				\ParamUtil::value($this->params, 'dataLimite'),
+				'',
+				$setor,
 				$this->colecaoUsuario->comId($this->servicoLogin->getIdUsuario())
+
 			);
-			
+	
 			$resposta = [];
 
 			$tarefa = $this->colecaoTarefa->adicionar($tarefa);
@@ -98,7 +101,7 @@ class ControladoraTarefa {
 		return $resposta;
 	}
 
-	function atualizar($checklistId = 0) {
+	function atualizar($setorId = 0) {
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
@@ -112,17 +115,19 @@ class ControladoraTarefa {
 				throw new Exception($msg);
 			}
 	
-			$checklist = $this->colecaoChecklist->comId(($checklistId> 0) ? $checklistId : \ParamUtil::value($this->params, 'descricao'));
+			$setor = $this->colecaoSetor->comId(($setorId> 0) ? setorId : \ParamUtil::value($this->params, 'descricao'));
 	
-			if(!isset($checklist) and !($checklist instanceof Checklist)){
-				throw new Exception("Checklist não encontrada na base de dados.");
+			if(!isset($setor) and !(setor instanceof Setor)){
+				throw new Exception("Setor não encontrada na base de dados.");
 			}
 	
 			$tarefa = new Tarefa(
 				\ParamUtil::value($this->params, 'id'),
 				\ParamUtil::value($this->params, 'titulo'),
 				\ParamUtil::value($this->params, 'descricao'),
-				$checklist
+				\ParamUtil::value($this->params, 'dataLimite'),
+				'',
+				$setor
 			);
 	
 			$resposta = [];
@@ -137,7 +142,7 @@ class ControladoraTarefa {
 		return $resposta;
 	}
 
-	function remover($id, $idChecklist = 0) {
+	function remover($id, $idSetor = 0) {
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
@@ -145,7 +150,7 @@ class ControladoraTarefa {
 			
 			$resposta = [];
 
-			$status = ($idChecklist > 0) ? $this->colecaoTarefa->removerComChecklistId($id, $idChecklist) :  $this->colecaoTarefa->remover($id);
+			$status = ($idSetor > 0) ? $this->colecaoTarefa->removerComSetorId($id, $idSetor) :  $this->colecaoTarefa->remover($id);
 			
 			$resposta = ['status' => true, 'mensagem'=> 'Categoria removida com sucesso.']; 
 		}

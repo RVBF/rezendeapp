@@ -19,8 +19,8 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 	
 				$id = Db::table(self::TABELA)->insertGetId([ 'titulo' => $obj->getTitulo(),
 						'descricao' => $obj->getDescricao(),
-						'encerrada' => $obj->getEncerrada(),
-						'checklist_id' => $obj->getChecklist()->getId(),
+						'data_limite' => $obj->getDataLimite(),
+						'setor_id' => $obj->getSetor()->getId(),
 						'questionador_id' =>$obj->getQuestionador()->getId()
 					]
 				);
@@ -38,11 +38,11 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 		}
 	}
 
-	function removerComChecklistId($id, $idChecklist) {
+	function removerComSetorId($id, $idSetor) {
 		if($this->validarRemocaoTarefa($id)){
 			try {	
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-				$removido = DB::table(self::TABELA)->where('id', $id)->where('checklist_id', $idChecklist)->delete();
+				$removido = DB::table(self::TABELA)->where('id', $id)->where('setor_id', $idSetor)->delete();
 				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 				return $removido;
 			}
@@ -78,7 +78,7 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 				$filds = [ 'titulo' => $obj->getTitulo(),
 					'descricao' => $obj->getDescricao(),
 					'encerrada' => $obj->getEncerrada(),
-					'checklist_id' => $obj->getChecklist()->getId()
+					'setor_id' => $obj->getSetor()->getId()
 				];
 				
 				Db::table(self::TABELA)->where('id', $obj->getId())->update($filds);
@@ -106,10 +106,9 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 		}
 	}
 
-	function todos($limite = 0, $pulo = 0, $idChecklist) {
+	function todos($limite = 0, $pulo = 0, $idSetor) {
 		try {	
-
-			if($idChecklist > 0) $tarefas = Db::table(self::TABELA)->where('checklist_id', $idChecklist)->offset($limite)->limit($pulo)->get();
+			if($idSetor > 0) $tarefas = Db::table(self::TABELA)->where('setor_id', $idSetor)->offset($limite)->limit($pulo)->get();
 			else $tarefas = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
 			$tarefasObjects = [];
 			foreach ($tarefas as $tarefa) {
@@ -142,9 +141,9 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 	}
 
 	function construirObjeto(array $row) {
-		$checklist = ($row['checklist_id'] > 0) ? Dice::instance()->create('ColecaoChecklist')->comId($row['checklist_id']) : '';
+		$setor = ($row['setor_id'] > 0) ? Dice::instance()->create('ColecaoSetor')->comId($row['setor_id']) : '';
 		$questionador = ($row['questionador_id'] > 0) ? Dice::instance()->create('ColecaoUsuario')->comId($row['questionador_id']) : '';
-		$tarefa = new Tarefa($row['id'],$row['titulo'], $row['descricao'], $checklist, $questionador, [],($row['encerrada']) ? true : false);
+		$tarefa = new Tarefa($row['id'],$row['titulo'], $row['descricao'], $row['data_limite'], $row['data_cadastro'], $setor, $questionador, [],($row['encerrada']) ? true : false);
 
 		return $tarefa;
 	}	
@@ -163,7 +162,7 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 		if($quantidade == 0) throw new ColecaoException('O usuário questionador não foi encontrado na base de dados.');
 
 
-		$quantidade = DB::table(ColecaoChecklistEmBDR::TABELA)->where('id', $obj->getChecklist()->getId())->count();
+		$quantidade = DB::table(ColecaoSetorEmBDR::TABELA)->where('id', $obj->getSetor()->getId())->count();
 
 		if($quantidade == 0)throw new ColecaoException('Check questionador não foi encontrado na base de dados.');
 

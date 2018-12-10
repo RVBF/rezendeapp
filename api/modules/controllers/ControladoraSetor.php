@@ -7,15 +7,15 @@ use \phputil\RTTI;
 use Carbon\Carbon;
 
 /**
- * Controladora de Checklist
+ * Controladora de Setor
  *
  * @author	Rafael Vinicius Barros Ferreira
  * @version	0.1
  */
-class ControladoraChecklist {
+class ControladoraSetor {
 
 	private $params;
-	private $colecaoChecklist;
+	private $colecaoSetor;
 	private $colecaoCategoria;
 	private $colecaoLoja;
 	private $servicoLogin;
@@ -23,7 +23,7 @@ class ControladoraChecklist {
 	function __construct($params,  Sessao $sessao) {
 		$this->servicoLogin = new ServicoLogin($sessao);
 		$this->params = $params;
-		$this->colecaoChecklist = Dice::instance()->create('ColecaoChecklist');
+		$this->colecaoSetor = Dice::instance()->create('ColecaoSetor');
 		$this->colecaoCategoria = Dice::instance()->create('ColecaoCategoria');
 		$this->colecaoLoja = Dice::instance()->create('ColecaoLoja');
 
@@ -35,19 +35,18 @@ class ControladoraChecklist {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
-
 			$dtr = new DataTablesRequest($this->params);
 			$contagem = 0;
 			$objetos = [];
 			$erro = null;
 
-			$objetos = $this->colecaoChecklist->todos($dtr->start, $dtr->length);
+			$objetos = $this->colecaoSetor->todos($dtr->start, $dtr->length);
 
-			$contagem = $this->colecaoChecklist->contagem();
+			$contagem = $this->colecaoSetor->contagem();
 		}
 		catch (\Exception $e )
 		{
-			throw new Exception("Erro ao listar checklist.");
+			throw new Exception("Erro ao listar setor.");
 		}
 
 		$conteudo = new DataTablesResponse($contagem,$contagem, $objetos, $dtr->draw, $erro);
@@ -61,7 +60,8 @@ class ControladoraChecklist {
 				throw new Exception("Erro ao acessar página.");				
 			}
 
-			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'descricao','dataLimite','categoria', 'loja'], $this->params);
+
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo','descricao','categoria'], $this->params);
 			$resposta = [];
 
 			if(count($inexistentes) > 0) {
@@ -74,19 +74,13 @@ class ControladoraChecklist {
 				throw new Exception("Categoria não encontrada na base de dados.");
 			}
 
-			$loja = $this->colecaoLoja->comId($this->params['loja']);
-
-			if(!count($loja)) throw new Exception("As loja selecionadas não se econtra no banco de dados");
-		
-			$checklist = new Checklist(
+			$setor = new Setor(
 				0,
+				\ParamUtil::value($this->params, 'titulo'),
 				\ParamUtil::value($this->params, 'descricao'),
-				\ParamUtil::value($this->params, 'dataLimite'),
-				'',
-				$categoria,
-				$loja
+				$categoria
 			);
-			$resposta = ['checklist'=> RTTI::getAttributes($this->colecaoChecklist->adicionar($checklist), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Checklist cadastrada com sucesso.']; 
+			$resposta = ['setor'=> RTTI::getAttributes($this->colecaoSetor->adicionar($setor), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Setor cadastrado com sucesso.']; 
 		}
 		catch (\Exception $e) {
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
@@ -101,7 +95,7 @@ class ControladoraChecklist {
 				throw new Exception("Erro ao acessar página.");				
 			}		
 			
-			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'descricao','dataLimite','categoria', 'loja'], $this->params);
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo','descricao'], $this->params);
 			$resposta = [];
 
 			if(count($inexistentes) > 0) {
@@ -113,20 +107,14 @@ class ControladoraChecklist {
 			if(!isset($categoria) and !($categoria instanceof Categoria)){
 				throw new Exception("Categoria não encontrada na base de dados.");
 			}
-
-			$loja = $this->colecaoLoja->comId($this->params['loja']);
-
-			if(!count($loja)) throw new Exception("As loja selecionadas não se econtra no banco de dados");
 			
-			$checklist = new Checklist(
+			$setor = new Setor(
 				\ParamUtil::value($this->params, 'id'),
+				\ParamUtil::value($this->params, 'titulo'),
 				\ParamUtil::value($this->params, 'descricao'),
-				\ParamUtil::value($this->params, 'dataLimite'),
-				'',
-				$categoria,
-				$loja
+				$categoria
 			);
-			$resposta = ['checklist'=> RTTI::getAttributes($this->colecaoChecklist->atualizar($checklist), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Checklist atualizada com sucesso.']; 
+			$resposta = ['setor'=> RTTI::getAttributes($this->colecaoSetor->atualizar($setor), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Setor atualizado com sucesso.']; 
 		}
 		catch (\Exception $e) {
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
@@ -143,9 +131,9 @@ class ControladoraChecklist {
 			
 			$resposta = [];
 
-			$status = $this->colecaoChecklist->remover($id);
+			$status = $this->colecaoSetor->remover($id);
 			
-			$resposta = ['status' => true, 'mensagem'=> 'Checklist removida com sucesso.']; 
+			$resposta = ['status' => true, 'mensagem'=> 'Setor removido com sucesso.']; 
 		}
 		catch (\Exception $e) {
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 

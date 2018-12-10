@@ -1,0 +1,106 @@
+<div class="card">
+    <div class="card-header  bg-dark text-white">
+        <div class="row">
+            <div class="col-md-4 col-sm-4 col-xs-4 col-4">
+                <h6 class="card-title">Setor</h6>
+            </div>
+
+
+            <div class="col-md-8 col-sm-8 col-xs-8 col-8">
+                <div class="justify-content-end row opcoes_modulos">
+                    <button aria-hidden="true" role="presentation" type="button" aria-label="cadastrar" class="btn  btn-sm btn-light" id="atualizar"><i class="fas fa-sync-alt"></i></button>
+                    <button aria-hidden="true" role="presentation" type="button" aria-label="cadastrar" class="btn  btn-sm btn-primary" id="cadastrar"><i class="fas fa-plus"></i></button>
+                    <button disabled="disabled" aria-hidden="true" role="presentation" type="button" aria-label="editar" class="btn  btn-sm btn-warning depende_selecao" id="editar"><i class="far fa-edit"></i></button>
+                    <button disabled="disabled" aria-hidden="true" role="presentation" type="button" aria-label="remover" class="btn  btn-sm btn-danger depende_selecao" id="remover"><i class="far fa-trash-alt"></i></button>         
+                </div>
+            </div>
+        </div>                     
+    </div>
+    
+    <div class="card desabilitado d-none" id="painel_formulario">
+        <div class="card-body">
+            <div class="container-fuid">
+                <div class="col-xs-12  col-sm-12 col-md-12">
+                    <form class="form-horizontal " id="setor_form">
+                        <input type="hidden" id="id" name ="id" />
+
+                        <div class="row form-row">
+                            <div class="col-xs-6 col-md-6 col-sm-6 col-6">
+                                <label for="titulo">*Título</label>
+                                <input  type="text" id ="titulo"  name="titulo" class="form-control"></input>
+                            </div>
+
+                            <div class="col-xs-6 col-md-6 col-sm-6 col-6">
+                                <label for="categoria">*Categoria</label>
+                                <select id ="categoria"  name="categoria" class="form-control select2"></select>
+                            </div>
+                        </div>
+    
+                        <div class="row form-row">
+                            <div class="col-xs-12 col-md-12 col-sm-12 col-12">
+                                <label for="descricao">Descrição</label>
+                                <textarea class="form-control" rows="2" id="descricao"></textarea>
+                            </div>
+                        </div>
+
+                        <div  class="row form-row d-none">
+                            <div class="col-xs-12  col-sm-12 col-md-12">
+                                <br /><div id="msg" class="text-danger msg " ></div>
+                            </div
+                        ></div>
+
+                        <div class="row form-row">
+                            <div class="col-xs-12 col-md-12 col-sm-12 col-12">
+                                <button type="submit" class="btn btn-success" id="salvar"><i class="fas fa-check"></i></i></button>
+                                <button type="button" class="btn btn-default" id="cancelar_edicao"><i class="fas fa-sign-out-alt"></i></button>
+                            </div>
+                        </div>
+                    </form>           
+                </div>
+            </div>            
+        </div>
+    </div>
+    
+        <div class="card-body" id="painel_listagem">
+            <div class="container-fuid">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                        <table class="table" style="width:100%" id="setor" >
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Título</th>
+                                    <th>Descricão</th>
+                                    <th>Categoria</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Título</th>
+                                    <th>Descricão</th>
+                                    <th>Categoria</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                </div> 
+            </div>
+    
+        </div> 
+    </div>
+    <script>
+        $(document).ready(function() {
+            var servicoSetor = new app.ServicoSetor();
+            var crltSetor = new app.ControladoraListagemSetor(servicoSetor);
+    
+            crltSetor.configurar();
+        });
+    </script>
+        

@@ -111,7 +111,7 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 	
 	private function validarCategoria(&$obj) {
 		if(!is_string($obj->getTitulo())) {
-			throw new ColecaoException('Valor inválido para bairro.');
+			throw new ColecaoException('Valor inválido para título.');
 		}
 
 		$quantidade = DB::table(self::TABELA)->where('titulo', $obj->getTitulo())->where('id', '<>', $obj->getId())->count();
@@ -125,6 +125,15 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 		return true;
 	}
 
+	private function validarDeleteCategoria($id){
+		$qtdReacionamento = DB::table(ColecaoSetor::TABELA)->where('categoria_id', $id)->count();
+
+		if($quantidade > 0){
+			throw new ColecaoException('Essa categoria possue setores relacionados a ela! Exclua todos os setores cadastros e tente novamente.');
+		}
+
+		return true;
+	}
 }
 
 ?>

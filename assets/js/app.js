@@ -74,17 +74,20 @@ var app = {
 
 	// Opções padrão para o DataTables ----------------------------------------
 	app.dtOptions = {
-		"responsive": true,
 		"autoWidth": true,
 		"processing":true,
 		"serverSide":true,
 		"destroy": true,
 		"select": 'single',
+		"scrollX": true,
+		"scrollY": "200px",
+        "scrollCollapse": true,
+		"table-layout": "fixed",
 		"ajax" :{
 			 "type": "POST"
 		},
-		"pageLength": 10,
-		"lengthMenu":[[10, 25, 50, 100], [10, 25, 50,100] ],
+		"pageLength": 20,
+		"lengthMenu":[[20, 30, 50, 100], [20, 30, 50, 100] ],
 		"paging":true,
 		"searching":false,
 		"ordering":true,
