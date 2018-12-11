@@ -1,30 +1,16 @@
 <div class="card">
     <div class="card-header  bg-dark text-white">
-        <div class="row form-row">
-            <div class="col-md-4 col-sm-4 col-xs-4 col-4">
+        <div class="row">
+            <div class="col-md-4 col-sm-4 col-xs-4 col-4 align-self-center">
                 <h6 class="card-title">Tarefa</h6>
             </div>
 
-            <div class="col-md-6 col-sm-6 col-xs-6 col-6">
+            <div class="col-md-8 col-sm-8 col-xs-8 col-8">
                 <div class="justify-content-end row opcoes_modulos">
                     <button aria-hidden="true" role="presentation" type="button" aria-label="cadastrar" class="btn  btn-sm btn-light" id="atualizar"><i class="fas fa-sync-alt"></i></button>
                     <button aria-hidden="true" role="presentation" type="button" aria-label="cadastrar" class="btn  btn-sm btn-primary" id="cadastrar"><i class="fas fa-plus"></i></button>
                     <button disabled="disabled" aria-hidden="true" role="presentation" type="button" aria-label="editar" class="btn  btn-sm btn-warning depende_selecao" id="editar"><i class="far fa-edit"></i></button>
                     <button disabled="disabled" aria-hidden="true" role="presentation" type="button" aria-label="remover" class="btn  btn-sm btn-danger depende_selecao" id="remover"><i class="far fa-trash-alt"></i></button>         
-                </div>
-            </div>
-
-            <div class="col-md-2 com-sm-2 col-xs-2 col-2 justify-content-end">
-                <div class="btn-group dropleft opcoes">
-                    <button type="button" class="btn btn-success  btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Opções
-                    </button>
-
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item gerenciar_perguntas" href="#">Ver Perguntas</a>
-                        <a class="dropdown-item cadastrar_perguntas" href="#">Cadastrar Perguntas</a>
-                        <a class="dropdown-item responder_perguntas" href="#">Responder Perguntas</a>
-                    </div>
                 </div>
             </div>
         </div>                     
@@ -36,14 +22,19 @@
                 <div class="col-xs-12  col-sm-12 col-md-12">
                     <form class="form-horizontal " id="tarefa_form">
                         <input type="hidden" id="id" name ="id" />
-            
+
                         <div class="row form-row">
-                            <div class="col-xs-6 col-md-6 col-sm-6 col-6">
+                            <div class="col-xs-4 col-md-4 col-sm-4 col-4">
                                 <label for="titulo">*Título</label>
                                 <input type="text" class="form-control campo_obrigatorio" id="titulo" name="titulo">
                             </div>
+
+                            <div class="col-xs-4 col-md-4 col-sm-4 col-4">
+                                <label for="loja">*Loja</label>
+                                <select id="loja"  name="loja" class="form-control select2 campo_obrigatorio"></select>
+                            </div>
     
-                            <div class="col-xs-6 col-md-6 col-sm-6 col-6">
+                            <div class="col-xs-4 col-md-4 col-sm-4 col-4">
                                 <label for="setor">*Setor</label>
                                 <select id="setor"  name="setor" class="form-control select2 campo_obrigatorio"></select>
                             </div>
@@ -98,13 +89,16 @@
                             <th>Título</th>
                             <th>Descrição</th>
                             <th>Setor</th>
+                            <th>Loja</th>
                             <th>Prazo</th>
                             <th>Questionador</th>
                             <th>Respondida</th>
+                            <th>Opções</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -120,9 +114,11 @@
                             <th>Título</th>
                             <th>Descrição</th>
                             <th>Setor</th>
+                            <th>Loja</th>
                             <th>Prazo</th>
                             <th>Questionador</th>
                             <th>Respondida</th>
+                            <th>Opções</th>
                         </tr>
                     </tfoot>
                 </table>

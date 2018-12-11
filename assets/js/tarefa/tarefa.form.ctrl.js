@@ -59,7 +59,8 @@
 				$('#titulo').val(),
 				$('#descricao').val(),
 				$('#data_limite').pickadate('picker').get('select', 'yyyy-mm-dd') + ' ' + $('#hora_limite').pickatime('picker').get('select','HH:i'),
-				$('#setor option:selected').val()
+				$('#setor option:selected').val(),
+				$('#loja option:selected').val()
 			);
 		};
 
@@ -75,6 +76,7 @@
 			_this.configurarBotoes();
 
 			if(_this.idSetor == undefined) _this.popularSetors();
+			_this.popularLojas();
 		};
 
 		_this.popularSetors  =  function popularSetors(valor = 0)
@@ -104,6 +106,33 @@
 			jqXHR.done(sucesso).fail(erro);
 		};
 
+		_this.popularLojas  =  function popularLojas(valor = 0)
+		{
+			var sucesso = function (resposta) {
+				$("#loja").empty();
+
+				$.each(resposta.data, function(i ,item) {
+					$("#loja").append($('<option>', {
+						value: item.id,
+						text: item.razaoSocial  + '/' + item.nomeFantasia
+					}));
+				});
+
+				$('#loja').trigger('change');
+			};
+
+			var erro = function(resposta)
+			{
+				var mensagem = jqXHR.responseText || 'Erro ao popular select de farmácias.';
+				toastr.error(mensagem);
+				return false;
+			}
+
+			var servicoLoja = new app.ServicoLoja();
+			var  jqXHR = servicoLoja.todos();
+			jqXHR.done(sucesso).fail(erro);
+		};
+
 		_this.iniciarFormularioModoEdicao = function iniciarFormularioModoEdicao() {
 			_this.iniciarFormularioModoCadastro();
 		};
@@ -122,9 +151,21 @@
 
 		// Desenha o objeto no formulário
 		_this.desenhar = function desenhar(obj) {
+			var dataPicker = $('#data_limite').pickadate('picker');
+			var horaPicker = $('#hora_limite').pickatime('picker');
+
+			var data  = obj.dataLimite.split('/');
+			var hora = obj.dataLimite.split(' ')[1].split(':');
+
 			_this.formulario.find('#id').val(obj.id);
 			_this.formulario.find('#titulo').val(obj.titulo);
 			_this.formulario.find('#descricao').val(obj.descricao);
+			_this.formulario.find('#setor').val(obj.setor.id);
+			_this.formulario.find('#loja').val(obj.loja.id);
+
+
+			dataPicker.set('select', new Date(data[0], data[1], data[2]))
+			horaPicker.set('select', hora[0] + ':' + hora[1], { format: 'hh:i' })
 		};
 
 		_this.salvar = function salvar() {
@@ -135,7 +176,7 @@
 			var contexto = _this.formulario.parents('#painel_formulario');
 			contexto.addClass('desabilitado');
 			_this.formulario.find('.msg').empty();
-
+			_this.formulario.find('.msg').parents('.row').addClass('d-none');
 			contexto.addClass('d-none');
 			contexto.desabilitar(true);
 

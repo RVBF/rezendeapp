@@ -43,7 +43,7 @@
 					labelMonthPrev: 'Mês Anterior',
 					labelMonthSelect: 'Selecione o Mês',
 					labelYearSelect: 'Selecione o Ano',
-					min :  Date.now()
+					min :  moment()
 				});
 			});
 

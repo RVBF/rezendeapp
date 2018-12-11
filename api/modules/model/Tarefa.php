@@ -14,19 +14,21 @@ class Tarefa {
     private $dataLimite;
     private $dataCadastro;
     private $setor;
+    private $loja;
     private $questionador;
     private $encerrada;
 
     const TAM_TITULO_MIM = 2;
     const TAM_TITULO_MAX = 100;
 
-    function __construct($id = 0, $titulo = '', $descricao = '', $dataLimite = '', $dataCadastro = '', $setor = null, $questionador = null, $perguntas = [], $encerrada = false) {
+    function __construct($id = 0, $titulo = '', $descricao = '', $dataLimite = '', $dataCadastro = '', $setor = null, $loja = null, $questionador = null, $perguntas = [], $encerrada = false) {
 		$this->id = $id;
         $this->titulo = $titulo;
         $this->descricao = $descricao;
         $this->dataLimite = $dataLimite;
         $this->dataCadastro = $dataCadastro;
         $this->setor = $setor;
+        $this->loja = $loja;
         $this->questionador = $questionador;
         $this->encerrada = $encerrada;
     }
@@ -77,6 +79,14 @@ class Tarefa {
  
     public function setSetor($setor){
         $this->setor = $setor;
+    }
+
+    public function getLoja(){
+        return $this->loja; 
+    }
+ 
+    public function setLoja($loja){
+        $this->loja = $loja;
     }
 
     public function getQuestionador(){

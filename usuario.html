@@ -1,10 +1,9 @@
 <div class="card">
     <div class="card-header  bg-dark text-white">
         <div class="row">
-            <div class="col-md-4 col-sm-4 col-xs-4 col-4">
-                <h5 class="card-title">Usuário</h5>
+            <div class="col-md-4 col-sm-4 col-xs-4 col-4 align-self-center">
+                <h6 class="card-title">Usuário</h6>
             </div>
-
 
             <div class="col-md-8 col-sm-8 col-xs-8 col-8">
                 <div class="justify-content-end row opcoes_modulos">
@@ -16,57 +15,60 @@
             </div>
         </div>                     
     </div>
-
+        
     <div class="card desabilitado d-none" id="painel_formulario">
         <div class="card-body">
-            <div class="col-xs-12  col-sm-12 col-md-12">
-                <form class="form-horizontal " id="usuario_form">
-                    <input type="hidden" id="id" name ="id" />
-                    
-                    <div class="row form-row">
-                        <div class="col-md-12 col-xs-12 col-sm-12 col-12">
-                            <label for="nome">Nome:  </label>
-                            <input class="form-control campo_obrigatorio" id ="nome" name="nome"/>
-                        </div>
-                    </div>
+            <div class="container-fuid">
+                <div class="col-xs-12  col-sm-12 col-md-12">
+                    <form class="form-horizontal "  method="post" id="usuario_form">
+                        <input type="hidden" id="id" name ="id" />
 
-                    <div class="row form-row">
-                        <div class="col-xs-4 col-md-4 col-sm-4 col-4">
-                            <label for="login">Login</label>
-                            <input class="form-control campo_obrigatorio" id="login"></input>
+                        <div class="row form-row">
+                            <div class="col-md-12 col-xs-12 col-sm-12 col-12">
+                                <label for="nome">*Nome:  </label>
+                                <input class="form-control campo_obrigatorio" id ="nome" name="nome"/>
+                            </div>
                         </div>
-
-                        <div class="col-md-4 col-sm-4 col-xs-4">
-                            <label for="senha">*Senha:</label>
-                            <input type="password" id="senha" name="senha" class="form-control campo_obrigatorio" />
-                        </div>
-        
-                        <div class="col-md-4 col-sm-4 col-xs-4">
-                            <label for="confirmacao_senha">*Confirmacão de Senha:</label>
-                            <input type="password" id="confirmacao_senha" name="confirmacao_senha " class="form-control campo_obrigatorio" />
-                        </div>
-                    </div>
     
-                    <div  class="row form-row">
-                        <div class="col-xs-12  col-sm-12 col-md-12">
-                            <br /><div id="msg" class="text-danger msg" ></div>
+                        <div class="row form-row">
+                            <div class="col-xs-4 col-md-4 col-sm-4 col-4">
+                                <label for="login">*Login</label>
+                                <input class="form-control campo_obrigatorio" id="login"></input>
+                            </div>
+    
+                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                <label for="senha">*Senha:</label>
+                                <input type="password" id="senha" name="senha" class="form-control campo_obrigatorio" />
+                            </div>
+            
+                            <div class="col-md-4 col-sm-4 col-xs-4">
+                                <label for="confirmacao_senha">*Confirmacão de Senha:</label>
+                                <input type="password" id="confirmacao_senha" name="confirmacao_senha " class="form-control campo_obrigatorio" />
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="row form-row card-footer">
-                        <div class="col-xs-12 col-md-12 col-sm-12 col-12 button_add">
-                            <button type="submit" class="btn btn-success" id="salvar"><i class="fas fa-check"></i></i></button>
-                            <button type="button" class="btn btn-default" id="cancelar_edicao"><i class="fas fa-sign-out-alt"></i></button>
+    
+                        <div  class="row form-row d-none">
+                            <div class="col-xs-12  col-sm-12 col-md-12">
+                                <br /><div id="msg" class="text-danger msg" ></div>
+                            </div>
                         </div>
-                    </div>
-                </form>           
-            </div>
+    
+                        <div  class="row form-row">
+                            <div class="col-xs-12 col-md-12 col-sm-12 col-12">
+                                <button type="submit" class="btn btn-success" id="salvar"><i class="fas fa-check"></i></i></button>
+                                <button type="button" class="btn btn-default" id="cancelar_edicao"><i class="fas fa-sign-out-alt"></i></button>
+                            </div>
+                        </div>
+                    </form>           
+                </div>
+            </div>            
         </div>
     </div>
-
+    
     <div class="card-body" id="painel_listagem">
+        <div class="container-fuid">
             <div class="col-xs-12 col-sm-12 col-md-12">
-                <table class="table table-striped table-bordered dt-responsive nowrap" id="usuario" >
+                <table class="table" style="width:100%" id="usuario">
                     <thead>
                         <tr>
                             <th>Id</th>
@@ -90,6 +92,8 @@
                     </tfoot>
                 </table>
             </div> 
+        </div>
+
     </div> 
 </div>
 
@@ -101,5 +105,3 @@
         crltusuario.configurar();
     });
 </script>
-    
-        

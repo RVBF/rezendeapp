@@ -42,7 +42,15 @@
 			_this.botaoSubmissao.on('click', _this.salvar);
 			_this.cancelarModoEdicao.on('click', _this.cancelar);
 			$('body').find('.adicionar_pergunta').on('click', _this.adiconarPergunta);
+			$('body').find('#voltar').on('click', function (event) {
+				event.preventDefault();
+
+				router.navigate('/tarefa');
+			});
 			$('body').find('.remover_pergunta').on('click', _this.removerPergunta);
+			$('body').find('#atualizar').on('click', function(){
+				location.reload();
+			})
 		};
 
 		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro() {
@@ -93,7 +101,7 @@
 						if(_this.formulario.find('.pergunta').length > 0){
 							var objetos  = _this.conteudo();
 							jqXHR =  servicoPergunta.adicionarTodas(objetos, _this.idTarefa);
-							router.navigate('/tarefa/' + _this.idTarefa + '/pergunta')
+							router.navigate('/tarefa');
 						}
 						else{
 							jqXHR = servicoPergunta.adicionar(obj, _this.idTarefa);
@@ -116,22 +124,23 @@
 			var contexto = _this.formulario.parents('#painel_formulario');
 			contexto.addClass('desabilitado');
 			_this.formulario.find('.msg').empty();
-
+			_this.formulario.find('.msg').parents('.row').addClass('d-none');
 			contexto.addClass('d-none');
 			contexto.desabilitar(true);
+			router.navigate('/tarefa');
 		};
-
+		
 		_this.adiconarPergunta = function(){
 			var quantidade = $(this).parents('form').find('.perguntas').find('.pergunta').length + 1;
 			var html  = '<div class="pergunta">';
 			html += '<input type= "hidden" class="ids"  name="pergunta_' + quantidade + '" value ="'+ quantidade +'">';
 			html += '<div class="row form-row">';
-			html += '<div class="col-xs-11 col-md-11 col-sm-11 col-11">';
+			html += '<div class="col-xs-11 col-md-11 col-sm-11 col-10">';
 			html += '<label for="pergunta_' + quantidade + '">Pergunta :</label>';
 			html += '<input type="text" class="form-control campo_obrigatorio" id="pergunta_' + quantidade + '" name="pergunta_' + quantidade + '">';
 			html += '</div>';
 
-			html += '<div class="col-xs-1 col-md-1 col-sm-1 col-1">';
+			html += '<div class="col-xs-1 col-md-1 col-sm-1 col-2">';
 			html += '<div class="bnt_campoextra">';
 			html += '<div class="row">';
 

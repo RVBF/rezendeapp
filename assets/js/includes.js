@@ -146,6 +146,7 @@
 		loader.script('vendor/pickadate/lib/compressed/picker.time.js');
 		loader.script('vendor/select2/dist/js/select2.min.js');
 		loader.script('vendor/piexifjs/piexif.js');
+		loader.script('vendor/moment/min/moment.min.js');
 
         // Inicialização
         loader.script('assets/js/jquery.meanmenu.js');
