@@ -27,7 +27,8 @@
     "select2": "^4.0.5",
     "select2-bootstrap4-theme": "^2.0.0",
     "popper.js": "^1.14.5",
-    "piexifjs": "1.0.4"
+    "piexifjs": "1.0.4",
+    "moment": "^2.22.2"
   },
   "devDependencies": {}
 }

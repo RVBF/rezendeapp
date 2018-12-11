@@ -117,9 +117,10 @@
 			var contexto = _this.formulario.parents('#painel_formulario');
 			contexto.addClass('desabilitado');
 			_this.formulario.find('.msg').empty();
-
+			_this.formulario.find('.msg').parents('.row').addClass('d-none');
 			contexto.addClass('d-none');
 			contexto.desabilitar(true);
+
 		};
 
 		// Configura os eventos do formulário

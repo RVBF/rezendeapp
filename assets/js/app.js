@@ -3,7 +3,7 @@ var app = {
   api : '/api'
 };
 
-(function(app, document, $, toastr, BootstrapDialog, window) {
+(function(app, document, $, toastr, BootstrapDialog, window, moment) {
   'use strict';
 	// Opções para mensagens
 	toastr.options.closeButton = false;
@@ -133,5 +133,5 @@ var app = {
 			});
 		}
 	});
-})(app, document, jQuery, toastr, BootstrapDialog, window);
+})(app, document, jQuery, toastr, BootstrapDialog, window, moment);
   

@@ -71,10 +71,10 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 	}
 
 	function comId($id){
-		try {	
-			$categoria = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
+		try {
+			$setor = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
 
-			return $categoria;
+			return $setor;
 		}
 		catch (\Exception $e)
 		{
@@ -104,7 +104,6 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 	}
 
 	function construirObjeto(array $row) {
-
 		$categoria = ($row['categoria_id'] > 0) ? Dice::instance()->create('ColecaoCategoria')->comId($row['categoria_id']) : null;
 		$setor = new Setor($row['id'],$row['titulo'], $row['descricao'], $categoria);
 

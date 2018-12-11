@@ -4,6 +4,7 @@ use phputil\datatables\DataTablesResponse;
 use Symfony\Component\Validator\Validation as Validacao;
 use \phputil\JSON;
 use \phputil\RTTI;
+use Carbon\Carbon;
 
 
 /**
@@ -19,13 +20,15 @@ class ControladoraTarefa {
 	private $colecaoSetor;
 	private $servicoLogin;
 	private $colecaoUsuario;
-	
+	private $colecaoLoja;
+
 	function __construct($params,  Sessao $sessao) {
 		$this->params = $params;
 		$this->servicoLogin = new ServicoLogin($sessao);
 		$this->colecaoTarefa = Dice::instance()->create('ColecaoTarefa');
 		$this->colecaoSetor = Dice::instance()->create('ColecaoSetor');
 		$this->colecaoUsuario = Dice::instance()->create('ColecaoUsuario');
+		$this->colecaoLoja = Dice::instance()->create('ColecaoLoja');
 	}
 
 	function todos($idSetor = 0) {
@@ -64,7 +67,7 @@ class ControladoraTarefa {
 				throw new Exception("Erro ao acessar página.");				
 			}
 
-			$inexistentes = \ArrayUtil::nonExistingKeys(['titulo', 	'descricao', 'setor'], $this->params);
+			$inexistentes = \ArrayUtil::nonExistingKeys(['titulo', 'descricao', 'dataLimite', 'setor', 'loja'], $this->params);
 
 			if(count($inexistentes) > 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
@@ -78,13 +81,23 @@ class ControladoraTarefa {
 				throw new Exception("Setor não encontrada na base de dados.");
 			}
 
+				
+			$loja = $this->colecaoLoja->comId((\ParamUtil::value($this->params, 'loja')> 0) ? \ParamUtil::value($this->params, 'loja') : \ParamUtil::value($this->params, 'loja'));
+
+			if(!isset($loja) and !($loja instanceof Loja)){
+				throw new Exception("Loja não encontrada na base de dados.");
+			}
+			$dataLimite = new Carbon();                  // equivalent to Carbon::now()
+			$dataLimite = new Carbon(\ParamUtil::value($this->params, 'dataLimite'), 'America/Sao_Paulo');
+
 			$tarefa = new Tarefa(
 				0,
 				\ParamUtil::value($this->params, 'titulo'),
 				\ParamUtil::value($this->params, 'descricao'),
-				\ParamUtil::value($this->params, 'dataLimite'),
+				$dataLimite,
 				'',
 				$setor,
+				$loja,
 				$this->colecaoUsuario->comId($this->servicoLogin->getIdUsuario())
 
 			);
@@ -107,7 +120,7 @@ class ControladoraTarefa {
 				throw new Exception("Erro ao acessar página.");				
 			}
 
-			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo', 	'descricao'], $this->params);
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo', 'descricao', 'dataLimite', 'setor', 'loja'], $this->params);
 		
 			if(count($inexistentes) > 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
@@ -115,19 +128,30 @@ class ControladoraTarefa {
 				throw new Exception($msg);
 			}
 	
-			$setor = $this->colecaoSetor->comId(($setorId> 0) ? setorId : \ParamUtil::value($this->params, 'descricao'));
+			$setor = $this->colecaoSetor->comId((\ParamUtil::value($this->params, 'loja')> 0) ? \ParamUtil::value($this->params, 'loja') : \ParamUtil::value($this->params, 'descricao'));
 	
 			if(!isset($setor) and !(setor instanceof Setor)){
 				throw new Exception("Setor não encontrada na base de dados.");
 			}
-	
+
+				
+			$loja = $this->colecaoLoja->comId((\ParamUtil::value($this->params, 'loja')> 0) ? \ParamUtil::value($this->params, 'loja') : \ParamUtil::value($this->params, 'loja'));
+
+			if(!isset($loja) and !($loja instanceof Loja)){
+				throw new Exception("Loja não encontrada na base de dados.");
+			}
+
+			$dataLimite = new Carbon();                  // equivalent to Carbon::now()
+			$dataLimite = new Carbon(\ParamUtil::value($this->params, 'dataLimite'), 'America/Sao_Paulo');
+
 			$tarefa = new Tarefa(
 				\ParamUtil::value($this->params, 'id'),
 				\ParamUtil::value($this->params, 'titulo'),
 				\ParamUtil::value($this->params, 'descricao'),
-				\ParamUtil::value($this->params, 'dataLimite'),
+				$dataLimite,
 				'',
-				$setor
+				$setor,
+				$loja
 			);
 	
 			$resposta = [];

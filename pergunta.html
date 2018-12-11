@@ -1,92 +1,89 @@
 <div class="card">
-    <div class="card-header  bg-secondary text-white">Perguntas</div>
+    <div class="card-header  bg-dark text-white">
+        <div class="row">
+            <div class="col-md-4 col-sm-4 col-xs-4 col-4 align-self-center">
+                <h6 class="card-title">Perguntas</h6>
+            </div>
 
-    <div class="card bg-light text-dark">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6 col-sm-6 col-xs-6 col-6">
-                    <button aria-hidden="true" role="presentation" type="button" aria-label="cadastrar" class="btn  btn-sm btn-info" id="voltar"><i class="fas fa-long-arrow-alt-left"></i></button>
-                    <button aria-hidden="true" role="presentation" type="button" aria-label="cadastrar" class="btn  btn-sm btn-dark" id="atualizar"><i class="fas fa-sync-alt"></i></button>
+            <div class="col-md-8 col-sm-8 col-xs-8 col-8">
+                <div class="justify-content-end row opcoes_modulos">
+                    <button aria-hidden="true" role="presentation" type="button" aria-label="cadastrar" class="btn  btn-sm btn-light" id="atualizar"><i class="fas fa-sync-alt"></i></button>
                     <button aria-hidden="true" role="presentation" type="button" aria-label="cadastrar" class="btn  btn-sm btn-primary" id="cadastrar"><i class="fas fa-plus"></i></button>
                     <button disabled="disabled" aria-hidden="true" role="presentation" type="button" aria-label="editar" class="btn  btn-sm btn-warning depende_selecao" id="editar"><i class="far fa-edit"></i></button>
-                    <button disabled="disabled" aria-hidden="true" role="presentation" type="button" aria-label="remover" class="btn  btn-sm btn-danger depende_selecao" id="remover"><i class="far fa-trash-alt"></i></button> 
-                </div>
-
-                <div class= "col-md-6 col-sm-6 col-xs-6 col-6">
-                    <div class="btn-group row justify-content-end  mr-3 dropleft desabilitado d-none opcoes">
-                        <button type="button" class="btn btn-success  btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Opções
-                        </button>
-
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item responder_pergunta" href="#">Responder Pergunta</a>
-                        </div>
-                    </div>
+                    <button disabled="disabled" aria-hidden="true" role="presentation" type="button" aria-label="remover" class="btn  btn-sm btn-danger depende_selecao" id="remover"><i class="far fa-trash-alt"></i></button>         
                 </div>
             </div>
-                               
-        </div>
+        </div>                     
     </div>
-
+            
     <div class="card desabilitado d-none" id="painel_formulario">
         <div class="card-body">
-            <div class="col-xs-12  col-sm-12 col-md-12">
-                <form class="form-horizontal " id="pergunta_form">
-                    <input type="hidden" id="id" name ="id" />
-                    
-                    <div class="row form-row">
-                        <div class="col-xs-12 col-md-12 col-sm-12 col-12">
-                            <label for="pergunta">Pergunta :</label>
-                            <input type="text" class="form-control" id="pergunta" name="pergunta">
+            <div class="container-fuid">
+                <div class="col-xs-12  col-sm-12 col-md-12">
+                    <form class="form-horizontal " id="pergunta_form">
+                        <input type="hidden" id="id" name ="id" />
+                
+                        <div class="row form-row">
+                            <div class="col-xs-12 col-md-12 col-sm-12 col-12">
+                                <label for="pergunta">Pergunta :</label>
+                                <input type="text" class="form-control" id="pergunta" name="pergunta">
+                            </div>
+                        </div> 
+                        
+                        <div  class="row form-row d-none">
+                            <div class="col-xs-12  col-sm-12 col-md-12">
+                                <br /><div id="msg" class="text-danger msg" ></div>
+                            </div>
                         </div>
-                    </div> 
-                    
-                    <div  class="row">
-                        <div class="col-xs-12  col-sm-12 col-md-12">
-                            <br /><div id="msg" class="text-danger msg" ></div>
+    
+                        <div  class="row form-row">
+                            <div class="col-xs-12 col-md-12 col-sm-12 col-12">
+                                <button type="submit" class="btn btn-success" id="salvar"><i class="fas fa-check"></i></i></button>
+                                <button type="button" class="btn btn-default" id="cancelar_edicao"><i class="fas fa-sign-out-alt"></i></button>
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="row form-row card-footer">
-                        <div class="col-xs-12 col-md-12 col-sm-12 col-12 button_add">
-                            <button type="submit" class="btn btn-success" id="salvar"><i class="fas fa-check"></i></i></button>
-                            <button type="button" class="btn btn-default" id="cancelar_edicao"><i class="fas fa-sign-out-alt"></i></button>
-                        </div>
-                    </div>
-                </form>           
-            </div>
+                    </form>           
+                </div>
+            </div>            
         </div>
     </div>
-
+        
     <div class="card-body" id="painel_listagem">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <table class="table table-striped table-bordered dt-responsive nowrap" id="pergunta_table">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Pergunta</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th>Id</th>
-                        <th>Pergunta</th>
-                    </tr>
-                </tfoot>
-            </table>
-        </div> 
+        <div class="container-fuid">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <table class="table" style="width:100%" id="pergunta">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Pergunta</th>
+                            <th>Tarefa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Id</th>
+                            <th>Pergunta</th>
+                            <th>Tarefa</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div> 
+        </div>
+
     </div> 
 </div>
+
 <script>
     $(document).ready(function() {
-		var servicoPergunta = new app.ServicoPergunta();
+        var servicoPergunta = new app.ServicoPergunta();
         var crltListagemPergunta = new app.ControladoraListagemPergunta(servicoPergunta);
         crltListagemPergunta.configurar();
-	});
+    });
 </script>

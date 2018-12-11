@@ -20,16 +20,18 @@
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
 			var opcoes = {
 				rules: {
-					"razao_social": {required : true},
-					"nome_fantasia" :{required : true}
+					"razao_social": {required : true, rangelength : [2, 100] },
+					"nome_fantasia" :{required : true, rangelength : [2, 100] }
 				},
 
 				messages: {
 					"razao_social": {
-						required    : "O campo categoria é obrigatório.",
+						required    : "O campo razão social é obrigatório.",
+						rangelength: "o campo razão social deve conter no mínimo {2} e  no máximo {100} caracteres."
 					},
 					"nome_fantasia": {
 						required    : "O campo lojas é obrigatório.",
+						rangelength: "o campo nome fantasia deve conter no mínimo {2} e  no máximo {100} caracteres."
                     }				
                 }
 			};
@@ -108,7 +110,7 @@
 			var contexto = _this.formulario.parents('#painel_formulario');
 			contexto.addClass('desabilitado');
 			_this.formulario.find('.msg').empty();
-
+			_this.formulario.find('.msg').parents('.row').addClass('d-none');
 			contexto.addClass('d-none');
 			contexto.desabilitar(true);
 

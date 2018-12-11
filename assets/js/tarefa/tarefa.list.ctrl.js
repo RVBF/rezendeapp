@@ -33,24 +33,31 @@
 
 			}, {
 				data: 'titulo',
-				responsivePriority: 1,
 				targets: 1
 			}, {
 				data: 'descricao',
-				responsivePriority: 1,
 				targets: 2
 			}, {
 				data : 'setor.titulo',
-				responsivePriority: 2,
 				targets : 3
 			}, {
-				data : 'dataLimite',
-				responsivePriority: 2,
+				data : function (data) {
+					return data.loja.razaoSocial + '/' + data.loja.nomeFantasia
+				},
 				targets : 4
 			}, {
-				data : 'questionador.nome',
-				responsivePriority: 3,
+				data : function(data) {
+					var dataLimite = moment(data.dataLimite, "YYYY-MM-DD HH:mm:ss", 'pt-br');
+					var hoje = moment();
+
+					var eAntes = hoje.isBetween(hoje.toString(), dataLimite.toString());
+					
+					return (eAntes) ? '<p class="text-success">'+ dataLimite.format('DD/MM/YYYY HH:mm:ss').toString() + '</p>' : '<p class="text-danger">'+ dataLimite.format('DD/MM/YYYY HH:mm:ss').toString() + '</p>';
+				},
 				targets : 5
+			}, {
+				data : 'questionador.nome',
+				targets : 6
 			}, {
 				data :function(data){
 					var texto = (data.encerrada) ? "Sim" : "Não";
@@ -58,11 +65,62 @@
 
 					return  '<div class="p-1 mb-1 bg-' + classe + ' text-white">'+ texto + '</div>';
 				},
-				responsivePriority: 3,
-				targets : 6
-			}
-		];
+				targets : 7
+			}, {
+				data :function(data){
+					var html = '';
+					html += '<div class="dropdown">';
+					html += '<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+					html += 'Opções';
+					html += '</button>';
+					html += '<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">';
+					if(data.perguntas != undefined){
+						html += (data.perguntas.length > 0) ? '<a class="dropdown-item gerenciar_perguntas" href="#">Ver Perguntas</a>' : '';
+					}
 
+					html += '<a class="dropdown-item cadastrar_perguntas" href="#">Cadastrar Perguntas</a>';
+
+					html += (!data.encerrada && data.perguntas != undefined) ? '<a class="dropdown-item responder_perguntas" href="#">Responder Perguntas</a>' : '';
+
+					html += '</div>';
+					html += '</div>';
+
+					return  html;
+				},
+				targets : 8
+			}
+		];	
+
+			objeto.fnDrawCallback = function (settings) {
+				$('.gerenciar_perguntas').on('click', function (event) {
+					event.preventDefault();
+
+					var objeto = _tabela.row('.selected').data();
+
+					router.navigate('/tarefa/' + objeto.id + '/pergunta')
+					
+				});
+
+				$('.cadastrar_perguntas').on('click', function (event) {
+					event.preventDefault();
+
+					var objeto = _tabela.row('.selected').data();
+
+					router.navigate('/tarefa/' + objeto.id + '/pergunta/cadastrar-perguntas')
+					
+				});
+
+				$('.responder_perguntas').on('click', function (event) {
+					event.preventDefault();
+					var objeto = _tabela.row('.selected').data();
+					router.navigate('/tarefa/' + objeto.id + '/pergunta/responder-perguntas')
+				});
+
+				_tabela.on('select',_this.selecionar);
+				_tabela.on('deselect', _this.deselect);
+		
+			};
+			
 			return objeto;
 		};
 
@@ -82,6 +140,14 @@
 		_this.editar = function editar() {
 			var objeto = _tabela.row('.selected').data();
 			var modoEdicao = true;
+			var contexto = $('#painel_formulario');
+			contexto.addClass('desabilitado');
+
+			contexto.addClass('d-none');
+			contexto.desabilitar(true);
+			contexto.find('form')[0].reset();
+			contexto.find('form').find('.msg').empty();
+			
 			ctrlFormulario.configurar(modoEdicao);
 			ctrlFormulario.desenhar(objeto);
 		};

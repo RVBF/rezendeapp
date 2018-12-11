@@ -1,5 +1,7 @@
 <?php
 use Illuminate\Database\Capsule\Manager as Db;
+use Carbon\Carbon;
+
 /**
  *	Coleção de Tarefa em Banco de Dados Relacional.
  *
@@ -19,8 +21,9 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 	
 				$id = Db::table(self::TABELA)->insertGetId([ 'titulo' => $obj->getTitulo(),
 						'descricao' => $obj->getDescricao(),
-						'data_limite' => $obj->getDataLimite(),
+						'data_limite' => $obj->getDataLimite()->toDateTimeString(),
 						'setor_id' => $obj->getSetor()->getId(),
+						'loja_id' => $obj->getLoja()->getId(),
 						'questionador_id' =>$obj->getQuestionador()->getId()
 					]
 				);
@@ -77,8 +80,10 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 
 				$filds = [ 'titulo' => $obj->getTitulo(),
 					'descricao' => $obj->getDescricao(),
+					'data_limite' => $obj->getDataLimite()->toDateTimeString(),
 					'encerrada' => $obj->getEncerrada(),
-					'setor_id' => $obj->getSetor()->getId()
+					'setor_id' => $obj->getSetor()->getId(),
+					'loja_id' => $obj->getLoja()->getId()
 				];
 				
 				Db::table(self::TABELA)->where('id', $obj->getId())->update($filds);
@@ -142,8 +147,10 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 
 	function construirObjeto(array $row) {
 		$setor = ($row['setor_id'] > 0) ? Dice::instance()->create('ColecaoSetor')->comId($row['setor_id']) : '';
+		$loja = ($row['loja_id'] > 0) ? Dice::instance()->create('ColecaoLoja')->comId($row['loja_id']) : '';
 		$questionador = ($row['questionador_id'] > 0) ? Dice::instance()->create('ColecaoUsuario')->comId($row['questionador_id']) : '';
-		$tarefa = new Tarefa($row['id'],$row['titulo'], $row['descricao'], $row['data_limite'], $row['data_cadastro'], $setor, $questionador, [],($row['encerrada']) ? true : false);
+		
+		$tarefa = new Tarefa($row['id'],$row['titulo'], $row['descricao'], $row['data_limite'], $row['data_cadastro'], $setor, $loja, $questionador, [],($row['encerrada']) ? true : false);
 
 		return $tarefa;
 	}	
@@ -157,25 +164,36 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 		
 		if(!is_string($obj->getDescricao())) throw new ColecaoException('Valor inválido para a descrição.');
 
-		$quantidade = DB::table(ColecaoUsuarioEmBDR::TABELA)->where('id', $obj->getQuestionador()->getId())->count();
+		if($obj->getQuestionador() instanceof Usuario){
+			$quantidade = DB::table(ColecaoUsuarioEmBDR::TABELA)->where('id', $obj->getQuestionador()->getId())->count();
 
-		if($quantidade == 0) throw new ColecaoException('O usuário questionador não foi encontrado na base de dados.');
-
+			if($quantidade == 0) throw new ColecaoException('O usuário questionador não foi encontrado na base de dados.');
+		}
+		
 
 		$quantidade = DB::table(ColecaoSetorEmBDR::TABELA)->where('id', $obj->getSetor()->getId())->count();
 
-		if($quantidade == 0)throw new ColecaoException('Check questionador não foi encontrado na base de dados.');
+		if($quantidade == 0)throw new ColecaoException('Setor não foi encontrado na base de dados.');
 
 		if(strlen($obj->getTitulo()) <= Tarefa::TAM_TITULO_MIM && strlen($obj->getTitulo()) > Tarefa::TAM_TITULO_MAX) throw new ColecaoException('O título deve conter no mínimo '. Tarefa::TAM_TITULO_MIM . ' e no máximo '. Tarefa::TAM_TITULO_MAX . '.');
-		if(strlen($obj->getdescricao()) <= 255 and $obj->getdescricao() <> '') throw new ColecaoException('A Descrição  deve conter no máximo '. 255 . ' e no máximo '. 1 . '.');
+		if(strlen($obj->getdescricao()) <= 255 and $obj->getdescricao()) throw new ColecaoException('A Descrição  deve conter no máximo '. 255 . ' e no máximo '. 1 . '.');
 
+		$quantidade = DB::table(self::TABELA)->where('titulo', $obj->getTitulo())->where('setor_id', $obj->getSetor()->getId())->where('id', '<>', $obj->getId())->count();
+
+		if($quantidade > 0){
+			throw new ColecaoException('Já exite uma tarefa cadastrada com esse título.');
+		}
+
+		if($obj->getDataLimite() < Carbon::now()) throw new Exception("A data Limite deve ser maior que a atual.");
+		
 		return true;
 	}
 
 	private function validarRemocaoTarefa($id){
 		$quantidade = DB::table(ColecaoPerguntaEmBDR::TABELA)->where('tarefa_id', $id)->count();
-		if($quantidade == 0)throw new ColecaoException('Não foi possível excluir a tarefa por que ela possui perguntas relacionadas a ela. Exclua todas as perguntas relacionadas e tente novamente.');
-		
+
+		if($quantidade > 0)throw new ColecaoException('Não foi possível excluir a tarefa por que ela possui perguntas relacionadas a ela. Exclua todas as perguntas relacionadas e tente novamente.');
+		return true;
 	}
 }
 

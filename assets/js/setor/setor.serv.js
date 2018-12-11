@@ -12,7 +12,6 @@
 		this.titulo = titulo  || '';
         this.descricao = descricao  || '';
         this.categoria = categoria  || undefined;
-        this.loja = loja  || '';
 	};
 
 	function ServicoSetor() { // Model

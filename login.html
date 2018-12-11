@@ -10,7 +10,7 @@
                 </div>
 
                 <div class="col-xs-12 col-md-12 col-sm-12 col-12">
-                    <form class="form-horizontal" accept-charset="UTF-8" role="form" id="form_login" name="form_login">
+                    <form class="form-horizontal" accept-charset="UTF-8" role="form" id="form_login" name="form_login" method="post">
                         <div class="row form-row justify-content-center">
                             <div class="col-md-8 col-sm-7 col-12">
                                 <label for="login">Usuário</label>
@@ -48,10 +48,10 @@
 </div>
 
 <script>
-        $(document).ready(function() {
-            var servicoLogin = new app.ServicoLogin();
-            var crltLogin = new app.ControladoraFormLogin(servicoLogin);
-            crltLogin.configurar();
-        });
-    </script>
+    $(document).ready(function() {
+        var servicoLogin = new app.ServicoLogin();
+        var crltLogin = new app.ControladoraFormLogin(servicoLogin);
+        crltLogin.configurar();
+    });
+</script>
     

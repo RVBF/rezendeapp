@@ -7,12 +7,13 @@
  {
 	'use strict';
 
-	function Tarefa(id, titulo, descricao, dataLimite, setor) {
+	function Tarefa(id, titulo, descricao, dataLimite, setor, loja) {
 		this.id = id  || 0;
 		this.titulo = titulo  || '';
 		this.descricao = descricao  || '';
 		this.dataLimite = dataLimite || '';
 		this.setor = setor  || 0;
+		this.loja  = loja || 0;
 	};
 
 	function ServicoTarefa() { // Model
@@ -23,14 +24,15 @@
 		};
 
 		// Cria um objeto de Tarefa
-		this.criar = function criar(id, titulo, descricao, dataLimite, setor) {
+		this.criar = function criar(id, titulo, descricao, dataLimite, setor, loja) {
 		 
 			return {
 				id : id  || 0,
 				titulo : titulo  || '',
 				descricao : descricao || '',
 				dataLimite : dataLimite || '',
-				setor : setor || ''
+				setor : setor || 0,
+				loja : loja || 0
 
 			};
 		};

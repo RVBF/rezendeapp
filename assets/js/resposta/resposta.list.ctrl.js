@@ -83,6 +83,14 @@
 		_this.editar = function editar() {
 			var objeto = _tabela.row('.selected').data();
 			var modoEdicao = true;
+			var contexto = $('#painel_formulario');
+			contexto.addClass('desabilitado');
+
+			contexto.addClass('d-none');
+			contexto.desabilitar(true);
+			contexto.find('form')[0].reset();
+			contexto.find('form').find('.msg').empty();
+			
 			ctrlFormulario.configurar(modoEdicao);
 			ctrlFormulario.desenhar(objeto);
 		}
