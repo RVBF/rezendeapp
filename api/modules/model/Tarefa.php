@@ -16,6 +16,7 @@ class Tarefa {
     private $setor;
     private $loja;
     private $questionador;
+    private $perguntas;
     private $encerrada;
 
     const TAM_TITULO_MIM = 2;
@@ -30,6 +31,7 @@ class Tarefa {
         $this->setor = $setor;
         $this->loja = $loja;
         $this->questionador = $questionador;
+        $this->perguntas = $perguntas;
         $this->encerrada = $encerrada;
     }
 
@@ -96,13 +98,24 @@ class Tarefa {
     public function setQuestionador($questionador){
         $this->questionador = $questionador;
     }
-
+ 
     public function getEncerrada(){
         return $this->encerrada; 
     }
- 
     public function setEncerrada($encerrada){
         $this->encerrada = $encerrada;
+    }
+
+    public function getPerguntas(){
+        return $this->perguntas; 
+    }
+ 
+    public function setPerguntas($perguntas){
+        $this->perguntas = $perguntas;
+    }
+
+    public function addPergunta($pergunta){
+        $this->perguntas[] = $pergunta;
     }
 }
 ?>

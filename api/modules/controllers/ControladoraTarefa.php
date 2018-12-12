@@ -31,7 +31,7 @@ class ControladoraTarefa {
 		$this->colecaoLoja = Dice::instance()->create('ColecaoLoja');
 	}
 
-	function todos($idSetor = 0) {
+	function todos() {
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
@@ -41,7 +41,7 @@ class ControladoraTarefa {
 			$contagem = 0;
 			$objetos = [];
 			$erro = null;
-			$objetos = $this->colecaoTarefa->todos($dtr->start, $dtr->length, $idSetor);
+			$objetos = $this->colecaoTarefa->todos($dtr->start, $dtr->length);
 
 			$contagem = $this->colecaoTarefa->contagem();
 		}

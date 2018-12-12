@@ -128,45 +128,43 @@
 
 				html += ' <div class="row form-row">';
 				html += '<div class="col-xs-12  col-sm-12 col-md-12 col-12">';
-				html += '<fieldset class="form-group row">';
 				html += '<input type= "hidden" class="ids" name="pergunta_id_' + perguntas[posicao].id + '" id="pergunta_id_' + perguntas[posicao].id + '" value ="'+  perguntas[posicao].id +'">';
 
-                html += '<legend class="col-form-legend col-xs-12  col-sm-12 col-md-12 col-12">' + perguntas[posicao].pergunta + '</legend>';
+				html += '<div class="row">';
+
+                html += '<legend class="col-form-legend">' + perguntas[posicao].pergunta + '</legend>';
+				html += '</div>';    
 
                 for(var posicaoOp in opcao.getpcoes()){
-					html += '<div class="col-xs-12  col-sm-12 col-md-12 col-12">';
-                    html += '<div class="form-check">';
-					html += ' <label class="form-check-label">';
-					if(posicaoOp == 1) html += ' <input class="form-check-input" type="radio" name="pergunta_' + perguntas[posicao].id + '" id="pergunta_' + perguntas[posicao].id + '_'+ opcao.getpcoes()[posicaoOp] + '" value="'  + posicaoOp + '" checked="checked"/>';
-					else html += ' <input class="form-check-input" type="radio" name="pergunta_' + perguntas[posicao].id + '" id="pergunta_' + perguntas[posicao].id + '_'+ opcao.getpcoes()[posicaoOp] + '" value="'  + posicaoOp + '"/>';					
-					html += opcao.getpcoes()[posicaoOp];
-					html += '</label>';
-					html += '</div>';
-					html += '</div>';    
+								html += '<div class="form-check row">';
+											if(posicaoOp == 1) html += '<input class="form-check-input radio-inline" type="radio" type="radio" name="pergunta_' + perguntas[posicao].id + '" id="pergunta_' + perguntas[posicao].id + '_'+ opcao.getpcoes()[posicaoOp] + '" value="'  + posicaoOp + '" checked="checked"/>';
+											else html += '<input class="form-check-input radio-inline" type="radio" type="radio" name="pergunta_' + perguntas[posicao].id + '" id="pergunta_' + perguntas[posicao].id + '_'+ opcao.getpcoes()[posicaoOp] + '" value="'  + posicaoOp + '"/>';					
+											html += ' <label class="radio-inline control-label" for="pergunta_' + perguntas[posicao].id + '">';
+											html += opcao.getpcoes()[posicaoOp];
+											html += '</label>';
+								html += '</div>';
 				}	
-				
-				html += '</fieldset>';
 				html += '</div>';    
 				html += '</div>';
 
 				html += '<div class="row form-row">';
-				html += '<div class="col-xs-2  col-sm-2 col-md-2 col-2">';
+				html += '<div class="col-xs-2  col-sm-2 col-md-2 col-12">';
 				html += '<div class="element">';
 				html += '<i class="fas fa-camera"></i></i><span class="name toltip" title="Nenhum arquivo selecionado.">Nenhum arquivo...</span>';
 				html += '<input type="file" name="pergunta_foto_' + perguntas[posicao].id + '" id="pergunta_foto_' + perguntas[posicao].id + '" accept="image/*">';
 				html += '</div>';
 				html += '</div>';
 
-				html += '<div class="col-xs-2  col-sm-2 col-md-2 col-2">';
+				html += '<div class="col-xs-2  col-sm-2 col-md-2 col-12">';
 				html += '<div class="element">';
 				html += '<i class="fas fa-file-audio"></i><span class="name toltip" title="Nenhum arquivo selecionado.">Nenhum arquivo...</span>';
 				html += '<input type="file" name="pergunta_audio_' + perguntas[posicao].id + '" id="pergunta_audio_' + perguntas[posicao].id + '" accept="audio/*">';
 				html += '</div>';
 				html += '</div>';
 
-				html += '<div class="col-xs-2  col-sm-2 col-md-2 col-2">';
+				html += '<div class="col-xs-2  col-sm-2 col-md-2 col-12">';
 				html += '<div class="element">';
-				html += '<i class="fas fa-file-import"></i></i><span class="name toltip" title="Nenhum arquivo selecionado.">Nenhum arquivo...</span>';
+				html += '<i class="fas fa-file"></i><span class="name toltip" title="Nenhum arquivo selecionado.">Nenhum arquivo...</span>';
 				html += '<input type="file" name="pergunta_file_' + perguntas[posicao].id + '" id="pergunta_file_' + perguntas[posicao].id + '" class="carregar_arquivo" accept="pdf/*;text/*;html/*;.csv; application/vnd.ms-excel;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">';
 				html += '</div>';
 				html += '</div>';

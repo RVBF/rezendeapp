@@ -111,10 +111,10 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 		}
 	}
 
-	function todos($limite = 0, $pulo = 0, $idSetor) {
+	function todos($limite = 0, $pulo = 0) {
 		try {	
-			if($idSetor > 0) $tarefas = Db::table(self::TABELA)->where('setor_id', $idSetor)->offset($limite)->limit($pulo)->get();
-			else $tarefas = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+			$tarefas = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+
 			$tarefasObjects = [];
 			foreach ($tarefas as $tarefa) {
 				$tarefasObjects[] =  $this->construirObjeto($tarefa);
@@ -149,8 +149,9 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 		$setor = ($row['setor_id'] > 0) ? Dice::instance()->create('ColecaoSetor')->comId($row['setor_id']) : '';
 		$loja = ($row['loja_id'] > 0) ? Dice::instance()->create('ColecaoLoja')->comId($row['loja_id']) : '';
 		$questionador = ($row['questionador_id'] > 0) ? Dice::instance()->create('ColecaoUsuario')->comId($row['questionador_id']) : '';
+		$perguntas = Dice::instance()->create('ColecaoPergunta')->comTarefaId($row['id']);
 		
-		$tarefa = new Tarefa($row['id'],$row['titulo'], $row['descricao'], $row['data_limite'], $row['data_cadastro'], $setor, $loja, $questionador, [],($row['encerrada']) ? true : false);
+		$tarefa = new Tarefa($row['id'],$row['titulo'], $row['descricao'], $row['data_limite'], $row['data_cadastro'], $setor, $loja, $questionador, $perguntas,($row['encerrada']) ? true : false);
 
 		return $tarefa;
 	}	
