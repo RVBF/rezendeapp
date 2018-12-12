@@ -67,6 +67,6 @@ interface ColecaoPergunta {
 	 */
 	function contagem();
 
-	function comTarefaId($limite = 0, $pulo = 0, $tarefaId);
+	function comTarefaId($tarefaId);
 }
 ?>

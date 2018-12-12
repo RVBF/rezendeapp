@@ -20,7 +20,7 @@
 		var _this = this;
 		// Rota no servidor
         _this.rota = function rota(idCheklist) {
-			return app.api + '/setor/' + idCheklist  + '/tarefa';
+			return app.api + '/tarefa';
 		};
 
 		// Cria um objeto de Tarefa
