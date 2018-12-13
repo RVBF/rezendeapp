@@ -111,6 +111,19 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 		}
 	}
 
+
+	function comPerguntaId($id){
+		try {	
+			$tarefa = $this->construirObjeto(DB::table(self::TABELA)->join(ColecaoPerguntaEmBDR::TABELA, ColecaoPerguntaEmBDR::TABELA . '.tarefa_id', '=', self::TABELA . '.id')->where(ColecaoPerguntaEmBDR::TABELA . '.id', $id)->first());
+
+			return $tarefa;
+		}
+		catch (\Exception $e)
+		{
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		}
+	}
+
 	function todos($limite = 0, $pulo = 0) {
 		try {	
 			$tarefas = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
@@ -150,7 +163,7 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 		$loja = ($row['loja_id'] > 0) ? Dice::instance()->create('ColecaoLoja')->comId($row['loja_id']) : '';
 		$questionador = ($row['questionador_id'] > 0) ? Dice::instance()->create('ColecaoUsuario')->comId($row['questionador_id']) : '';
 		$perguntas = Dice::instance()->create('ColecaoPergunta')->comTarefaId($row['id']);
-		
+
 		$tarefa = new Tarefa($row['id'],$row['titulo'], $row['descricao'], $row['data_limite'], $row['data_cadastro'], $setor, $loja, $questionador, $perguntas,($row['encerrada']) ? true : false);
 
 		return $tarefa;
@@ -185,7 +198,9 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 			throw new ColecaoException('Já exite uma tarefa cadastrada com esse título.');
 		}
 
-		if($obj->getDataLimite() < Carbon::now()) throw new Exception("A data Limite deve ser maior que a atual.");
+		if($obj->getDataLimite() instanceof Carbon){
+			if($obj->getDataLimite() < Carbon::now() and $obj->getId() == 0) throw new Exception("A data Limite deve ser maior que a atual.");
+		}
 		
 		return true;
 	}

@@ -497,17 +497,16 @@ button{
         margin: 4px !important;
     }
 
-    label{
-        margin-bottom: 0px;
-        padding: 5px;    
-    }
+   
+}
+label{
+    margin-bottom: 0px;
+    padding: 5px;    
 }
 
 .perguntas {
     margin-bottom: 5em;
 }
-
-
 
 select.custom-select.custom-select-sm.form-control.form-control-sm{
     height: 30px  !important;
