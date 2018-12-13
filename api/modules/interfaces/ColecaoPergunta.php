@@ -50,7 +50,6 @@ interface ColecaoPergunta {
 	 * @throws	ColecaoException
 	 */
 	function comId($id);
-
 	/**
 	 * Obtém todos os objetos.
 	 *

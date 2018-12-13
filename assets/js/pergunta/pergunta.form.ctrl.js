@@ -50,7 +50,7 @@
 			$('body').find('.remover_pergunta').on('click', _this.removerPergunta);
 			$('body').find('#atualizar').on('click', function(){
 				location.reload();
-			})
+			});
 		};
 
 		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro() {

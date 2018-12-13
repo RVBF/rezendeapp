@@ -8,5 +8,6 @@
  */
 
 interface ColecaoTarefa extends Colecao{
+	function comPerguntaId($id);
 }
 ?>

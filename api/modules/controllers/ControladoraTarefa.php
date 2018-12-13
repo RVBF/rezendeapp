@@ -56,7 +56,6 @@ class ControladoraTarefa {
 			$dtr->draw,
 			$erro
 		);
-
 		return $conteudo;
 	}
 	

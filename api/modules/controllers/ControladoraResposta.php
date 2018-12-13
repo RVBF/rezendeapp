@@ -82,7 +82,7 @@ class ControladoraResposta {
 			$tarefa = null;
 
 			foreach($this->params['obj'] as $key => $parametros) {
-				$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'opcaoSelecionada','pergunta'], $parametros);
+				$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'opcaoSelecionada','comentario', 'pergunta'], $parametros);
 
 				if(count($inexistentes) > 0) {
 					$msg = 'Os seguintes campos obrigatórios da pergunta de id   não foram enviados: ' . implode(', ', $inexistentes);
@@ -91,14 +91,17 @@ class ControladoraResposta {
 				}
 
 				$pergunta = $this->colecaoPergunta->comId($parametros['pergunta']);
-				if($tarefa == null) $tarefa = $pergunta->getTarefa();
-				$formularioRespondido->addPergunta($pergunta);
-
-				if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
+				if(!isset($pergunta) and !($pergunta instanceof Pergunta)){
 					throw new Exception("Pergunta não encontrada na base de dados.");
 				}
+				if($tarefa == null) $tarefa = $this->colecaoTarefa->comPerguntaId($parametros['pergunta']);
 
-				$resposta = new Resposta(0, \ParamUtil::value($parametros, 'opcaoSelecionada'), '', $pergunta);
+				if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
+					throw new Exception("Tarefa não encontrada na base de dados.");
+				}
+				$formularioRespondido->addPergunta($pergunta);
+
+				$resposta = new Resposta(0, \ParamUtil::value($parametros, 'opcaoSelecionada'), \ParamUtil::value($parametros, 'comentario'), $pergunta);
 
 				$this->colecaoResposta->adicionar($resposta);
 				

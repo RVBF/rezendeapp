@@ -115,6 +115,10 @@
 				event.preventDefault();
 				router.navigate('/tarefa');
 			});
+
+			$(evento.target).find('.resposta_link').on('click', function() {
+				router.navigate('/resposta');
+			})
 		}
 	}
 	var bodyEvento = {target: 'body'};

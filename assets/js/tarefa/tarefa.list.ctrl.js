@@ -74,13 +74,11 @@
 					html += 'Opções';
 					html += '</button>';
 					html += '<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">';
-					if(data.perguntas != undefined){
-						html += (data.perguntas.length > 0) ? '<a class="dropdown-item gerenciar_perguntas" href="#">Ver Perguntas</a>' : '';
-					}
+					html += (data.perguntas.length > 0) ? '<a class="dropdown-item gerenciar_perguntas" href="#">Ver Perguntas</a>' : '';
+					html += (data.encerrada) ?  '<a class="dropdown-item resposta_link" href="#">Ver Respostas</a>' : '';
+					html += (!data.encerrada) ?  '<a class="dropdown-item cadastrar_perguntas" href="#">Cadastrar Perguntas</a>' : '';
 
-					html += '<a class="dropdown-item cadastrar_perguntas" href="#">Cadastrar Perguntas</a>';
-
-					html += (!data.encerrada && data.perguntas != undefined) ? '<a class="dropdown-item responder_perguntas" href="#">Responder Perguntas</a>' : '';
+					html += (!data.encerrada && data.perguntas.length > 0) ? '<a class="dropdown-item responder_perguntas" href="#">Responder Perguntas</a>' : '';
 
 					html += '</div>';
 					html += '</div>';
