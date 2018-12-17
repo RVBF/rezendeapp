@@ -37,20 +37,15 @@
 			};
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
-				_this.formulario.desabilitar(false);
-
-				var erro = function erro(jqXHR, textStatus, errorThrown) {
-					var mensagem = jqXHR.responseText;
-					_this.formulario.find('#msg').empty().append('<div class="error" >' + mensagem + '</div>');
-				};
-				
+				_this.formulario.desabilitar(true);
+								
 				var terminado = function() {
-					_this.formulario.desabilitar(true);
+					_this.formulario.desabilitar(false);
 				};
 				
 				var obj = _this.conteudo();
 				var jqXHR = _this.alterar ? servicoLoja.atualizar(obj) : servicoLoja.adicionar(obj);
-				jqXHR.done(window.sucessoParaFormulario).fail(window.erro);
+				jqXHR.done(window.sucessoParaFormulario).fail(window.erro).always(terminado);
 
 				if(_this.alterar){
 					$('.depende_selecao').each(function(){

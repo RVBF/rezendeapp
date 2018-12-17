@@ -50,7 +50,7 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 				return $removido;
 			}
 			catch (\Exception $e) {
-				throw new ColecaoException("Erro ao remover categoria com o id do checklist.", $e->getCode(), $e);
+				throw new ColecaoException("Erro ao remover categoria com o id do setor.", $e->getCode(), $e);
 			}
 		}
 
@@ -190,7 +190,8 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 		if($quantidade == 0)throw new ColecaoException('Setor não foi encontrado na base de dados.');
 
 		if(strlen($obj->getTitulo()) <= Tarefa::TAM_TITULO_MIM && strlen($obj->getTitulo()) > Tarefa::TAM_TITULO_MAX) throw new ColecaoException('O título deve conter no mínimo '. Tarefa::TAM_TITULO_MIM . ' e no máximo '. Tarefa::TAM_TITULO_MAX . '.');
-		if(strlen($obj->getdescricao()) <= 255 and $obj->getdescricao()) throw new ColecaoException('A Descrição  deve conter no máximo '. 255 . ' e no máximo '. 1 . '.');
+		
+		if(strlen($obj->getdescricao()) > 255 and $obj->getdescricao() <> '') throw new ColecaoException('A descrição  deve conter no máximo '. 255 . ' caracteres.');
 
 		$quantidade = DB::table(self::TABELA)->where('titulo', $obj->getTitulo())->where('setor_id', $obj->getSetor()->getId())->where('id', '<>', $obj->getId())->count();
 

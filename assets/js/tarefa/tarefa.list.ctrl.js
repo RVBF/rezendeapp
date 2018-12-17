@@ -52,7 +52,7 @@
 
 					var eAntes = hoje.isBetween(hoje.toString(), dataLimite.toString());
 					
-					return (eAntes) ? '<p class="text-success">'+ dataLimite.format('DD/MM/YYYY HH:mm:ss').toString() + '</p>' : '<p class="text-danger">'+ dataLimite.format('DD/MM/YYYY HH:mm:ss').toString() + '</p>';
+					return (eAntes) ? '<p class="text-success align-middle">'+ dataLimite.format('DD/MM/YYYY HH:mm:ss').toString() + '</p>' : '<p class="text-danger">'+ dataLimite.format('DD/MM/YYYY HH:mm:ss').toString() + '</p>';
 				},
 				targets : 5
 			}, {

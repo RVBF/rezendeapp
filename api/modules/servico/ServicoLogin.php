@@ -24,40 +24,12 @@ class ServicoLogin {
 		$usuario = null;
 		$senhaCriptografada = HashSenha::instance();
 		$senhaCriptografada = $senhaCriptografada->gerarHashDeSenhaComSaltEmMD5($senha);		
-		if($this->validarFormatoDeEmail($login))
-		{
-			if($this->validarEmail($login) and $resultado = $this->colecaoUsuario->comEmail($login))
-			{
-				if(count($resultado) === 1)
-				{
-					$usuario = $resultado;
-
-					if($usuario->getSenha() === $senhaCriptografada || $usuario->getSenha() == $senha)
-					{
-						$this->sessaoUsuario->criar(
-							$usuario->getId(),
-							$usuario->getLogin(), 
-							$usuario->getNome(),
-							$ultimaRequisicao = time()
-						);
-					}
-					else
-					{
-						throw new Exception("A senha digitada está incorreta.");
-					}
-				}
-				else
-				{
-					throw new Exception("O e-mail inserido não corresponde a nenhuma conta cadastrada no sistema.");
-				}
-			}
-		}
-		elseif($this->validarLogin($login) and $resultado = $this->colecaoUsuario->comLogin($login))
+		
+		if($this->validarLogin($login) and $resultado = $this->colecaoUsuario->comLogin($login))
 		{
 			if(count($resultado) === 1)
 			{
 				$usuario = $resultado;
-
 				if($usuario->getSenha() === $senhaCriptografada || $usuario->getSenha() == $senha)
 				{
 					$this->sessaoUsuario->criar(		
@@ -224,9 +196,7 @@ class ServicoLogin {
 	*  Valida o senha do usuário, lançando uma exceção caso haja algo inválido.
 	*  @throws ColecaoException
 	*/
-	private function validarSenha($senha)
-	{
-
+	private function validarSenha($senha) {
 		if(!is_string($senha))
 		{
 			throw new ColecaoException( 'Valor inválido para senha.' );
@@ -242,6 +212,8 @@ class ServicoLogin {
 		{
 			throw new ColecaoException('O senha deve conter no máximo ' . Usuario::TAMANHO_MAXIMO_SENHA . ' caracteres.');
 		}
+
+		return true;
 	}	
 
 	/**

@@ -125,7 +125,7 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 			throw new ColecaoException('Já exite um setor cadastrado com esse título');
 		}
 
-		if(strlen($obj->getTitulo()) <= Setor::TAM_MIN_TITUlO && strlen($obj->getTitulo()) > Setor::TAM_MAX_TITUlO) throw new ColecaoException('A Descrição deve conter no mínimo '.  Setor::TAM_MIN_TITULO. ' e no máximo '. Categoria::TAM_MAX_TITUlO . '.');
+		if(strlen($obj->getTitulo()) <= Setor::TAM_MIN_TITUlO && strlen($obj->getTitulo()) > Setor::TAM_MAX_TITUlO) throw new ColecaoException('O titulo deve conter no mínimo '.  Setor::TAM_MIN_TITULO. ' e no máximo '. Categoria::TAM_MAX_TITUlO . '.');
 
 		return true;
 	}
