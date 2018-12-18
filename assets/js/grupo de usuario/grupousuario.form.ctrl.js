@@ -43,7 +43,6 @@
 
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
-				// console.log()
 				_this.formulario.desabilitar(true);
 
 				var erro = function erro(jqXHR, textStatus, errorThrown) {

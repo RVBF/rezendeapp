@@ -75,7 +75,7 @@
 					html += '</button>';
 					html += '<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">';
 					html += (data.perguntas.length > 0) ? '<a class="dropdown-item gerenciar_perguntas" href="#">Ver Perguntas</a>' : '';
-					html += (data.encerrada) ?  '<a class="dropdown-item resposta_link" href="#">Ver Respostas</a>' : '';
+					html += (data.encerrada) ?  '<a class="dropdown-item gerenciar_respostas" href="#">Ver Respostas</a>' : '';
 					html += (!data.encerrada) ?  '<a class="dropdown-item cadastrar_perguntas" href="#">Cadastrar Perguntas</a>' : '';
 
 					html += (!data.encerrada && data.perguntas.length > 0) ? '<a class="dropdown-item responder_perguntas" href="#">Responder Perguntas</a>' : '';
@@ -93,16 +93,23 @@
 				$('.gerenciar_perguntas').on('click', function (event) {
 					event.preventDefault();
 
-					var objeto = _tabela.row('.selected').data();
+					var objeto = _tabela.row($(this).parents('tr')).data();
 
 					router.navigate('/tarefa/' + objeto.id + '/pergunta')
 					
 				});
 
+				$('.gerenciar_respostas').on('click', function (event) {
+					event.preventDefault();
+					var objeto = _tabela.row($(this).parents('tr')).data();
+
+					router.navigate('/resposta/' + objeto.id);
+				});
+
 				$('.cadastrar_perguntas').on('click', function (event) {
 					event.preventDefault();
 
-					var objeto = _tabela.row('.selected').data();
+					var objeto = _tabela.row($(this).parents('tr')).data();
 
 					router.navigate('/tarefa/' + objeto.id + '/pergunta/cadastrar-perguntas')
 					
@@ -110,7 +117,7 @@
 
 				$('.responder_perguntas').on('click', function (event) {
 					event.preventDefault();
-					var objeto = _tabela.row('.selected').data();
+					var objeto = _tabela.row($(this).parents('tr')).data();
 					router.navigate('/tarefa/' + objeto.id + '/pergunta/responder-perguntas')
 				});
 
@@ -228,6 +235,7 @@
 				router.navigate('/tarefa/' + objeto.id + '/pergunta')
 				
 			});
+
 
 			$('.cadastrar_perguntas').on('click', function (event) {
 				event.preventDefault();

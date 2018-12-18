@@ -8,5 +8,6 @@
  */
 
 interface ColecaoResposta extends Colecao {
+  function  todosComTarefaId($limite = 0, $pulo = 0, $tarefaid = 0);
 }
 ?>

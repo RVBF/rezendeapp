@@ -76,7 +76,6 @@
 			});
 	
 			$(evento.target).find('.setor_link').on('click', function(event){
-				console.log('entrei');
 				event.preventDefault();
 				router.navigate('/');
 			});
@@ -115,17 +114,12 @@
 				event.preventDefault();
 				router.navigate('/tarefa');
 			});
-
-			$(evento.target).find('.resposta_link').on('click', function() {
-				router.navigate('/resposta');
-			})
 		}
 	}
 	var bodyEvento = {target: 'body'};
 	iniciarFuncoesPadroesSistema(bodyEvento);
 
-	$('body').on('DOMNodeInserted',function(evento)
-	{
+	$('body').on('DOMNodeInserted',function(evento) {
 		iniciarFuncoesPadroesSistema(evento);
 	});
 
@@ -139,6 +133,20 @@
 		setInterval(function() {
 			app.verficarLogin();
 		}, 1800000);
+		
+		window.download = function download(content, filename, contentType){
+			console.log(content);
+			// var element = document.createElement('a');
+			// element.setAttribute('href', content);
+			// element.setAttribute('download', filename);
+
+			// element.style.display = 'none';
+			// document.body.appendChild(element);
+
+			// element.click();
+
+			// document.body.removeChild(element);
+		};
 
 		window.validarSeONavegadorSuporta  = function validarSeONavegadorSuporta() {
 			// Verificando se o navegador tem suporte aos recursos para redimensionamento
