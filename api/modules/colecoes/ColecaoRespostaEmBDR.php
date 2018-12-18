@@ -89,6 +89,28 @@ class ColecaoRespostaEmBDR implements ColecaoResposta
 		}
 	}
 
+	function  todosComTarefaId($limite = 0, $pulo = 0, $tarefaid = 0){
+		try {	
+			$respostas = Db::table(self::TABELA)
+			->join(ColecaoPerguntaEmBDR::TABELA, ColecaoPerguntaEmBDR::TABELA . '.id', '=', self::TABELA . '.pergunta_id')
+			->join(ColecaoTarefaEmBDR::TABELA, ColecaoTarefaEmBDR::TABELA . '.id', '=', ColecaoPerguntaEmBDR::TABELA . '.tarefa_id')
+			->where(ColecaoTarefaEmBDR::TABELA .'.id', $tarefaid)
+			->offset($limite)
+			->limit($pulo)
+			->groupBy(ColecaoTarefaEmBDR::TABELA .'.id')->get();
+			$respostasObjects = [];
+
+			foreach ($respostas as $pergunta) {
+				$respostasObjects[] =  $this->construirObjeto($pergunta);
+			}
+
+			return $respostasObjects;
+		}
+		catch (\Exception $e) {
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		}
+	}
+
 	function construirObjeto(array $row) {
 		$pergunta  = ($row['pergunta_id'] > 0 ) ? Dice::instance()->create('ColecaoPergunta')->comId($row['pergunta_id']) : null;
 		$anexos = Dice::instance()->create('ColecaoAnexo')->comRespostaId($row['id']);	

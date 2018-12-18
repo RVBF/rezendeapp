@@ -83,7 +83,7 @@
 	router.get('/categorias', verficarLogin, criarRotaPara('categoria.html'));
 	router.get('/loja', verficarLogin, criarRotaPara('loja.html'));
 	router.get('/tarefa', verficarLogin, criarRotaPara('tarefa.html'));
-	router.get('/resposta', verficarLogin, criarRotaPara('resposta.html'));
+	router.get('/resposta/:tarefaId', verficarLogin, criarRotaPara('resposta.html'));
 
 	router.get('/tarefa/:id/pergunta', verficarLogin, criarRotaPara('pergunta.html'));
 	router.get('/tarefa/:id/pergunta/cadastrar-perguntas', verficarLogin, criarRotaPara('perguntaCadastroMultiplo.html'));

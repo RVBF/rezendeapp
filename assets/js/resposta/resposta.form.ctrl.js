@@ -53,13 +53,6 @@
 			opcoes.submitHandler = function submitHandler(form) {
 				_this.formulario.desabilitar(true);
 
-
-				var erro = function erro(jqXHR, textStatus, errorThrown) {
-					var mensagem = jqXHR.responseText;
-					_this.formulario.find('#msg').empty().append('<div class="error" >' + mensagem + '</div>');
-
-					// _this.respostas = [];
-				};
 				
 				var terminado = function() {
 					// _this.respostas = [];

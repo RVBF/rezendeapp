@@ -307,11 +307,11 @@ $app->delete('/grupo-usuario/{id}', function(Request $req,  Response $res, $args
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 });
 
-$app->get('/resposta', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+$app->get('/resposta/{tarefaId}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 	$this->logger->addInfo("Acessando o cadastro de tarefa");
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraResposta($req->getQueryParams(), $sessaoUsuario);
-	$response = $ctrl->todos();
+	$response = $ctrl->todos($args['tarefaId']);
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
 
 });

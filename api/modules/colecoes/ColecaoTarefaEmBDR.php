@@ -80,7 +80,7 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 
 				$filds = [ 'titulo' => $obj->getTitulo(),
 					'descricao' => $obj->getDescricao(),
-					'data_limite' => $obj->getDataLimite()->toDateTimeString(),
+					'data_limite' => ($obj->getDataLimite() instanceof Carbon)  ? $obj->getDataLimite()->toDateTimeString() : $obj->getDataLimite(),
 					'encerrada' => $obj->getEncerrada(),
 					'setor_id' => $obj->getSetor()->getId(),
 					'loja_id' => $obj->getLoja()->getId()
@@ -193,11 +193,14 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 		
 		if(strlen($obj->getdescricao()) > 255 and $obj->getdescricao() <> '') throw new ColecaoException('A descrição  deve conter no máximo '. 255 . ' caracteres.');
 
-		$quantidade = DB::table(self::TABELA)->where('titulo', $obj->getTitulo())->where('setor_id', $obj->getSetor()->getId())->where('id', '<>', $obj->getId())->count();
+		// $quantidade = DB::table(self::TABELA)->where('titulo', 'like', $obj->getTitulo())->where('setor_id', $obj->getSetor()->getId())->where('id', '<>', $obj->getId())->count();
+		// $quantidade = DB::table(self::TABELA)->where('titulo', $obj->getTitulo())->where('id', '<>', $obj->getId())->count();
+		
+		// Debuger::printr($quantidade);
 
-		if($quantidade > 0){
-			throw new ColecaoException('Já exite uma tarefa cadastrada com esse título.');
-		}
+		// if($quantidade > 0){
+		// 	throw new ColecaoException('Já exite uma tarefa cadastrada com esse título.');
+		// }
 
 		if($obj->getDataLimite() instanceof Carbon){
 			if($obj->getDataLimite() < Carbon::now() and $obj->getId() == 0) throw new Exception("A data Limite deve ser maior que a atual.");

@@ -477,6 +477,14 @@ button{
     padding: 6px !important;
 }
 
+.download i{
+    font-size:50px !important;
+}
+
+.table i{
+    font-size: 16px !important;
+}
+
 @media only screen and (max-width: 600px) {
     #painel_listagem, #painel_formulario {
         width:auto;

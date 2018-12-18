@@ -38,9 +38,8 @@ class ControladoraResposta {
 
 	}
 
-	function todos() {
+	function todos($tarefaId) {
 		try {
-
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
@@ -49,7 +48,7 @@ class ControladoraResposta {
 			$objetos = [];
 			$erro = null;
 
-			$objetos = $this->colecaoResposta->todos($dtr->start, $dtr->length);
+			$objetos = $this->colecaoResposta->todosComTarefaId($dtr->start, $dtr->length, $tarefaId);
 
 			$contagem = $this->colecaoResposta->contagem();
 		}

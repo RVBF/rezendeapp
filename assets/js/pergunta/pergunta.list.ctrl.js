@@ -135,7 +135,6 @@
 		};
 
 		_this.voltar = function voltar() {
-			console.log('entrei');
 		};
 
 
