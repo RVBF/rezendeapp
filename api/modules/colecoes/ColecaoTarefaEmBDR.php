@@ -129,7 +129,8 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 			$tarefas = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
 
 			$tarefasObjects = [];
-			foreach ($tarefas as $tarefa) {
+
+			foreach ($tarefas as $key => $tarefa) {
 				$tarefasObjects[] =  $this->construirObjeto($tarefa);
 			}
 
@@ -137,7 +138,7 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
 		}
 	}
 	
@@ -196,7 +197,6 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 		// $quantidade = DB::table(self::TABELA)->where('titulo', 'like', $obj->getTitulo())->where('setor_id', $obj->getSetor()->getId())->where('id', '<>', $obj->getId())->count();
 		// $quantidade = DB::table(self::TABELA)->where('titulo', $obj->getTitulo())->where('id', '<>', $obj->getId())->count();
 		
-		// Debuger::printr($quantidade);
 
 		// if($quantidade > 0){
 		// 	throw new ColecaoException('Já exite uma tarefa cadastrada com esse título.');

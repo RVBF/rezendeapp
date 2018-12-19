@@ -418,9 +418,10 @@ ul.rezende-menu-wrap li a {
 
 /* layout.css Style */
 .upload-drop-zone {
-    height: 200px;
+    height: auto !important;
     border-width: 2px;
     margin-bottom: 20px;
+    padding: 2em;
 }
 
 /* skin.css Style*/
@@ -428,7 +429,7 @@ ul.rezende-menu-wrap li a {
     color: #ccc;
     border-style: dashed;
     border-color: #ccc;
-    line-height: 200px;
+    line-height: auto !important;
     text-align: center
 }
 .upload-drop-zone.drop {

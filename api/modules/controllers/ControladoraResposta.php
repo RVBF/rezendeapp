@@ -49,6 +49,15 @@ class ControladoraResposta {
 			$erro = null;
 
 			$objetos = $this->colecaoResposta->todosComTarefaId($dtr->start, $dtr->length, $tarefaId);
+			$tarefa = $this->colecaoTarefa->comId($tarefaId);
+
+			if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
+				throw new Exception("Tarefa não encontrada na base de dados.");
+			}
+			
+			foreach ($objetos as $obj) {
+				$obj->getPergunta()->setTarefa($tarefa);
+			}
 
 			$contagem = $this->colecaoResposta->contagem();
 		}
@@ -79,7 +88,7 @@ class ControladoraResposta {
 			$formularioRespondido->setRespondedor($this->colecaoUsuario->comId($this->servicoLogin->getIdUsuario()));
 			$formularioRespondido->setDataHora(Carbon::now());
 			$tarefa = null;
-
+			Debuger::printr($this->params['obj']);
 			foreach($this->params['obj'] as $key => $parametros) {
 				$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'opcaoSelecionada','comentario', 'pergunta'], $parametros);
 

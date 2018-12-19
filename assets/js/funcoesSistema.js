@@ -123,6 +123,14 @@
 		iniciarFuncoesPadroesSistema(evento);
 	});
 
+	$('body').on('click', '.download', function(evento) {
+		evento.preventDefault();
+
+		var elemento = $(this);
+
+		download(elemento.attr('href'), elemento.attr('nomeArquivo'), elemento.attr('tipo'));
+	});
+
 	$(document).ready(function()
 	{
 		$('.toltip').tooltip(); 
@@ -134,19 +142,29 @@
 			app.verficarLogin();
 		}, 1800000);
 		
-		window.download = function download(content, filename, contentType){
-			console.log(content);
-			// var element = document.createElement('a');
-			// element.setAttribute('href', content);
-			// element.setAttribute('download', filename);
+		// window.download = function download(content, filleName, contentType){
 
-			// element.style.display = 'none';
-			// document.body.appendChild(element);
 
-			// element.click();
+		// 	// var blob = new Blob([content], {type: contentType});
+		// 	// console.log(blob)
+        //     // url = window.URL.createObjectURL(blob);
+		// 	// a.setAttribute('href', url);
+		// 	// a.setAttribute('download', filleName);
+		// 	// document.body.appendChild(a);
+		// 	// a.click();
+		// 	// document.body.removeChild(a);
 
-			// document.body.removeChild(element);
-		};
+        // 	// window.URL.revokeObjectURL(url);
+		// 	// element.setAttribute('href', content);
+		// 	// element.setAttribute('download', filename);
+
+		// 	// element.style.display = 'none';
+		// 	// document.body.appendChild(element);
+
+		// 	// element.click();
+
+		// 	// document.body.removeChild(element);
+		// };
 
 		window.validarSeONavegadorSuporta  = function validarSeONavegadorSuporta() {
 			// Verificando se o navegador tem suporte aos recursos para redimensionamento

@@ -30,11 +30,9 @@
 			objeto.columnDefs = [ {
 					data: 'id',
 					targets: 0,
-					responsivePriority: 5,
 					visible : true
 				}, {
 					data: 'pergunta.pergunta',
-					responsivePriority: 1,
 					targets: 1
 				}, {
 					data: function(data){
@@ -43,14 +41,22 @@
 
 						return opcao.getpcoes()[opcaoSelecionada];
 					},
-					responsivePriority: 2,
 					targets: 2
 				}, {
+					data: 'pergunta.formularioRespondido.respondedor.nome',
+					targets: 3
+				}, {
+					data: function(data) {
+						var dataHora = moment(data.pergunta.formularioRespondido.dataHora, "YYYY-MM-DD HH:mm:ss", 'pt-br');
+						
+						return dataHora.format('DD/MM/YYYY HH:mm:ss').toString() ;
+					},
+					targets: 4
+				},{
 					data: function() {
 						return '<a href="anexos.html" class="anexos"><i class="fas fa-paperclip"></i></a>';
 					},
-					responsivePriority: 3,
-					targets: 3
+					targets: 5
 				}
 
 			];
@@ -71,9 +77,9 @@
 
 						html += (contador == 0) ? '<div class="row">' : '';
 						html += (contador >= 0 && contador <= 3) ? '<div class="col-md-4 col-sm-4 col-xs-4 col-4" >' : '' ;
-						html += '<a  class="download" href="#" nomeArquivo="' + nome + '" tipo="'+ objeto.anexos[indice].tipo +'" tipo="'+ objeto.anexos[indice].tipo +'" src="' + objeto.anexos[indice].arquivoBase64 + '">';
+						html += '<a  class="download" href="' +  objeto.anexos[indice].arquivoBase64 + '" arquivo="' + conteudo + '" nomeArquivo="' + nome + '"  tipo="'+ objeto.anexos[indice].tipo +'" download>';
 						html += (objeto.anexos[indice].tipo.split('/')[0] == 'image') ? '<i class="fas fa-file-image"></i>' : '<i class="far fa-file-audio"></i>';
-						html += '<br>' + nome + '</a>';
+						html += '<br><span class="name toltip" title="' + nome + '">' + nome.substring(1, 10) + '</span></a>';
 						html += (contador >= 0 && contador <= 3) ?  '</div>' : '';
 						html +=  (contador == 3) ? '</div>': '';
 
@@ -120,13 +126,6 @@
 
 		_this.configurar = function configurar() {
 			_tabela = _this.idTabela.DataTable(_this.opcoesDaTabela());
-
-			$('body').on('click', '.download', function() {
-				var elemento = $(this);
-				// location.href=elemento.attr('src');
-
-				download(elemento.attr('src'), elemento.attr('nomeArquivo'), elemento.attr('tipo'))
-			});
 		};
 	} // ControladoraListagemResposta
 

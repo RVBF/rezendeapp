@@ -147,6 +147,7 @@
 		loader.script('vendor/select2/dist/js/select2.min.js');
 		loader.script('vendor/piexifjs/piexif.js');
 		loader.script('vendor/moment/min/moment.min.js');
+		loader.script('vendor/downloadjs/download.min.js');
 
         // Inicialização
         loader.script('assets/js/jquery.meanmenu.js');

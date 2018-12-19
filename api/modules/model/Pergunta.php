@@ -10,12 +10,15 @@ class Pergunta {
 
 	private $id;
     private $pergunta;
-    private $tarefa;
+    private $tarefa;    
+    private $formularioRespondido;
 
-    function __construct($id = 0, $pergunta = '', $tarefa = null) {
+
+    function __construct($id = 0, $pergunta = '', $tarefa = null, $formularioRespondido = null) {
 		$this->id = $id;
         $this->pergunta = $pergunta;
         $this->tarefa = $tarefa;
+        $this->formularioRespondido = $formularioRespondido;
     }
 
     public function getId(){
@@ -56,6 +59,14 @@ class Pergunta {
 
     public function setTarefa($tarefa){
         $this->tarefa = $tarefa;
+    }
+
+    public function setFormularioRespondido($formularioRespondido){
+        $this->formularioRespondido = $formularioRespondido;
+    }
+ 
+    public function getFormularioRespondido(){
+        return $this->formularioRespondido; 
     }
 }
 ?>
