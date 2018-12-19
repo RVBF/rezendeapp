@@ -135,21 +135,21 @@
 			var html  = '<div class="pergunta">';
 			html += '<input type= "hidden" class="ids"  name="pergunta_' + quantidade + '" value ="'+ quantidade +'">';
 			html += '<div class="row form-row">';
-			html += '<div class="col-xs-11 col-md-11 col-sm-11 col-10">';
+			html += '<div class="col-xs-11 col-md-11 col-sm-11 col-11">';
 			html += '<label for="pergunta_' + quantidade + '">Pergunta :</label>';
 			html += '<input type="text" class="form-control campo_obrigatorio" id="pergunta_' + quantidade + '" name="pergunta_' + quantidade + '">';
 			html += '</div>';
 
-			html += '<div class="col-xs-1 col-md-1 col-sm-1 col-2">';
+			html += '<div class="col-xs-1 col-md-1 col-sm-1 col-1">';
 			html += '<div class="bnt_campoextra">';
 			html += '<div class="row">';
 
 			html += '<div class="col-xs-4 col-md-4 col-sm-4 col-4">';
-			html += '<button aria-hidden="true" role="presentation" type="button" aria-label="Adicionar Pergunta" class="btn btn-sm btn-success adicionar_pergunta"><i class="fas fa-plus"></i></button>';
+			html += '<button aria-hidden="true" role="presentation" type="button" aria-label="Adicionar Pergunta" class="btn bnt_opcoesformulario btn-sm btn-success adicionar_pergunta"><i class="fas fa-plus"></i></button>';
 			html += '</div>';
 
 			html += '<div class="col-xs-4 col-md-4 col-sm-4 col-4">';          
-			html += '<button aria-hidden="true" role="presentation" type="button" aria-label="Remover Pergunta" class="btn btn-sm btn-danger remover_pergunta"><i class="fas fa-minus"></i></button>';
+			html += '<button aria-hidden="true" role="presentation" type="button" aria-label="Remover Pergunta" class="btn bnt_opcoesformulario btn-sm btn-danger remover_pergunta"><i class="fas fa-minus"></i></button>';
 			html += '</div>';
 			html += '</div>';
 			
