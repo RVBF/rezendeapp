@@ -8,5 +8,6 @@
  */
 
 interface ColecaoFormularioRespondido extends Colecao {
+    function comPerguntaId($id);
 }
 ?>

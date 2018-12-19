@@ -85,6 +85,25 @@ class ColecaoFormularioRespondidoEmBDR implements ColecaoFormularioRespondido
 		}
 	}
 
+
+	function comPerguntaId($id){
+		try {
+			$formularioRespondido = DB::table(self::TABELA)->join(self::TABELA_RELACIONAL, self::TABELA_RELACIONAL . '.formulario_respondido_id', '=', self::TABELA . '.id')->where(self::TABELA_RELACIONAL . '.pergunta_id', $id)->get();
+			$formularioRespondidoObj = null;
+
+			if(count($formularioRespondido) >  0 ) {
+				 $formularioRespondidoObj = $this->construirObjeto($formularioRespondido[0]);
+
+			}
+			return $formularioRespondidoObj;
+		}
+		catch (\Exception $e)
+		{
+			throw new ColecaoException("Erro ao buscar formulário respondido com a referência de pergunta.", $e->getCode(), $e);
+		}
+	}
+
+
 	/**
 	 * @inheritDoc
 	 */
@@ -108,9 +127,8 @@ class ColecaoFormularioRespondidoEmBDR implements ColecaoFormularioRespondido
 	function construirObjeto(array $row) {
 
 		$respondedor = ($row['respondedor_id'] > 0) ? Dice::instance()->create('ColecaoUsuario')->comId($row['respondedor_id']) : null;
-		$perguntas = Dice::instance()->create('ColecaoPergunta')->comFormularioId($row[id]);
 
-		$formularioRespondido = new FormularioRespondido($row['id'], $row['data_resposta'], $respondedor, $perguntas);
+		$formularioRespondido = new FormularioRespondido($row['id'], $row['data_resposta'], $respondedor);
 
 		return $formularioRespondido;
 	}	

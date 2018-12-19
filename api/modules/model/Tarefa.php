@@ -23,7 +23,7 @@ class Tarefa {
     const TAM_TITULO_MAX = 100;
 
     function __construct($id = 0, $titulo = '', $descricao = '', $dataLimite = '', $dataCadastro = '', $setor = null, $loja = null, $questionador = null, $perguntas = [], $encerrada = false) {
-		$this->id = $id;
+        $this->id = $id;
         $this->titulo = $titulo;
         $this->descricao = $descricao;
         $this->dataLimite = $dataLimite;

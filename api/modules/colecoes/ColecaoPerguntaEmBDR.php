@@ -102,7 +102,7 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta {
 		try {	
 			$perguntas = Db::table(self::TABELA)->where('tarefa_id', $idTarefa)->offset($limite)->limit($pulo)->get();
 			$perguntasObjects = [];
-		
+
 			foreach ($perguntas as $key => $pergunta) {
 
 				$perguntasObjects[] =  $this->construirObjeto($pergunta);
@@ -140,6 +140,7 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta {
 
 			$perguntasObjects = [];
 			foreach ($perguntas as $pergunta) {
+
 				$perguntasObjects[] =  $this->construirObjeto($pergunta);
 			}
 
@@ -169,7 +170,8 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta {
 	}
 
 	function construirObjeto(array $row) {
-		$pergunta = new Pergunta($row['id'],$row['pergunta']);
+		$formularioRespondido = Dice::instance()->create('ColecaoFormularioRespondido')->comPerguntaId($row['id']);
+		$pergunta = new Pergunta($row['id'],$row['pergunta'], null,$formularioRespondido);
 
 		return $pergunta;
 	}	
