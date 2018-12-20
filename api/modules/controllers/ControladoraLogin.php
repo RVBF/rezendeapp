@@ -21,6 +21,7 @@ class ControladoraLogin {
 
 	function logar() {
 		$inexistentes = \ArrayUtil::nonExistingKeys([ 'login', 'senha' ], $this->params);
+		// Debuger::printr($this->params);
 
 		if(count($inexistentes) > 0)
 		{

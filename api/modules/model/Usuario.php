@@ -9,11 +9,9 @@
 class Usuario {
 
     private $id;
-    private $nome;
     private $login;
     private $senha;
-    private $loja;
-    private $grupoUsuario;
+    private $gruposUsuario;
 
     const TABELA = 'usuario';
     
@@ -23,11 +21,11 @@ class Usuario {
 	const TAMANHO_MINIMO_SENHA = 8;
 	const TAMANHO_MAXIMO_SENHA = 50;
 
-    function __construct($id = 0, $nome = '', $login = '', $senha = '') {
+    function __construct($id = 0, $login = '', $senha = '', $gruposUsuario = []) {
         $this->id = $id;
-        $this->nome =  $nome;
         $this->login = $login;
         $this->senha = $senha;
+        $this->gruposUsuarios = $gruposUsuario;
     }
 
     public function getId(){
@@ -54,28 +52,12 @@ class Usuario {
         $this->senha = $senha;
     }
 
-    public function getNome(){
-        return $this->nome; 
+    public function getGruposUsuario(){
+        return $this->gruposUsuario; 
     }
  
-    public function setNome($nome){
-        $this->nome = $nome;
-    }
-
-    public function getLoja(){
-        return $this->loja; 
-    }
- 
-    public function setLoja($loja){
-        $this->loja = $loja;
-    }
-
-    public function getGrupoUsuario(){
-        return $this->grupoUsuario; 
-    }
- 
-    public function setGrupoUsuario($grupoUsuario){
-        $this->grupoUsuario = $grupoUsuario;
+    public function setGruposUsuario($gruposUsuario){
+        $this->gruposUsuario = $gruposUsuario;
     }
 }
 ?>

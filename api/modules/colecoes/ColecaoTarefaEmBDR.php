@@ -127,7 +127,6 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 	function todos($limite = 0, $pulo = 0) {
 		try {	
 			$tarefas = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
-
 			$tarefasObjects = [];
 
 			foreach ($tarefas as $key => $tarefa) {

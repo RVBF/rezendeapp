@@ -8,13 +8,13 @@
 	'use strict';
 
 	function Opcao() {
-		this.exelente = 'Exelente';
+		this.excelente = 'Excelente';
 		this.bom = 'Bom';
 		this.ruim = 'Ruim';
 		this.naoAplica = 'Não se Aplica';
 
 		this.getpcoes = function(){
-			return { 1 : this.exelente, 2 : this.bom, 3 : this.ruim, 4 : this.naoAplica };
+			return { 1 : this.excelente, 2 : this.bom, 3 : this.ruim, 4 : this.naoAplica };
 		}
 	};
 

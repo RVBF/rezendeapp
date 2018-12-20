@@ -21,7 +21,7 @@
 			var opcoes = {
 				rules: {
 					"senha": {
-						rangelength : [ 8, 50 ]
+						rangelength : [ 3, 20 ]
 					},
 
 					"confirmacao_senha": {
@@ -32,7 +32,7 @@
 
 				messages: { 
 					"senha": {
-						rangelength	: $.validator.format("A senha deve ter entre {0} e {1} caracteres.")
+						rangelength	: $.validator.format("A senha deve ter entre {3} e {50} caracteres.")
 					},
 
 					"confirmacao_senha": {
@@ -55,7 +55,8 @@
 				};
 				
 				var obj = _this.conteudo();
-				var jqXHR = _this.alterar ? servicoUsuario.atualizar(obj) : servicoUsuario.adicionar(obj);
+				console.log(obj);
+				// var jqXHR = _this.alterar ? servicoUsuario.atualizar(obj) : servicoUsuario.adicionar(obj);
 				jqXHR.done(window.sucessoParaFormulario).fail(window.erro);
 
 				if(_this.alterar){
@@ -70,7 +71,16 @@
         
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
-			return servicoUsuario.criar($('#id').val(), $('#nome').val(), $('#login').val(), $('#senha').val());
+			console.log($('#lojas').val());
+			console.log($('#lojas').select2("val"));			
+			return servicoUsuario.criar($('#id').val(),
+				$('#nome').val(),
+				$('#sobrenome').val(),
+				$('#email').val(),
+				$('#login').val(), 
+				$('#senha').val(), 
+				$('#lojas').val()
+			);
 		};
 
 		_this.configurarBotoes = function configurarBotoes() {
@@ -78,11 +88,43 @@
 			_this.cancelarModoEdicao.on('click', _this.cancelar);
 		};
 
+
+		_this.popularLojas  =  function popularLojas(valor = 0)
+		{
+			var sucesso = function (resposta) {
+				$("#lojas").empty();
+
+				$.each(resposta.data, function(i ,item) {
+					$("#lojas").append($('<option>', {
+						value: item.id,
+						text: item.razaoSocial  + '/' + item.nomeFantasia
+					}));
+				});
+
+				$('#lojas').trigger('change');
+			};
+
+			var erro = function(resposta)
+			{
+				var mensagem = jqXHR.responseText || 'Erro ao popular select de farmácias.';
+				toastr.error(mensagem);
+				return false;
+			}
+
+			var servicoLoja = new app.ServicoLoja();
+			var  jqXHR = servicoLoja.todos();
+			jqXHR.done(sucesso).fail(erro);
+		};
+
 		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro() {
 			_this.formulario.parents('#painel_formulario').removeClass('desabilitado').desabilitar(false);
 			_this.formulario.parents('#painel_formulario').removeClass('d-none');
 			_this.formulario.find('#login').focus();
+
+			_this.popularLojas();
+
 			_this.configurarBotoes();
+
 		};
 
 		_this.iniciarFormularioModoEdicao = function iniciarFormularioModoEdicao() {
@@ -109,7 +151,11 @@
 		_this.desenhar = function desenhar(obj) {
 			$('#id').val(obj.id);
 			$('#nome').val(obj.nome);
+			$('#sobrenome').val(obj.sobrenome);
+			$('#email').val(obj.email);
 			$('#login').val(obj.login);
+			$('#lojas').val(obj.lojas).trigger('change');
+
 		};
 
 		_this.salvar = function salvar() {
