@@ -14,6 +14,7 @@ class ControladoraUsuario {
 
 	private $params;
 	private $colecaoUsuario;
+	private $colecaoLoja;
 	private $servicologin;
 	private $session;
 
@@ -21,6 +22,7 @@ class ControladoraUsuario {
 	function __construct($params, Sessao $sessao) {
 		$this->params = $params;
 		$this->colecaoUsuario = Dice::instance()->create('ColecaoUsuario');
+		$this->colecaoLoja = Dice::instance()->create('ColecaoLoja');
 		$this->servicoLogin = new ServicoLogin($sessao);
 		$this->sessao = $sessao;
 	}
@@ -53,18 +55,42 @@ class ControladoraUsuario {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
-			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'nome','login','senha'], $this->params);
 
+			Debuger::printr($this->params);
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'nome', 'sobrenome', 'email', 'login','senha', 'lojas'], $this->params);
 			if(count($inexistentes) > 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
 				throw new Exception($msg);
 			}
 
+			$lojas = $this->colecaoLoja->todosComIds(\ParamUtil::value($this->params, 'lojas'));
+
+			if(!isset($categoria) and !($loja instanceof Loja)){
+				throw new Exception("Loja não encontrada na base de dados.");
+			}
+
 			$hash = HashSenha::instance();
 
-			$usuario = new Usuario( 0, \ParamUtil::value($this->params, 'nome'), \ParamUtil::value($this->params, 'login'), $hash->gerarHashDeSenhaComSaltEmMD5(\ParamUtil::value($this->params, 'senha')));
-			$resposta = ['setor'=> RTTI::getAttributes($this->colecaoUsuario->adicionar($usuario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Usuário cadastrado com sucesso.']; 
+			$usuario = new Usuario( 
+				0, 
+				\ParamUtil::value($this->params, 'login'), 
+				$hash->gerarHashDeSenhaComSaltEmMD5(\ParamUtil::value($this->params, 'senha'))
+			);
+
+			$this->colecaoUsuario->adicionar($usuario);
+
+
+			$colaborador = new Colaborador(
+				0, 
+				\ParamUtil::value($this->params, 'nome'), 
+				\ParamUtil::value($this->params, 'sobrenome'), 
+				\ParamUtil::value($this->params, 'email'), 
+				$usuario,
+				$lojas
+			);
+
+			$resposta = ['status' => true, 'mensagem'=> 'Usuário cadastrado com sucesso.']; 
 		}
 		catch (\Exception $e) {
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
@@ -87,8 +113,18 @@ class ControladoraUsuario {
 			}
 
 			$hash = HashSenha::instance();
+			$loja = $this->colecaoLoja->comId(\ParamUtil::value($this->params, 'loja'));
+			if(!isset($categoria) and !($loja instanceof Loja)){
+				throw new Exception("Loja não encontrada na base de dados.");
+			}
 
-			$usuario = new Usuario( \ParamUtil::value($this->params, 'id'), \ParamUtil::value($this->params, 'nome'), \ParamUtil::value($this->params, 'login'), $hash->gerarHashDeSenhaComSaltEmMD5(\ParamUtil::value($this->params, 'senha')));
+			$usuario = new Usuario( 
+				\ParamUtil::value($this->params, 'id'), 
+				\ParamUtil::value($this->params, 'login'), 
+				$hash->gerarHashDeSenhaComSaltEmMD5(\ParamUtil::value($this->params, 'senha')),
+				$loja
+			);
+
 			$resposta = ['setor'=> RTTI::getAttributes($this->colecaoUsuario->atualizar($usuario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Usuário atualizado com sucesso.']; 
 		}
 		catch (\Exception $e) {
@@ -120,3 +156,4 @@ class ControladoraUsuario {
 	}
 }
 ?>
+				

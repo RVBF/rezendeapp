@@ -1,17 +1,18 @@
 <?php
 use Illuminate\Database\Capsule\Manager as Db;
 /**
- *	Coleção de Usuario em Banco de Dados Relacional.
+ *	Coleção de Colaborador em Banco de Dados Relacional.
  *
  *  @author		Rafael Vinicius Barros Ferreira
  *	@version	0.1
  */
 
-class ColecaoUsuarioEmBDR implements ColecaoUsuario
+class ColecaoColaboradorEmBDR implements ColecaoColaborador
 {
 
-	const TABELA = 'usuario';
-
+	const TABELA = 'colaborador';
+    const TABELA_RELACIONAL = 'atuacao';
+    
 	function __construct(){}
 
 	function adicionar(&$obj) {
@@ -20,9 +21,20 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
 			$id = Db::table(self::TABELA)->insertGetId([ 
-				'login' => $obj->getLogin(),
-				'senha' => $obj->getSenha()
-			]);
+				'nome' => $obj->getNome() ,
+				'sobrenome' => $obj->getLogin(),
+				'email' => $obj->getSenha(),
+				'usuario_id' => $obj->getUsuario()->getId()
+            ]);
+            
+            $atuacoesLojas = [];
+
+			foreach($obj->getLojas() as $loja){
+				
+				$atuacoesLojas[] = ['loja_id' => $loja->getId(), 'colaborador_id' =>  $id];
+            }
+            
+			Db::table(self::TABELA_RELACIONAL)->insert($atuacoesLojas);
 			
 			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
@@ -56,10 +68,12 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 			
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-			Db::table(self::TABELA)->where('id', $obj->getId())->update([
-				'login' => $obj->getLogin(), 
-				'senha' => $obj->getSenha()
-			]);
+			Db::table(self::TABELA)->where('id', $obj->getId())->update([ 
+				'nome' => $obj->getNome() ,
+				'sobrenome' => $obj->getLogin(),
+				'email' => $obj->getSenha(),
+				'usuario_id' => $obj->getUsuario()->getId()
+            ]);
 
 			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 			return $obj;
@@ -73,7 +87,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 
 	function comId($id){
 		try {	
-			$usuario = $this->construirObjeto(DB::table(self::TABELA)->select('id', 'login', 'loja_id')->where('id', $id)->get()[0]);
+			$usuario = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
 
 			return $usuario;
 		}
@@ -88,7 +102,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 	 */
 	function todos($limite = 0, $pulo = 0) {
 		try {	
-			$usuarios = Db::table(self::TABELA)->select('id', 'login')->offset($limite)->limit($pulo)->get();
+			$usuarios = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
 
             $usuariosObjects = [];
 
@@ -123,8 +137,10 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 	}
 
 	function construirObjeto(array $row) {
+		$usuario = ($row['usuario_id'] > 0) ? Dice::instance()->create('ColecaoUsuario')->comId($row['usuario_id']) : null;
+        $lojas = Dice::instance()->create('ColecaoLoja')->comColaboradorId($row['id']);
 
-		$usuario = new Usuario($row['id'], $row['login'], isset($row['senha']) ? $row['senha'] : '');
+		$colaborador = new Colaborador($row['id'], $row['nome'], $row['sobrenome'], $row['email'], $usuario, (count($lojas) > 0) ? $lojas : []);
 
 		return $usuario;
 	}	
@@ -132,46 +148,6 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
     function contagem() {
 		return Db::table(self::TABELA)->count();
 	}
-
-	function comLogin($login)
-	{
-		try {
-			$usuario = $this->construirObjeto(DB::table(self::TABELA)->where('login', $login)->get()[0]);
-		
-			return $usuario;
-		}
-		catch (\Exception $e)
-		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
-		}
-	}
-
-	function novaSenha($senhaAtual, $novaSenha, $confirmacaoSenha)
-	{
-		$this->validarTrocaDeSenha($senhaAtual, $novaSenha, $confirmacaoSenha);
-
-		$hash = new HashSenha($novaSenha);
-
-		$novaSenha = $hash->gerarHashDeSenhaComSaltEmMD5();
-
-		try
-		{
-			$sql = 'UPDATE ' . self::TABELA . ' SET
-			 	senha = :senha
-			 	WHERE id = :id';
-
-			$this->pdoW->execute($sql, [
-				'senha' => $novaSenha,
-				'id' => $this->getUsuario()->getId()
-			]);
-		}
-		catch (\Exception $e)
-		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
-		}
-	}
-
-
 }
 
 ?>

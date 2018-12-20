@@ -72,6 +72,22 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 		}
 	}
 
+	function comColaboradorId($id){
+		try {	
+			$loja = $this->construirObjeto(DB::table(self::TABELA)
+				->join(self::TABELA_RELACIONAL, self::TABELA_RELACIONAL . '.loja_id', '=', self::TABELA . '.id')
+				->where(self::TABELA_RELACIONAL . '.colaborador_id', $id)->get()
+
+			);
+
+			return $loja;
+		}
+		catch (\Exception $e)
+		{
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		}
+	}
+
 	/**
 	 * @inheritDoc
 	 */
