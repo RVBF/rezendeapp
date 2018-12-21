@@ -8,7 +8,7 @@
  */
 
 interface ColecaoLoja extends Colecao {
-    function todosComId($ids = []);
+    function todosComIds($ids = []);
 
     function comColaboradorId($id);
 }

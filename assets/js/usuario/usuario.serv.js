@@ -24,7 +24,7 @@
 
 		// Cria um objeto de usuario
 		this.criar = function criar(id = 0, nome = '', sobrenome = '', email = '', login = '', senha = '', lojas = []) {
- 			return {
+			return {
 				id : id  || 0,
 				nome : nome || '',
 				sobrenome : sobrenome || '',

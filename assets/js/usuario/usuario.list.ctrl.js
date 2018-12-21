@@ -27,16 +27,18 @@
 			objeto.columnDefs = [ {
 					data: 'id',
 					targets: 0,
-					responsivePriority: 2,
 					visible : true
 				}, {
-					data: 'nome',
-					responsivePriority: 1,
+					data: function(data) {
+						return data.colaborador.nome + ' ' + data.colaborador.sobrenome 	
+					},
 					targets: 1
+				}, {
+					data: 'colaborador.email',
+					targets: 2
                 }, {
 					data: 'login',
-					responsivePriority: 1,
-					targets: 2
+					targets: 3
                 }
 			];
 

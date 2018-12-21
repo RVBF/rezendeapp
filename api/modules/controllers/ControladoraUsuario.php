@@ -4,6 +4,8 @@ use phputil\datatables\DataTablesResponse;
 use Symfony\Component\Validator\Validation as Validacao;
 use \phputil\JSON;
 use \phputil\RTTI;
+use Illuminate\Database\Capsule\Manager as Db;
+
 /**
  * Controladora de Usuario
  *
@@ -16,6 +18,7 @@ class ControladoraUsuario {
 	private $colecaoUsuario;
 	private $colecaoLoja;
 	private $servicologin;
+	private $colecaoColaborador;
 	private $session;
 
 	
@@ -23,6 +26,7 @@ class ControladoraUsuario {
 		$this->params = $params;
 		$this->colecaoUsuario = Dice::instance()->create('ColecaoUsuario');
 		$this->colecaoLoja = Dice::instance()->create('ColecaoLoja');
+		$this->colecaoColaborador = Dice::instance()->create('ColecaoColaborador');
 		$this->servicoLogin = new ServicoLogin($sessao);
 		$this->sessao = $sessao;
 	}
@@ -39,6 +43,16 @@ class ControladoraUsuario {
 			$erro = null;	
 
 			$objetos = $this->colecaoUsuario->todos($dtr->start, $dtr->length);
+	
+			foreach ($objetos as $key => $obj) {
+				$colaborador = $this->colecaoColaborador->comUsuarioId($obj->getId());
+				if(!isset($colaborador) and !($colaborador instanceof Colaborador)){
+					throw new Exception("Colaborador não encontrada na base de dados.");
+				}
+
+				$objetos[$key]->setColaborador($colaborador);
+			}
+
 			$contagem = $this->colecaoUsuario->contagem();
 		}
 		catch (\Exception $e ) {
@@ -51,35 +65,36 @@ class ControladoraUsuario {
     }
     
     function adicionar() {
+		DB::beginTransaction();
+
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
 
-			Debuger::printr($this->params);
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'nome', 'sobrenome', 'email', 'login','senha', 'lojas'], $this->params);
 			if(count($inexistentes) > 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
 				throw new Exception($msg);
-			}
+			}			
+			
 
-			$lojas = $this->colecaoLoja->todosComIds(\ParamUtil::value($this->params, 'lojas'));
+			$lojas = $this->colecaoLoja->todosComIds($this->params['lojas']);
 
-			if(!isset($categoria) and !($loja instanceof Loja)){
+			if(!isset($lojas) and !($lojas instanceof Loja)){
 				throw new Exception("Loja não encontrada na base de dados.");
 			}
 
 			$hash = HashSenha::instance();
-
 			$usuario = new Usuario( 
 				0, 
 				\ParamUtil::value($this->params, 'login'), 
 				$hash->gerarHashDeSenhaComSaltEmMD5(\ParamUtil::value($this->params, 'senha'))
 			);
 
-			$this->colecaoUsuario->adicionar($usuario);
 
+			$this->colecaoUsuario->adicionar($usuario);
 
 			$colaborador = new Colaborador(
 				0, 
@@ -90,44 +105,75 @@ class ControladoraUsuario {
 				$lojas
 			);
 
+			$this->colecaoColaborador->adicionar($colaborador);
+
+			DB::commit();
+
 			$resposta = ['status' => true, 'mensagem'=> 'Usuário cadastrado com sucesso.']; 
 		}
 		catch (\Exception $e) {
+			DB::rollback();
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 
 		return $resposta;
 	}
 
-	function atualizar() {
+	function atualizar(){
+		DB::beginTransaction();
+
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
-			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'nome','login','senha'], $this->params);
-			
+
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'nome', 'sobrenome', 'email', 'login'], $this->params);
+
 			if(count($inexistentes) > 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
 				throw new Exception($msg);
-			}
+			}		
+			$lojas = null;
 
-			$hash = HashSenha::instance();
-			$loja = $this->colecaoLoja->comId(\ParamUtil::value($this->params, 'loja'));
-			if(!isset($categoria) and !($loja instanceof Loja)){
+			if(isset($this->params['lojas'])) $lojas = $this->colecaoLoja->todosComIds($this->params['lojas']);
+
+			if(!isset($lojas) and !($lojas instanceof Loja) and count($lojas)){
 				throw new Exception("Loja não encontrada na base de dados.");
 			}
 
+			$hash = HashSenha::instance();
 			$usuario = new Usuario( 
 				\ParamUtil::value($this->params, 'id'), 
-				\ParamUtil::value($this->params, 'login'), 
-				$hash->gerarHashDeSenhaComSaltEmMD5(\ParamUtil::value($this->params, 'senha')),
-				$loja
+				\ParamUtil::value($this->params, 'login')
 			);
 
-			$resposta = ['setor'=> RTTI::getAttributes($this->colecaoUsuario->atualizar($usuario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Usuário atualizado com sucesso.']; 
+			$usuario->setColaborador($this->colecaoColaborador->comUsuarioId($usuario->getId()));
+
+			$this->colecaoUsuario->atualizar($usuario);
+
+			$colaborador = new Colaborador(
+				0, 
+				\ParamUtil::value($this->params, 'nome'), 
+				\ParamUtil::value($this->params, 'sobrenome'), 
+				\ParamUtil::value($this->params, 'email'), 
+				$usuario,
+				(isset($lojas)) ? $lojas : []
+			);
+
+			$usuario->getColaborador()->setNome(\ParamUtil::value($this->params, 'nome'));
+			$usuario->getColaborador()->setSobrenome(\ParamUtil::value($this->params, 'sobrenome'));
+			$usuario->getColaborador()->setEmail(\ParamUtil::value($this->params, 'email'));
+			$usuario->getColaborador()->setLojas($lojas);
+
+			$this->colecaoColaborador->atualizar($usuario->getColaborador());
+
+			DB::commit();
+
+			$resposta = ['status' => true, 'mensagem'=> 'Usuário cadastrado com sucesso.']; 
 		}
 		catch (\Exception $e) {
+			DB::rollback();
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 
@@ -135,6 +181,8 @@ class ControladoraUsuario {
 	}
 
 	function remover($id) {
+		DB::beginTransaction();
+
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
@@ -143,16 +191,21 @@ class ControladoraUsuario {
 				$msg = 'O id informado não é numérico.';
 				return $this->geradoraResposta->erro($msg, GeradoraResposta::TIPO_TEXTO);
 			}
-
-			$this->colecaoUsuario->remover($id);
+			if($this->colecaoUsuario->remover($id)){
+				throw new Exception("Erro ao remover usuário.");
+			}
+			
+			DB::commit();
 
 			$resposta = ['status' => true, 'mensagem'=> 'Usuário removido com sucesso.']; 
-
-			return $this->geradoraResposta->semConteudo();
 		}
 		catch (\Exception $e) {
-			$resposta = ['status' => true, 'mensagem'=> 'Usuário removido com sucesso.']; 
+			DB::rollback();
+			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()]; 
 		}
+
+		return $resposta;
+
 	}
 }
 ?>

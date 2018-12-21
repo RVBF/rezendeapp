@@ -15,6 +15,9 @@ class Colaborador {
     private $usuario;
     private $lojas;
 
+    const TAM_TEXT_MIM = 3;
+    const TAM_TEXT_MAX = 50;
+
     function __construct($id = 0, $nome = '', $sobrenome = '', $email = '', $usuario = null, $lojas = []) {
         $this->id = $id;
         $this->nome =  $nome;

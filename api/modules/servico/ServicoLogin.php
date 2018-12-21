@@ -24,7 +24,7 @@ class ServicoLogin {
 		$usuario = null;
 		$senhaCriptografada = HashSenha::instance();
 		$senhaCriptografada = $senhaCriptografada->gerarHashDeSenhaComSaltEmMD5($senha);		
-		
+
 		if($this->validarLogin($login) and $resultado = $this->colecaoUsuario->comLogin($login))
 		{
 			if(count($resultado) === 1)
@@ -161,13 +161,11 @@ class ServicoLogin {
 	*/
 	private function validarLogin($login)	
 	{
-		if(!$this->validarFormatoLogin($login))
-		{
+		if(!$this->validarFormatoLogin($login)) {
 			throw new Exception("Formato de Login inválido.");
 		}
 
-		if(!is_string($login))
-		{
+		if(!is_string($login)) {
 			throw new ColecaoException( 'Valor inválido para login, o campo login é um campo do tipo texto.' );
 		}
 
@@ -181,6 +179,7 @@ class ServicoLogin {
 		{
 			throw new ColecaoException('O login deve conter no máximo ' . Usuario::TAMANHO_MAXIMO_LOGIN . ' caracteres.');
 		}
+
 
 		$resultado = $this->colecaoUsuario->comLogin($login);
 

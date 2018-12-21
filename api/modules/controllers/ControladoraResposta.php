@@ -88,7 +88,7 @@ class ControladoraResposta {
 			$formularioRespondido->setRespondedor($this->colecaoUsuario->comId($this->servicoLogin->getIdUsuario()));
 			$formularioRespondido->setDataHora(Carbon::now());
 			$tarefa = null;
-			Debuger::printr($this->params['obj']);
+
 			foreach($this->params['obj'] as $key => $parametros) {
 				$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'opcaoSelecionada','comentario', 'pergunta'], $parametros);
 

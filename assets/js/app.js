@@ -54,7 +54,7 @@ var app = {
 		errorClass: 'help-block',
 		errorPlacement: function (error, element)
 		{
-			var possivelSelect2 = element.nextAll('span .select2:first');
+			var possivelSelect2 = element.parent('div');
 			var possivelInputaAddon = element.parent('div .input-group').nextAll('div .menu_input_addon_erro:first');
 			if(possivelSelect2.length)
 			{
@@ -68,7 +68,7 @@ var app = {
 				}
 			}
 
-			element.after(error);
+			element.append(error);
 		}
 	});
 

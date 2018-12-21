@@ -12,6 +12,7 @@ class Usuario {
     private $login;
     private $senha;
     private $gruposUsuario;
+    private $colaborador;
 
     const TABELA = 'usuario';
     
@@ -58,6 +59,13 @@ class Usuario {
  
     public function setGruposUsuario($gruposUsuario){
         $this->gruposUsuario = $gruposUsuario;
+    }
+    public function getColaborador(){
+        return $this->colaborador; 
+    }
+ 
+    public function setColaborador($colaborador){
+        $this->colaborador = $colaborador;
     }
 }
 ?>
