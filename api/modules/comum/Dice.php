@@ -50,6 +50,7 @@ class Dice {
 		DI::config(DI::let('ColecaoGrupoUsuario')->create('ColecaoGrupoUsuarioEmBDR'));
 		DI::config(DI::let('ColecaoGrupoUsuario')->create('ColecaoGrupoUsuarioEmBDR'));
 		DI::config(DI::let('ColecaoFormularioRespondido')->create('ColecaoFormularioRespondidoEmBDR'));
+		DI::config(DI::let('ColecaoColaborador')->create('ColecaoColaboradorEmBDR'));
 	}
 }
 

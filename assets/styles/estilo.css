@@ -546,3 +546,7 @@ span.select2-selection.select2-selection--multiple{
 input.select2-search__field {
     margin-bottom: 0 !important;
 }
+
+.help-block{
+    margin-bottom: 2px !important;
+}

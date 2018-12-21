@@ -13,13 +13,19 @@
 
 		_this.alterar;
 		_this.formulario = $('#usuario_form');
-		_this.botaoSubmissao = $('#salvar')
-		_this.cancelarModoEdicao = $('#cancelar_edicao')
-
+		_this.botaoSubmissao = $('#salvar');
+		_this.cancelarModoEdicao = $('#cancelar_edicao');
+		_this.obj = null;
 		// Cria as opções de validação do formulário
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
 			var opcoes = {
 				rules: {
+					"nome" : {
+						rangelength : [3, 50]
+					},
+					"sobrenome" : {
+						rangelength : [3, 50]
+					},
 					"senha": {
 						rangelength : [ 3, 20 ]
 					},
@@ -43,20 +49,15 @@
 
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
-				_this.formulario.desabilitar(true);
+				var obj = _this.conteudo();
 
-				var erro = function erro(jqXHR, textStatus, errorThrown) {
-					var mensagem = jqXHR.responseText;
-					_this.formulario.find('#msg').empty().append('<div class="error" >' + mensagem + '</div>');
-				};
+				_this.formulario.desabilitar(true);
 				
 				var terminado = function() {
 					_this.formulario.desabilitar(false);
 				};
 				
-				var obj = _this.conteudo();
-				console.log(obj);
-				// var jqXHR = _this.alterar ? servicoUsuario.atualizar(obj) : servicoUsuario.adicionar(obj);
+				var jqXHR = _this.alterar ? servicoUsuario.atualizar(obj) : servicoUsuario.adicionar(obj);
 				jqXHR.done(window.sucessoParaFormulario).fail(window.erro);
 
 				if(_this.alterar){
@@ -71,9 +72,8 @@
         
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
-			console.log($('#lojas').val());
-			console.log($('#lojas').select2("val"));			
-			return servicoUsuario.criar($('#id').val(),
+			return servicoUsuario.criar(
+				$('#id').val(),
 				$('#nome').val(),
 				$('#sobrenome').val(),
 				$('#email').val(),
@@ -100,8 +100,15 @@
 						text: item.razaoSocial  + '/' + item.nomeFantasia
 					}));
 				});
+				
+				var ids = Array();
 
-				$('#lojas').trigger('change');
+				for(var indice in _this.obj.colaborador.lojas){
+					var atual =  _this.obj.colaborador.lojas[indice];
+					ids.push(atual.id);
+				}
+
+				$('#lojas').val(ids).trigger('change');
 			};
 
 			var erro = function(resposta)
@@ -125,11 +132,27 @@
 
 			_this.configurarBotoes();
 
+
+			if(!$('#senha').hasClass('campo_obrigatorio')){
+				$('#login').parent('div').attr('class', 'col-md-4 col-xs-4 co-sm-4 col-12');
+				$('#senha').parent('div').removeClass('d-none');
+				$('#confirmacao_senha').parent('div').removeClass('d-none');
+	
+				$('#senha').addClass('campo_obrigatorio');
+				$('#lojas').addClass('campo_obrigatorio');
+				$('#confirmacao_senha ').addClass('campo_obrigatorio');
+			}
 		};
 
 		_this.iniciarFormularioModoEdicao = function iniciarFormularioModoEdicao() {
 			_this.iniciarFormularioModoCadastro();
 			$('#msg').empty();
+
+			$('#login').parent('div').attr('class', 'col-md-12 col-xs-12 co-sm-12 col-12');
+			$('#senha').parent('div').addClass('d-none');
+			$('#confirmacao_senha').parent('div').addClass('d-none');
+
+			$('#lojas').removeClass('campo_obrigatorio');
 			$('#senha').removeClass('campo_obrigatorio');
 			$('#confirmacao_senha ').removeClass('campo_obrigatorio');
 
@@ -149,13 +172,12 @@
 
 		// Desenha o objeto no formulário
 		_this.desenhar = function desenhar(obj) {
+			_this.obj = obj;
 			$('#id').val(obj.id);
-			$('#nome').val(obj.nome);
-			$('#sobrenome').val(obj.sobrenome);
-			$('#email').val(obj.email);
+			$('#nome').val(obj.colaborador.nome);
+			$('#sobrenome').val(obj.colaborador.sobrenome);
+			$('#email').val(obj.colaborador.email);
 			$('#login').val(obj.login);
-			$('#lojas').val(obj.lojas).trigger('change');
-
 		};
 
 		_this.salvar = function salvar() {

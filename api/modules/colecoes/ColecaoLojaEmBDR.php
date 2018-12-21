@@ -11,6 +11,8 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 {
 
 	const TABELA = 'loja';
+	const TABELA_RELACIONAL = 'atuacao';
+
 
 	function __construct(){}
 
@@ -73,14 +75,19 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 	}
 
 	function comColaboradorId($id){
-		try {	
-			$loja = $this->construirObjeto(DB::table(self::TABELA)
+		try {
+
+			$lojas = DB::table(self::TABELA)
 				->join(self::TABELA_RELACIONAL, self::TABELA_RELACIONAL . '.loja_id', '=', self::TABELA . '.id')
-				->where(self::TABELA_RELACIONAL . '.colaborador_id', $id)->get()
+				->where(self::TABELA_RELACIONAL . '.colaborador_id', $id)->get();
+				
+			$lojasObjects = [];
 
-			);
+			foreach ($lojas as $loja) {
+				$lojasObjects[] = $this->construirObjeto($loja);			
+			}
 
-			return $loja;
+			return $lojasObjects;
 		}
 		catch (\Exception $e)
 		{
@@ -107,7 +114,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 		}
 	}
 
-	function todosComId($ids = []) {
+	function todosComIds($ids = []) {
 		try {	
 			$lojas = Db::table(self::TABELA)->whereIn('id', $ids)->get();
 			$lojasObjects = [];
@@ -125,7 +132,6 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 
 	function construirObjeto(array $row) {
 		$loja = new Loja($row['id'],$row['razaoSocial'], $row['nomeFantasia']);
-
 		return $loja;
 	}	
 

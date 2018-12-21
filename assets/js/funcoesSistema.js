@@ -136,36 +136,19 @@
 		$('.toltip').tooltip(); 
 		
 		$.validator.addMethod("cRequired", $.validator.methods.required, "Campo obrigatório.");
+		$.validator.addMethod("emailFormat", function(email) {
+			var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+    		return pattern.test(email);
+		}, "Formato inválido para e-mail.");
+
 		$.validator.addClassRules("campo_obrigatorio", {cRequired: true});
+		$.validator.addClassRules("email_formato", {emailFormat: true});
+
 		
 		setInterval(function() {
 			app.verficarLogin();
 		}, 1800000);
 		
-		// window.download = function download(content, filleName, contentType){
-
-
-		// 	// var blob = new Blob([content], {type: contentType});
-		// 	// console.log(blob)
-        //     // url = window.URL.createObjectURL(blob);
-		// 	// a.setAttribute('href', url);
-		// 	// a.setAttribute('download', filleName);
-		// 	// document.body.appendChild(a);
-		// 	// a.click();
-		// 	// document.body.removeChild(a);
-
-        // 	// window.URL.revokeObjectURL(url);
-		// 	// element.setAttribute('href', content);
-		// 	// element.setAttribute('download', filename);
-
-		// 	// element.style.display = 'none';
-		// 	// document.body.appendChild(element);
-
-		// 	// element.click();
-
-		// 	// document.body.removeChild(element);
-		// };
-
 		window.validarSeONavegadorSuporta  = function validarSeONavegadorSuporta() {
 			// Verificando se o navegador tem suporte aos recursos para redimensionamento
 			if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
