@@ -4,7 +4,7 @@ use phputil\datatables\DataTablesResponse;
 use Symfony\Component\Validator\Validation as Validacao;
 use \phputil\JSON;
 use \phputil\RTTI;
-use Illuminate\Database\Capsule\Manager as Db;
+use Illuminate\Database\Capsule\Manager as DB;
 
 /**
  * Controladora de Usuario

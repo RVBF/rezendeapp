@@ -56,7 +56,9 @@
 				},
 				targets : 5
 			}, {
-				data : 'questionador.nome',
+				data :function(data) {
+					return data.questionador.nome + ' ' + data.questionador.sobrenome;
+				},
 				targets : 6
 			}, {
 				data :function(data){

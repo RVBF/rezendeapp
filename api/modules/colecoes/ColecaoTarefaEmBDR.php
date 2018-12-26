@@ -1,5 +1,5 @@
 <?php
-use Illuminate\Database\Capsule\Manager as Db;
+use Illuminate\Database\Capsule\Manager as DB;
 use Carbon\Carbon;
 
 /**
@@ -19,7 +19,7 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 			try {	
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 	
-				$id = Db::table(self::TABELA)->insertGetId([ 'titulo' => $obj->getTitulo(),
+				$id = DB::table(self::TABELA)->insertGetId([ 'titulo' => $obj->getTitulo(),
 						'descricao' => $obj->getDescricao(),
 						'data_limite' => $obj->getDataLimite()->toDateTimeString(),
 						'setor_id' => $obj->getSetor()->getId(),
@@ -86,7 +86,7 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 					'loja_id' => $obj->getLoja()->getId()
 				];
 				
-				Db::table(self::TABELA)->where('id', $obj->getId())->update($filds);
+				DB::table(self::TABELA)->where('id', $obj->getId())->update($filds);
 
 				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
@@ -124,9 +124,26 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 		}
 	}
 
+	function todosComLojaIds($limite = 0, $pulo = 0, $idsLojas = []){
+		try {	
+			$tarefas = DB::table(self::TABELA)->whereIn('loja_id', $idsLojas)->offset($limite)->limit($pulo)->get();
+
+			$tarefasObjects = [];
+			foreach ($tarefas as $key => $tarefa) {
+				$tarefasObjects[] =  $this->construirObjeto($tarefa);
+			}
+
+			return $tarefasObjects;
+		}
+		catch (\Exception $e)
+		{
+			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
+		}
+	}
+
 	function todos($limite = 0, $pulo = 0) {
 		try {	
-			$tarefas = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+			$tarefas = DB::table(self::TABELA)->offset($limite)->limit($pulo)->get();
 			$tarefasObjects = [];
 
 			foreach ($tarefas as $key => $tarefa) {
@@ -143,7 +160,7 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 	
 	function todosComId($ids = []) {
 		try {	
-			$tarefas = Db::table(self::TABELA)->whereIn('id', $ids)->get();
+			$tarefas = DB::table(self::TABELA)->whereIn('id', $ids)->get();
 			$tarefasObjects = [];
 
 			foreach ($tarefas as $tarefa) {
@@ -161,16 +178,14 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 	function construirObjeto(array $row) {
 		$setor = ($row['setor_id'] > 0) ? Dice::instance()->create('ColecaoSetor')->comId($row['setor_id']) : '';
 		$loja = ($row['loja_id'] > 0) ? Dice::instance()->create('ColecaoLoja')->comId($row['loja_id']) : '';
-		$questionador = ($row['questionador_id'] > 0) ? Dice::instance()->create('ColecaoUsuario')->comId($row['questionador_id']) : '';
+		$questionador = ($row['questionador_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comUsuarioId($row['questionador_id']) : '';
 		$perguntas = Dice::instance()->create('ColecaoPergunta')->comTarefaId($row['id']);
-
 		$tarefa = new Tarefa($row['id'],$row['titulo'], $row['descricao'], $row['data_limite'], $row['data_cadastro'], $setor, $loja, $questionador, $perguntas,($row['encerrada']) ? true : false);
-
 		return $tarefa;
 	}	
 
     function contagem() {
-		return Db::table(self::TABELA)->count();
+		return DB::table(self::TABELA)->count();
 	}
 
 	private function validarTarefa(&$obj) {

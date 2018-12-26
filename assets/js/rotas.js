@@ -83,6 +83,7 @@
 	router.get('/categorias', verficarLogin, criarRotaPara('categoria.html'));
 	router.get('/loja', verficarLogin, criarRotaPara('loja.html'));
 	router.get('/tarefa', verficarLogin, criarRotaPara('tarefa.html'));
+	router.get('/setor', verficarLogin, criarRotaPara('setor.html'));
 	router.get('/resposta/:tarefaId', verficarLogin, criarRotaPara('resposta.html'));
 
 	router.get('/tarefa/:id/pergunta', verficarLogin, criarRotaPara('pergunta.html'));
@@ -93,7 +94,7 @@
 	router.get('/configuracao/grupo-usuario', verficarLogin, criarRotaPara('grupo_usuario.html'));
 
 
-    router.get('/', verficarLogin, criarRotaPara('setor.html'));
+    router.get('/', verficarLogin, criarRotaPara('tarefa.html'));
 
 	// // 404
 	router.get('/*', function(req, e) {

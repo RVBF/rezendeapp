@@ -11,11 +11,13 @@ class GrupoUsuario {
     private $id;
     private $nome;
     private $descricao;
-
-    function __construct($id = 0, $nome = '', $descricao = '') {
+    private $usuarios;
+    
+    function __construct($id = 0, $nome = '', $descricao = '', $usuarios = []) {
         $this->id = $id;
         $this->nome =  $nome;
         $this->descricao = $descricao;
+        $this->usuarios = $usuarios;
     }
 
     public function getId(){
@@ -40,6 +42,18 @@ class GrupoUsuario {
  
     public function setNome($nome){
         $this->nome = $nome;
+    }
+
+    public function getUsuarios(){
+        return $this->usuarios; 
+    }
+ 
+    public function setUsuarios($usuarios){
+        $this->usuarios = $usuarios;
+    }
+
+    public function addUsuario($usuario){
+        $this->usuarios[] = $usuario;
     }
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-use Illuminate\Database\Capsule\Manager as Db;
+use Illuminate\Database\Capsule\Manager as DB;
 /**
  *	Coleção de Usuario em Banco de Dados Relacional.
  *
@@ -11,6 +11,8 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 {
 
 	const TABELA = 'usuario';
+	const TABELA_RELACIONAL = 'usuario_grupo_usuario';
+
 
 	function __construct(){}
 
@@ -20,7 +22,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 	
-				$id = Db::table(self::TABELA)->insertGetId([ 
+				$id = DB::table(self::TABELA)->insertGetId([ 
 					'login' => $obj->getLogin(),
 					'senha' => $obj->getSenha()
 				]);
@@ -71,7 +73,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 				
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-				Db::table(self::TABELA)->where('id', $obj->getId())->update([
+				DB::table(self::TABELA)->where('id', $obj->getId())->update([
 					'login' => $obj->getLogin()
 				]);
 
@@ -102,7 +104,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 	 */
 	function todos($limite = 0, $pulo = 0) {
 		try {	
-			$usuarios = Db::table(self::TABELA)->select('id', 'login')->offset($limite)->limit($pulo)->get();
+			$usuarios = DB::table(self::TABELA)->select('id', 'login')->offset($limite)->limit($pulo)->get();
 
             $usuariosObjects = [];
 
@@ -119,13 +121,12 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 		}
 	}
 	
-	function todosComId($ids = []) {
+	function todosComIds($ids = []) {
 		try {	
-			$usuarios = Db::table(self::TABELA)->whereIn('id', $ids)->get();
+			$usuarios = DB::table(self::TABELA)->whereIn('id', $ids)->get();
 			$usuariosObjects = [];
-
-			foreach ($usuarios as $usuario) {
-				$usuariosObjects[] =  $this->construirObjeto($usuario);
+			foreach ($usuarios as $usuarios) {
+				$usuariosObjects[] =  $this->construirObjeto($usuarios);
 			}
 
 			return $usuariosObjects;
@@ -135,16 +136,36 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
 		}
 	}
-
+	
 	function construirObjeto(array $row) {
-
 		$usuario = new Usuario($row['id'], $row['login'], isset($row['senha']) ? $row['senha'] : '');
 
 		return $usuario;
-	}	
+	}
+	
+	function comGrupoId($id){
+		try {
+
+			$grupos = DB::table(self::TABELA)
+				->join(self::TABELA_RELACIONAL, self::TABELA_RELACIONAL . '.usuario_id', '=', self::TABELA . '.id')
+				->where(self::TABELA_RELACIONAL . '.grupo_usuario_id', $id)->get();
+				
+			$gruposObjects = [];
+
+			foreach ($grupos as $grupo) {
+				$gruposObjects[] = $this->construirObjeto($grupo);			
+			}
+
+			return $gruposObjects;
+		}
+		catch (\Exception $e)
+		{
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		}
+	}
 
     function contagem() {
-		return Db::table(self::TABELA)->count();
+		return DB::table(self::TABELA)->count();
 	}
 
 	function comLogin($login)
@@ -185,15 +206,14 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
 		}
 	}
-	private function validarUsuario($obj)
-	{
+	private function validarUsuario($obj) {
 		$this->validarLogin($obj->getLogin());
 
 		if($obj->getSenha() != '' or ($obj->getId() == 0 and $obj->getSenha() != '') ) {
 			$this->validarSenha($obj->getSenha());
 		}
 
-		$quantidade = Db::table(self::TABELA)->whereRaw('login like "%' . $obj->getLogin() . '%"')->where('id', '<>', $obj->getId())->count();
+		$quantidade = DB::table(self::TABELA)->whereRaw('login like "%' . $obj->getLogin() . '%"')->where('id', '<>', $obj->getId())->count();
 
 		if($quantidade > 0)
 		{

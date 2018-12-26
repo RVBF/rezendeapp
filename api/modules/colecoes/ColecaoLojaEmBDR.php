@@ -1,5 +1,5 @@
 <?php
-use Illuminate\Database\Capsule\Manager as Db;
+use Illuminate\Database\Capsule\Manager as DB;
 /**
  *	Coleção de Loja em Banco de Dados Relacional.
  *
@@ -19,7 +19,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 	function adicionar(&$obj) {
 		if($this->validarLoja($obj)){
 			try {	
-				$id = Db::table(self::TABELA)->insertGetId(['razaoSocial' => $obj->getRazaoSocial(), 'nomeFantasia' => $obj->getNomeFantasia()]);
+				$id = DB::table(self::TABELA)->insertGetId(['razaoSocial' => $obj->getRazaoSocial(), 'nomeFantasia' => $obj->getNomeFantasia()]);
 				
 				$obj->setId($id);
 
@@ -100,7 +100,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 	 */
 	function todos($limite = 0, $pulo = 0) {
 		try {	
-			$lojas = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+			$lojas = DB::table(self::TABELA)->offset($limite)->limit($pulo)->get();
 			$lojasObjects = [];
 			foreach ($lojas as $loja) {
 				$lojasObjects[] =  $this->construirObjeto($loja);
@@ -116,7 +116,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 
 	function todosComIds($ids = []) {
 		try {	
-			$lojas = Db::table(self::TABELA)->whereIn('id', $ids)->get();
+			$lojas = DB::table(self::TABELA)->whereIn('id', $ids)->get();
 			$lojasObjects = [];
 			foreach ($lojas as $loja) {
 				$lojasObjects[] =  $this->construirObjeto($loja);
@@ -136,7 +136,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 	}	
 
     function contagem() {
-		return Db::table(self::TABELA)->count();
+		return DB::table(self::TABELA)->count();
 	}
 
 	private function validarLoja(&$obj) {

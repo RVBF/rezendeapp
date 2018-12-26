@@ -77,17 +77,7 @@
 	
 			$(evento.target).find('.setor_link').on('click', function(event){
 				event.preventDefault();
-				router.navigate('/');
-			});
-	
-			$(evento.target).find('.tarefa_link').on('click', function(event){
-				event.preventDefault();
-				router.navigate('/tarefa');
-			});
-
-			$(evento.target).find('.tarefa_link').on('click', function(event){
-				event.preventDefault();
-				router.navigate('/tarefa');
+				router.navigate('/setor');
 			});
 
 			$(evento.target).find('.usuario_link').on('click', function(event){

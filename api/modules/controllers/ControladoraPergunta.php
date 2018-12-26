@@ -4,7 +4,7 @@ use phputil\datatables\DataTablesResponse;
 use Symfony\Component\Validator\Validation as Validacao;
 use \phputil\JSON;
 use \phputil\RTTI;
-
+use Illuminate\Database\Capsule\Manager as DB;
 
 
 /**
@@ -57,6 +57,8 @@ class ControladoraPergunta {
 	}
 	
 	function adicionar($tarefaId) {
+		DB::beginTransaction();
+
 		try {
 
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
@@ -86,8 +88,11 @@ class ControladoraPergunta {
 			
 			$pergunta = $this->colecaoPergunta->adicionar($pergunta);
 			$resposta = ['pergunta'=> RTTI::getAttributes( $pergunta, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Pergunta cadastrada com sucesso.']; 
+			DB::commit();
 		}
 		catch (\Exception $e) {
+			DB::rollback();
+
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 
@@ -96,6 +101,7 @@ class ControladoraPergunta {
 
 		
 	function adicionarTodas($tarefaId) {
+		DB::beginTransaction();
 
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
@@ -130,8 +136,12 @@ class ControladoraPergunta {
 			
 			$objetos = $this->colecaoPergunta->adicionarTodas($objetos);
 			$resposta = ['perguntas'=> $objetos, 'status' => true, 'mensagem'=> 'Pergunta cadastrada com sucesso.']; 
+			DB::commit();
+
 		}
 		catch (\Exception $e) {
+			DB::rollback();
+
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 
@@ -139,6 +149,7 @@ class ControladoraPergunta {
 	}
 
 	function atualizar($tarefaId) {
+		DB::beginTransaction();
 
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
@@ -169,8 +180,12 @@ class ControladoraPergunta {
 			
 			$pergunta = $this->colecaoPergunta->atualizar($pergunta);
 			$resposta = ['pergunta'=> RTTI::getAttributes( $pergunta, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Pergunta atualizada com sucesso.']; 
+			DB::commit();
+
 		}
 		catch (\Exception $e) {
+			DB::rollback();
+
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 
@@ -225,6 +240,8 @@ class ControladoraPergunta {
 		return $resposta;
 	}
 	function remover($id, $tarefaId) {
+		DB::beginTransaction();
+
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
@@ -232,10 +249,13 @@ class ControladoraPergunta {
 			$resposta = [];
 
 			$status = $this->colecaoPergunta->remover($id, $tarefaId);
-			
+			DB::commit();
+
 			$resposta = ['status' => true, 'mensagem'=> 'Categoria removida com sucesso.']; 
 		}
 		catch (\Exception $e) {
+			DB::rollback();
+
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 

@@ -1,5 +1,5 @@
 <?php
-use Illuminate\Database\Capsule\Manager as Db;
+use Illuminate\Database\Capsule\Manager as DB;
 /**
  *	Coleção de Categoria em Banco de Dados Relacional.
  *
@@ -17,7 +17,7 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 	function adicionar(&$obj) {
 		if($this->validarCategoria($obj)){
 			try {	
-				$id = Db::table(self::TABELA)->insertGetId(
+				$id = DB::table(self::TABELA)->insertGetId(
 					['titulo' => $obj->getTitulo()]
 				);
 				
@@ -82,7 +82,7 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 	 */
 	function todos($limite = 0, $pulo = 0) {
 		try {	
-			$categorias = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+			$categorias = DB::table(self::TABELA)->offset($limite)->limit($pulo)->get();
 			$categoriasObjects = [];
 
 			foreach ($categorias as $categoria) {
@@ -106,7 +106,7 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 	}
 
     function contagem(){
-		return Db::table(self::TABELA)->count();
+		return DB::table(self::TABELA)->count();
 	}
 	
 	private function validarCategoria(&$obj) {

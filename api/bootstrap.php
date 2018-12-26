@@ -3,7 +3,7 @@
 include __DIR__.'/vendor/autoload.php';
 
 // use Config;
-use Illuminate\Database\Capsule\Manager as Db;
+use Illuminate\Database\Capsule\Manager as DB;
 
 $config = Config::getInstance();
 

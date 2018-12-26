@@ -1,5 +1,5 @@
 <?php
-use Illuminate\Database\Capsule\Manager as Db;
+use Illuminate\Database\Capsule\Manager as DB;
 /**
  *	Coleção de Resposta em Banco de Dados Relacional.
  *
@@ -16,7 +16,7 @@ class ColecaRespostaEmBDR implements ColecaResposta
 
 	function adicionar(&$obj) {
 		try {	
-			$id = Db::table(self::TABELA)->insertGetId(
+			$id = DB::table(self::TABELA)->insertGetId(
 				['titulo' => $obj->getTitulo()]
 			);
 			
@@ -72,7 +72,7 @@ class ColecaRespostaEmBDR implements ColecaResposta
 	 */
 	function todos($limite = 0, $pulo = 0) {
 		try {	
-			$lojas = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+			$lojas = DB::table(self::TABELA)->offset($limite)->limit($pulo)->get();
 			$lojasObjects = [];
 			foreach ($lojas as $loja) {
 				$lojasObjects[] =  $this->construirObjeto($loja);
@@ -88,7 +88,7 @@ class ColecaRespostaEmBDR implements ColecaResposta
 
 	function todosComId($ids = []) {
 		try {	
-			$lojas = Db::table(self::TABELA)->whereIn('id', $ids)->get();
+			$lojas = DB::table(self::TABELA)->whereIn('id', $ids)->get();
 			$lojasObjects = [];
 			foreach ($lojas as $loja) {
 				$lojasObjects[] =  $this->construirObjeto($loja);
@@ -109,7 +109,7 @@ class ColecaRespostaEmBDR implements ColecaResposta
 	}	
 
     function contagem() {
-		return Db::table(self::TABELA)->count();
+		return DB::table(self::TABELA)->count();
 	}
 }
 

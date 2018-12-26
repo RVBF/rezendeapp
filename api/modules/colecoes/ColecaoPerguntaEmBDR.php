@@ -1,5 +1,5 @@
 <?php
-use Illuminate\Database\Capsule\Manager as Db;
+use Illuminate\Database\Capsule\Manager as DB;
 /**
  *	Coleção de Pergunta em Banco de Dados Relacional.
  *
@@ -18,7 +18,7 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta {
 		try {	
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 			
-			$id = Db::table(self::TABELA)->insertGetId(['pergunta' => $obj->getPergunta(), 'tarefa_id' => $obj->getTarefa()->getId()]);
+			$id = DB::table(self::TABELA)->insertGetId(['pergunta' => $obj->getPergunta(), 'tarefa_id' => $obj->getTarefa()->getId()]);
 
 			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
@@ -37,7 +37,7 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta {
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
 			foreach ($objs as $key => $obj) {
-				$id = Db::table(self::TABELA)->insertGetId([ 'pergunta' => $obj->getPergunta(), 'tarefa_id' => $obj->getTarefa()->getId()]);
+				$id = DB::table(self::TABELA)->insertGetId([ 'pergunta' => $obj->getPergunta(), 'tarefa_id' => $obj->getTarefa()->getId()]);
 				$obj->setId($id);
 				$objs[$key] = $obj;
 			}
@@ -70,7 +70,7 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta {
 			
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-			Db::table(self::TABELA)->where('id', $obj->getId())->update([ 'pergunta' => $obj->getPergunta(), 'tarefa_id' => $obj->getTarefa()->getId(),'resposta_id' => $obj->getResposta()->getId()
+			DB::table(self::TABELA)->where('id', $obj->getId())->update([ 'pergunta' => $obj->getPergunta(), 'tarefa_id' => $obj->getTarefa()->getId(),'resposta_id' => $obj->getResposta()->getId()
 			]);
 
 			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
@@ -100,7 +100,7 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta {
 	 */
 	function todos($limite = 0, $pulo = 0, $idTarefa) {
 		try {	
-			$perguntas = Db::table(self::TABELA)->where('tarefa_id', $idTarefa)->offset($limite)->limit($pulo)->get();
+			$perguntas = DB::table(self::TABELA)->where('tarefa_id', $idTarefa)->offset($limite)->limit($pulo)->get();
 			$perguntasObjects = [];
 
 			foreach ($perguntas as $key => $pergunta) {
@@ -118,7 +118,7 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta {
 
 	function todosComId($ids = []) {
 		try {	
-			$perguntas = Db::table(self::TABELA)->whereIn('id', $ids)->get();
+			$perguntas = DB::table(self::TABELA)->whereIn('id', $ids)->get();
 			$perguntasObjects = [];
 
 			foreach ($perguntas as $pergunta) {
@@ -136,7 +136,7 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta {
 
 	function comTarefaId($tarefaId){
 		try {	
-			$perguntas = Db::table(self::TABELA)->where('tarefa_id', $tarefaId)->get();
+			$perguntas = DB::table(self::TABELA)->where('tarefa_id', $tarefaId)->get();
 
 			$perguntasObjects = [];
 			foreach ($perguntas as $pergunta) {
@@ -154,7 +154,7 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta {
 
 	function comFormularioId($id){
 		try {	
-			$perguntas = Db::table(self::TABELA)->join(self::TABELA_RELACIONAL, self::TABELA.'.id', '=', self::TABELA . 'pergunta_id')->where(self::TABELA_RELACIONAL . '.formulario_respondido_id', $id)->get();
+			$perguntas = DB::table(self::TABELA)->join(self::TABELA_RELACIONAL, self::TABELA.'.id', '=', self::TABELA . 'pergunta_id')->where(self::TABELA_RELACIONAL . '.formulario_respondido_id', $id)->get();
 
 			$perguntasObjects = [];
 			foreach ($perguntas as $pergunta) {
@@ -171,13 +171,14 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta {
 
 	function construirObjeto(array $row) {
 		$formularioRespondido = Dice::instance()->create('ColecaoFormularioRespondido')->comPerguntaId($row['id']);
+
 		$pergunta = new Pergunta($row['id'],$row['pergunta'], null,$formularioRespondido);
 
 		return $pergunta;
 	}	
 
     function contagem() {
-		return Db::table(self::TABELA)->count();
+		return DB::table(self::TABELA)->count();
 	}
 }
 ?>

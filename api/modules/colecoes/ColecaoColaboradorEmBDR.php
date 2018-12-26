@@ -1,5 +1,5 @@
 <?php
-use Illuminate\Database\Capsule\Manager as Db;
+use Illuminate\Database\Capsule\Manager as DB;
 /**
  *	Coleção de Colaborador em Banco de Dados Relacional.
  *
@@ -20,7 +20,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-				$id = Db::table(self::TABELA)->insertGetId([ 
+				$id = DB::table(self::TABELA)->insertGetId([ 
 					'nome' => $obj->getNome() ,
 					'sobrenome' => $obj->getSobreNome(),
 					'email' => $obj->getEmail(),
@@ -34,7 +34,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 					$atuacoesLojas[] = ['loja_id' => $loja->getId(), 'colaborador_id' =>  $id];
 				}
 				
-				Db::table(self::TABELA_RELACIONAL)->insert($atuacoesLojas);
+				DB::table(self::TABELA_RELACIONAL)->insert($atuacoesLojas);
 				
 				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
@@ -73,7 +73,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 			
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 	
-				Db::table(self::TABELA)->where('id', $obj->getId())->update([ 
+				DB::table(self::TABELA)->where('id', $obj->getId())->update([ 
 					'nome' => $obj->getNome() ,
 					'sobrenome' => $obj->getSobreNome(),
 					'email' => $obj->getEmail(),
@@ -89,7 +89,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 					
 						$atuacoesLojas[] = ['loja_id' => $loja->getId(), 'colaborador_id' =>  $obj->getId()];
 					}
-					Db::table(self::TABELA_RELACIONAL)->insert($atuacoesLojas);
+					DB::table(self::TABELA_RELACIONAL)->insert($atuacoesLojas);
 				}
 			
 			
@@ -134,7 +134,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 	 */
 	function todos($limite = 0, $pulo = 0) {
 		try {	
-			$colaboradores = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+			$colaboradores = DB::table(self::TABELA)->offset($limite)->limit($pulo)->get();
 
             $colaboradoresObjects = [];
 
@@ -153,7 +153,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 	
 	function todosComId($ids = []) {
 		try {	
-			$colaboradores = Db::table(self::TABELA)->whereIn('id', $ids)->get();
+			$colaboradores = DB::table(self::TABELA)->whereIn('id', $ids)->get();
 			$colaboradoresObjects = [];
 
 			foreach ($colaboradores as $usuario) {
@@ -178,7 +178,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 	}	
 
     function contagem() {
-		return Db::table(self::TABELA)->count();
+		return DB::table(self::TABELA)->count();
 	}
 
 	private function validarColaborador(&$obj) {

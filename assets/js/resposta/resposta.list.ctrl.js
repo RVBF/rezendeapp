@@ -43,7 +43,9 @@
 					},
 					targets: 2
 				}, {
-					data: 'pergunta.formularioRespondido.respondedor.nome',
+					data :function(data) {
+						return data.pergunta.formularioRespondido.respondedor.nome + ' ' + data.pergunta.formularioRespondido.respondedor.sobrenome;
+					},					
 					targets: 3
 				}, {
 					data: function(data) {

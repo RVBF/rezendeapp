@@ -9,7 +9,6 @@
 
 interface ColecaoLoja extends Colecao {
     function todosComIds($ids = []);
-
     function comColaboradorId($id);
 }
 ?>

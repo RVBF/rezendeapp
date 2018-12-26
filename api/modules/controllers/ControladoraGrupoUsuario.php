@@ -4,6 +4,8 @@ use phputil\datatables\DataTablesResponse;
 use Symfony\Component\Validator\Validation as Validacao;
 use \phputil\JSON;
 use \phputil\RTTI;
+use Illuminate\Database\Capsule\Manager as DB;
+
 /**
  * Controladora de Grupo de Usuario
  *
@@ -16,10 +18,12 @@ class ControladoraGrupoUsuario {
 	private $colecaoGrupoUsuario;
 	private $session;
 	private $servicoLogin;
+	private $colecaoUsuario;
 	
 	function __construct($params, Sessao $sessao) {
 		$this->params = $params;
 		$this->colecaoGrupoUsuario = Dice::instance()->create('ColecaoGrupoUsuario');
+		$this->colecaoUsuario = Dice::instance()->create('ColecaoUsuario');
 		$this->servicoLogin = new ServicoLogin($sessao);
 		$this->sessao = $sessao;
 	}
@@ -48,12 +52,19 @@ class ControladoraGrupoUsuario {
     }
     
     function adicionar() {
+		DB::beginTransaction();
+
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
 
-			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'nome','descricao'], $this->params);
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'nome','descricao', 'usuarios'], $this->params);
+		
+			$usuarios = $this->colecaoUsuario->todosComIds($this->params['usuarios']);
+			if(!isset($usuarios) and !($usuarios instanceof Usuario)){
+				throw new Exception("Usuários não encontrados na base de dados.");
+			}
 
 			if(count($inexistentes) > 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
@@ -61,11 +72,14 @@ class ControladoraGrupoUsuario {
 				throw new Exception($msg);
 			}
 
-			$grupoUsuario = new GrupoUsuario( 0, \ParamUtil::value($this->params, 'nome'), \ParamUtil::value($this->params, 'descricao'));
+			$grupoUsuario = new GrupoUsuario( 0, \ParamUtil::value($this->params, 'nome'), \ParamUtil::value($this->params, 'descricao'), $usuarios);
 
 			$resposta = ['grupoUsuario'=> RTTI::getAttributes($this->colecaoGrupoUsuario->adicionar($grupoUsuario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Grupo de usuário cadastrado com sucesso.']; 
+			DB::commit();
 		}
 		catch (\Exception $e) {
+			DB::rollback();
+
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 
@@ -73,6 +87,8 @@ class ControladoraGrupoUsuario {
 	}
 
     function atualizar() {
+		DB::beginTransaction();
+
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
@@ -86,11 +102,20 @@ class ControladoraGrupoUsuario {
 				throw new Exception($msg);
 			}
 
-			$grupoUsuario = new GrupoUsuario( \ParamUtil::value($this->params, 'id'), \ParamUtil::value($this->params, 'nome'), \ParamUtil::value($this->params, 'descricao'));
+			$usuarios = $this->colecaoUsuario->todosComIds($this->params['usuarios']);
+			if(!isset($usuarios) and !($usuarios instanceof Usuario)){
+				throw new Exception("Usuários não encontrados na base de dados.");
+			}
+
+			$grupoUsuario = new GrupoUsuario( \ParamUtil::value($this->params, 'id'), \ParamUtil::value($this->params, 'nome'), \ParamUtil::value($this->params, 'descricao'), $usuarios);
 
 			$resposta = ['grupoUsuario'=> RTTI::getAttributes($this->colecaoGrupoUsuario->atualizar($grupoUsuario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Grupo de usuário cadastrado com sucesso.']; 
+			
+			DB::commit();
 		}
 		catch (\Exception $e) {
+			DB::rollback();
+
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 
@@ -98,6 +123,8 @@ class ControladoraGrupoUsuario {
 	}
 
 	function remover($id) {
+		DB::beginTransaction();
+
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
@@ -109,10 +136,14 @@ class ControladoraGrupoUsuario {
 
 			$this->colecaoGrupoUsuario->remover($id);
 
+			DB::commit();
+
 			$resposta = ['status' => true, 'mensagem'=> 'Grupo de usuário removido com sucesso.']; 
 		}
 		catch (\Exception $e) {
-			$resposta = ['status' => true, 'mensagem'=> 'Grupo de usuário removido com sucesso.']; 
+			DB::rollback();
+
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 		
 		return $resposta;

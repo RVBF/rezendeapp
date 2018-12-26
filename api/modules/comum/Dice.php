@@ -1,7 +1,7 @@
 <?php
 
 use phputil\di\DI;
-use Illuminate\Database\Capsule\Manager as Db;
+use Illuminate\Database\Capsule\Manager as DB;
 
 /**
  *  Envólucro para container de injeção de dependência.

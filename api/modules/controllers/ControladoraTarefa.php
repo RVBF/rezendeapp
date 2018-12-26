@@ -5,6 +5,7 @@ use Symfony\Component\Validator\Validation as Validacao;
 use \phputil\JSON;
 use \phputil\RTTI;
 use Carbon\Carbon;
+use Illuminate\Database\Capsule\Manager as DB;
 
 
 /**
@@ -20,6 +21,7 @@ class ControladoraTarefa {
 	private $colecaoSetor;
 	private $servicoLogin;
 	private $colecaoUsuario;
+	private $colecaoColaborador;
 	private $colecaoLoja;
 
 	function __construct($params,  Sessao $sessao) {
@@ -28,6 +30,7 @@ class ControladoraTarefa {
 		$this->colecaoTarefa = Dice::instance()->create('ColecaoTarefa');
 		$this->colecaoSetor = Dice::instance()->create('ColecaoSetor');
 		$this->colecaoUsuario = Dice::instance()->create('ColecaoUsuario');
+		$this->colecaoColaborador = Dice::instance()->create('ColecaoColaborador');
 		$this->colecaoLoja = Dice::instance()->create('ColecaoLoja');
 	}
 
@@ -41,7 +44,16 @@ class ControladoraTarefa {
 			$contagem = 0;
 			$objetos = [];
 			$erro = null;
-			$objetos = $this->colecaoTarefa->todos($dtr->start, $dtr->length);
+
+			$colaborador = $this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario());
+
+			$idsLojas = [];
+
+			foreach ($colaborador->getLojas() as $loja) {
+				$idsLojas[] = $loja->getId();
+			}
+
+			$objetos = $this->colecaoTarefa->todosComLojaIds($dtr->start, $dtr->length, $idsLojas);
 
 			$contagem = $this->colecaoTarefa->contagem();
 		}
@@ -60,6 +72,8 @@ class ControladoraTarefa {
 	}
 	
 	function adicionar($setorId = 0) {
+		DB::beginTransaction();
+
 		try {
 
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
@@ -105,8 +119,12 @@ class ControladoraTarefa {
 
 			$tarefa = $this->colecaoTarefa->adicionar($tarefa);
 			$resposta = ['categoria'=> RTTI::getAttributes( $tarefa, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria cadastrada com sucesso.']; 
+			DB::commit();
+
 		}
 		catch (\Exception $e) {
+			DB::rollback();
+
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 
@@ -114,6 +132,8 @@ class ControladoraTarefa {
 	}
 
 	function atualizar($setorId = 0) {
+		DB::beginTransaction();
+
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
@@ -157,8 +177,12 @@ class ControladoraTarefa {
 					
 			$tarefa = $this->colecaoTarefa->atualizar($tarefa);
 			$resposta = ['categoria'=> RTTI::getAttributes( $tarefa, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria cadastrada com sucesso.']; 
+			DB::commit();
+
 		}
 		catch (\Exception $e) {
+			DB::rollback();
+
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 
@@ -166,6 +190,8 @@ class ControladoraTarefa {
 	}
 
 	function remover($id, $idSetor = 0) {
+		DB::beginTransaction();
+
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
@@ -176,8 +202,12 @@ class ControladoraTarefa {
 			$status = ($idSetor > 0) ? $this->colecaoTarefa->removerComSetorId($id, $idSetor) :  $this->colecaoTarefa->remover($id);
 			
 			$resposta = ['status' => true, 'mensagem'=> 'Categoria removida com sucesso.']; 
+			DB::commit();
+
 		}
 		catch (\Exception $e) {
+			DB::rollback();
+
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 
