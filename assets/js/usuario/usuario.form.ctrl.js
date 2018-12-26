@@ -100,15 +100,20 @@
 						text: item.razaoSocial  + '/' + item.nomeFantasia
 					}));
 				});
-				
+
 				var ids = Array();
 
-				for(var indice in _this.obj.colaborador.lojas){
-					var atual =  _this.obj.colaborador.lojas[indice];
-					ids.push(atual.id);
+				if(_this.obj != null || _this.obj != undefined) {
+					for(var indice in _this.obj.colaborador.lojas){
+						var atual =  _this.obj.colaborador.lojas[indice];
+						ids.push(atual.id);
+					}
+					$('#lojas').val(ids).trigger('change');
 				}
-
-				$('#lojas').val(ids).trigger('change');
+				else{
+					$('#lojas').val(ids).trigger('change');
+				}
+			
 			};
 
 			var erro = function(resposta)
@@ -124,6 +129,9 @@
 		};
 
 		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro() {
+			if(_this.obj != null || _this.obj != undefined) {
+				_this.obj = null;
+			}
 			_this.formulario.parents('#painel_formulario').removeClass('desabilitado').desabilitar(false);
 			_this.formulario.parents('#painel_formulario').removeClass('d-none');
 			_this.formulario.find('#login').focus();

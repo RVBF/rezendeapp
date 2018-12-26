@@ -1,5 +1,5 @@
 <?php
-use Illuminate\Database\Capsule\Manager as Db;
+use Illuminate\Database\Capsule\Manager as DB;
 /**
  *	Coleção de Anexo em Banco de Dados Relacional.
  *
@@ -18,7 +18,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 		try {	
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-			$id = Db::table(self::TABELA)->insertGetId([ 'caminho' => $obj->getPatch(), 'tipo' => $obj->getTipo(), 'resposta_id' => $obj->getResposta()->getId()]);
+			$id = DB::table(self::TABELA)->insertGetId([ 'caminho' => $obj->getPatch(), 'tipo' => $obj->getTipo(), 'resposta_id' => $obj->getResposta()->getId()]);
             
 			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
@@ -37,7 +37,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
 			foreach ($objs as $key => $obj) {
-				$id = Db::table(self::TABELA)->insertGetId([ 'pergunta' => $obj->getPergunta(),
+				$id = DB::table(self::TABELA)->insertGetId([ 'pergunta' => $obj->getPergunta(),
 						'tarefa_id' => $obj->getTarefa()->getId()
 					]
 				);
@@ -73,7 +73,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 			
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-			Db::table(self::TABELA)->where('id', $obj->getId())->update([ 'pergunta' => $obj->getPergunta(),
+			DB::table(self::TABELA)->where('id', $obj->getId())->update([ 'pergunta' => $obj->getPergunta(),
 			'tarefa_id' => $obj->getTarefa()->getId()]);
 
 			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
@@ -101,7 +101,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 	public function comRespostaId($id){
 		try {	
 
-			$anexos = Db::table(self::TABELA)->where('resposta_id', $id)->get();
+			$anexos = DB::table(self::TABELA)->where('resposta_id', $id)->get();
 			$anexosObjects = [];
 			foreach ($anexos as $anexo) {
 				$anexosObjects[] =  $this->construirObjeto($anexo);
@@ -118,7 +118,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 	 */
 	function todos($limite = 0, $pulo = 0) {
 		try {	
-			$anexos = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+			$anexos = DB::table(self::TABELA)->offset($limite)->limit($pulo)->get();
 
 			$anexosObjects = [];
 			foreach ($anexos as $pergunta) {
@@ -143,7 +143,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 	}	
 
     function contagem() {
-		return Db::table(self::TABELA)->count();
+		return DB::table(self::TABELA)->count();
 	}
 }
 

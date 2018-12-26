@@ -1,5 +1,5 @@
 <?php
-use Illuminate\Database\Capsule\Manager as Db;
+use Illuminate\Database\Capsule\Manager as DB;
 /**
  *	Coleção de Resposta em Banco de Dados Relacional.
  *
@@ -16,7 +16,7 @@ class ColecaoRespostaEmBDR implements ColecaoResposta
 
 	function adicionar(&$obj) {
 		try {	
-			$id = Db::table(self::TABELA)->insertGetId([ 'opcaoSelecionada' => $obj->getOpcaoSelecionada(), 'comentario' => $obj->getComentario(), 'pergunta_id' => $obj->getPergunta()->getId()]);
+			$id = DB::table(self::TABELA)->insertGetId([ 'opcaoSelecionada' => $obj->getOpcaoSelecionada(), 'comentario' => $obj->getComentario(), 'pergunta_id' => $obj->getPergunta()->getId()]);
 
 			$obj->setId($id);
 
@@ -46,7 +46,7 @@ class ColecaoRespostaEmBDR implements ColecaoResposta
 			
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-			Db::table(self::TABELA)->where('id', $obj->getId())->update([ 'opcaoSelecionada' => $obj->getOpcaoSelecionada(), 'comentario' => $obj->getComentario(), 'pergunta_id' => $obj->getPergunta()->getId()]);
+			DB::table(self::TABELA)->where('id', $obj->getId())->update([ 'opcaoSelecionada' => $obj->getOpcaoSelecionada(), 'comentario' => $obj->getComentario(), 'pergunta_id' => $obj->getPergunta()->getId()]);
 
 			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 			return $obj;
@@ -74,7 +74,7 @@ class ColecaoRespostaEmBDR implements ColecaoResposta
 	 */
 	function todos($limite = 0, $pulo = 0) {
 		try {	
-			$perguntas = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+			$perguntas = DB::table(self::TABELA)->offset($limite)->limit($pulo)->get();
 			$perguntasObjects = [];
 
 			foreach ($perguntas as $pergunta) {
@@ -91,7 +91,7 @@ class ColecaoRespostaEmBDR implements ColecaoResposta
 
 	function  todosComTarefaId($limite = 0, $pulo = 0, $tarefaid = 0){
 		try {	
-			$respostas = Db::table(self::TABELA)
+			$respostas = DB::table(self::TABELA)
 			->join(ColecaoPerguntaEmBDR::TABELA, ColecaoPerguntaEmBDR::TABELA . '.id', '=', self::TABELA . '.pergunta_id')
 			->join(ColecaoTarefaEmBDR::TABELA, ColecaoTarefaEmBDR::TABELA . '.id', '=', ColecaoPerguntaEmBDR::TABELA . '.tarefa_id')
 			->where(ColecaoTarefaEmBDR::TABELA .'.id', $tarefaid)
@@ -120,7 +120,7 @@ class ColecaoRespostaEmBDR implements ColecaoResposta
 	}	
 
     function contagem() {
-		return Db::table(self::TABELA)->count();
+		return DB::table(self::TABELA)->count();
 	}
 }
 

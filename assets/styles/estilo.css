@@ -522,11 +522,6 @@ select.custom-select.custom-select-sm.form-control.form-control-sm{
     height: 30px  !important;
 }
 
-
-.dropdown-menu.show {
-    display: flex !important;
-}
-
 .bnt_opcoesformulario {
     margin-top: 1rem;
 }

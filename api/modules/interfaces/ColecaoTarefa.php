@@ -9,5 +9,6 @@
 
 interface ColecaoTarefa extends Colecao{
 	function comPerguntaId($id);
+	function todosComLojaIds($limite = 0, $pulo = 0, $idsLojas = []);
 }
 ?>

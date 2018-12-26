@@ -4,6 +4,8 @@ use phputil\datatables\DataTablesResponse;
 use Symfony\Component\Validator\Validation as Validacao;
 use \phputil\JSON;
 use \phputil\RTTI;
+use Illuminate\Database\Capsule\Manager as DB;
+
 
 
 /**
@@ -56,6 +58,8 @@ class ControladoraCategoria {
 	}
 
 	function adicionar() {
+		DB::beginTransaction();
+
 		try {
 
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
@@ -72,9 +76,13 @@ class ControladoraCategoria {
 			$resposta = [];
 
 			$categoria = $this->colecaoCategoria->adicionar($categoria);
+			DB::commit();
+
 			$resposta = ['categoria'=> RTTI::getAttributes( $categoria, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria cadastrada com sucesso.']; 
 		}
 		catch (\Exception $e) {
+			DB::rollback();
+
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 
@@ -82,6 +90,8 @@ class ControladoraCategoria {
 	}
 
 	function atualizar() {
+		DB::beginTransaction();
+
 		try {	
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
@@ -103,9 +113,14 @@ class ControladoraCategoria {
 			);
 	
 			$this->colecaoCategoria->atualizar($categoria);
+			
+			DB::commit();
+
 			$resposta = ['categoria'=> RTTI::getAttributes( $categoria, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria atualizada com sucesso.']; 
 		}
 		catch (\Exception $e) {
+			DB::rollback();
+
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 
@@ -113,6 +128,8 @@ class ControladoraCategoria {
 	}
 
 	function remover($id) {
+		DB::beginTransaction();
+
 		try {	
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
@@ -120,10 +137,13 @@ class ControladoraCategoria {
 			$resposta = [];
 			
 			$status = $this->colecaoCategoria->remover($id);
-			
+			DB::commit();
+
 			$resposta = ['status' => true, 'mensagem'=> 'Categoria removida com sucesso.']; 
 		}
 		catch (\Exception $e) {
+			DB::rollback();
+
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 

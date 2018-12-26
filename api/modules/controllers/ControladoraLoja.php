@@ -4,6 +4,8 @@ use phputil\datatables\DataTablesResponse;
 use Symfony\Component\Validator\Validation as Validacao;
 use \phputil\JSON;
 use \phputil\RTTI;
+use Illuminate\Database\Capsule\Manager as DB;
+
 
 
 /**
@@ -57,6 +59,8 @@ class ControladoraLoja {
 	}
 
 	function adicionar() {
+		DB::beginTransaction();
+
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
@@ -78,8 +82,12 @@ class ControladoraLoja {
 			);
 
 			$resposta = ['loja'=> RTTI::getAttributes($this->colecaoLoja->adicionar($loja), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Loja cadastrada com sucesso.']; 
+			DB::commit();
+
 		}
 		catch (\Exception $e) {
+			DB::rollback();
+
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 
@@ -87,6 +95,8 @@ class ControladoraLoja {
 	}
 
 	function atualizar() {
+		DB::beginTransaction();
+
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
@@ -108,8 +118,12 @@ class ControladoraLoja {
 			);
 
 			$resposta = ['loja'=> RTTI::getAttributes($this->colecaoLoja->atualizar($loja), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Loja atualizada com sucesso.']; 
+		
+			DB::commit();
 		}
 		catch (\Exception $e) {
+			DB::rollback();
+
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 
@@ -118,6 +132,8 @@ class ControladoraLoja {
 	
 	
 	function remover($id) {
+		DB::beginTransaction();
+
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
@@ -127,8 +143,12 @@ class ControladoraLoja {
 			$status = $this->colecaoLoja->remover($id);
 			
 			$resposta = ['status' => $status, 'mensagem'=> 'Loja removida com sucesso.']; 
+			
+			DB::commit();
 		}
 		catch (\Exception $e) {
+			DB::rollback();
+
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 

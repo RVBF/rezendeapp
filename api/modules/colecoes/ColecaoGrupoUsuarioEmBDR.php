@@ -1,5 +1,5 @@
 <?php
-use Illuminate\Database\Capsule\Manager as Db;
+use Illuminate\Database\Capsule\Manager as DB;
 /**
  *	Coleção de Usuario em Banco de Dados Relacional.
  *
@@ -10,55 +10,83 @@ use Illuminate\Database\Capsule\Manager as Db;
 class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
 {
 
-    const TABELA = 'grupo_usuario';
-    
+	const TABELA = 'grupo_usuario';
+	const TABELA_RELACIONAL = 'usuario_grupo_usuario';
 
 	function __construct(){}
 
 	function adicionar(&$obj) {
-		try {	
-			$id = Db::table(self::TABELA)->insertGetId([ 'nome' => $obj->getNome() ,'descricao' => $obj->getDescricao()]);
-			
-			$obj->setId($id);
+		if($this->validarGrupoDeUsuario($obj)) {
+			try {	
+				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-			return $obj;
-		}
-		catch (\Exception $e)
-		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
-		}
+				$id = DB::table(self::TABELA)->insertGetId([ 'nome' => $obj->getNome() ,'descricao' => $obj->getDescricao()]);
+				
+				$gruposUsuarios = [];
+
+				foreach ($obj->getUsuarios() as $key => $usuario) {
+					$gruposUsuarios[] = ['usuario_id' => $usuario->getId(), 'grupo_usuario_id' =>  $id];
+				}
+
+				DB::table(self::TABELA_RELACIONAL)->insert($gruposUsuarios);
+
+				$obj->setId($id);
+				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+			}
+			catch (\Exception $e)
+			{
+				throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			}
+		}	
 	}
 
 	function remover($id) {
-		try {	
-			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-            
-            $removido = DB::table(self::TABELA)->where('id', $id)->delete();
-            
-            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-			return $removido;
-		}
-		catch (\Exception $e)
-		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		if($this->validarDeleteGrupoDeUsuario($id)){
+
+			try {	
+				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+				
+				$removido = DB::table(self::TABELA)->where('id', $id)->delete();
+				if($removido) $removido = DB::table(self::TABELA_RELACIONAL)->where('grupo_usuario_id', $id)->delete();
+
+				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+				return $removido;
+			}
+			catch (\Exception $e)
+			{
+				throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			}
 		}
 	}
 
 	function atualizar(&$obj) {
-		try {
+		if($this->validarGrupoDeUsuario($obj)){
+			try {
 
-			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-			Db::table(self::TABELA)->where('id', $obj->getId())->update(['nome' => $obj->getNome() ,'descricao' => $obj->getDescricao()]);
+				DB::table(self::TABELA)->where('id', $obj->getId())->update(['nome' => $obj->getNome() ,'descricao' => $obj->getDescricao()]);
 
-			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-			return $obj;
-		}
-		catch (\Exception $e)
-		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
-		}
-		
+				if(count($obj->getUsuarios())){
+					DB::table(self::TABELA_RELACIONAL)->where('grupo_usuario_id', $obj->getId())->delete();
+
+					$gruposUsuarios = [];
+
+					foreach($obj->getUsuarios() as $usuario){
+					
+						$gruposUsuarios[] = ['usuario_id' => $usuario->getId(), 'grupo_usuario_id' =>  $obj->getId()];
+					}
+					DB::table(self::TABELA_RELACIONAL)->insert($gruposUsuarios);
+				}
+
+				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+				return $obj;
+			}
+			catch (\Exception $e)
+			{
+				throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			}
+		}	
 	}
 
 	function comId($id){
@@ -67,8 +95,7 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
 
 			return $usuario;
 		}
-		catch (\Exception $e)
-		{
+		catch (\Exception $e) {
 			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
 		}
 	}
@@ -78,7 +105,7 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
 	 */
 	function todos($limite = 0, $pulo = 0) {
 		try {	
-			$grupoDeusuarios = Db::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+			$grupoDeusuarios = DB::table(self::TABELA)->offset($limite)->limit($pulo)->get();
 
             $grupoDeusuariosObjects = [];
 
@@ -97,7 +124,7 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
 	
 	function todosComId($ids = []) {
 		try {	
-			$usuarios = Db::table(self::TABELA)->whereIn('id', $ids)->get();
+			$usuarios = DB::table(self::TABELA)->whereIn('id', $ids)->get();
 			$usuariosObjects = [];
 
 			foreach ($usuarios as $usuario) {
@@ -113,54 +140,44 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
 	}
 
 	function construirObjeto(array $row) {
-		$usuario = new GrupoUsuario($row['id'], $row['nome'], $row['descricao']);
+		$usuarios = Dice::instance()->create('ColecaoUsuario')->comGrupoId($row['id']);
 
-		return $usuario;
+		$grupoDeUsuario = new GrupoUsuario($row['id'], $row['nome'], $row['descricao'], $usuarios);
+
+		return $grupoDeUsuario;
 	}	
 
     function contagem() {
-		return Db::table(self::TABELA)->count();
+		return DB::table(self::TABELA)->count();
 	}
 
-	function comLogin($login)
-	{
-		try {
-			$usuario = $this->construirObjeto(DB::table(self::TABELA)->where('login', $login)->get()[0]);
+	private function validarGrupoDeUsuario(&$obj) {
+		if(!is_string($obj->getNome())) {
+			throw new ColecaoException('Valor inválido para o nome do grupo.');
+		}
 
-			return $usuario;
+		$quantidade = DB::table(self::TABELA)->whereRaw('nome like "%' . $obj->getNome() . '%"')->where('id', '<>', $obj->getId())->count();
+
+		if($quantidade > 0){
+			throw new ColecaoException('Já exite um grupo cadastrado com esse nome.');
 		}
-		catch (\Exception $e)
-		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
-		}
+
+		if(strlen($obj->getNome()) <= 2 && strlen($obj->getNome()) >= 100) throw new ColecaoException('O nome deve conter no mínimo 2 e no máximo 100 caracteres.');
+		
+		if($obj->getDescricao() != '' and strlen($obj->getDescricao()) > 255) throw new ColecaoException('A descrição deve conter no máximo 255 caracteres.');
+
+		return true;
 	}
 
-	function novaSenha($senhaAtual, $novaSenha, $confirmacaoSenha)
-	{
-		$this->validarTrocaDeSenha($senhaAtual, $novaSenha, $confirmacaoSenha);
+	private function validarDeleteGrupoDeUsuario($id){
+		$qtdReacionamento = DB::table(self::TABELA_RELACIONAL)->where('grupo_usuario_id', $id)->count();
 
-		$hash = new HashSenha($novaSenha);
-
-		$novaSenha = $hash->gerarHashDeSenhaComSaltEmMD5();
-
-		try
-		{
-			$sql = 'UPDATE ' . self::TABELA . ' SET
-			 	senha = :senha
-			 	WHERE id = :id';
-
-			$this->pdoW->execute($sql, [
-				'senha' => $novaSenha,
-				'id' => $this->getUsuario()->getId()
-			]);
+		if($qtdReacionamento > 0){
+			throw new ColecaoException('Esse grupo possue usuários relacionados a ele! Desfaça todos  os relacionamentos e tente novamente.');
 		}
-		catch (\Exception $e)
-		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
-		}
+
+		return true;
 	}
-
-
 }
 
 ?>

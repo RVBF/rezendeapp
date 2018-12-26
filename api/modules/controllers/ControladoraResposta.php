@@ -5,7 +5,7 @@ use Symfony\Component\Validator\Validation as Validacao;
 use \phputil\JSON;
 use \phputil\RTTI;
 use Carbon\Carbon;
-use Illuminate\Database\Capsule\Manager as Db;
+use Illuminate\Database\Capsule\Manager as DB;
 
 
 /**
@@ -78,6 +78,9 @@ class ControladoraResposta {
 	}
 
 	function adicionar() {
+
+		DB::beginTransaction();
+
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
@@ -107,6 +110,7 @@ class ControladoraResposta {
 				if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
 					throw new Exception("Tarefa não encontrada na base de dados.");
 				}
+				
 				$formularioRespondido->addPergunta($pergunta);
 
 				$resposta = new Resposta(0, \ParamUtil::value($parametros, 'opcaoSelecionada'), \ParamUtil::value($parametros, 'comentario'), $pergunta);
@@ -134,10 +138,15 @@ class ControladoraResposta {
 			$this->colecaoFormularioRespondido->adicionar($formularioRespondido);
 			$tarefa->setEncerrada(true);
 			$this->colecaoTarefa->atualizar($tarefa);
+
+			DB::commit();
+
 			$respostaFront = ['Resposta'=> $respostasCadastradas, 'status' => true, 'mensagem'=> 'Resposta cadastrada com sucesso.']; 
 			
 		}
 		catch (\Exception $e) {
+			DB::rollback();
+
 			$respostaFront = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 

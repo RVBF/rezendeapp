@@ -5,6 +5,7 @@ use Symfony\Component\Validator\Validation as Validacao;
 use \phputil\JSON;
 use \phputil\RTTI;
 use Carbon\Carbon;
+use Illuminate\Database\Capsule\Manager as DB;
 
 /**
  * Controladora de Setor
@@ -55,6 +56,8 @@ class ControladoraSetor {
 	}
 
 	function adicionar() {
+		DB::beginTransaction();
+
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
@@ -81,8 +84,13 @@ class ControladoraSetor {
 				$categoria
 			);
 			$resposta = ['setor'=> RTTI::getAttributes($this->colecaoSetor->adicionar($setor), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Setor cadastrado com sucesso.']; 
+			
+			DB::commit();
+
 		}
 		catch (\Exception $e) {
+			DB::rollback();
+
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 
@@ -90,6 +98,8 @@ class ControladoraSetor {
 	}
 
 	function atualizar() {
+		DB::beginTransaction();
+
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
@@ -115,8 +125,11 @@ class ControladoraSetor {
 				$categoria
 			);
 			$resposta = ['setor'=> RTTI::getAttributes($this->colecaoSetor->atualizar($setor), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Setor atualizado com sucesso.']; 
+			DB::commit();
 		}
 		catch (\Exception $e) {
+			DB::rollback();
+
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 
@@ -124,6 +137,8 @@ class ControladoraSetor {
 	}
 
 	function remover($id) {
+		DB::beginTransaction();
+
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
@@ -134,8 +149,12 @@ class ControladoraSetor {
 			$status = $this->colecaoSetor->remover($id);
 			
 			$resposta = ['status' => true, 'mensagem'=> 'Setor removido com sucesso.']; 
+			DB::commit();
+
 		}
 		catch (\Exception $e) {
+			DB::rollback();
+
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 

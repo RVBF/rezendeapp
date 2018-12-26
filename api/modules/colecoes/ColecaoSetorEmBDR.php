@@ -1,5 +1,5 @@
 <?php
-use Illuminate\Database\Capsule\Manager as Db;
+use Illuminate\Database\Capsule\Manager as DB;
 /**
  *	Coleção de Setor em Banco de Dados Relacional.
  *
@@ -16,7 +16,7 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 		if($this->validarSetor($obj)){
 			try {	
 
-				$id = Db::table(self::TABELA)->insertGetId(['titulo' => $obj->getTitulo(),
+				$id = DB::table(self::TABELA)->insertGetId(['titulo' => $obj->getTitulo(),
 					'descricao'=> $obj->getDescricao(),
 					'categoria_id'=> $obj->getCategoria()->getId()
 				]);
@@ -87,7 +87,7 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 	 */
 	function todos($limite = 0, $pulo = 0) {
 		try {	
-			$setors = Db::table(self::TABELA)->select(self::TABELA . '.*')->offset($limite)->limit($pulo)->get();
+			$setors = DB::table(self::TABELA)->select(self::TABELA . '.*')->offset($limite)->limit($pulo)->get();
 
 			$setorObjects = [];
 			foreach ($setors as $setor) {
@@ -111,7 +111,7 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 	}
 
     function contagem() {
-		return Db::table(self::TABELA)->count();
+		return DB::table(self::TABELA)->count();
 	}
 	
 	private function validarSetor(&$obj) {

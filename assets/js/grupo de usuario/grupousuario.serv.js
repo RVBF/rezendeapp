@@ -7,10 +7,11 @@
  {
 	'use strict';
 
-	function GrupoUsuario(id, nome, descricao) {
+	function GrupoUsuario(id, nome, descricao, usuarios) {
 		this.id = id  || 0;
         this.nome = nome  || '';
-        this.descricao = descricao  || '';
+		this.descricao = descricao  || '';
+		this.usuarios = usuarios  || [];
 	};
 
 	function ServicoGrupoUsuario() { // Model
@@ -21,11 +22,12 @@
 		};
 
 		// Cria um objeto de categoria
-		this.criar = function criar(id, nome, descricao) {
+		this.criar = function criar(id, nome, descricao, usuarios) {
  			return {
                 id : id  || 0,
                 nome : nome  || '',
-                descricao : descricao  || ''
+				descricao : descricao  || '',
+				usuarios : usuarios || []
 			};
 		};
 
