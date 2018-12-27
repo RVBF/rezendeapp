@@ -70,13 +70,16 @@
 		};
 
 		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro() {
-			_this.formulario.parents('#painel_formulario').removeClass('desabilitado').desabilitar(false);
 			_this.formulario.parents('#painel_formulario').removeClass('d-none');
-			_this.formulario.find('#tiulo').focus();
-			_this.configurarBotoes();
+			_this.formulario.parents('#painel_formulario').removeClass('desabilitado').desabilitar(false);
 
-			if(_this.idSetor == undefined) _this.popularSetors();
-			_this.popularLojas();
+			_this.formulario.parents('#painel_formulario').promise().done(function() {
+				_this.formulario.find('#titulo').focus();
+				_this.configurarBotoes();
+
+				if(_this.idSetor == undefined) _this.popularSetors();
+				_this.popularLojas();
+			});
 		};
 
 		_this.popularSetors  =  function popularSetors(valor = 0)

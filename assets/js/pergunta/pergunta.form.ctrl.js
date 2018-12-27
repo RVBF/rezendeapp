@@ -56,8 +56,10 @@
 		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro() {
 			_this.formulario.parents('#painel_formulario').removeClass('desabilitado').desabilitar(false);
 			_this.formulario.parents('#painel_formulario').removeClass('d-none');
-			_this.formulario.find('#pergunta').focus();
-			_this.configurarBotoes();
+			_this.formulario.parents('#painel_formulario').promise().done(function(){
+				_this.formulario.find('#pergunta').focus();
+				_this.configurarBotoes();
+			});
 		};
 
 		_this.iniciarFormularioModoEdicao = function iniciarFormularioModoEdicao() {

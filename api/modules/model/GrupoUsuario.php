@@ -12,6 +12,7 @@ class GrupoUsuario {
     private $nome;
     private $descricao;
     private $usuarios;
+    private $administrador; 
     
     function __construct($id = 0, $nome = '', $descricao = '', $usuarios = []) {
         $this->id = $id;
@@ -43,6 +44,15 @@ class GrupoUsuario {
     public function setNome($nome){
         $this->nome = $nome;
     }
+
+    public function getAdministrador(){
+        return $this->administrador; 
+    }
+ 
+    public function setAdministrador($administrador){
+        $this->administrador = $administrador;
+    }
+
 
     public function getUsuarios(){
         return $this->usuarios; 

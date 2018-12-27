@@ -13,6 +13,7 @@ class Usuario {
     private $senha;
     private $gruposUsuario;
     private $colaborador;
+    private $administrador;
 
     const TABELA = 'usuario';
     
@@ -51,6 +52,14 @@ class Usuario {
  
     public function setSenha($senha){
         $this->senha = $senha;
+    }
+    
+    public function getAdministrador(){
+        return $this->administrador; 
+    }
+ 
+    public function setAdministrador($administrador){
+        $this->administrador = $administrador;
     }
 
     public function getGruposUsuario(){

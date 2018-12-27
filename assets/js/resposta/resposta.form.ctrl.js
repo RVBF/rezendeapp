@@ -269,7 +269,7 @@
 		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro() {
 			_this.formulario.parents('#painel_formulario').removeClass('desabilitado').desabilitar(false);
 			_this.formulario.parents('#painel_formulario').removeClass('d-none');
-            _this.configurarBotoes();
+			_this.configurarBotoes();
 			_this.popularPerguntas();
         };
 

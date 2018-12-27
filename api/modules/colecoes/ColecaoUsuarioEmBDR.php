@@ -89,7 +89,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 
 	function comId($id){
 		try {	
-			$usuario = $this->construirObjeto(DB::table(self::TABELA)->select('id', 'login')->where('id', $id)->get()[0]);
+			$usuario = $this->construirObjeto(DB::table(self::TABELA)->select('id', 'login', 'administrador')->where('id', $id)->get()[0]);
 
 			return $usuario;
 		}
@@ -99,12 +99,9 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 		}
 	}
 
-	/**
-	 * @inheritDoc
-	 */
 	function todos($limite = 0, $pulo = 0) {
 		try {	
-			$usuarios = DB::table(self::TABELA)->select('id', 'login')->offset($limite)->limit($pulo)->get();
+			$usuarios = DB::table(self::TABELA)->select('id', 'login', 'administrador')->offset($limite)->limit($pulo)->get();
 
             $usuariosObjects = [];
 
@@ -123,7 +120,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 	
 	function todosComIds($ids = []) {
 		try {	
-			$usuarios = DB::table(self::TABELA)->whereIn('id', $ids)->get();
+			$usuarios = DB::table(self::TABELA)->select('id', 'login', 'administrador')->whereIn('id', $ids)->get();
 			$usuariosObjects = [];
 			foreach ($usuarios as $usuarios) {
 				$usuariosObjects[] =  $this->construirObjeto($usuarios);
@@ -139,6 +136,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 	
 	function construirObjeto(array $row) {
 		$usuario = new Usuario($row['id'], $row['login'], isset($row['senha']) ? $row['senha'] : '');
+		$usuario->setAdministrador($row['administrador']);
 
 		return $usuario;
 	}
@@ -182,8 +180,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 		}
 	}
 
-	function novaSenha($senhaAtual, $novaSenha, $confirmacaoSenha)
-	{
+	function novaSenha($senhaAtual, $novaSenha, $confirmacaoSenha) {
 		$this->validarTrocaDeSenha($senhaAtual, $novaSenha, $confirmacaoSenha);
 
 		$hash = new HashSenha($novaSenha);
@@ -206,6 +203,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
 		}
 	}
+	
 	private function validarUsuario($obj) {
 		$this->validarLogin($obj->getLogin());
 

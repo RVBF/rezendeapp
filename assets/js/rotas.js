@@ -85,6 +85,7 @@
 	router.get('/tarefa', verficarLogin, criarRotaPara('tarefa.html'));
 	router.get('/setor', verficarLogin, criarRotaPara('setor.html'));
 	router.get('/resposta/:tarefaId', verficarLogin, criarRotaPara('resposta.html'));
+	router.get('/configurar-permissoes', verficarLogin, criarRotaPara('permissoes.html'));
 
 	router.get('/tarefa/:id/pergunta', verficarLogin, criarRotaPara('pergunta.html'));
 	router.get('/tarefa/:id/pergunta/cadastrar-perguntas', verficarLogin, criarRotaPara('perguntaCadastroMultiplo.html'));

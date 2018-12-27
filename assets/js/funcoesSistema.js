@@ -3,7 +3,9 @@
 	function iniciarFuncoesPadroesSistema(event)
 	{
 		var evento = event;
-	
+		
+		// window.exibirMenu();
+
 		if(typeof(evento) != 'undefined')
 		{
 			$(evento.target).find('.desabilitado').each(function(i) {
@@ -64,15 +66,20 @@
 				width: '100%'
 			});
 
-			$(evento.target).find(".categoria_link").on('click', function(event){
-				event.preventDefault();
-				router.navigate('/categorias');
+			$(evento.target).find('.toltip').each(function(){
+			    $(this).tooltip(); 
 			});
 
 			$(evento.target).find(".efetuar_logout").on('click', function(event){
+				event.preventDefault();
 				var servico = new app.ServicoLogout();
 				var controladoraLogout = new app.ControladoraLogout(servico);
 				controladoraLogout.configurar();
+			});
+
+			$(evento.target).find(".categoria_link").on('click', function(event){
+				event.preventDefault();
+				router.navigate('/categorias');
 			});
 	
 			$(evento.target).find('.setor_link').on('click', function(event){
@@ -95,15 +102,15 @@
 				router.navigate('/configuracao/grupo-usuario');
 			});
 
-
-			$(evento.target).find('.toltip').each(function(){
-			    $(this).tooltip(); 
-			});
-
 			$(evento.target).find('.tarefaListagemCompleta_link').on('click', function(event){
 				event.preventDefault();
 				router.navigate('/tarefa');
 			});
+
+			$(evento.target).find('.permissoes_link').on('click', function(event) {
+				event.preventDefault();
+				router.navigate('/configurar-permissoes');
+			})
 		}
 	}
 	var bodyEvento = {target: 'body'};
