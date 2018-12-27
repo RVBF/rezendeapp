@@ -100,6 +100,25 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
 		}
 	}
 
+	function comUsuarioId($id = 0){
+		try {	
+			$grupoDeusuarios = DB::table(self::TABELA)->join(self::TABELA_RELACIONAL, self::TABELA_RELACIONAL. '.grupo_usuario_id', '=', self::TABELA . '.id')->where(self::TABELA_RELACIONAL. '.usuario_id', $id)->get();
+
+            $grupoDeusuariosObjects = [];
+
+			foreach($grupoDeusuarios as $grupo) {
+
+				$grupoDeusuariosObjects[] =  $this->construirObjeto($grupo);
+			}
+
+			return $grupoDeusuariosObjects;
+		}
+		catch (\Exception $e)
+		{
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		}
+	}
+
 	/**
 	 * @inheritDoc
 	 */
@@ -122,7 +141,7 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
 		}
 	}
 	
-	function todosComId($ids = []) {
+	function todosComIds($ids = []) {
 		try {	
 			$usuarios = DB::table(self::TABELA)->whereIn('id', $ids)->get();
 			$usuariosObjects = [];
@@ -141,9 +160,8 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
 
 	function construirObjeto(array $row) {
 		$usuarios = Dice::instance()->create('ColecaoUsuario')->comGrupoId($row['id']);
-
 		$grupoDeUsuario = new GrupoUsuario($row['id'], $row['nome'], $row['descricao'], $usuarios);
-
+		$grupoDeUsuario->setAdministrador($row['administrador']);
 		return $grupoDeUsuario;
 	}	
 

@@ -161,8 +161,8 @@
 
 		loader.script('assets/js/rotas.js');
 		loader.script('assets/js/funcoesSistema.js');
+		loader.script('assets/js/index.list.ctrl.js');
 
-		
 		loader.script('assets/js/categoria/categoria.serv.js');
 		loader.script('assets/js/categoria/categoria.form.ctrl.js');
 		loader.script('assets/js/categoria/categoria.list.ctrl.js');
@@ -198,6 +198,9 @@
 		loader.script('assets/js/usuario/usuario.form.ctrl.js');
 		loader.script('assets/js/usuario/usuario.list.ctrl.js');
 		loader.script('assets/js/login/login.form.ctrl.js');
+		
+		loader.script('assets/js/permissao/permissao.serv.js');
+		loader.script('assets/js/permissao/permissao.form.ctrl.js');
 	}});
 	var loader = new window.Loader();
 

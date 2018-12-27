@@ -24,7 +24,7 @@
 * Find more information at http://www.meanthemes.com/plugins/meanmenu/
 *
 */
-(function ($) {
+(function ($, window) {
 	"use strict";
 		$.fn.meanmenu = function (options) {
 				var defaults = {
@@ -280,6 +280,8 @@
 
 					// run main menuMenu function on load
 					showMeanMenu();
+
+					window.exibirMenu = showMeanMenu;
 				});
 		};
-})(jQuery);
+})(jQuery, window);

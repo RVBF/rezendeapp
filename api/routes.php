@@ -323,4 +323,47 @@ $app->post('/resposta', function(Request $req,  Response $res, $args = []) use (
 	$response = $ctrl->adicionar();
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 });
+
+
+// Início para permissoes
+$app->post('/permissoes', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Acessando o cadastro de tarefa");
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraPermissaoAdministrativa($req->getParsedBody(), $sessaoUsuario);
+	$response = $ctrl->configurar();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+});
+
+$app->get('/permissoes', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Acessando o cadastro de tarefa");
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraPermissaoAdministrativa($req->getParsedBody(), $sessaoUsuario);
+	$response = $ctrl->todosComPermissao();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+});
+
+$app->get('/index/tem-permissao', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Acessando o cadastro de tarefa");
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraUsuario($req->getParsedBody(), $sessaoUsuario);
+
+	$resposta = $ctrl->comId($sessaoUsuario->idUsuario());
+	$temPermissão = false;
+	
+	$resposta['status'] = ($resposta['conteudo']['administrador']) ? true : false;
+
+	if(!$resposta['status']){
+		foreach ($resposta['conteudo']['gruposUsuario'] as $grupo) {
+			if($grupo->getAdministrador()) 
+			{
+				$resposta['status'] = true;
+				break;
+			}
+		}
+	}
+	
+	if($resposta['status']) $resposta['mensagem'] = 'Usuario autorizado.';
+	else $resposta['mensagem'] = 'Usuario não possui permissão para acessar funcionalidade';
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($resposta)));
+});
 ?>

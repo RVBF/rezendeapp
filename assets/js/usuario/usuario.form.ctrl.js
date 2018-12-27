@@ -134,22 +134,26 @@
 			}
 			_this.formulario.parents('#painel_formulario').removeClass('desabilitado').desabilitar(false);
 			_this.formulario.parents('#painel_formulario').removeClass('d-none');
-			_this.formulario.find('#login').focus();
 
-			_this.popularLojas();
+			_this.formulario.parents('#painel_formulario').promise().done(function(){
+				_this.formulario.find('#login').focus();
 
-			_this.configurarBotoes();
-
-
-			if(!$('#senha').hasClass('campo_obrigatorio')){
-				$('#login').parent('div').attr('class', 'col-md-4 col-xs-4 co-sm-4 col-12');
-				$('#senha').parent('div').removeClass('d-none');
-				$('#confirmacao_senha').parent('div').removeClass('d-none');
+				_this.popularLojas();
 	
-				$('#senha').addClass('campo_obrigatorio');
-				$('#lojas').addClass('campo_obrigatorio');
-				$('#confirmacao_senha ').addClass('campo_obrigatorio');
-			}
+				_this.configurarBotoes();
+	
+	
+				if(!$('#senha').hasClass('campo_obrigatorio')){
+					$('#login').parent('div').attr('class', 'col-md-4 col-xs-4 co-sm-4 col-12');
+					$('#senha').parent('div').removeClass('d-none');
+					$('#confirmacao_senha').parent('div').removeClass('d-none');
+		
+					$('#senha').addClass('campo_obrigatorio');
+					$('#lojas').addClass('campo_obrigatorio');
+					$('#confirmacao_senha ').addClass('campo_obrigatorio');
+				}
+			});
+			
 		};
 
 		_this.iniciarFormularioModoEdicao = function iniciarFormularioModoEdicao() {
@@ -163,7 +167,6 @@
 			$('#lojas').removeClass('campo_obrigatorio');
 			$('#senha').removeClass('campo_obrigatorio');
 			$('#confirmacao_senha ').removeClass('campo_obrigatorio');
-
 		};
 
 		_this.definirForm = function definirForm(status) {			
@@ -199,7 +202,6 @@
 			_this.formulario.find('.msg').parents('.row').addClass('d-none');
 			contexto.addClass('d-none');
 			contexto.desabilitar(true);
-
 		};
 
 		// Configura os eventos do formulário

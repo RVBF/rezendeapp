@@ -91,7 +91,6 @@ class ControladoraResposta {
 			$formularioRespondido->setRespondedor($this->colecaoUsuario->comId($this->servicoLogin->getIdUsuario()));
 			$formularioRespondido->setDataHora(Carbon::now());
 			$tarefa = null;
-
 			foreach($this->params['obj'] as $key => $parametros) {
 				$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'opcaoSelecionada','comentario', 'pergunta'], $parametros);
 
@@ -116,7 +115,7 @@ class ControladoraResposta {
 				$resposta = new Resposta(0, \ParamUtil::value($parametros, 'opcaoSelecionada'), \ParamUtil::value($parametros, 'comentario'), $pergunta);
 
 				$this->colecaoResposta->adicionar($resposta);
-				
+
 				if(isset($parametros['files']) and count($parametros['files']) > 0){
 					$pastaTarefa = 'pergunta_'. $tarefa->getId();
 
@@ -133,10 +132,14 @@ class ControladoraResposta {
 					}
 				}
 			
-				$respostasCadastradas[] = $resposta;		
+				$respostasCadastradas[] = $resposta;	
+	
 			}
+
 			$this->colecaoFormularioRespondido->adicionar($formularioRespondido);
+
 			$tarefa->setEncerrada(true);
+
 			$this->colecaoTarefa->atualizar($tarefa);
 
 			DB::commit();

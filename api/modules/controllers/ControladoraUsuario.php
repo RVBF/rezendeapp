@@ -19,12 +19,15 @@ class ControladoraUsuario {
 	private $colecaoLoja;
 	private $servicologin;
 	private $colecaoColaborador;
+	private $colecaoGrupoDeUsuario;
+
 	private $session;
 
 	
 	function __construct($params, Sessao $sessao) {
 		$this->params = $params;
 		$this->colecaoUsuario = Dice::instance()->create('ColecaoUsuario');
+		$this->colecaoGrupoDeUsuario = Dice::instance()->create('ColecaoGrupoUsuario');
 		$this->colecaoLoja = Dice::instance()->create('ColecaoLoja');
 		$this->colecaoColaborador = Dice::instance()->create('ColecaoColaborador');
 		$this->servicoLogin = new ServicoLogin($sessao);
@@ -198,6 +201,31 @@ class ControladoraUsuario {
 			DB::commit();
 
 			$resposta = ['status' => true, 'mensagem'=> 'Usuário removido com sucesso.']; 
+		}
+		catch (\Exception $e) {
+			DB::rollback();
+			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()]; 
+		}
+
+		return $resposta;
+
+	}
+
+	function comId($id) {
+
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}
+			if (! is_numeric($id)) {
+				$msg = 'O id informado não é numérico.';
+				return $this->geradoraResposta->erro($msg, GeradoraResposta::TIPO_TEXTO);
+			}
+
+			$usuario = $this->colecaoUsuario->comId($id);
+			$usuario->setGruposUsuario($this->colecaoGrupoDeUsuario->comUsuarioId($usuario->getId()));
+
+			$resposta = ['conteudo'=> RTTI::getAttributes($usuario, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Usuário removido com sucesso.']; 
 		}
 		catch (\Exception $e) {
 			DB::rollback();

@@ -36,6 +36,7 @@
 		_this.sair = function sair(event) {
 			event.preventDefault();
 			var sucesso = function sucesso(data, textStatus, jqXHR) {
+				console.log('entrei');
                 window.sucessoPadrao(data, textStatus, jqXHR);
                 if(data.status) {
                     window.sessionStorage.clear();
