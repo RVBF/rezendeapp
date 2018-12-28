@@ -151,7 +151,6 @@
 
         // Inicialização
         loader.script('assets/js/jquery.meanmenu.js');
-		loader.script('assets/js/main.js');
 		loader.script('assets/js/app.js');
 
 		loader.script('assets/js/sessao/sessao.serv.js');

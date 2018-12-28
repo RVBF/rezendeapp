@@ -65,6 +65,10 @@ class ControladoraCategoria {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
+
+			if(!$this->servicoLogin->eAdministrador()){
+				throw new Exception("Usuário sem permissão para executar ação.");
+			}
 	
 			$inexistentes = \ArrayUtil::nonExistingKeys(['titulo'], $this->params);
 	
@@ -95,6 +99,10 @@ class ControladoraCategoria {
 		try {	
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
+			}
+
+			if(!$this->servicoLogin->eAdministrador()){
+				throw new Exception("Usuário sem permissão para executar ação.");
 			}
 
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo'], $this->params);
@@ -133,6 +141,10 @@ class ControladoraCategoria {
 		try {	
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
+			}
+
+			if(!$this->servicoLogin->eAdministrador()){
+				throw new Exception("Usuário sem permissão para executar ação.");
 			}
 			$resposta = [];
 			

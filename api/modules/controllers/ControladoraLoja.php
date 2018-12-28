@@ -64,7 +64,11 @@ class ControladoraLoja {
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
-			}		
+			}
+			
+			if(!$this->servicoLogin->eAdministrador()){
+				throw new Exception("Usuário sem permissão para executar ação.");
+			}
 			
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'razaoSocial','nomeFantasia'], $this->params);
 			$resposta = [];
@@ -100,7 +104,11 @@ class ControladoraLoja {
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
-			}		
+			}
+			
+			if(!$this->servicoLogin->eAdministrador()){
+				throw new Exception("Usuário sem permissão para executar ação.");
+			}
 			
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'razaoSocial','nomeFantasia'], $this->params);
 			$resposta = [];
@@ -137,7 +145,12 @@ class ControladoraLoja {
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
-			}		
+			}	
+			
+			if(!$this->servicoLogin->eAdministrador()){
+				throw new Exception("Usuário sem permissão para executar ação.");
+			}
+
 			$resposta = [];
 
 			$status = $this->colecaoLoja->remover($id);

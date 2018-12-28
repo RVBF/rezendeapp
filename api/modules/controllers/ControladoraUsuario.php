@@ -40,6 +40,10 @@ class ControladoraUsuario {
 				throw new Exception("Erro ao acessar página.");				
 			}
 
+			if(!$this->servicoLogin->eAdministrador()){
+				throw new Exception("Usuário sem permissão para executar ação.");
+			}
+
 			$dtr = new DataTablesRequest($this->params);
 			$contagem = 0;
 			$objetos = [];
@@ -73,6 +77,10 @@ class ControladoraUsuario {
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
+			}
+
+			if(!$this->servicoLogin->eAdministrador()){
+				throw new Exception("Usuário sem permissão para executar ação.");
 			}
 
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'nome', 'sobrenome', 'email', 'login','senha', 'lojas'], $this->params);
@@ -190,6 +198,11 @@ class ControladoraUsuario {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
+
+			if(!$this->servicoLogin->eAdministrador()){
+				throw new Exception("Usuário sem permissão para executar ação.");
+			}
+
 			if (! is_numeric($id)) {
 				$msg = 'O id informado não é numérico.';
 				return $this->geradoraResposta->erro($msg, GeradoraResposta::TIPO_TEXTO);

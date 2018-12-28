@@ -114,7 +114,7 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 
 	function comPerguntaId($id){
 		try {	
-			$tarefa = $this->construirObjeto(DB::table(self::TABELA)->join(ColecaoPerguntaEmBDR::TABELA, ColecaoPerguntaEmBDR::TABELA . '.tarefa_id', '=', self::TABELA . '.id')->where(ColecaoPerguntaEmBDR::TABELA . '.id', $id)->first());
+			$tarefa = $this->construirObjeto(DB::table(self::TABELA)->select(self::TABELA. '.*')->join(ColecaoPerguntaEmBDR::TABELA, ColecaoPerguntaEmBDR::TABELA . '.tarefa_id', '=', self::TABELA . '.id')->where(ColecaoPerguntaEmBDR::TABELA . '.id', $id)->first());
 
 			return $tarefa;
 		}
@@ -208,13 +208,11 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 		
 		if(strlen($obj->getdescricao()) > 255 and $obj->getdescricao() <> '') throw new ColecaoException('A descrição  deve conter no máximo '. 255 . ' caracteres.');
 
-		// $quantidade = DB::table(self::TABELA)->where('titulo', 'like', $obj->getTitulo())->where('setor_id', $obj->getSetor()->getId())->where('id', '<>', $obj->getId())->count();
-		// $quantidade = DB::table(self::TABELA)->where('titulo', $obj->getTitulo())->where('id', '<>', $obj->getId())->count();
+		$quantidade = DB::table(self::TABELA)->whereRaw('titulo like  "%'. $obj->getTitulo() . '%"')->where('setor_id', $obj->getSetor()->getId())->where(self::TABELA . '.id', '<>', $obj->getId())->count();
 		
-
-		// if($quantidade > 0){
-		// 	throw new ColecaoException('Já exite uma tarefa cadastrada com esse título.');
-		// }
+		if($quantidade > 0){
+			throw new ColecaoException('Já exite uma tarefa cadastrada com esse título.');
+		}
 
 		if($obj->getDataLimite() instanceof Carbon){
 			if($obj->getDataLimite() < Carbon::now() and $obj->getId() == 0) throw new Exception("A data Limite deve ser maior que a atual.");

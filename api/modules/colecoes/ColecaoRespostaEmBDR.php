@@ -91,13 +91,14 @@ class ColecaoRespostaEmBDR implements ColecaoResposta
 
 	function  todosComTarefaId($limite = 0, $pulo = 0, $tarefaid = 0){
 		try {	
-			$respostas = DB::table(self::TABELA)
+			$respostas = DB::table(self::TABELA)->select(self::TABELA . '.*')
 			->join(ColecaoPerguntaEmBDR::TABELA, ColecaoPerguntaEmBDR::TABELA . '.id', '=', self::TABELA . '.pergunta_id')
 			->join(ColecaoTarefaEmBDR::TABELA, ColecaoTarefaEmBDR::TABELA . '.id', '=', ColecaoPerguntaEmBDR::TABELA . '.tarefa_id')
 			->where(ColecaoTarefaEmBDR::TABELA .'.id', $tarefaid)
 			->offset($limite)
 			->limit($pulo)
-			->groupBy(ColecaoTarefaEmBDR::TABELA .'.id')->get();
+			->get();
+
 			$respostasObjects = [];
 
 			foreach ($respostas as $pergunta) {

@@ -47,8 +47,8 @@ class ControladoraResposta {
 			$contagem = 0;
 			$objetos = [];
 			$erro = null;
-
 			$objetos = $this->colecaoResposta->todosComTarefaId($dtr->start, $dtr->length, $tarefaId);
+
 			$tarefa = $this->colecaoTarefa->comId($tarefaId);
 
 			if(!isset($tarefa) and !($tarefa instanceof Tarefa)){

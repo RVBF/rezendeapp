@@ -11,6 +11,8 @@ class Sessao
 	const ID_USUARIO = 'idUsuario';
 	const LOGIN_USUARIO = 'user_name';
 	const ULTIMA_REQUISICAO = 'ultimaRequisicao';
+	const ADMIN = 'e_adm';
+
 
 	private $session;
 	
@@ -22,11 +24,11 @@ class Sessao
 		return $this->session->get(self::ID_USUARIO) >  0;
 	}
 	
-	function criar($id, $login, $ultimaRequisicao) {
+	function criar($id, $login, $ultimaRequisicao, $admin = false) {
 		$this->session->put(self::LOGIN_USUARIO, $login); // Set a value in the session
 		$this->session->put(self::ID_USUARIO, $id);
 		$this->session->put(self::ULTIMA_REQUISICAO, $ultimaRequisicao);
-
+		$this->session->put(self::ADMIN, $admin);
 	}
 	
 	function destruir() {
@@ -43,6 +45,10 @@ class Sessao
 	
 	function ultimaRequisicao() {
 		return $this->session->get(self::ULTIMA_REQUISICAO);
+	}
+
+	function eAdmin() {
+		return $this->session->get(self::ADMIN);
 	}
 
 	function atualizarUltimaRequisicao($valor = null) {

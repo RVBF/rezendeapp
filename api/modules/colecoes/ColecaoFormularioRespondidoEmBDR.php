@@ -88,7 +88,7 @@ class ColecaoFormularioRespondidoEmBDR implements ColecaoFormularioRespondido
 
 	function comPerguntaId($id){
 		try {
-			$formularioRespondido = DB::table(self::TABELA)->join(self::TABELA_RELACIONAL, self::TABELA_RELACIONAL . '.formulario_respondido_id', '=', self::TABELA . '.id')->where(self::TABELA_RELACIONAL . '.pergunta_id', $id)->get();
+			$formularioRespondido = DB::table(self::TABELA)->select(self::TABELA . '.*')->join(self::TABELA_RELACIONAL, self::TABELA_RELACIONAL . '.formulario_respondido_id', '=', self::TABELA . '.id')->where(self::TABELA_RELACIONAL . '.pergunta_id', $id)->get();
 			$formularioRespondidoObj = null;
 
 			if(count($formularioRespondido) >  0 ) {

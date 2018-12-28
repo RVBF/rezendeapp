@@ -77,7 +77,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 	function comColaboradorId($id){
 		try {
 
-			$lojas = DB::table(self::TABELA)
+			$lojas = DB::table(self::TABELA)->select(self::TABELA . '.*')
 				->join(self::TABELA_RELACIONAL, self::TABELA_RELACIONAL . '.loja_id', '=', self::TABELA . '.id')
 				->where(self::TABELA_RELACIONAL . '.colaborador_id', $id)->get();
 				

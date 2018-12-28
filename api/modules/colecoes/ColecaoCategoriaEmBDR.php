@@ -73,7 +73,7 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException("Ero ao buscar categoria", $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar categoria", $e->getCode(), $e);
 		}
 	}
 

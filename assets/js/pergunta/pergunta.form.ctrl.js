@@ -87,13 +87,14 @@
 		_this.salvar = function salvar() {
 			_this.formulario.validate({
 				submitHandler : function(form){
+					var obj = _this.conteudo();
+
 					_this.formulario.desabilitar(true);
 					
 					var terminado = function() {
 						_this.formulario.desabilitar(false);
 					};
 					
-					var obj = _this.conteudo();
 					var jqXHR;
 
 					if(_this.alterar){

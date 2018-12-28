@@ -26,7 +26,7 @@ a.meanmenu-reveal{display:none}
   color: #666666;
   display: block;
   float: left;
-  font-size: 16px;
+  font-size: 12px;
   margin: 0;
   padding: 1em 5%;
   text-align: left;
@@ -79,9 +79,10 @@ a.meanmenu-reveal{display:none}
 .mean-container .mean-bar,.mean-container .mean-bar *{-webkit-box-sizing:content-box;-moz-box-sizing:content-box;box-sizing:content-box}
 .mean-remove{display:none!important}
 .mean-container .mean-bar::after {
+  padding-top: 5px;
   color: #333;
   content: "MENU";
-  font-size: 21px;
+  font-size: 12px;
   left: 5%;
   position: absolute;
   top: 12px;
