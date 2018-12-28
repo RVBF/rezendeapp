@@ -31,11 +31,12 @@ class ServicoLogin {
 			{
 				$usuario = $resultado;
 				if($usuario->getSenha() === $senhaCriptografada || $usuario->getSenha() == $senha)
-				{
+				{	
 					$this->sessaoUsuario->criar(		
 						$usuario->getId(),
 						$usuario->getLogin(), 
-						$ultimaRequisicao = time()
+						$ultimaRequisicao = time(),
+						($usuario->getAdministrador()) ? true : false
 					);
 				}
 				else
@@ -101,6 +102,11 @@ class ServicoLogin {
 	function estaLogado() {
 		return $this->sessaoUsuario->existe();
 	}
+
+	function eAdministrador() {
+		return $this->sessaoUsuario->eAdmin();
+	}
+
 
 	function verificarSeUsuarioEstaLogado()
 	{

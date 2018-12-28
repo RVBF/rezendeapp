@@ -68,6 +68,7 @@ class ControladoraTarefa {
 			$dtr->draw,
 			$erro
 		);
+		
 		return $conteudo;
 	}
 	
@@ -78,6 +79,10 @@ class ControladoraTarefa {
 
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
+			}
+
+			if(!$this->servicoLogin->eAdministrador()){
+				throw new Exception("Usuário sem permissão para executar ação.");
 			}
 
 			$inexistentes = \ArrayUtil::nonExistingKeys(['titulo', 'descricao', 'dataLimite', 'setor', 'loja'], $this->params);
@@ -139,6 +144,10 @@ class ControladoraTarefa {
 				throw new Exception("Erro ao acessar página.");				
 			}
 
+			if(!$this->servicoLogin->eAdministrador()){
+				throw new Exception("Usuário sem permissão para executar ação.");
+			}
+
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo', 'descricao', 'dataLimite', 'setor', 'loja'], $this->params);
 		
 			if(count($inexistentes) > 0) {
@@ -146,9 +155,9 @@ class ControladoraTarefa {
 	
 				throw new Exception($msg);
 			}
-	
-			$setor = $this->colecaoSetor->comId((\ParamUtil::value($this->params, 'loja')> 0) ? \ParamUtil::value($this->params, 'loja') : \ParamUtil::value($this->params, 'descricao'));
-	
+
+			$setor = $this->colecaoSetor->comId(\ParamUtil::value($this->params, 'setor'));
+
 			if(!isset($setor) and !(setor instanceof Setor)){
 				throw new Exception("Setor não encontrada na base de dados.");
 			}
@@ -172,11 +181,14 @@ class ControladoraTarefa {
 				$setor,
 				$loja
 			);
+
 	
 			$resposta = [];
 					
 			$tarefa = $this->colecaoTarefa->atualizar($tarefa);
+
 			$resposta = ['categoria'=> RTTI::getAttributes( $tarefa, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria cadastrada com sucesso.']; 
+			
 			DB::commit();
 
 		}
@@ -195,6 +207,10 @@ class ControladoraTarefa {
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
+			}
+
+			if(!$this->servicoLogin->eAdministrador()){
+				throw new Exception("Usuário sem permissão para executar ação.");
 			}
 			
 			$resposta = [];

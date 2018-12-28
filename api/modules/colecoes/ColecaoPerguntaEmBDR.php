@@ -154,7 +154,7 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta {
 
 	function comFormularioId($id){
 		try {	
-			$perguntas = DB::table(self::TABELA)->join(self::TABELA_RELACIONAL, self::TABELA.'.id', '=', self::TABELA . 'pergunta_id')->where(self::TABELA_RELACIONAL . '.formulario_respondido_id', $id)->get();
+			$perguntas = DB::table(self::TABELA)->select(self::TABELA . '.*')->join(self::TABELA_RELACIONAL, self::TABELA.'.id', '=', self::TABELA . 'pergunta_id')->where(self::TABELA_RELACIONAL . '.formulario_respondido_id', $id)->get();
 
 			$perguntasObjects = [];
 			foreach ($perguntas as $pergunta) {

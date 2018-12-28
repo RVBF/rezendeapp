@@ -36,6 +36,7 @@ class ControladoraSetor {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
+
 			$dtr = new DataTablesRequest($this->params);
 			$contagem = 0;
 			$objetos = [];
@@ -63,6 +64,9 @@ class ControladoraSetor {
 				throw new Exception("Erro ao acessar página.");				
 			}
 
+			if(!$this->servicoLogin->eAdministrador()){
+				throw new Exception("Usuário sem permissão para executar ação.");
+			}
 
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo','descricao','categoria'], $this->params);
 			$resposta = [];
@@ -72,7 +76,9 @@ class ControladoraSetor {
 
 				throw new Exception($msg);
 			}
+			Debuger::printr($this->params);
 			$categoria = $this->colecaoCategoria->comId(\ParamUtil::value($this->params, 'categoria'));
+
 			if(!isset($categoria) and !($categoria instanceof Categoria)){
 				throw new Exception("Categoria não encontrada na base de dados.");
 			}
@@ -105,6 +111,10 @@ class ControladoraSetor {
 				throw new Exception("Erro ao acessar página.");				
 			}		
 			
+			if(!$this->servicoLogin->eAdministrador()){
+				throw new Exception("Usuário sem permissão para executar ação.");
+			}
+
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo','descricao'], $this->params);
 			$resposta = [];
 
@@ -143,7 +153,11 @@ class ControladoraSetor {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}	
-			
+
+			if(!$this->servicoLogin->eAdministrador()){
+				throw new Exception("Usuário sem permissão para executar ação.");
+			}
+
 			$resposta = [];
 
 			$status = $this->colecaoSetor->remover($id);

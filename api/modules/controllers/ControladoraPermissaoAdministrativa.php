@@ -34,6 +34,10 @@ class ControladoraPermissaoAdministrativa {
 				throw new Exception("Erro ao acessar página.");				
 			}
 
+			if(!$this->servicoLogin->eAdministrador()){
+				throw new Exception("Usuário sem permissão para executar ação.");
+			}
+
 			$inexistentes = \ArrayUtil::nonExistingKeys(['grupos', 'usuarios'], $this->params);
 			if(count($inexistentes) > 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);

@@ -545,3 +545,19 @@ input.select2-search__field {
 .help-block{
     margin-bottom: 2px !important;
 }
+
+.link_menu_mobile{
+    font-size: 12px !important;
+}
+
+.modal{
+    z-index: 1069000 !important;
+}
+
+.modal .close {
+    font-size: 21px !important;
+}
+
+.modal-title{
+    padding-top : 10px;
+}

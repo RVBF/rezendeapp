@@ -21,78 +21,77 @@
 		_this.idSetor = window.location.href.split('#')[1].substring(1, url.length).split('/')[1];	
 
 		var ctrlFormulario = new app.ControladoraFormTarefa(servicoTarefa, _this);
-	
+		
 		//Configura a tabela
 		_this.opcoesDaTabela = function opcoesDaTabela() {
 			var objeto = $.extend(true, {}, app.dtOptions);
-			objeto.ajax = servicoTarefa.rota(_this.idSetor);
-			
+			objeto.ajax = servicoTarefa.rota();
 			objeto.columnDefs = [ {
-				data: 'id',
-				targets: 0
+					data: 'id',
+					targets: 0
 
-			}, {
-				data: 'titulo',
-				targets: 1
-			}, {
-				data: 'descricao',
-				targets: 2
-			}, {
-				data : 'setor.titulo',
-				targets : 3
-			}, {
-				data : function (data) {
-					return data.loja.razaoSocial + '/' + data.loja.nomeFantasia
-				},
-				targets : 4
-			}, {
-				data : function(data) {
-					var dataLimite = moment(data.dataLimite, "YYYY-MM-DD HH:mm:ss", 'pt-br');
-					var hoje = moment();
+				}, {
+					data: 'titulo',
+					targets: 1
+				}, {
+					data: 'descricao',
+					targets: 2
+				}, {
+					data : 'setor.titulo',
+					targets : 3
+				}, {
+					data : function (data) {
+						return data.loja.razaoSocial + '/' + data.loja.nomeFantasia
+					},
+					targets : 4
+				}, {
+					data : function(data) {
+						var dataLimite = moment(data.dataLimite, "YYYY-MM-DD HH:mm:ss", 'pt-br');
+						var hoje = moment();
 
-					var eAntes = hoje.isBetween(hoje.toString(), dataLimite.toString());
-					
-					return (eAntes) ? '<p class="text-success align-middle">'+ dataLimite.format('DD/MM/YYYY HH:mm:ss').toString() + '</p>' : '<p class="text-danger">'+ dataLimite.format('DD/MM/YYYY HH:mm:ss').toString() + '</p>';
-				},
-				targets : 5
-			}, {
-				data :function(data) {
-					return data.questionador.nome + ' ' + data.questionador.sobrenome;
-				},
-				targets : 6
-			}, {
-				data :function(data){
-					var texto = (data.encerrada) ? "Sim" : "Não";
-					var classe = (data.encerrada) ? "success" : "danger"
+						var eAntes = hoje.isBetween(hoje.toString(), dataLimite.toString());
+						
+						return (eAntes) ? '<p class="text-success align-middle">'+ dataLimite.format('DD/MM/YYYY HH:mm:ss').toString() + '</p>' : '<p class="text-danger">'+ dataLimite.format('DD/MM/YYYY HH:mm:ss').toString() + '</p>';
+					},
+					targets : 5
+				}, {
+					data :function(data) {
+						return data.questionador.nome + ' ' + data.questionador.sobrenome;
+					},
+					targets : 6
+				}, {
+					data :function(data){
+						var texto = (data.encerrada) ? "Sim" : "Não";
+						var classe = (data.encerrada) ? "success" : "danger"
 
-					return  '<div class="p-1 mb-1 bg-' + classe + ' text-white">'+ texto + '</div>';
-				},
-				targets : 7
-			}, {
-				data :function(data){
-					var html = '';
-					html += '<div class="dropdown">';
-					html += '<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
-					html += 'Opções';
-					html += '</button>';
-					html += '<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">';
-					html += (data.perguntas.length > 0) ? '<a class="dropdown-item gerenciar_perguntas" href="#">Ver Perguntas</a>' : '';
-					html += (data.encerrada) ?  '<a class="dropdown-item gerenciar_respostas" href="#">Ver Respostas</a>' : '';
-					html += (!data.encerrada) ?  '<a class="dropdown-item cadastrar_perguntas" href="#">Cadastrar Perguntas</a>' : '';
+						return  '<div class="p-1 mb-1 bg-' + classe + ' text-white">'+ texto + '</div>';
+					},
+					targets : 7
+				}, {
+					data :function(data){
+						var html = '';
+						html += '<div class="dropdown">';
+						html += '<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+						html += 'Opções';
+						html += '</button>';
+						html += '<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">';
+						html += (data.perguntas.length > 0) ? '<a class="dropdown-item gerenciar_perguntas" href="#">Ver Perguntas</a>' : '';
+						html += (data.encerrada) ?  '<a class="dropdown-item gerenciar_respostas" href="#">Ver Respostas</a>' : '';
+						html += (!data.encerrada) ?  '<a class="dropdown-item cadastrar_perguntas" href="#">Cadastrar Perguntas</a>' : '';
 
-					html += (!data.encerrada && data.perguntas.length > 0) ? '<a class="dropdown-item responder_perguntas" href="#">Responder Perguntas</a>' : '';
+						html += (!data.encerrada && data.perguntas.length > 0) ? '<a class="dropdown-item responder_perguntas" href="#">Responder Perguntas</a>' : '';
 
-					html += '</div>';
-					html += '</div>';
+						html += '</div>';
+						html += '</div>';
 
-					return  html;
-				},
-				targets : 8
-			}
-		];	
+						return  html;
+					},
+					targets : 8
+				}
+			];	
 
 			objeto.fnDrawCallback = function (settings) {
-				$('.gerenciar_perguntas').on('click', function (event) {
+				$('body').on('click','.gerenciar_perguntas', function (event) {
 					event.preventDefault();
 
 					var objeto = _tabela.row($(this).parents('tr')).data();
@@ -101,14 +100,14 @@
 					
 				});
 
-				$('.gerenciar_respostas').on('click', function (event) {
+				$('body').on('click','.gerenciar_respostas', function (event) {
 					event.preventDefault();
 					var objeto = _tabela.row($(this).parents('tr')).data();
 
 					router.navigate('/resposta/' + objeto.id);
 				});
 
-				$('.cadastrar_perguntas').on('click', function (event) {
+				$('body').on('click','.cadastrar_perguntas', function (event) {
 					event.preventDefault();
 
 					var objeto = _tabela.row($(this).parents('tr')).data();
@@ -117,7 +116,7 @@
 					
 				});
 
-				$('.responder_perguntas').on('click', function (event) {
+				$('body').on('click','.responder_perguntas', function (event) {
 					event.preventDefault();
 					var objeto = _tabela.row($(this).parents('tr')).data();
 					router.navigate('/tarefa/' + objeto.id + '/pergunta/responder-perguntas')

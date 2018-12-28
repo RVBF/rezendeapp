@@ -32,14 +32,15 @@
 			};
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
+				var obj = _this.conteudo();
+
 				_this.formulario.desabilitar(true);
 				
 				var terminado = function() {
 					_this.formulario.desabilitar(false);
 				};
 				
-				var obj = _this.conteudo();
-				var jqXHR = _this.alterar ? servicoTarefa.atualizarComSetorId(obj, _this.idSetor) : servicoTarefa.adicionarComSetorId(obj, _this.idSetor);
+ 				var jqXHR = _this.alterar ? servicoTarefa.atualizarComSetorId(obj, _this.idSetor) : servicoTarefa.adicionarComSetorId(obj, _this.idSetor);
 				jqXHR.done(window.sucessoParaFormulario).fail(window.erro).always(terminado);
 
 				if(_this.alterar){

@@ -50,7 +50,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 				$removido = DB::table(self::TABELA)->where('id', $id)->delete();
 
 				
-				$removido = DB::table(ColecaoColaboradorEmBDR::TABELA_RELACIONAL)
+				$removido = DB::table(ColecaoColaboradorEmBDR::TABELA_RELACIONAL)->select(ColecaoColaboradorEmBDR::TABELA_RELACIONAL . '.*')
 					->join(ColecaoColaboradorEmBDR::TABELA, ColecaoColaboradorEmBDR::TABELA . '.id', '=', ColecaoColaboradorEmBDR::TABELA_RELACIONAL . '.colaborador_Id')
 					->where(ColecaoColaboradorEmBDR::TABELA . '.usuario_id', $id)
 					->delete();
@@ -144,7 +144,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 	function comGrupoId($id){
 		try {
 
-			$grupos = DB::table(self::TABELA)
+			$grupos = DB::table(self::TABELA)->select(self::TABELA . '.*')
 				->join(self::TABELA_RELACIONAL, self::TABELA_RELACIONAL . '.usuario_id', '=', self::TABELA . '.id')
 				->where(self::TABELA_RELACIONAL . '.grupo_usuario_id', $id)->get();
 				
@@ -211,7 +211,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 			$this->validarSenha($obj->getSenha());
 		}
 
-		$quantidade = DB::table(self::TABELA)->whereRaw('login like "%' . $obj->getLogin() . '%"')->where('id', '<>', $obj->getId())->count();
+		$quantidade = DB::table(self::TABELA)->whereRaw(self::TABELA . '.login like "%' . $obj->getLogin() . '%"')->where('id', '<>', $obj->getId())->count();
 
 		if($quantidade > 0)
 		{
@@ -374,7 +374,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 
 		if($quantidade > 0)throw new ColecaoException('Não foi possível excluir o usuário por que ele possui formulários relacionadoss a ele. Exclua todas os formulários relacionados e tente novamente.');
 
-		$quantidade = DB::table(ColecaoLojaEmBDR::TABELA)
+		$quantidade = DB::table(ColecaoLojaEmBDR::TABELA)->select(ColecaoLojaEmBDR::TABELA . '.*')
 			->join(ColecaoLojaEmBDR::TABELA_RELACIONAL , ColecaoLojaEmBDR::TABELA_RELACIONAL . '.loja_id', '=', ColecaoLojaEmBDR::TABELA . '.id')
 			->join(ColecaoColaboradorEmBDR::TABELA, ColecaoColaboradorEmBDR::TABELA . '.id', '=', ColecaoLojaEmBDR::TABELA_RELACIONAL . '.colaborador_id' )
 			->where(ColecaoColaboradorEmBDR::TABELA . '.usuario_id', $id)->count();

@@ -102,7 +102,7 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
 
 	function comUsuarioId($id = 0){
 		try {	
-			$grupoDeusuarios = DB::table(self::TABELA)->join(self::TABELA_RELACIONAL, self::TABELA_RELACIONAL. '.grupo_usuario_id', '=', self::TABELA . '.id')->where(self::TABELA_RELACIONAL. '.usuario_id', $id)->get();
+			$grupoDeusuarios = DB::table(self::TABELA)->select(self::TABELA . '.*')->join(self::TABELA_RELACIONAL, self::TABELA_RELACIONAL. '.grupo_usuario_id', '=', self::TABELA . '.id')->where(self::TABELA_RELACIONAL. '.usuario_id', $id)->get();
 
             $grupoDeusuariosObjects = [];
 

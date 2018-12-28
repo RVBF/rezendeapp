@@ -24,9 +24,10 @@
 			};
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
+				var obj = _this.conteudo();
+
 				_this.formulario.desabilitar(true);
 
-				var obj = _this.conteudo();
 				var jqXHR = _this.alterar ? servicoCategoria.atualizar(obj) : servicoCategoria.adicionar(obj);
 				
 				jqXHR.done(window.sucessoParaFormulario).always(function(){

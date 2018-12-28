@@ -33,6 +33,10 @@ class ControladoraPergunta {
 				throw new Exception("Erro ao acessar página.");				
 			}
 
+			if(!$this->servicoLogin->eAdministrador()){
+				throw new Exception("Usuário sem permissão para executar ação.");
+			}
+
 			$dtr = new DataTablesRequest($this->params);
 			$contagem = 0;
 			$objetos = [];
@@ -63,6 +67,10 @@ class ControladoraPergunta {
 
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
+			}
+			
+			if(!$this->servicoLogin->eAdministrador()){
+				throw new Exception("Usuário sem permissão para executar ação.");
 			}
 			$inexistentes = \ArrayUtil::nonExistingKeys(['pergunta'], $this->params);
 			
@@ -107,6 +115,11 @@ class ControladoraPergunta {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
+
+			if(!$this->servicoLogin->eAdministrador()){
+				throw new Exception("Usuário sem permissão para executar ação.");
+			}
+
 			$inexistentes = \ArrayUtil::nonExistingKeys(['data'], $this->params);
 			
 			if(count($inexistentes) > 0) {
@@ -154,7 +167,11 @@ class ControladoraPergunta {
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
-			}		
+			}	
+			
+			if(!$this->servicoLogin->eAdministrador()){
+				throw new Exception("Usuário sem permissão para executar ação.");
+			}
 
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'pergunta'], $this->params);
 			
@@ -246,6 +263,11 @@ class ControladoraPergunta {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
+
+			if(!$this->servicoLogin->eAdministrador()){
+				throw new Exception("Usuário sem permissão para executar ação.");
+			}
+
 			$resposta = [];
 
 			$status = $this->colecaoPergunta->remover($id, $tarefaId);

@@ -19,7 +19,7 @@
 	function ServicoTarefa() { // Model
 		var _this = this;
 		// Rota no servidor
-        _this.rota = function rota(idCheklist) {
+        _this.rota = function rota() {
 			return app.api + '/tarefa';
 		};
 
@@ -36,6 +36,13 @@
 
 			};
 		};
+
+		_this.todos = function todos() {
+			return $.ajax({
+				type: "GET",
+				url: _this.rota()
+			});
+		}
 
 		_this.adicionarComSetorId = function adicionarComSetorId(obj, idSetor) {
 			return $.ajax({

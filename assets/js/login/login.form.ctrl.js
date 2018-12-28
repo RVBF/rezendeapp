@@ -54,7 +54,9 @@
 
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
-				_this.formulario.desabilitar(false);
+				var obj = _this.conteudo();
+
+				_this.formulario.desabilitar(true);
 
 				var sucesso = function sucesso(data, textStatus, jqXHR)
 				{
@@ -74,7 +76,6 @@
 					_this.formulario.desabilitar(false);
 				};
 
-				var obj = _this.conteudo();
 				var jqXHR = servico.logar(obj);
 
 				_this.formulario.desabilitar(true);

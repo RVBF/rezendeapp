@@ -92,9 +92,9 @@
             opcoesParaHTML += (!temPermissao) ? '' :'<a data-toggle="tab" href="#config" aria-expanded="false" class="nav-link"><i class="rezende-icon fas fa-cog"></i>Configuração</a>';
             opcoesParaHTML += (!temPermissao) ? '' :'</li>';
 
-            opcoesParaHTML += (!temPermissao) ? '' :'<li class="nav-item">';
-            opcoesParaHTML += (!temPermissao) ? '' :'<a data-toggle="tab" href="#opc_user" aria-expanded="false" class="nav-link"><i class="rezende-icon fas fa-sign-out-alt"></i>Opções de usuário</a>';
-            opcoesParaHTML += (!temPermissao) ? '' :'</li>';
+            opcoesParaHTML += '<li class="nav-item">';
+            opcoesParaHTML += '<a data-toggle="tab" href="#opc_user" aria-expanded="false" class="nav-link"><i class="rezende-icon fas fa-sign-out-alt"></i>Opções de usuário</a>';
+            opcoesParaHTML += '</li>';
 
             $('#menu_nav').append(opcoesParaHTML);
         };
@@ -102,47 +102,49 @@
         _this.renderizarOpcoesMobile = function renderizarOpcoesMobile(temPermissao){
             var opcoesParaHTML = '';
             opcoesParaHTML += '<li>';
-            opcoesParaHTML += '<a data-toggle="collapse" data-target="#tarefa" class="tarefaListagemCompleta_link">Tarefa</a>';
+            opcoesParaHTML += '<a data-toggle="collapse" data-target="#tarefa" class="tarefaListagemCompleta_link link_menu_mobile redireciona_mobile">Tarefa</a>';
             opcoesParaHTML += (!temPermissao) ? '' :'<ul class="collapse dropdown-header-top">';
             opcoesParaHTML += (!temPermissao) ? '' :'<li>';
-            opcoesParaHTML += (!temPermissao) ? '' :'<a href="categoria.html" class="categoria_link">Categoria</a>';
+            opcoesParaHTML += (!temPermissao) ? '' :'<a href="categoria.html" class="categoria_link link_menu_mobile redireciona_mobile">Categoria</a>';
             opcoesParaHTML += (!temPermissao) ? '' :'</li>';
             opcoesParaHTML += (!temPermissao) ? '' :'';
             opcoesParaHTML += (!temPermissao) ? '' :'<li>';
-            opcoesParaHTML += (!temPermissao) ? '' :'<a href="loja.html" class="loja_link">Lojas</a>';
+            opcoesParaHTML += (!temPermissao) ? '' :'<a href="loja.html" class="loja_link link_menu_mobile redireciona_mobile">Lojas</a>';
             opcoesParaHTML += (!temPermissao) ? '' :'</li>';
             opcoesParaHTML += (!temPermissao) ? '' :'';
             opcoesParaHTML += (!temPermissao) ? '' :'<li>';
-            opcoesParaHTML += (!temPermissao) ? '' :'<a href="tarefaListagemCompleta.html" class="setor_link">Setor</a>';
+            opcoesParaHTML += (!temPermissao) ? '' :'<a href="tarefaListagemCompleta.html" class="setor_link link_menu_mobile redireciona_mobile">Setor</a>';
             opcoesParaHTML += (!temPermissao) ? '' :'</li>';
             opcoesParaHTML += (!temPermissao) ? '' :'</ul>';
             opcoesParaHTML += '</li>';
 
             opcoesParaHTML += (!temPermissao) ? '' :'<li>';
-            opcoesParaHTML += (!temPermissao) ? '' :'<a data-toggle="collapse" data-target="#setor" class="configuracoes_link">Configurações</a>';
+            opcoesParaHTML += (!temPermissao) ? '' :'<a data-toggle="collapse" data-target="#setor" class="configuracoes_link link_menu_mobile">Configurações</a>';
             opcoesParaHTML += (!temPermissao) ? '' :'';
             opcoesParaHTML += (!temPermissao) ? '' :'<ul class="collapse dropdown-header-top">';
             opcoesParaHTML += (!temPermissao) ? '' :'<li>';
-            opcoesParaHTML += (!temPermissao) ? '' :'<a href="usuario.html" class="usuario_link">Usuário</a>';
+            opcoesParaHTML += (!temPermissao) ? '' :'<a href="usuario.html" class="usuario_link link_menu_mobile redireciona_mobile">Usuário</a>';
             opcoesParaHTML += (!temPermissao) ? '' :'</li>';
             opcoesParaHTML += (!temPermissao) ? '' :'';
             opcoesParaHTML += (!temPermissao) ? '' :'<li>';
-            opcoesParaHTML += (!temPermissao) ? '' :'<a href="grupo_usuario.html" class="grupo_usuario_link">Grupo de  Usuário</a>';
+            opcoesParaHTML += (!temPermissao) ? '' :'<a href="grupo_usuario.html" class="grupo_usuario_link link_menu_mobile redireciona_mobile">Grupo de  Usuário</a>';
             opcoesParaHTML += (!temPermissao) ? '' :'</li>';
             opcoesParaHTML += (!temPermissao) ? '' :'</ul>';
             opcoesParaHTML += (!temPermissao) ? '' :'</li>';
 
             opcoesParaHTML += '<li>';
-            opcoesParaHTML += '<a data-toggle="collapse" data-target="#setor" class="configuracoes_link">Opções de usuário</a>';
+            opcoesParaHTML += '<a data-toggle="collapse" data-target="#setor" class="configuracoes_link link_menu_mobile">Opções de usuário</a>';
 
             opcoesParaHTML += '<ul class="collapse dropdown-header-top">';
             opcoesParaHTML += '<li>';
-            opcoesParaHTML += '<a href="login.html" class="efetuar_logout">Sair</a>';
+            opcoesParaHTML += '<a href="login.html" class="efetuar_logout link_menu_mobile redireciona_mobile">Sair</a>';
             opcoesParaHTML += '</li>';
             opcoesParaHTML += '</ul>';
             opcoesParaHTML += '</li>';
 
-            $('#opcoes_mobile').append(opcoesParaHTML);
+            $('#opcoes_mobile').append(opcoesParaHTML).promise().done(function () {
+                window.meanBar();
+            });
 
         };
 

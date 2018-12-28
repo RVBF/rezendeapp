@@ -126,6 +126,8 @@ var app = {
 		"order": [[0, 'desc']]
 	};
 
+	$.fn.dataTable.ext.errMode = 'none';
+
 	$.fn.extend({
 		desabilitar: function (status) {
 			$(this).find("*").each(function(){
