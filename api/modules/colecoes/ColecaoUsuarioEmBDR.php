@@ -246,7 +246,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 	}
 
 	/**
-	*  Valida o senha do usuário, lançando uma exceção caso haja algo inválido.
+	*  Valida a senha do usuário, lançando uma exceção caso haja algo inválido.
 	*  @throws ColecaoException
 	*/
 	private function validarSenha($senha) {
@@ -257,13 +257,13 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 
 		$tamSenha = mb_strlen($senha);
 
-		if($tamSenha <= Usuario::TAMANHO_MINIMO_SENHA)
+		if($tamSenha < Usuario::TAMANHO_MINIMO_SENHA)
 		{
-			throw new ColecaoException('O senha deve conter no minímo ' . Usuario::TAMANHO_MINIMO_SENHA . ' caracteres.');
+			throw new ColecaoException('A senha deve conter no minímo ' . Usuario::TAMANHO_MINIMO_SENHA . ' caracteres.');
 		}
-		if ($tamSenha >= Usuario::TAMANHO_MAXIMO_SENHA)
+		if ($tamSenha > Usuario::TAMANHO_MAXIMO_SENHA)
 		{
-			throw new ColecaoException('O senha deve conter no máximo ' . Usuario::TAMANHO_MAXIMO_SENHA . ' caracteres.');
+			throw new ColecaoException('A senha deve conter no máximo ' . Usuario::TAMANHO_MAXIMO_SENHA . ' caracteres.');
 		}
 	}
 
@@ -293,11 +293,11 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 
 			$tamSenha = mb_strlen($senhaAtual);
 
-			if($tamSenha <= Usuario::TAMANHO_MINIMO_SENHA)
+			if($tamSenha < Usuario::TAMANHO_MINIMO_SENHA)
 			{
 				throw new ColecaoException('O campo senha atual deve conter no minímo ' . Usuario::TAMANHO_MINIMO_SENHA . ' caracteres.');
 			}
-			if ($tamSenha >= Usuario::TAMANHO_MAXIMO_SENHA)
+			if ($tamSenha > Usuario::TAMANHO_MAXIMO_SENHA)
 			{
 				throw new ColecaoException('O campo senha atual conter no máximo ' . Usuario::TAMANHO_MAXIMO_SENHA . ' caracteres.');
 			}
@@ -312,11 +312,11 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 
 			$tamSenha = mb_strlen($novaSenha);
 
-			if($tamSenha <= Usuario::TAMANHO_MINIMO_SENHA)
+			if($tamSenha < Usuario::TAMANHO_MINIMO_SENHA)
 			{
 				throw new ColecaoException('O campo nova senha deve conter no minímo ' . Usuario::TAMANHO_MINIMO_SENHA . ' caracteres.');
 			}
-			if ($tamSenha >= Usuario::TAMANHO_MAXIMO_SENHA)
+			if ($tamSenha > Usuario::TAMANHO_MAXIMO_SENHA)
 			{
 				throw new ColecaoException('O campo nova senha conter no máximo ' . Usuario::TAMANHO_MAXIMO_SENHA . ' caracteres.');
 			}
@@ -331,11 +331,11 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 
 			$tamSenha = mb_strlen($confirmacaoSenha);
 
-			if($tamSenha <= Usuario::TAMANHO_MINIMO_SENHA)
+			if($tamSenha < Usuario::TAMANHO_MINIMO_SENHA)
 			{
 				throw new ColecaoException('O campo confirmação senha deve conter no minímo ' . Usuario::TAMANHO_MINIMO_SENHA . ' caracteres.');
 			}
-			if ($tamSenha >= Usuario::TAMANHO_MAXIMO_SENHA)
+			if ($tamSenha > Usuario::TAMANHO_MAXIMO_SENHA)
 			{
 				throw new ColecaoException('O campo confirmação senha conter no máximo ' . Usuario::TAMANHO_MAXIMO_SENHA . ' caracteres.');
 			}

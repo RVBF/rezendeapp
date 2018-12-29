@@ -71,11 +71,11 @@ class ServicoUsuario {
 	{
 		$tamSenha = mb_strlen($senha);
 
-		if ($tamSenha < Usuario::TAMANHO_MINIMO_SENHA)
+		if ($tamSenha >= Usuario::TAMANHO_MINIMO_SENHA)
 		{
 			throw new ServicoException('A senha deve possuir no mínimo ' . Usuario::TAMANHO_MINIMO_SENHA . ' caracteres.');
 		}
-		if ($tamSenha > Usuario::TAMANHO_MAXIMO_SENHA)
+		if ($tamSenha <= Usuario::TAMANHO_MAXIMO_SENHA)
 		{
 			throw new ServicoException('A senha deve possuir no máximo ' . Usuario::TAMANHO_MAXIMO_SENHA . ' caracteres.');
 		}
@@ -251,12 +251,12 @@ class ServicoUsuario {
 
 		$tamSenha = mb_strlen($obj->getSenha());
 
-		if($tamSenha >= $obj->getTamanhoMinimoSenha())
+		if($tamSenha < $obj->getTamanhoMinimoSenha())
 		{
 			throw new ColecaoException('A senha deve possuir pelo menos ' . $obj->getTamanhoMinimoSenha() . ' caracteres.');
 		}
 
-		if($tamSenha <= $obj->getTamanhoMaximoSenha())
+		if($tamSenha > $obj->getTamanhoMaximoSenha())
 		{
 			throw new ColecaoException('A senha deve possuir no máximo ' . $obj->getTamanhoMaximoSenha() . ' caracteres.');
 		}

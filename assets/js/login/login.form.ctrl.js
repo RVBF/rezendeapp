@@ -33,17 +33,16 @@
 				rules: {
 					"login": {
 						required	: true,
-						rangelength : [ 7, 50 ],
 					},
 					"senha": {
 						required	: true,
-						rangelength : [ 6, 50 ]
+						rangelength : [ 3, 20 ]
 					}
 				},
 				messages: {
 					"login": {
 						required	: "O campo login é obrigatório.",
-						rangelength	: $.validator.format("A identificação deve ter entre {0} e {1} caracteres."),
+						rangelength	: $.validator.format("A identificação deve ter entre {3} e {20} caracteres."),
 					},
 					"senha": {
 						required	: "O campo senha é obrigatório.",

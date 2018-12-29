@@ -353,11 +353,13 @@ $app->get('/index/tem-permissao', function(Request $req,  Response $res, $args =
 	$resposta['status'] = ($resposta['conteudo']['administrador']) ? true : false;
 
 	if(!$resposta['status']){
-		foreach ($resposta['conteudo']['gruposUsuario'] as $grupo) {
-			if($grupo->getAdministrador()) 
-			{
-				$resposta['status'] = true;
-				break;
+		if(isset($resposta['conteudo']['gruposUsuario']) and count($resposta['conteudo']['gruposUsuario']) > 0){
+			foreach ($resposta['conteudo']['gruposUsuario'] as $grupo) {
+				if($grupo->getAdministrador()) 
+				{
+					$resposta['status'] = true;
+					break;
+				}
 			}
 		}
 	}

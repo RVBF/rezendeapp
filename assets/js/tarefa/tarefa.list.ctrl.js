@@ -89,25 +89,26 @@
 					targets : 8
 				}
 			];	
+			
+			objeto.initComplete = function (settings, json) {
 
-			objeto.fnDrawCallback = function (settings) {
-				$('body').on('click','.gerenciar_perguntas', function (event) {
+				$('tbody tr').on('click','.gerenciar_perguntas', function (event) {
 					event.preventDefault();
 
-					var objeto = _tabela.row($(this).parents('tr')).data();
+					var objeto = _tabela.row($(this).parents('tr')).draw().data();
 
 					router.navigate('/tarefa/' + objeto.id + '/pergunta')
 					
 				});
 
-				$('body').on('click','.gerenciar_respostas', function (event) {
+				$('tbody tr').on('click','.gerenciar_respostas', function (event) {
 					event.preventDefault();
 					var objeto = _tabela.row($(this).parents('tr')).data();
 
 					router.navigate('/resposta/' + objeto.id);
 				});
 
-				$('body').on('click','.cadastrar_perguntas', function (event) {
+				$('tbody tr').on('click','.cadastrar_perguntas', function (event) {
 					event.preventDefault();
 
 					var objeto = _tabela.row($(this).parents('tr')).data();
@@ -116,7 +117,7 @@
 					
 				});
 
-				$('body').on('click','.responder_perguntas', function (event) {
+				$('tbody tr').on('click','.responder_perguntas', function (event) {
 					event.preventDefault();
 					var objeto = _tabela.row($(this).parents('tr')).data();
 					router.navigate('/tarefa/' + objeto.id + '/pergunta/responder-perguntas')
@@ -124,12 +125,10 @@
 
 				_tabela.on('select',_this.selecionar);
 				_tabela.on('deselect', _this.deselect);
-		
 			};
-			
+
 			return objeto;
 		};
-
 
 		_this.cadastrar = function cadastrar() {
 			var modoEdicao = false;
@@ -140,7 +139,10 @@
 			contexto.desabilitar(true);
 			contexto.find('form')[0].reset();
 			contexto.find('form').find('.msg').empty();
-			ctrlFormulario.configurar(modoEdicao);
+
+			contexto.promise().done(function () {
+				ctrlFormulario.configurar(modoEdicao);
+			});
 		};
 
 		_this.editar = function editar() {
@@ -153,9 +155,11 @@
 			contexto.desabilitar(true);
 			contexto.find('form')[0].reset();
 			contexto.find('form').find('.msg').empty();
-			
-			ctrlFormulario.configurar(modoEdicao);
-			ctrlFormulario.desenhar(objeto);
+
+			contexto.promise().done(function () {
+				ctrlFormulario.configurar(modoEdicao);
+				ctrlFormulario.desenhar(objeto);			
+			});
 		};
 
 		_this.atualizar = function atualizar(){
@@ -228,33 +232,6 @@
 			_this.botaoEditar.on('click', _this.editar)
 			_this.botaoAtualizar.on('click',_this.atualizar);
 			_this.botaoRemover.on('click', _this.remover)
-			$('.gerenciar_perguntas').on('click', function (event) {
-				event.preventDefault();
-
-				var objeto = _tabela.row('.selected').data();
-
-				router.navigate('/tarefa/' + objeto.id + '/pergunta')
-				
-			});
-
-
-			$('.cadastrar_perguntas').on('click', function (event) {
-				event.preventDefault();
-
-				var objeto = _tabela.row('.selected').data();
-
-				router.navigate('/tarefa/' + objeto.id + '/pergunta/cadastrar-perguntas')
-				
-			});
-
-			$('.responder_perguntas').on('click', function (event) {
-				event.preventDefault();
-				var objeto = _tabela.row('.selected').data();
-				router.navigate('/tarefa/' + objeto.id + '/pergunta/responder-perguntas')
-			});
-
-			_tabela.on('select',_this.selecionar);
-			_tabela.on('deselect', _this.deselect);
 		};
 	}; // ControladoraListagemTarefa
 
