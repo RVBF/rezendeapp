@@ -54,7 +54,10 @@
 			contexto.desabilitar(true);
 			contexto.find('form')[0].reset();
 			contexto.find('form').find('.msg').empty();
-			ctrlFormulario.configurar(modoEdicao);
+
+			contexto.promise().done(function () {
+				ctrlFormulario.configurar(modoEdicao);
+			});		
 		};
 
 		_this.editar = function editar() {
@@ -68,8 +71,10 @@
 			contexto.find('form')[0].reset();
 			contexto.find('form').find('.msg').empty();
 			
-			ctrlFormulario.configurar(modoEdicao);
-			ctrlFormulario.desenhar(objeto);
+			contexto.promise().done(function () {
+				ctrlFormulario.configurar(modoEdicao);
+				ctrlFormulario.desenhar(objeto);			
+			});
 		};
 
 		_this.atualizar = function atualizar(){

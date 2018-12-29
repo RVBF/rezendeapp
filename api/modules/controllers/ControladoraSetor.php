@@ -76,7 +76,7 @@ class ControladoraSetor {
 
 				throw new Exception($msg);
 			}
-			Debuger::printr($this->params);
+
 			$categoria = $this->colecaoCategoria->comId(\ParamUtil::value($this->params, 'categoria'));
 
 			if(!isset($categoria) and !($categoria instanceof Categoria)){

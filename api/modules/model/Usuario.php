@@ -20,8 +20,8 @@ class Usuario {
 	const TAMANHO_MINIMO_LOGIN = 5;
 	const TAMANHO_MAXIMO_LOGIN = 30;
 
-	const TAMANHO_MINIMO_SENHA = 8;
-	const TAMANHO_MAXIMO_SENHA = 50;
+	const TAMANHO_MINIMO_SENHA = 3;
+	const TAMANHO_MAXIMO_SENHA = 20;
 
     function __construct($id = 0, $login = '', $senha = '', $gruposUsuario = []) {
         $this->id = $id;

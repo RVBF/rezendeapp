@@ -12,7 +12,6 @@
 
 	var mudarConteudo = function mudarConteudo(valor) {
 		conteudo.empty().html(valor);
-		setarCaminho();
 	};
 
 	var carregarPagina = function carregarPagina(pagina) {

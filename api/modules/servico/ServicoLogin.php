@@ -198,7 +198,7 @@ class ServicoLogin {
 	}
 
 	/**
-	*  Valida o senha do usuário, lançando uma exceção caso haja algo inválido.
+	*  Valida a senha do usuário, lançando uma exceção caso haja algo inválido.
 	*  @throws ColecaoException
 	*/
 	private function validarSenha($senha) {
@@ -209,13 +209,13 @@ class ServicoLogin {
 
 		$tamSenha = mb_strlen($senha);
 
-		if($tamSenha <= Usuario::TAMANHO_MINIMO_SENHA)
+		if($tamSenha < Usuario::TAMANHO_MINIMO_SENHA)
 		{
-			throw new ColecaoException('O senha deve conter no minímo ' . Usuario::TAMANHO_MINIMO_SENHA . ' caracteres.');
+			throw new ColecaoException('A senha deve conter no minímo ' . Usuario::TAMANHO_MINIMO_SENHA . ' caracteres.');
 		}
-		if ($tamSenha >= Usuario::TAMANHO_MAXIMO_SENHA)
+		if ($tamSenha > Usuario::TAMANHO_MAXIMO_SENHA)
 		{
-			throw new ColecaoException('O senha deve conter no máximo ' . Usuario::TAMANHO_MAXIMO_SENHA . ' caracteres.');
+			throw new ColecaoException('A senha deve conter no máximo ' . Usuario::TAMANHO_MAXIMO_SENHA . ' caracteres.');
 		}
 
 		return true;

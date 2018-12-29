@@ -163,21 +163,14 @@ class ControladoraUsuario {
 
 			$this->colecaoUsuario->atualizar($usuario);
 
-			$colaborador = new Colaborador(
-				0, 
-				\ParamUtil::value($this->params, 'nome'), 
-				\ParamUtil::value($this->params, 'sobrenome'), 
-				\ParamUtil::value($this->params, 'email'), 
-				$usuario,
-				(isset($lojas)) ? $lojas : []
-			);
+			$colaborador = $usuario->getColaborador();
 
-			$usuario->getColaborador()->setNome(\ParamUtil::value($this->params, 'nome'));
-			$usuario->getColaborador()->setSobrenome(\ParamUtil::value($this->params, 'sobrenome'));
-			$usuario->getColaborador()->setEmail(\ParamUtil::value($this->params, 'email'));
-			$usuario->getColaborador()->setLojas($lojas);
+			$colaborador->setNome(\ParamUtil::value($this->params, 'nome'));
+			$colaborador->setSobrenome(\ParamUtil::value($this->params, 'sobrenome'));
+			$colaborador->setEmail(\ParamUtil::value($this->params, 'email'));
+			$colaborador->setLojas($lojas);
 
-			$this->colecaoColaborador->atualizar($usuario->getColaborador());
+			$this->colecaoColaborador->atualizar($colaborador);
 
 			DB::commit();
 
