@@ -10,7 +10,8 @@ class Pergunta {
 
 	private $id;
     private $pergunta;
-    private $tarefa;    
+    private $tarefa; 
+    private $resposta;
     private $formularioRespondido;
 
 
@@ -59,6 +60,14 @@ class Pergunta {
 
     public function setTarefa($tarefa){
         $this->tarefa = $tarefa;
+    }
+
+    public function setResposta($resposta){
+        $this->resposta = $resposta;
+    }
+ 
+    public function getResposta(){
+        return $this->resposta; 
     }
 
     public function setFormularioRespondido($formularioRespondido){

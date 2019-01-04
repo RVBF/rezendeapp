@@ -12,9 +12,7 @@
 		var _this = this;
 		var _cont = 0;
 		var _tabela = null;
-		_this.botaoCadastrar = $('#cadastrar');
-		_this.botaoEditar = $('#editar');
-		_this.botaoRemover = $('#remover');
+		_this.botaoVoltar = $('#voltar');
 		_this.botaoAtualizar = $('#atualizar');
 		_this.idTabela = $('#resposta');
 
@@ -55,8 +53,8 @@
 					},
 					targets: 4
 				},{
-					data: function() {
-						return '<a href="anexos.html" class="anexos"><i class="fas fa-paperclip"></i></a>';
+					data: function(data) {
+						return (data.anexos.length > 0 ) ? '<a href="anexos.html" class="anexos"><i class="fas fa-paperclip"></i></a>' : 'Não há anexos.';
 					},
 					targets: 5
 				}
@@ -99,39 +97,15 @@
 			return objeto;
 		};
 
-		_this.cadastrar = function cadastrar() {
-			var modoEdicao = false;
-			var contexto = $('#painel_formulario');
-			contexto.addClass('desabilitado');
+		_this.voltar = function voltar() {
+			event.preventDefault();
 
-			contexto.addClass('d-none');
-			contexto.desabilitar(true);
-			contexto.find('form')[0].reset();
-			contexto.find('form').find('.msg').empty();
-			contexto.promise().done(function () {
-				ctrlFormulario.configurar(modoEdicao);
-			});				
+			router.navigate('/tarefa');		
 		};
-
-		_this.editar = function editar() {
-			var objeto = _tabela.row('.selected').data();
-			var modoEdicao = true;
-			var contexto = $('#painel_formulario');
-			contexto.addClass('desabilitado');
-
-			contexto.addClass('d-none');
-			contexto.desabilitar(true);
-			contexto.find('form')[0].reset();
-			contexto.find('form').find('.msg').empty();
-			
-			contexto.promise().done(function () {
-				ctrlFormulario.configurar(modoEdicao);
-				ctrlFormulario.desenhar(objeto);
-			});		
-		}
 
 		_this.configurar = function configurar() {
 			_tabela = _this.idTabela.DataTable(_this.opcoesDaTabela());
+			_this.botaoVoltar.on('click', _this.voltar);
 		};
 	} // ControladoraListagemResposta
 

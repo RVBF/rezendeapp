@@ -160,9 +160,9 @@
 
   Modal.prototype.resize = function () {
     if (this.isShown) {
-      $(window).on('resize.bs.modal', $.proxy(this.handleUpdate, this))
+      $(document).on('resize.bs.modal', $.proxy(this.handleUpdate, this))
     } else {
-      $(window).off('resize.bs.modal')
+      $(document).off('resize.bs.modal')
     }
   }
 

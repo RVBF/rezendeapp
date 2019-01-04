@@ -109,6 +109,8 @@ class ControladoraResposta {
 				if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
 					throw new Exception("Tarefa não encontrada na base de dados.");
 				}
+
+				if($tarefa->getEncerrada()) throw new Exception("Não é possível adicionar respostas para tarefas já encerrada.");
 				
 				$formularioRespondido->addPergunta($pergunta);
 

@@ -33,8 +33,16 @@
 
 				}, {
 					data: 'pergunta',
-					responsivePriority: 1,
                     targets: 1
+				}, {
+					data: function (pergunta) {
+						var opcao = new app.Opcao();
+						return (pergunta.resposta.opcaoSelecionada != undefined) ? opcao.getpcoes()[pergunta.resposta.opcaoSelecionada] : 'Não respondida.'
+					},
+                    targets: 2
+				}, {
+					data: 'tarefa.titulo',
+                    targets: 3
                 }
 			];
 
@@ -139,6 +147,9 @@
 		};
 
 		_this.voltar = function voltar() {
+			event.preventDefault();
+
+			router.navigate('/tarefa');		
 		};
 
 

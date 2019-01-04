@@ -129,6 +129,8 @@
             opcoesParaHTML += (!temPermissao) ? '' :'<li>';
             opcoesParaHTML += (!temPermissao) ? '' :'<a href="grupo_usuario.html" class="grupo_usuario_link link_menu_mobile redireciona_mobile">Grupo de  Usuário</a>';
             opcoesParaHTML += (!temPermissao) ? '' :'</li>';
+            opcoesParaHTML += (!temPermissao) ? '' :  '<li><a href="permissoes.html" class="permissoes_link">Permissões</a></li>';
+
             opcoesParaHTML += (!temPermissao) ? '' :'</ul>';
             opcoesParaHTML += (!temPermissao) ? '' :'</li>';
 

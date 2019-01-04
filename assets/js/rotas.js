@@ -9,43 +9,41 @@
 	'use strict';
 	var router = new Grapnel();
 	var conteudo = $('#app');
+	
 
 	var mudarConteudo = function mudarConteudo(valor) {
 		conteudo.empty().html(valor);
 	};
 
 	var carregarPagina = function carregarPagina(pagina) {
-		if('login.html' ==  pagina) $('body').empty().load(pagina);
-		else {
-			if(conteudo.length > 0){
-				conteudo.empty().load(pagina);
-			}
-			else{
-				$('body').empty().load('index.html', function(){
-					router.navigate('/');
-				});
-			}
-		}
-	};
-
-	var naoEstaLogado = function (req, event, next) {
 		var sessao = new app.Sessao();
-
-		var erro = function erro(jqXHR, textStatus, errorThrown)
-		{
-			if( typeof next == 'function')
-			{
-				next();
+		var sucesso = function sucesso(data, textStatus, jqXHR) {
+			if('login.html' ==  pagina) $('body').empty().load(pagina);
+			else {
+				if(conteudo.length > 0){
+					conteudo.empty().load(pagina);
+				}
+				else{
+					$('body').empty().load('index.html', function(){
+						router.navigate('/');
+					});
+				}
 			}
 		};
 
-		var sucesso = function sucesso(data, textStatus, jqXHR)
-		{
-			return;
+		var erro = function erro(jqXHR, textStatus, errorThrown)  {
+			var mensagem = jqXHR.responseText || 'Erro ao acessar página.';
+			toastr.error(mensagem);
+
+			if(sessao.getSessao() == null || sessao.getSessao() == '') {
+				sessao.limparSessionStorage();
+			}
+
+			$('body').empty().load('login.html');
 		};
 
 		var jqXHR = sessao.verificarSessao();
-		jqXHR.fail(erro);
+		jqXHR.fail(erro).done(sucesso);
 	};
 
 	let verficarLogin = function (req, event, next) {
@@ -69,32 +67,31 @@
 	};
 
 	var criarRotaPara = function criarRotaPara(pagina) {
-		return function()
-		{
+		return function() {
 			carregarPagina(pagina);
 		};
 	};
 
 
 	// Rotas: adicione sua rota ACIMA das existentes, a seguir. -Thiago
-    router.get('/login', naoEstaLogado, criarRotaPara('login.html'));
+    router.get('/login', criarRotaPara('login.html'));
 
-	router.get('/categorias', verficarLogin, criarRotaPara('categoria.html'));
-	router.get('/loja', verficarLogin, criarRotaPara('loja.html'));
-	router.get('/tarefa', verficarLogin, criarRotaPara('tarefa.html'));
-	router.get('/setor', verficarLogin, criarRotaPara('setor.html'));
-	router.get('/resposta/:tarefaId', verficarLogin, criarRotaPara('resposta.html'));
-	router.get('/configurar-permissoes', verficarLogin, criarRotaPara('permissoes.html'));
+	router.get('/categorias', criarRotaPara('categoria.html'));
+	router.get('/loja', criarRotaPara('loja.html'));
+	router.get('/tarefa', criarRotaPara('tarefa.html'));
+	router.get('/setor', criarRotaPara('setor.html'));
+	router.get('/resposta/:tarefaId', criarRotaPara('resposta.html'));
+	router.get('/configurar-permissoes', criarRotaPara('permissoes.html'));
 
-	router.get('/tarefa/:id/pergunta', verficarLogin, criarRotaPara('pergunta.html'));
-	router.get('/tarefa/:id/pergunta/cadastrar-perguntas', verficarLogin, criarRotaPara('perguntaCadastroMultiplo.html'));
-	router.get('/tarefa/:id/pergunta/responder-perguntas', verficarLogin, criarRotaPara('reponderPerguntas.html'));
+	router.get('/tarefa/:id/pergunta', criarRotaPara('pergunta.html'));
+	router.get('/tarefa/:id/pergunta/cadastrar-perguntas', criarRotaPara('perguntaCadastroMultiplo.html'));
+	router.get('/tarefa/:id/pergunta/responder-perguntas', criarRotaPara('reponderPerguntas.html'));
 
-	router.get('/configuracao/usuario', verficarLogin, criarRotaPara('usuario.html'));
-	router.get('/configuracao/grupo-usuario', verficarLogin, criarRotaPara('grupo_usuario.html'));
+	router.get('/configuracao/usuario', criarRotaPara('usuario.html'));
+	router.get('/configuracao/grupo-usuario', criarRotaPara('grupo_usuario.html'));
 
 
-    router.get('/', verficarLogin, criarRotaPara('tarefa.html'));
+    router.get('/', criarRotaPara('tarefa.html'));
 
 	// // 404
 	router.get('/*', function(req, e) {

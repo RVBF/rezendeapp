@@ -64,7 +64,7 @@ interface ColecaoPergunta {
 	 *  Retorna a contagem de elementos na coleção.
 	 *  @return int
 	 */
-	function contagem();
+	function contagem($tarefaId = 0);
 
 	function comTarefaId($tarefaId);
 }

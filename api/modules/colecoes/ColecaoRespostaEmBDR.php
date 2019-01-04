@@ -89,6 +89,18 @@ class ColecaoRespostaEmBDR implements ColecaoResposta
 		}
 	}
 
+	function comPerguntaId($id = 0){
+		try {
+            $resposta = (DB::table(self::TABELA)->where('pergunta_id', $id)->count() > 0) ? $this->construirObjeto(DB::table(self::TABELA)->where('pergunta_id', $id)->get()[0]) : [];
+
+			return $resposta;
+		}
+		catch (\Exception $e)
+		{
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		}
+	}
+
 	function  todosComTarefaId($limite = 0, $pulo = 0, $tarefaid = 0){
 		try {	
 			$respostas = DB::table(self::TABELA)->select(self::TABELA . '.*')
