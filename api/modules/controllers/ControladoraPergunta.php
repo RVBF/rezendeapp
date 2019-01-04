@@ -17,6 +17,7 @@ class ControladoraPergunta {
 
 	private $params;
 	private $colecaoPergunta;
+	private $colecaoResposta;
 	private $colecaoTarefa;
 	private $servicoLogin;
 	
@@ -24,6 +25,7 @@ class ControladoraPergunta {
 		$this->params = $params;
 		$this->colecaoPergunta = Dice::instance()->create('ColecaoPergunta');
 		$this->colecaoTarefa = Dice::instance()->create('ColecaoTarefa');
+		$this->colecaoResposta = Dice::instance()->create('ColecaoResposta');
 		$this->servicoLogin = new ServicoLogin($sessao);
 	}
 
@@ -41,9 +43,17 @@ class ControladoraPergunta {
 			$contagem = 0;
 			$objetos = [];
 			$erro = null;
-            $objetos = $this->colecaoPergunta->todos($dtr->start, $dtr->length, $idTarefa);
 
-			$contagem = $this->colecaoPergunta->contagem();
+			$tarefa = $this->colecaoTarefa->comId($idTarefa);
+			$objetos = $this->colecaoPergunta->todos($dtr->start, $dtr->length, $idTarefa);
+
+			foreach ($objetos as $key => $obj) {
+				$resposta = $this->colecaoResposta->comPerguntaId($obj->getId());
+				$obj->setResposta($resposta);
+				$obj->setTarefa($tarefa);
+			}
+
+			$contagem = $this->colecaoPergunta->contagem($idTarefa);
 		}
 		catch (\Exception $e ) {
 			throw new Exception("Erro ao listar categorias");
@@ -79,6 +89,10 @@ class ControladoraPergunta {
 
 				throw new Exception($msg);
 			}
+
+			$tarefa = $this->colecaoTarefa->comId($tarefaId);
+
+			if($tarefa->getEncerrada()) throw new Exception("Não é possível cadastrar pergunta para tarefas já encerrada.");
 
 			$tarefa = $this->colecaoTarefa->comId($tarefaId);
 
@@ -130,6 +144,10 @@ class ControladoraPergunta {
 
 			$tarefa = $this->colecaoTarefa->comId($tarefaId);
 
+			if($tarefa->getEncerrada()) throw new Exception("Não é possível adicionar perguntas para tarefas já encerrada.");
+
+			$tarefa = $this->colecaoTarefa->comId($tarefaId);
+
 			if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
 				throw new Exception("Setor não encontrada na base de dados.");
 			}
@@ -163,7 +181,6 @@ class ControladoraPergunta {
 
 	function atualizar($tarefaId) {
 		DB::beginTransaction();
-
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
@@ -183,6 +200,10 @@ class ControladoraPergunta {
 
 			$tarefa = $this->colecaoTarefa->comId($tarefaId);
 
+			if($tarefa->getEncerrada()) throw new Exception("Não é possível editar pergunta para tarefas já encerrada.");
+
+			$tarefa = $this->colecaoTarefa->comId($tarefaId);
+
 			if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
 				throw new Exception("Setor não encontrada na base de dados.");
 			}
@@ -192,7 +213,6 @@ class ControladoraPergunta {
 				\ParamUtil::value($this->params, 'pergunta'),
 				$tarefa
 			);
-
 			$resposta = [];
 			
 			$pergunta = $this->colecaoPergunta->atualizar($pergunta);
@@ -208,6 +228,7 @@ class ControladoraPergunta {
 
 		return $resposta;
 	}
+
 	function comTarefaId($tarefaId){
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {

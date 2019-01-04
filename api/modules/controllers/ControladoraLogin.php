@@ -20,15 +20,16 @@ class ControladoraLogin {
 	}
 
 	function logar() {
-		$inexistentes = \ArrayUtil::nonExistingKeys([ 'login', 'senha' ], $this->params);
-
-		if(count($inexistentes) > 0)
-		{
-			$msg = 'Os seguintes campos não foram enviados: ' . implode(', ', $inexistentes);
-			return $this->geradoraResposta->erro($msg, GeradoraResposta::TIPO_TEXTO);
-		}
-
 		try {
+			$inexistentes = \ArrayUtil::nonExistingKeys([ 'login', 'senha' ], $this->params);
+
+			if(count($inexistentes) > 0) {
+				$msg = 'Os seguintes campos não foram enviados: ' . implode(', ', $inexistentes);
+				throw new Exception($msg);
+				
+				// return $this->geradoraResposta->erro($msg, GeradoraResposta::TIPO_TEXTO);
+			}
+	
 			$usuario = $this->servico->login(\ParamUtil::value($this->params, 'login'), \ParamUtil::value($this->params, 'senha'));
 
 			$conteudo = ['id' => $usuario->getId(), 'nome'=> $usuario->getLogin()];

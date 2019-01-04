@@ -136,7 +136,7 @@
 			_this.formulario.parents('#painel_formulario').removeClass('d-none');
 
 			_this.formulario.parents('#painel_formulario').promise().done(function(){
-				_this.formulario.find('#login').focus();
+				_this.formulario.find('#nome').focus();
 
 				_this.popularLojas();
 	
@@ -207,6 +207,10 @@
 		// Configura os eventos do formulário
 		_this.configurar = function configurar(status = false) {
 			_this.definirForm(status);
+			$('.select2').select2({
+				theme: 'bootstrap4',
+				width: '100%',
+			});
 		};
 	}; // ControladoraFormUsuario
 

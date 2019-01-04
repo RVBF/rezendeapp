@@ -57,17 +57,14 @@
 
 				_this.formulario.desabilitar(true);
 
-				var sucesso = function sucesso(data, textStatus, jqXHR)
-				{
+				var sucesso = function sucesso(data, textStatus, jqXHR) {
 					window.sucessoPadrao(data, textStatus, jqXHR);
 
-					if(data.status){
+					if(data.status) {
 						window.sessionStorage.setItem('usuario', JSON.stringify(data.usuario));
-						if(!$('#app').length){
-							$('body').empty().load('index.html', function(){
-								router.navigate('/');
-							});
-						}
+						$('body').empty().load('index.html', function(){
+							router.navigate('/');
+						});
 					}
 				};
 

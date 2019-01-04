@@ -189,6 +189,11 @@
 		// Configura os eventos do formulário
 		_this.configurar = function configurar(status = false) {
 			_this.definirForm(status);
+			
+			$('.select2').select2({
+				theme: 'bootstrap4',
+				width: '100%',
+			});
 		};
 	}; // ControladoraFormTarefa
 

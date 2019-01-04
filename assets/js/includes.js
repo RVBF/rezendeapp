@@ -104,8 +104,9 @@
 	dependenciasCSS.push({ url : 'vendor/pickadate/lib/compressed/themes/default.css' });
 	dependenciasCSS.push({ url : 'vendor/pickadate/lib/compressed/themes/default.time.css' });
 	dependenciasCSS.push({ url : 'vendor/pickadate/lib/compressed/themes/default.date.css' });
-	dependenciasCSS.push({ url : 'vendor/select2/dist/css/select2.min.css' });
+	dependenciasCSS.push({ url : 'vendor/select2-bootstrap-theme/dist/select2-bootstrap.min.css'});	
 	dependenciasCSS.push({ url : 'vendor/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css'});
+	dependenciasCSS.push({ url : 'vendor/select2/dist/css/select2.min.css' });
 	
 	var loader = new window.Loader();
 
@@ -152,13 +153,13 @@
         // Inicialização
         loader.script('assets/js/jquery.meanmenu.js');
 		loader.script('assets/js/app.js');
-
 		loader.script('assets/js/sessao/sessao.serv.js');
+		loader.script('assets/js/rotas.js');
+
 		loader.script('assets/js/usuario/usuario.serv.js');
 		loader.script('assets/js/login/login.serv.js');
 		loader.script('assets/js/logout/logout.serv.js');
 
-		loader.script('assets/js/rotas.js');
 		loader.script('assets/js/funcoesSistema.js');
 		loader.script('assets/js/index.list.ctrl.js');
 

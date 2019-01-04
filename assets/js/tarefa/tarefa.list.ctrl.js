@@ -92,7 +92,7 @@
 			
 			objeto.initComplete = function (settings, json) {
 
-				$('tbody tr').on('click','.gerenciar_perguntas', function (event) {
+				$('#tarefa_listagem tr').on('click','.gerenciar_perguntas', function (event) {
 					event.preventDefault();
 
 					var objeto = _tabela.row($(this).parents('tr')).draw().data();
@@ -101,14 +101,14 @@
 					
 				});
 
-				$('tbody tr').on('click','.gerenciar_respostas', function (event) {
+				$('#tarefa_listagem tr').on('click','.gerenciar_respostas', function (event) {
 					event.preventDefault();
 					var objeto = _tabela.row($(this).parents('tr')).data();
 
 					router.navigate('/resposta/' + objeto.id);
 				});
 
-				$('tbody tr').on('click','.cadastrar_perguntas', function (event) {
+				$('#tarefa_listagem tr').on('click','.cadastrar_perguntas', function (event) {
 					event.preventDefault();
 
 					var objeto = _tabela.row($(this).parents('tr')).data();
@@ -117,11 +117,13 @@
 					
 				});
 
-				$('tbody tr').on('click','.responder_perguntas', function (event) {
+				$('#tarefa_listagem tr').on('click','.responder_perguntas', function (event) {
 					event.preventDefault();
 					var objeto = _tabela.row($(this).parents('tr')).data();
 					router.navigate('/tarefa/' + objeto.id + '/pergunta/responder-perguntas')
 				});
+				$('#tarefa_listagem .dropdown-toggle').dropdown(); 
+
 
 				_tabela.on('select',_this.selecionar);
 				_tabela.on('deselect', _this.deselect);
@@ -139,10 +141,7 @@
 			contexto.desabilitar(true);
 			contexto.find('form')[0].reset();
 			contexto.find('form').find('.msg').empty();
-
-			contexto.promise().done(function () {
-				ctrlFormulario.configurar(modoEdicao);
-			});
+			ctrlFormulario.configurar(modoEdicao);
 		};
 
 		_this.editar = function editar() {
@@ -226,7 +225,7 @@
 		};
 
 
-		_this.configurar = function configurar() {
+		_this.configurar = function configurar() {	
 			_tabela = _this.idTabela.DataTable(_this.opcoesDaTabela());
 			_this.botaoCadastrar.on('click',_this.cadastrar);
 			_this.botaoEditar.on('click', _this.editar)

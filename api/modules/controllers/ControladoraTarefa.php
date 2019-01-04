@@ -172,16 +172,15 @@ class ControladoraTarefa {
 			$dataLimite = new Carbon();                  // equivalent to Carbon::now()
 			$dataLimite = new Carbon(\ParamUtil::value($this->params, 'dataLimite'), 'America/Sao_Paulo');
 
-			$tarefa = new Tarefa(
-				\ParamUtil::value($this->params, 'id'),
-				\ParamUtil::value($this->params, 'titulo'),
-				\ParamUtil::value($this->params, 'descricao'),
-				$dataLimite,
-				'',
-				$setor,
-				$loja
-			);
+			$tarefa = $this->colecaoTarefa->comId(\ParamUtil::value($this->params, 'id'));
 
+			if($tarefa->getEncerrada()) throw new Exception("Não é possível editar uma tarefa já encerrada.");
+
+			$tarefa->setTitulo(\ParamUtil::value($this->params, 'titulo'));
+			$tarefa->setDescricao(\ParamUtil::value($this->params, 'descricao'));
+			$tarefa->setDataLimite($dataLimite);
+			$tarefa->setSetor($setor);
+			$tarefa->setLoja($loja);
 	
 			$resposta = [];
 					

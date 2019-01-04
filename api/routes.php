@@ -196,7 +196,7 @@ $app->put('/tarefa/{idTarefa}/pergunta', function(Request $req,  Response $res, 
 $app->delete('/tarefa/{idTarefa}/pergunta/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 	$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
 	$sessaoUsuario = new Sessao($session);
-	$ctrl = new ControladoraPergunta($req->getParsedBody()->getStream(), $sessaoUsuario);
+	$ctrl = new ControladoraPergunta($req->getParsedBody(), $sessaoUsuario);
 	$response = $ctrl->remover($args['id'], $args['idTarefa']);
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 });

@@ -61,10 +61,18 @@
 				});
 			});
 
-			$(evento.target).find('.select2').select2({
-				theme: 'bootstrap4',
-				width: '100%'
-			});
+			// $(evento.target).find('.select2').select2({
+			// 	theme: 'bootstrap4',
+			// 	width: '100%'
+			// });
+
+			// $(evento.target).find('.select2').each(function(){
+			// 	console.log('netrei');
+			// 	$(this).select2({
+			// 		theme: 'bootstrap4',
+			// 		width: '100%'
+			// 	});
+			// })
 
 			$(evento.target).find('.toltip').each(function(){
 			    $(this).tooltip(); 
@@ -126,6 +134,10 @@
 		iniciarFuncoesPadroesSistema(evento);
 	});
 
+	// $('body.select2').select2({
+	// 	theme: 'bootstrap4',
+	// 	width: '100%',
+	// });
 
 	$('body').on('click', '.download', function(evento) {
 		evento.preventDefault();
@@ -221,10 +233,8 @@
 		jQuery('nav#dropdown').meanmenu();
 	}
 
-	$(document).ready(function()
-	{			
+	$(document).ready(function() {			
 		$('.toltip').tooltip(); 
-		
 		if(window.location.href == 'http://rezendeconstrucao.com.br/rezendeapp/' || window.location.href == 'http://rezendeapp.local/') router.navigate('/');
 		
 		$.validator.addMethod("cRequired", $.validator.methods.required, "Campo obrigatório.");
@@ -275,7 +285,7 @@
 			var datatable = $('body').find('.table').DataTable();
 
 			if(data.status){
-				datatable.ajax.reload();
+				if($('body').find('.table').length) datatable.ajax.reload();
 				toastr.success(data.mensagem);
 			}
 			else{
