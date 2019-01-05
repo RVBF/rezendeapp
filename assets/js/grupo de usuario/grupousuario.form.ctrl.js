@@ -68,11 +68,15 @@
 				_this.formulario.find('#nome').focus();
 				_this.popularUsuarios();
 				_this.configurarBotoes();
+
+				$('#usuarios').addClass('campo_obrigatorio');
 			});
 		};
 
 		_this.iniciarFormularioModoEdicao = function iniciarFormularioModoEdicao() {
 			_this.iniciarFormularioModoCadastro();
+			$('#usuarios').removeClass('campo_obrigatorio');
+
 		};
 
 		_this.definirForm = function definirForm(status) {			

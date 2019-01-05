@@ -66,10 +66,9 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
 				DB::table(self::TABELA)->where('id', $obj->getId())->update(['nome' => $obj->getNome() ,'descricao' => $obj->getDescricao()]);
+				DB::table(self::TABELA_RELACIONAL)->where('grupo_usuario_id', $obj->getId())->delete();
 
 				if(count($obj->getUsuarios())){
-					DB::table(self::TABELA_RELACIONAL)->where('grupo_usuario_id', $obj->getId())->delete();
-
 					$gruposUsuarios = [];
 
 					foreach($obj->getUsuarios() as $usuario){
@@ -122,9 +121,34 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
 	/**
 	 * @inheritDoc
 	 */
-	function todos($limite = 0, $pulo = 0) {
+	function todos($limite = 0, $pulo = 0, $search = '') {
 		try {	
-			$grupoDeusuarios = DB::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+			$query = DB::table(self::TABELA)->select(self::TABELA . '.*');
+			
+			if($search != '') {
+				$buscaCompleta = $search;
+				$palavras = explode(' ', $buscaCompleta);
+
+				$query->whereRaw(self::TABELA . '.id like "%' . $buscaCompleta . '%"');
+				$query->orWhereRaw(self::TABELA . '.nome like "%' . $buscaCompleta . '%"');
+				$query->orWhereRaw(self::TABELA . '.descricao like "%' . $buscaCompleta . '%"');
+				
+				if($query->count() == 0){
+					$query->orWhere(function($query) use ($palavras){
+						foreach ($palavras as $key => $palavra) {
+							if($palavra != " "){
+								$query->whereRaw(self::TABELA . '.id like "%' . $palavra . '%"');
+								$query->orWhereRaw(self::TABELA . '.nome like "%' . $palavra . '%"');
+								$query->orWhereRaw(self::TABELA . '.descricao like "%' . $palavra . '%"');
+							}
+						}
+						
+					});
+				}
+				$query->groupBy(self::TABELA.'.id');
+			}
+			
+			$grupoDeusuarios = $query->offset($limite)->limit($pulo)->get();
 
             $grupoDeusuariosObjects = [];
 

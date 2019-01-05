@@ -123,6 +123,7 @@ var app = {
 		},
 		"bFilter" : true,
 		"searching" : true,
+		"searchDelay": 600,
 		"order": [[0, 'desc']]
 	};
 

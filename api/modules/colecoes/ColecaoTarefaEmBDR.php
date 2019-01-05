@@ -124,9 +124,53 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 		}
 	}
 
-	function todosComLojaIds($limite = 0, $pulo = 0, $idsLojas = []){
+	function todosComLojaIds($limite = 0, $pulo = 0, $search = '', $idsLojas = []){
 		try {	
-			$tarefas = DB::table(self::TABELA)->whereIn('loja_id', $idsLojas)->offset($limite)->limit($pulo)->get();
+
+			$query = DB::table(self::TABELA)->select(self::TABELA . '.*')->whereIn('loja_id', $idsLojas);
+				
+			if($search != '') {
+				$buscaCompleta = $search;
+				$palavras = explode(' ', $buscaCompleta);
+
+				$query->leftJoin(ColecaoLojaEmBDR::TABELA, ColecaoLojaEmBDR::TABELA. '.id', '=', self::TABELA .'.loja_id');
+				$query->leftJoin(ColecaoUsuarioEmBDR::TABELA, ColecaoUsuarioEmBDR::TABELA. '.id', '=', self::TABELA .'.questionador_id');
+				$query->leftJoin(ColecaoColaboradorEmBDR::TABELA, ColecaoColaboradorEmBDR::TABELA. '.usuario_id', '=', ColecaoUsuarioEmBDR::TABELA .'.id');
+				$query->leftJoin(ColecaoSetorEmBDR::TABELA, ColecaoSetorEmBDR::TABELA. '.id', '=', self::TABELA .'.setor_id');
+			
+				$query->whereRaw(self::TABELA . '.id like "%' . $buscaCompleta . '%"');
+				$query->orWhereRaw(self::TABELA . '.titulo like "%' . $buscaCompleta . '%"');
+				$query->orWhereRaw(self::TABELA . '.descricao like "%' . $buscaCompleta . '%"');
+				$query->orWhereRaw(ColecaoLojaEmBDR::TABELA . '.razaoSocial like "%' . $buscaCompleta . '%"');
+				$query->orWhereRaw(ColecaoLojaEmBDR::TABELA . '.nomeFantasia like "%' . $buscaCompleta . '%"');
+				$query->orWhereRaw(ColecaoSetorEmBDR::TABELA . '.titulo like "%' . $buscaCompleta . '%"');
+				$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.nome like "%' . $buscaCompleta . '%"');
+				$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.sobrenome like "%' . $buscaCompleta . '%"');
+				$query->orWhereRaw('DATE_FORMAT('. self::TABELA .'.data_limite, "%d/%m/%Y") like "%' . $buscaCompleta . '%"');
+				if($query->count() == 0){
+					$query->orWhere(function($query) use ($palavras){
+						foreach ($palavras as $key => $palavra) {
+							if($palavra != " "){
+								$query->whereRaw(self::TABELA . '.id like "%' . $palavra . '%"');
+								$query->orWhereRaw(self::TABELA . '.titulo like "%' . $palavra . '%"');
+								$query->orWhereRaw(self::TABELA . '.descricao like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoLojaEmBDR::TABELA . '.razaoSocial like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoLojaEmBDR::TABELA . '.nomeFantasia like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoSetorEmBDR::TABELA . '.titulo like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.nome like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.sobrenome like "%' . $palavra . '%"');
+								$query->orWhereRaw('DATE_FORMAT('. self::TABELA .'.data_limite, "%d/%m/%Y") like "%' . $palavra . '%"');
+							}
+						}
+						
+					});
+				}
+				$query->groupBy(self::TABELA.'.id');
+			}
+			
+			// Debuger::printr($query->toSql());
+
+			$tarefas = $query->offset($limite)->limit($pulo)->get();
 
 			$tarefasObjects = [];
 			foreach ($tarefas as $key => $tarefa) {
@@ -136,7 +180,9 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 			return $tarefasObjects;
 		}
 		catch (\Exception $e)
-		{
+		{			
+			Debuger::printr($e->getMessage());
+
 			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
 		}
 	}
@@ -184,8 +230,8 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 		return $tarefa;
 	}	
 
-    function contagem() {
-		return DB::table(self::TABELA)->count();
+    function contagem($idsLojas = []) {
+		return (count($idsLojas) > 0) ?  DB::table(self::TABELA)->whereIn('loja_id', $idsLojas)->count() : DB::table(self::TABELA)->count();
 	}
 
 	private function validarTarefa(&$obj) {

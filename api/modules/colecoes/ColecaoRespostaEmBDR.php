@@ -132,8 +132,12 @@ class ColecaoRespostaEmBDR implements ColecaoResposta
 		return $resposta;
 	}	
 
-    function contagem() {
-		return DB::table(self::TABELA)->count();
+    function contagem($tarefaId = 0) {
+		return ($tarefaId > 0) ? DB::table(self::TABELA)->select(self::TABELA . '.*')
+		->join(ColecaoPerguntaEmBDR::TABELA, ColecaoPerguntaEmBDR::TABELA . '.id', '=', self::TABELA . '.pergunta_id')
+		->join(ColecaoTarefaEmBDR::TABELA, ColecaoTarefaEmBDR::TABELA . '.id', '=', ColecaoPerguntaEmBDR::TABELA . '.tarefa_id')
+		->where(ColecaoTarefaEmBDR::TABELA .'.id', $tarefaId)
+		->count() : DB::table(self::TABELA)->count();
 	}
 }
 

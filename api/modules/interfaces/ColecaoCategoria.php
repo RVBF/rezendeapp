@@ -8,5 +8,7 @@
  */
 
 interface ColecaoCategoria extends Colecao {
+    function todos($limite = 0, $pulo = 0, $search = '');
+
 }
 ?>
