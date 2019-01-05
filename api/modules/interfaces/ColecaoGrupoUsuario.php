@@ -10,5 +10,6 @@
 interface ColecaoGrupoUsuario extends Colecao {
     function todosComIds($ids = []);
     function comUsuarioId($id = 0);
+    function todos($limite = 0, $pulo = 0, $search = '');
 }
 ?>

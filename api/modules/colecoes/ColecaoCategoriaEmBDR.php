@@ -80,9 +80,33 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 	/**
 	 * @inheritDoc
 	 */
-	function todos($limite = 0, $pulo = 0) {
+	function todos($limite = 0, $pulo = 0, $search = '') {
 		try {	
-			$categorias = DB::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+			$query = DB::table(self::TABELA)->select(self::TABELA . '.*');
+				
+			if($search != '') {
+				$buscaCompleta = $search;
+				$palavras = explode(' ', $buscaCompleta);
+
+				$query->whereRaw(self::TABELA . '.id like "%' . $buscaCompleta . '%"');
+				$query->orWhereRaw(self::TABELA . '.titulo like "%' . $buscaCompleta . '%"');
+				
+				if($query->count() == 0){
+					$query->orWhere(function($query) use ($palavras){
+						foreach ($palavras as $key => $palavra) {
+							if($palavra != " "){
+								$query->whereRaw(self::TABELA . '.id like "%' . $palavra . '%"');
+								$query->orWhereRaw(self::TABELA . '.titulo like "%' . $palavra . '%"');
+							}
+						}
+						
+					});
+				}
+				$query->groupBy(self::TABELA.'.id');
+			}
+			
+			$categorias = $query->offset($limite)->limit($pulo)->get();
+
 			$categoriasObjects = [];
 
 			foreach ($categorias as $categoria) {
@@ -126,7 +150,7 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 	}
 
 	private function validarDeleteCategoria($id){
-		$qtdReacionamento = DB::table(ColecaoSetor::TABELA)->where('categoria_id', $id)->count();
+		$qtdReacionamento = DB::table(ColecaoSetorEmBDR::TABELA)->where('categoria_id', $id)->count();
 
 		if($quantidade > 0){
 			throw new ColecaoException('Essa categoria possue setores relacionados a ela! Exclua todos os setores cadastros e tente novamente.');

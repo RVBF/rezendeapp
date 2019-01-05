@@ -59,7 +59,7 @@ class ControladoraResposta {
 				$obj->getPergunta()->setTarefa($tarefa);
 			}
 
-			$contagem = $this->colecaoResposta->contagem();
+			$contagem = $this->colecaoResposta->contagem($tarefaId);
 		}
 		catch (\Exception $e )
 		{

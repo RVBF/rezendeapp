@@ -163,7 +163,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 			throw new ColecaoException('Essa loja possue tarefas relacionados a ela! Exclua todos as tarefas cadastros e tente novamente.');
 		}
 
-		$qtdReacionamento = DB::table(ColecaoUsuarioEmBDR::TABELA)->where('loja_id', $id)->count();
+		$qtdReacionamento = DB::table(ColecaoColaboradorEmBDR::TABELA_RELACIONAL)->where('loja_id', $id)->count();
 
 		if($qtdReacionamento > 0){
 			throw new ColecaoException('Essa loja possue usuários relacionados a ela! Exclua todos os usuários cadastros e tente novamente.');

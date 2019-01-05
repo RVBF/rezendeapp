@@ -37,7 +37,7 @@ class ControladoraCategoria {
 			$objetos = [];
 			$erro = null;
 
-			$objetos = $this->colecaoCategoria->todos($dtr->start, $dtr->length);
+			$objetos = $this->colecaoCategoria->todos($dtr->start, $dtr->length, $dtr->search->value);
 
 			$contagem = $this->colecaoCategoria->contagem();
 		}
@@ -48,7 +48,7 @@ class ControladoraCategoria {
 
 		$conteudo = new DataTablesResponse(
 			$contagem,
-			$contagem, //count($objetos ),
+			count($objetos), //count($objetos ),
 			$objetos,
 			$dtr->draw,
 			$erro

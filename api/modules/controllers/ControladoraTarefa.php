@@ -53,9 +53,9 @@ class ControladoraTarefa {
 				$idsLojas[] = $loja->getId();
 			}
 
-			$objetos = $this->colecaoTarefa->todosComLojaIds($dtr->start, $dtr->length, $idsLojas);
+			$objetos = $this->colecaoTarefa->todosComLojaIds($dtr->start, $dtr->length, $dtr->search->value, $idsLojas);
 
-			$contagem = $this->colecaoTarefa->contagem();
+			$contagem = $this->colecaoTarefa->contagem($idsLojas);
 		}
 		catch (\Exception $e ) {
 			throw new Exception("Erro ao listar tarefas");
@@ -63,7 +63,7 @@ class ControladoraTarefa {
 
 		$conteudo = new DataTablesResponse(
 			$contagem,
-			$contagem, //count($objetos ),
+			count($objetos), //count($objetos ),
 			$objetos,
 			$dtr->draw,
 			$erro

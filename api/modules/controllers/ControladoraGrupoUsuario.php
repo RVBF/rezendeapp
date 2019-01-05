@@ -43,14 +43,14 @@ class ControladoraGrupoUsuario {
 			$objetos = [];
 			$erro = null;	
 
-			$objetos = $this->colecaoGrupoUsuario->todos($dtr->start, $dtr->length);
+			$objetos = $this->colecaoGrupoUsuario->todos($dtr->start, $dtr->length, $dtr->search->value);
 			$contagem = $this->colecaoGrupoUsuario->contagem();
 		}
 		catch (\Exception $e ) {
 			throw new Exception($e->getMessage());
 		}
 
-		$conteudo = new DataTablesResponse($contagem, $contagem, $objetos, $dtr->draw, $erro);
+		$conteudo = new DataTablesResponse($contagem, count($objetos), $objetos, $dtr->draw, $erro);
 
 		return $conteudo;
     }
@@ -114,10 +114,7 @@ class ControladoraGrupoUsuario {
 				throw new Exception($msg);
 			}
 
-			$usuarios = $this->colecaoUsuario->todosComIds($this->params['usuarios']);
-			if(!isset($usuarios) and !($usuarios instanceof Usuario)){
-				throw new Exception("Usuários não encontrados na base de dados.");
-			}
+			$usuarios = (isset($this->params['usuarios'])) ? $this->colecaoUsuario->todosComIds($this->params['usuarios']) : [];
 
 			$grupoUsuario = new GrupoUsuario( \ParamUtil::value($this->params, 'id'), \ParamUtil::value($this->params, 'nome'), \ParamUtil::value($this->params, 'descricao'), $usuarios);
 
