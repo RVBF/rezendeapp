@@ -21,10 +21,11 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 			try {	
 
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-	
+				$hash = HashSenha::instance();
+
 				$id = DB::table(self::TABELA)->insertGetId([ 
 					'login' => $obj->getLogin(),
-					'senha' => $obj->getSenha()
+					'senha' => $hash->gerarHashDeSenhaComSaltEmMD5($obj->getSenha())
 				]);
 				
 				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
@@ -99,9 +100,44 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 		}
 	}
 
-	function todos($limite = 0, $pulo = 0) {
+	function todos($limite = 0, $pulo = 0, $search = '') {
 		try {	
-			$usuarios = DB::table(self::TABELA)->select('id', 'login', 'administrador')->offset($limite)->limit($pulo)->get();
+			$query = DB::table(self::TABELA)->select(self::TABELA . '.id', self::TABELA . '.login', self::TABELA . '.administrador');
+
+			if($search != '') {
+				$buscaCompleta = $search;
+				$palavras = explode(' ', $buscaCompleta);
+				
+				$query->leftJoin(ColecaoColaboradorEmBDR::TABELA, ColecaoColaboradorEmBDR::TABELA . '.usuario_id', '=', self::TABELA . '.id');
+
+				$query->where(function($query) use ($buscaCompleta){
+					$query->whereRaw(self::TABELA . '.id like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(self::TABELA . '.login like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.nome like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.sobrenome like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.email like "%' . $buscaCompleta . '%"');
+
+				});
+				
+				
+				if($query->count() == 0){
+					$query->where(function($query) use ($palavras){
+						foreach ($palavras as $key => $palavra) {
+							if($palavra != " "){
+								$query->whereRaw(self::TABELA . '.id like "%' . $palavra . '%"');
+								$query->orWhereRaw(self::TABELA . '.login like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.nome like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.sobrenome like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.email like "%' . $palavra . '%"');
+							}
+						}
+						
+					});
+				}
+				$query->groupBy(self::TABELA.'.id');
+			}
+
+			$usuarios = $query->offset($limite)->limit($pulo)->get();
 
             $usuariosObjects = [];
 
@@ -235,13 +271,8 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 		}
 
 		$tamLogin = mb_strlen($login);
-
-		if($tamLogin <= Usuario::TAMANHO_MINIMO_LOGIN) {
-			throw new ColecaoException('O login deve conter no minímo ' . Usuario::TAMANHO_MINIMO_LOGIN . ' caracteres.');
-		}
-
-		if ($tamLogin >= Usuario::TAMANHO_MAXIMO_LOGIN) {
-			throw new ColecaoException('O login deve conter no máximo ' . Usuario::TAMANHO_MAXIMO_LOGIN . ' caracteres.');
+		if($tamLogin < Usuario::TAMANHO_MINIMO_LOGIN or $tamLogin > Usuario::TAMANHO_MAXIMO_LOGIN) {
+			throw new ColecaoException('O login deve conter no minímo ' . Usuario::TAMANHO_MINIMO_LOGIN . ' e no máximo ' . Usuario::TAMANHO_MAXIMO_LOGIN . ' caracteres.');
 		}
 	}
 
@@ -250,20 +281,14 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 	*  @throws ColecaoException
 	*/
 	private function validarSenha($senha) {
-		if(!is_string($senha))
-		{
+		if(!is_string($senha)) {
 			throw new ColecaoException( 'Valor inválido para senha.' );
 		}
 
 		$tamSenha = mb_strlen($senha);
 
-		if($tamSenha < Usuario::TAMANHO_MINIMO_SENHA)
-		{
-			throw new ColecaoException('A senha deve conter no minímo ' . Usuario::TAMANHO_MINIMO_SENHA . ' caracteres.');
-		}
-		if ($tamSenha > Usuario::TAMANHO_MAXIMO_SENHA)
-		{
-			throw new ColecaoException('A senha deve conter no máximo ' . Usuario::TAMANHO_MAXIMO_SENHA . ' caracteres.');
+		if($tamSenha < Usuario::TAMANHO_MINIMO_SENHA or $tamSenha > Usuario::TAMANHO_MAXIMO_SENHA) {
+			throw new ColecaoException('A senha deve conter no minímo ' . Usuario::TAMANHO_MINIMO_SENHA . ' e no máximo ' . Usuario::TAMANHO_MAXIMO_SENHA . ' caracteres.');
 		}
 	}
 
@@ -356,7 +381,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario
 
 		if($resultado[0]['senha'] != $senhaAtual)
 		{
-			throw new Exception("Senha atuali inválidá");
+			throw new Exception("Senha atual inválidá");
 		}
 
 		if($senhaAtual == $novaSenha)

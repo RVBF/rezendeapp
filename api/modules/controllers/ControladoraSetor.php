@@ -42,7 +42,7 @@ class ControladoraSetor {
 			$objetos = [];
 			$erro = null;
 
-			$objetos = $this->colecaoSetor->todos($dtr->start, $dtr->length);
+			$objetos = $this->colecaoSetor->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');
 
 			$contagem = $this->colecaoSetor->contagem();
 		}

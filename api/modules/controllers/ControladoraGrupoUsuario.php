@@ -43,7 +43,7 @@ class ControladoraGrupoUsuario {
 			$objetos = [];
 			$erro = null;	
 
-			$objetos = $this->colecaoGrupoUsuario->todos($dtr->start, $dtr->length, $dtr->search->value);
+			$objetos = $this->colecaoGrupoUsuario->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');
 			$contagem = $this->colecaoGrupoUsuario->contagem();
 		}
 		catch (\Exception $e ) {

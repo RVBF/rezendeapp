@@ -107,9 +107,43 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta {
 	/**
 	 * @inheritDoc
 	 */
-	function todos($limite = 0, $pulo = 0, $idTarefa) {
-		try {	
-			$perguntas = DB::table(self::TABELA)->where('tarefa_id', $idTarefa)->offset($limite)->limit($pulo)->get();
+	function todos($limite = 0, $pulo = 0, $search = '', $idTarefa =  0, $idsLojas = []) {
+
+		try {
+			$query = DB::table(self::TABELA)->select(self::TABELA . '.*')->where(self::TABELA .'.tarefa_id', $idTarefa);
+
+			if($search != '') {
+				$buscaCompleta = $search;
+				$palavras = explode(' ', $buscaCompleta);
+
+				$query->rightJoin(ColecaoRespostaEmBDR::TABELA, self::TABELA .'.id', '=', ColecaoRespostaEmBDR::TABELA .'.pergunta_id');
+				$query->rightJoin(ColecaoTarefaEmBDR::TABELA, self::TABELA .'.tarefa_id', '=', ColecaoTarefaEmBDR::TABELA .'.id');
+
+				$query->where(function($query) use ($buscaCompleta){
+					$query->whereRaw(self::TABELA . '.id like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(self::TABELA . '.pergunta like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(ColecaoRespostaEmBDR::TABELA . '.comentario like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(ColecaoTarefaEmBDR::TABELA . '.titulo like "%' . $buscaCompleta . '%"');
+				});
+			
+				
+				if($query->count() == 0){
+					$query->where(function($query) use ($palavras){
+						foreach ($palavras as $key => $palavra) {
+							if($palavra != " "){
+								$query->whereRaw(self::TABELA . '.id like "%' . $palavra . '%"');
+								$query->orWhereRaw(self::TABELA . '.pergunta like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoRespostaEmBDR::TABELA . '.comentario like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoTarefaEmBDR::TABELA . '.titulo like "%' . $palavra . '%"');
+							}
+						}
+						
+					});
+				}
+
+			}
+
+			$perguntas = $query->offset($limite)->limit($pulo)->get();
 			$perguntasObjects = [];
 
 			foreach ($perguntas as $key => $pergunta) {

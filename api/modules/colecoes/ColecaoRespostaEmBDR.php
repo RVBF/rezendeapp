@@ -101,15 +101,52 @@ class ColecaoRespostaEmBDR implements ColecaoResposta
 		}
 	}
 
-	function  todosComTarefaId($limite = 0, $pulo = 0, $tarefaid = 0){
+	function  todosComTarefaId($limite = 0, $pulo = 0, $tarefaid = 0, $search = ''){
 		try {	
-			$respostas = DB::table(self::TABELA)->select(self::TABELA . '.*')
-			->join(ColecaoPerguntaEmBDR::TABELA, ColecaoPerguntaEmBDR::TABELA . '.id', '=', self::TABELA . '.pergunta_id')
-			->join(ColecaoTarefaEmBDR::TABELA, ColecaoTarefaEmBDR::TABELA . '.id', '=', ColecaoPerguntaEmBDR::TABELA . '.tarefa_id')
-			->where(ColecaoTarefaEmBDR::TABELA .'.id', $tarefaid)
-			->offset($limite)
-			->limit($pulo)
-			->get();
+
+			$query = DB::table(self::TABELA)->select(self::TABELA . '.*')
+			->leftJoin(ColecaoPerguntaEmBDR::TABELA, ColecaoPerguntaEmBDR::TABELA . '.id', '=', self::TABELA . '.pergunta_id')
+			->leftJoin(ColecaoTarefaEmBDR::TABELA, ColecaoTarefaEmBDR::TABELA . '.id', '=', ColecaoPerguntaEmBDR::TABELA . '.tarefa_id')
+			->where(ColecaoTarefaEmBDR::TABELA .'.id', $tarefaid);
+
+			if($search != '') {
+				$buscaCompleta = $search;
+				$palavras = explode(' ', $buscaCompleta);
+
+				$query->leftJoin(ColecaoFormularioRespondidoEmBDR::TABELA_RELACIONAL, ColecaoFormularioRespondidoEmBDR::TABELA_RELACIONAL .'.pergunta_id', '=', ColecaoPerguntaEmBDR::TABELA .'.id');
+				$query->leftJoin(ColecaoFormularioRespondidoEmBDR::TABELA, ColecaoFormularioRespondidoEmBDR::TABELA .'.id', '=', ColecaoFormularioRespondidoEmBDR::TABELA_RELACIONAL .'.formulario_respondido_id');
+				$query->leftJoin(ColecaoUsuarioEmBDR::TABELA, ColecaoUsuarioEmBDR::TABELA .'.id', '=', ColecaoFormularioRespondidoEmBDR::TABELA .'.respondedor_id');
+				$query->leftJoin(ColecaoColaboradorEmBDR::TABELA, ColecaoColaboradorEmBDR::TABELA .'.usuario_id', '=', ColecaoUsuarioEmBDR::TABELA .'.id');
+
+				$query->where(function($query) use ($buscaCompleta){
+					$query->whereRaw(self::TABELA . '.id like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(ColecaoPerguntaEmBDR::TABELA . '.pergunta like "%' . $buscaCompleta . '%"');
+
+					$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.nome like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.sobrenome like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw('DATE_FORMAT('. ColecaoFormularioRespondidoEmBDR::TABELA .'.data_resposta, "%d/%m/%Y") like "%' . $buscaCompleta . '%"');
+				});
+			
+
+				
+				if($query->count() == 0){
+					$query->where(function($query) use ($palavras){
+						foreach ($palavras as $key => $palavra) {
+							if($palavra != " "){
+								$query->whereRaw(self::TABELA . '.id like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoPerguntaEmBDR::TABELA . '.pergunta like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.nome like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.sobrenome like "%' . $palavra . '%"');
+								$query->orWhereRaw('DATE_FORMAT('. ColecaoFormularioRespondidoEmBDR::TABELA .'.data_resposta, "%d/%m/%Y") like "%' . $palavra . '%"');
+							}
+						}
+						
+					});
+				}
+
+			}
+			$respostas = $query->offset($limite)->limit($pulo)->get();
+
 
 			$respostasObjects = [];
 

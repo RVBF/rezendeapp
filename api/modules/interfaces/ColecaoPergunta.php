@@ -58,7 +58,7 @@ interface ColecaoPergunta {
 	 * @return array	Array de objetos a serem retornados.
 	 * @throws	ColecaoException
 	 */
-	function todos($limite = 0, $pulo = 0, $idTarefa);
+	function todos($limite = 0, $pulo = 0, $search = '', $idTarefa =  0);
 	
 	/**
 	 *  Retorna a contagem de elementos na coleção.

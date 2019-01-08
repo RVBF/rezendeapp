@@ -22,32 +22,6 @@
 		// Cria as opções de validação do formulário
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
 			var opcoes = {
-				rules: {
-					// "categoria": {required : true},
-					// "lojas" :{required : true},
-					// "data_limite" : { required : true},
-					// "hora_limite" : { required : true},
-					// "descricao" : {required : true}
-
-				},
-
-				messages: {
-					// "categoria": {
-					// 	required    : "O campo categoria é obrigatório.",
-					// },
-					// "lojas": {
-					// 	required    : "O campo lojas é obrigatório.",
-					// },
-					// "data_limite": {
-					// 	required    : "O campo data limite é obrigatório.",
-					// },
-					// "hora_limite": {
-					// 	required    : "O campo hora limite é obrigatório.",
-					// },
-					// "descricao": {
-					// 	required    : "O campo descrição é obrigatório.",
-					// }
-				}
 			};
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
@@ -55,14 +29,11 @@
 
 				
 				var terminado = function() {
-					// _this.respostas = [];
-
 					_this.formulario.desabilitar(false);
 				};
 				
 				var obj =  JSON.stringify(_this.conteudo()).toString();
 
-				// obj.replace('[', '{');
 				var jqXHR = _this.alterar ? servicoResposta.atualizar(JSON.parse(obj)) : servicoResposta.adicionar(JSON.parse(obj));
 				jqXHR.done(function(data, textStatus, jqXHR){
 					window.sucessoParaFormulario(data, textStatus, jqXHR);
@@ -179,6 +150,8 @@
         
         _this.popularPerguntas  =  function popularPerguntas(valor = 0) {
 			var sucesso = function (resposta) {
+				console.log(resposta);
+
 				_this.formulario.find('.perguntas').append(_this.pergutasParaHtml(resposta.data));
 
 				$('input[type="file"]').change(function(evt){
@@ -306,13 +279,6 @@
 		// Configura os eventos do formulário
 		_this.configurar = function configurar(status = false) {
 			_this.definirForm(status);
-			$('.select2').select2({
-				theme: 'bootstrap4',
-				width: '100%',
-			});
-			$('#data_limite').on('click', function(event){
-				event.preventDefault();
-			});
 		};
 	}; // ControladoraFormResposta
 

@@ -45,7 +45,8 @@ class ControladoraPergunta {
 			$erro = null;
 
 			$tarefa = $this->colecaoTarefa->comId($idTarefa);
-			$objetos = $this->colecaoPergunta->todos($dtr->start, $dtr->length, $idTarefa);
+
+			$objetos = $this->colecaoPergunta->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $idTarefa);
 
 			foreach ($objetos as $key => $obj) {
 				$resposta = $this->colecaoResposta->comPerguntaId($obj->getId());
@@ -240,7 +241,7 @@ class ControladoraPergunta {
 			$objetos = [];
 			$erro = null;
 
-            $objetos = $this->colecaoPergunta->todos($dtr->start, $dtr->length, $tarefaId);
+            $objetos = $this->colecaoPergunta->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '',  $tarefaId);
 
 			$contagem = $this->colecaoPergunta->contagem();
 		}

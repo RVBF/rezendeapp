@@ -53,7 +53,7 @@ class ControladoraTarefa {
 				$idsLojas[] = $loja->getId();
 			}
 
-			$objetos = $this->colecaoTarefa->todosComLojaIds($dtr->start, $dtr->length, $dtr->search->value, $idsLojas);
+			$objetos = $this->colecaoTarefa->todosComLojaIds($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $idsLojas);
 
 			$contagem = $this->colecaoTarefa->contagem($idsLojas);
 		}

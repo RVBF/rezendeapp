@@ -38,13 +38,13 @@ class ControladoraLoja {
 			$objetos = [];
 			$erro = null;
 
-			$objetos = $this->colecaoLoja->todos($dtr->start, $dtr->length);
+			$objetos = $this->colecaoLoja->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');
 
 			$contagem = $this->colecaoLoja->contagem();
 		}
 		catch (\Exception $e )
 		{
-			throw new Exception("Erro ao listar categorias");
+			throw new Exception("Erro ao listar lojas.");
 		}
 
 		$conteudo = new DataTablesResponse(
