@@ -129,12 +129,15 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
 				$buscaCompleta = $search;
 				$palavras = explode(' ', $buscaCompleta);
 
-				$query->whereRaw(self::TABELA . '.id like "%' . $buscaCompleta . '%"');
-				$query->orWhereRaw(self::TABELA . '.nome like "%' . $buscaCompleta . '%"');
-				$query->orWhereRaw(self::TABELA . '.descricao like "%' . $buscaCompleta . '%"');
+				$query->where(function($query)  use ($buscaCompleta){
+					$query->whereRaw(self::TABELA . '.id like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(self::TABELA . '.nome like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(self::TABELA . '.descricao like "%' . $buscaCompleta . '%"');
+				});
+
 				
 				if($query->count() == 0){
-					$query->orWhere(function($query) use ($palavras){
+					$query->where(function($query) use ($palavras){
 						foreach ($palavras as $key => $palavra) {
 							if($palavra != " "){
 								$query->whereRaw(self::TABELA . '.id like "%' . $palavra . '%"');

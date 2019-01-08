@@ -47,7 +47,7 @@ class ControladoraResposta {
 			$contagem = 0;
 			$objetos = [];
 			$erro = null;
-			$objetos = $this->colecaoResposta->todosComTarefaId($dtr->start, $dtr->length, $tarefaId);
+			$objetos = $this->colecaoResposta->todosComTarefaId($dtr->start, $dtr->length, $tarefaId, (isset($dtr->search->value)) ? $dtr->search->value : '');
 
 			$tarefa = $this->colecaoTarefa->comId($tarefaId);
 

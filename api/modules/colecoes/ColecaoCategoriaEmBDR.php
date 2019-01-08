@@ -88,11 +88,14 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 				$buscaCompleta = $search;
 				$palavras = explode(' ', $buscaCompleta);
 
-				$query->whereRaw(self::TABELA . '.id like "%' . $buscaCompleta . '%"');
-				$query->orWhereRaw(self::TABELA . '.titulo like "%' . $buscaCompleta . '%"');
+				$query->where(function($query) use ($buscaCompleta){
+					$query->whereRaw(self::TABELA . '.id like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(self::TABELA . '.titulo like "%' . $buscaCompleta . '%"');
+				});
+				
 				
 				if($query->count() == 0){
-					$query->orWhere(function($query) use ($palavras){
+					$query->where(function($query) use ($palavras){
 						foreach ($palavras as $key => $palavra) {
 							if($palavra != " "){
 								$query->whereRaw(self::TABELA . '.id like "%' . $palavra . '%"');
@@ -152,7 +155,7 @@ class ColecaoCategoriaEmBDR implements ColecaoCategoria
 	private function validarDeleteCategoria($id){
 		$qtdReacionamento = DB::table(ColecaoSetorEmBDR::TABELA)->where('categoria_id', $id)->count();
 
-		if($quantidade > 0){
+		if($qtdReacionamento > 0){
 			throw new ColecaoException('Essa categoria possue setores relacionados a ela! Exclua todos os setores cadastros e tente novamente.');
 		}
 

@@ -49,7 +49,7 @@ class ControladoraUsuario {
 			$objetos = [];
 			$erro = null;	
 
-			$objetos = $this->colecaoUsuario->todos($dtr->start, $dtr->length);
+			$objetos = $this->colecaoUsuario->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');
 	
 			foreach ($objetos as $key => $obj) {
 				$colaborador = $this->colecaoColaborador->comUsuarioId($obj->getId());
@@ -97,11 +97,10 @@ class ControladoraUsuario {
 				throw new Exception("Loja não encontrada na base de dados.");
 			}
 
-			$hash = HashSenha::instance();
 			$usuario = new Usuario( 
 				0, 
 				\ParamUtil::value($this->params, 'login'), 
-				$hash->gerarHashDeSenhaComSaltEmMD5(\ParamUtil::value($this->params, 'senha'))
+				\ParamUtil::value($this->params, 'senha')
 			);
 
 
@@ -200,7 +199,8 @@ class ControladoraUsuario {
 				$msg = 'O id informado não é numérico.';
 				return $this->geradoraResposta->erro($msg, GeradoraResposta::TIPO_TEXTO);
 			}
-			if($this->colecaoUsuario->remover($id)){
+			// Debuger::printr($this->colecaoUsuario->remover($id));
+			if(!$this->colecaoUsuario->remover($id)){
 				throw new Exception("Erro ao remover usuário.");
 			}
 			

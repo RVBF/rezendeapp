@@ -98,9 +98,37 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 	/**
 	 * @inheritDoc
 	 */
-	function todos($limite = 0, $pulo = 0) {
+	function todos($limite = 0, $pulo = 0, $search = '') {
 		try {	
-			$lojas = DB::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+
+			$query = DB::table(self::TABELA)->select(self::TABELA . '.*');
+			
+			if($search != '') {
+				$buscaCompleta = $search;
+				$palavras = explode(' ', $buscaCompleta);
+				$query->where(function($query) use ($buscaCompleta){
+					$query->whereRaw(self::TABELA . '.id like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(self::TABELA . '.razaoSocial like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(self::TABELA . '.nomeFantasia like "%' . $buscaCompleta . '%"');
+				});
+			
+				
+				if($query->count() == 0){
+					$query->where(function($query) use ($palavras){
+						foreach ($palavras as $key => $palavra) {
+							if($palavra != " "){
+								$query->whereRaw(self::TABELA . '.id like "%' . $palavra . '%"');
+								$query->orWhereRaw(self::TABELA . '.razaoSocial like "%' . $palavra . '%"');
+								$query->orWhereRaw(self::TABELA . '.nomeFantasia like "%' . $palavra . '%"');
+							}
+						}
+						
+					});
+				}
+				$query->groupBy(self::TABELA.'.id');
+			}
+			
+			$lojas = $query->offset($limite)->limit($pulo)->get();
 			$lojasObjects = [];
 			foreach ($lojas as $loja) {
 				$lojasObjects[] =  $this->construirObjeto($loja);

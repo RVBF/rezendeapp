@@ -37,7 +37,7 @@ class ControladoraCategoria {
 			$objetos = [];
 			$erro = null;
 
-			$objetos = $this->colecaoCategoria->todos($dtr->start, $dtr->length, $dtr->search->value);
+			$objetos = $this->colecaoCategoria->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');
 
 			$contagem = $this->colecaoCategoria->contagem();
 		}

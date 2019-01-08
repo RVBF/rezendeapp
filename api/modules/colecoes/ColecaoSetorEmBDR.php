@@ -85,9 +85,43 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 	/**
 	 * @inheritDoc
 	 */
-	function todos($limite = 0, $pulo = 0) {
+	function todos($limite = 0, $pulo = 0, $search = '') {
 		try {	
-			$setors = DB::table(self::TABELA)->select(self::TABELA . '.*')->offset($limite)->limit($pulo)->get();
+
+			$query = DB::table(self::TABELA)->select(self::TABELA . '.*');
+
+			if($search != '') {
+				$buscaCompleta = $search;
+				$palavras = explode(' ', $buscaCompleta);
+				
+				$query->leftJoin(ColecaoCategoriaEmBDR::TABELA, ColecaoCategoriaEmBDR::TABELA . '.id', '=', self::TABELA . '.categoria_id');
+
+				$query->where(function($query) use ($buscaCompleta){
+					$query->whereRaw(self::TABELA . '.id like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(self::TABELA . '.titulo like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(self::TABELA . '.descricao like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(ColecaoCategoriaEmBDR::TABELA . '.titulo like "%' . $buscaCompleta . '%"');
+
+				});
+				
+				
+				if($query->count() == 0){
+					$query->where(function($query) use ($palavras){
+						foreach ($palavras as $key => $palavra) {
+							if($palavra != " "){
+								$query->whereRaw(self::TABELA . '.id like "%' . $palavra . '%"');
+								$query->orWhereRaw(self::TABELA . '.titulo like "%' . $palavra . '%"');
+								$query->orWhereRaw(self::TABELA . '.descricao like "%' . $buscaCompleta . '%"');
+								$query->orWhereRaw(ColecaoCategoriaEmBDR::TABELA . '.titulo like "%' . $buscaCompleta . '%"');
+							}
+						}
+						
+					});
+				}
+				$query->groupBy(self::TABELA.'.id');
+			}
+
+			$setors = $query->offset($limite)->limit($pulo)->get();
 
 			$setorObjects = [];
 			foreach ($setors as $setor) {
