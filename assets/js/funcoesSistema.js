@@ -61,19 +61,6 @@
 				});
 			});
 
-			// $(evento.target).find('.select2').select2({
-			// 	theme: 'bootstrap4',
-			// 	width: '100%'
-			// });
-
-			// $(evento.target).find('.select2').each(function(){
-			// 	console.log('netrei');
-			// 	$(this).select2({
-			// 		theme: 'bootstrap4',
-			// 		width: '100%'
-			// 	});
-			// })
-
 			$(evento.target).find('.toltip').each(function(){
 			    $(this).tooltip(); 
 			});
