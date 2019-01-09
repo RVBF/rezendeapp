@@ -75,9 +75,9 @@
 						html += 'Opções';
 						html += '</button>';
 						html += '<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">';
-						html += (data.perguntas.length > 0) ? '<a class="dropdown-item gerenciar_perguntas" href="#">Ver Perguntas</a>' : '';
+						html += (data.perguntas.length > 0 && !_this.eAdministrador) ? '<a class="dropdown-item gerenciar_perguntas" href="#">Ver Perguntas</a>' : '';
 						html += (data.encerrada) ?  '<a class="dropdown-item gerenciar_respostas" href="#">Ver Respostas</a>' : '';
-						html += (!data.encerrada) ?  '<a class="dropdown-item cadastrar_perguntas" href="#">Cadastrar Perguntas</a>' : '';
+						html += (!data.encerrada && !_this.eAdministrador) ?  '<a class="dropdown-item cadastrar_perguntas" href="#">Cadastrar Perguntas</a>' : '';
 
 						html += (!data.encerrada && data.perguntas.length > 0) ? '<a class="dropdown-item responder_perguntas" href="#">Responder Perguntas</a>' : '';
 
@@ -90,7 +90,7 @@
 				}
 			];	
 			
-			objeto.initComplete = function (settings, json) {
+			objeto.fnDrawCallback = function (settings, json) {
 
 				$('#tarefa_listagem tr').on('click','.gerenciar_perguntas', function (event) {
 					event.preventDefault();
@@ -131,7 +131,17 @@
 
 			return objeto;
 		};
+		_this.eAdministrador = function eAdministrador(){
+			var eadmin = false
+			var sucesso = function (resposta) {
+				eadmin = resposta.status;
+			};
+			
+			var  jqXHR = servicoIndex.temPermissao();
+			jqXHR.done(sucesso);
 
+			return eadmin;
+		};
 		_this.cadastrar = function cadastrar() {
 			var modoEdicao = false;
 			var contexto = $('#painel_formulario');

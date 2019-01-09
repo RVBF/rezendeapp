@@ -61,7 +61,7 @@
 
 			];
 
-			objeto.initComplete = function(settings){
+			objeto.fnDrawCallback = function(settings){
 				$('tbody tr').on('click', '.anexos', function (event) {
 					event.preventDefault();
 					var objeto = _tabela.row($(this).parents('tr')).data();

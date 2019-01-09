@@ -150,8 +150,6 @@
         
         _this.popularPerguntas  =  function popularPerguntas(valor = 0) {
 			var sucesso = function (resposta) {
-				console.log(resposta);
-
 				_this.formulario.find('.perguntas').append(_this.pergutasParaHtml(resposta.data));
 
 				$('input[type="file"]').change(function(evt){
