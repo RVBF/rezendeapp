@@ -31,6 +31,7 @@
 		// Redireciona para o login
 		var irProLogin = function irProLogin() {
 			router.navigate('/login');
+			location.reload();
 		};
 
 		_this.sair = function sair(event) {

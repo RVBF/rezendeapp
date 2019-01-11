@@ -172,7 +172,6 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 				$query->groupBy(self::TABELA.'.id');
 			}
 			
-			// Debuger::printr($query->toSql());
 
 			$tarefas = $query->offset($limite)->limit($pulo)->get();
 
@@ -185,8 +184,6 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 		}
 		catch (\Exception $e)
 		{			
-			Debuger::printr($e->getMessage());
-
 			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
 		}
 	}

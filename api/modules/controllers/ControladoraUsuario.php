@@ -199,7 +199,6 @@ class ControladoraUsuario {
 				$msg = 'O id informado não é numérico.';
 				return $this->geradoraResposta->erro($msg, GeradoraResposta::TIPO_TEXTO);
 			}
-			// Debuger::printr($this->colecaoUsuario->remover($id));
 			if(!$this->colecaoUsuario->remover($id)){
 				throw new Exception("Erro ao remover usuário.");
 			}

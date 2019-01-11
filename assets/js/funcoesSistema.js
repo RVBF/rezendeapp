@@ -4,8 +4,6 @@
 	{
 		var evento = event;
 		
-		// window.exibirMenu();
-
 		if(typeof(evento) != 'undefined')
 		{
 			$(evento.target).find('.desabilitado').each(function(i) {
@@ -120,11 +118,6 @@
 	$('body').on('DOMNodeInserted',function(evento) {
 		iniciarFuncoesPadroesSistema(evento);
 	});
-
-	// $('body.select2').select2({
-	// 	theme: 'bootstrap4',
-	// 	width: '100%',
-	// });
 
 	$('body').on('click', '.download', function(evento) {
 		evento.preventDefault();

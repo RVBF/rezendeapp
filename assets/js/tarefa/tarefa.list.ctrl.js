@@ -70,20 +70,32 @@
 				}, {
 					data :function(data){
 						var html = '';
-						html += '<div class="dropdown">';
-						html += '<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
-						html += 'Opções';
-						html += '</button>';
-						html += '<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">';
-						html += (data.perguntas.length > 0 && !_this.eAdministrador) ? '<a class="dropdown-item gerenciar_perguntas" href="#">Ver Perguntas</a>' : '';
-						html += (data.encerrada) ?  '<a class="dropdown-item gerenciar_respostas" href="#">Ver Respostas</a>' : '';
-						html += (!data.encerrada && !_this.eAdministrador) ?  '<a class="dropdown-item cadastrar_perguntas" href="#">Cadastrar Perguntas</a>' : '';
+						
+						var usuario =  JSON.parse(sessionStorage.getItem('usuario'));
 
-						html += (!data.encerrada && data.perguntas.length > 0) ? '<a class="dropdown-item responder_perguntas" href="#">Responder Perguntas</a>' : '';
-
-						html += '</div>';
-						html += '</div>';
-
+						if(!data.encerrada && data.perguntas.length == 0 && !usuario.admin) html = 'Não há opções!'; 
+						else {
+							html += '<div class="dropdown">';
+							html += '<button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+							html += 'Opções';
+							html += '</button>';
+							html += '<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">';
+							if(usuario.admin) {
+								html += (data.perguntas.length > 0) ? '<a class="dropdown-item gerenciar_perguntas" href="#">Ver Perguntas</a>' : '';
+								html += (data.encerrada) ?  '<a class="dropdown-item gerenciar_respostas" href="#">Ver Respostas</a>' : '';
+								html += (!data.encerrada) ?  '<a class="dropdown-item cadastrar_perguntas" href="#">Cadastrar Perguntas</a>' : '';
+							}
+							else{
+								html += (data.encerrada) ?  '<a class="dropdown-item gerenciar_respostas" href="#">Ver Respostas</a>' : '';
+							}
+							
+	
+							html += (!data.encerrada && data.perguntas.length > 0) ? '<a class="dropdown-item responder_perguntas" href="#">Responder Perguntas</a>' : '';
+	
+							html += '</div>';
+							html += '</div>';
+	
+						}
 						return  html;
 					},
 					targets : 8
@@ -131,17 +143,7 @@
 
 			return objeto;
 		};
-		_this.eAdministrador = function eAdministrador(){
-			var eadmin = false
-			var sucesso = function (resposta) {
-				eadmin = resposta.status;
-			};
-			
-			var  jqXHR = servicoIndex.temPermissao();
-			jqXHR.done(sucesso);
 
-			return eadmin;
-		};
 		_this.cadastrar = function cadastrar() {
 			var modoEdicao = false;
 			var contexto = $('#painel_formulario');

@@ -105,7 +105,6 @@ class ControladoraTarefa {
 			if(!isset($loja) and !($loja instanceof Loja)){
 				throw new Exception("Loja não encontrada na base de dados.");
 			}
-			$dataLimite = new Carbon();                  // equivalent to Carbon::now()
 			$dataLimite = new Carbon(\ParamUtil::value($this->params, 'dataLimite'), 'America/Sao_Paulo');
 
 			$tarefa = new Tarefa(
