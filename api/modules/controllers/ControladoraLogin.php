@@ -32,7 +32,7 @@ class ControladoraLogin {
 	
 			$usuario = $this->servico->login(\ParamUtil::value($this->params, 'login'), \ParamUtil::value($this->params, 'senha'));
 
-			$conteudo = ['id' => $usuario->getId(), 'nome'=> $usuario->getLogin()];
+			$conteudo = ['id' => $usuario->getId(), 'nome'=> $usuario->getLogin(), 'admin' => $usuario->getAdministrador()];
 
 			$resposta = ['usuario'=> $conteudo, 'status' => true, 'mensagem'=> 'Logado Com sucesso.']; 
 		}

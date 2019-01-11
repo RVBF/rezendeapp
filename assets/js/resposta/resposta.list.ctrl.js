@@ -54,7 +54,7 @@
 					targets: 4
 				},{
 					data: function(data) {
-						return (data.anexos.length > 0 ) ? '<a href="anexos.html" class="anexos"><i class="fas fa-paperclip"></i></a>' : 'Não há anexos.';
+						return (data.anexos.length > 0 ) ? '<a href="anexos.html" class="anexos"><i class="fas fa-paperclip"></i></a>' : 'Não há anexos!';
 					},
 					targets: 5
 				}

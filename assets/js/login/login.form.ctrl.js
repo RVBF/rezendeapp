@@ -64,6 +64,7 @@
 						window.sessionStorage.setItem('usuario', JSON.stringify(data.usuario));
 						$('body').empty().load('index.html', function(){
 							router.navigate('/');
+							location.reload();
 						});
 					}
 				};
