@@ -108,6 +108,11 @@
 				router.navigate('/configurar-permissoes');
 			});
 
+			$(evento.target).find('.planoAcao_link').on('click', function (event) {
+				event.preventDefault();
+				router.navigate('/plano-acao');
+			})
+
 
 		}
 	};
@@ -192,7 +197,7 @@
 			var button = $(this).find('i.nk-indicator');
 			button.toggleClass('notika-back').toggleClass('notika-next-pro');
 		});
-		/*--------------------------
+		/*--------------------------planoAcao_link
 		 Button BTN Left
 		---------------------------- */	
 		
