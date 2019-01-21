@@ -80,6 +80,7 @@
 	router.get('/loja', criarRotaPara('loja.html'));
 	router.get('/tarefa', criarRotaPara('tarefa.html'));
 	router.get('/setor', criarRotaPara('setor.html'));
+	router.get('/plano-acao', criarRotaPara('plano_acao.html'));
 	router.get('/resposta/:tarefaId', criarRotaPara('resposta.html'));
 	router.get('/configurar-permissoes', criarRotaPara('permissoes.html'));
 

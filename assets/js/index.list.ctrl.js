@@ -85,8 +85,12 @@
             var opcoesParaHTML = '';
 
             opcoesParaHTML += '<li class="nav-item">';
-            opcoesParaHTML += '<a data-toggle="tab" href="#tarefa" aria-expanded="false" class="tarefaListagemCompleta_link nav-link active"><i class="rezende-icon fas fa-tasks"></i>Tarefa</a>';
+            opcoesParaHTML += '<a data-toggle="tab" href="#tarefa" aria-expanded="false" class="tarefaListagemCompleta_link nav-link active"><i class="rezende-icon fas fa-tasks"></i>Tarefa</a>';            
             opcoesParaHTML += '</li>';
+
+            opcoesParaHTML += (!temPermissao) ? '' :'<li class="nav-item">';
+            opcoesParaHTML += (!temPermissao) ? '' : '<a data-toggle="tab" href="#plano_acao" aria-expanded="false" class="planoAcao_link nav-link"><i class=" rezende-icon far fa-check-square"></i>Plano de ação</a>';
+            opcoesParaHTML += (!temPermissao) ? '' :'</li>';
 
             opcoesParaHTML += (!temPermissao) ? '' :'<li class="nav-item">';
             opcoesParaHTML += (!temPermissao) ? '' :'<a data-toggle="tab" href="#config" aria-expanded="false" class="nav-link"><i class="rezende-icon fas fa-cog"></i>Configuração</a>';
