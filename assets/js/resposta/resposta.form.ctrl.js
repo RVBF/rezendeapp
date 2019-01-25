@@ -88,14 +88,14 @@
 			var opcao = new app.Opcao();
 		
             for(var posicao in perguntas){
-				html += ' <div class="pergunta">';
+				html += ' <div class="pergunta linha_atual">';
 
 				html += ' <div class="row form-row">';
-				html += '<div class="col-xs-12  col-sm-12 col-md-12 col-12">';
+				html += '<div class="col-xs-6  col-sm-6 col-md-6 col-6">';
 				html += '<input type= "hidden" class="ids" name="pergunta_id_' + perguntas[posicao].id + '" id="pergunta_id_' + perguntas[posicao].id + '" value ="'+  perguntas[posicao].id +'">';
 
 				html += '<div class="row">';
-				html += '<div class="col-xs-12  col-sm-12 col-md-12 col-12">';
+				html += '<div class="col-xs-6  col-sm-6 col-md-6 col-6">';
 
                 html += '<legend class="col-form-legend">' + perguntas[posicao].pergunta + '</legend>';
 				html += '</div>';
@@ -104,13 +104,22 @@
 
                 for(var posicaoOp in opcao.getpcoes()){
 					html += '<div class="form-check row">';
-					html += '<div class="col-xs-12  col-sm-12 col-md-12 col-12">';
-
-								if(posicaoOp == 1) html += '<input class="form-check-input radio-inline" type="radio" name="pergunta_' + perguntas[posicao].id + '" id="pergunta_' + perguntas[posicao].id + '_'+ opcao.getpcoes()[posicaoOp] + '" value="'  + posicaoOp + '" checked="checked"/>';
-								else html += '<input class="form-check-input radio-inline" type="radio" name="pergunta_' + perguntas[posicao].id + '" id="pergunta_' + perguntas[posicao].id + '_'+ opcao.getpcoes()[posicaoOp] + '" value="'  + posicaoOp + '"/>';					
-								html += ' <label class="radio-inline control-label" for="pergunta_' + perguntas[posicao].id + '">';
-								html += opcao.getpcoes()[posicaoOp];
-								html += '</label>';
+					html += '<div class="col-xs-6  col-sm-6 col-md-6 col-6">';
+					if(posicaoOp == 3 || posicaoOp == 4) {
+						html += '<input class="form-check-input radio-inline seleciona_resposta exige_planoacao" type="radio" name="pergunta_' + perguntas[posicao].id + '" id="pergunta_' + perguntas[posicao].id + '_'+ opcao.getpcoes()[posicaoOp] + '" value="'  + posicaoOp + '"/>';					
+						html += ' <label class="radio-inline control-label" for="pergunta_' + perguntas[posicao].id + '">';
+						html += opcao.getpcoes()[posicaoOp];
+						html += '</label>';
+					}
+					else{
+						if(posicaoOp == 1) html += '<input class="form-check-input radio-inline seleciona_resposta" type="radio" name="pergunta_' + perguntas[posicao].id + '" id="pergunta_' + perguntas[posicao].id + '_'+ opcao.getpcoes()[posicaoOp] + '" value="'  + posicaoOp + '" checked="checked"/>';
+						else html += '<input class="form-check-input radio-inline seleciona_resposta" type="radio" name="pergunta_' + perguntas[posicao].id + '" id="pergunta_' + perguntas[posicao].id + '_'+ opcao.getpcoes()[posicaoOp] + '" value="'  + posicaoOp + '"/>';					
+						html += ' <label class="radio-inline control-label" for="pergunta_' + perguntas[posicao].id + '">';
+						html += opcao.getpcoes()[posicaoOp];
+						html += '</label>';
+					}
+								
+				
 					html += '</div>';    
 
 					html += '</div>';
@@ -119,7 +128,7 @@
 				html += '</div>';
 
 				html += '<div class="row form-row">';
-				html += '<div class="col-xs-12  col-sm-12 col-md-12 col-12">';
+				html += '<div class="col-xs-6  col-sm-6 col-md-6 col-6">';
 				html += '<label for="pergunta_comentario_' + perguntas[posicao].id + '">Comentário</label>';
 				html += '<textarea class="form-control" rows="3" name="pergunta_comentario_' + perguntas[posicao].id + '" id="pergunta_comentario_' + perguntas[posicao].id + '" ></textarea>';
 				html += '</div>';
@@ -127,14 +136,14 @@
 
 
 				html += '<div class="row form-row">';
-				html += '<div class="col-xs-2  col-sm-2 col-md-2 col-12">';
+				html += '<div class="col-xs-2  col-sm-2 col-md-2 col-6">';
 				html += '<div class="element">';
 				html += '<i class="fas fa-camera"></i></i><span class="name toltip" title="Nenhum arquivo selecionado.">Nenhum arquivo...</span>';
 				html += '<input type="file" name="pergunta_foto_' + perguntas[posicao].id + '" id="pergunta_foto_' + perguntas[posicao].id + '" accept="image/*">';
 				html += '</div>';
 				html += '</div>';
 
-				html += '<div class="col-xs-2  col-sm-2 col-md-2 col-12">';
+				html += '<div class="col-xs-2  col-sm-2 col-md-2 col-6">';
 				html += '<div class="element">';
 				html += '<i class="fas fa-file-audio"></i><span class="name toltip" title="Nenhum arquivo selecionado.">Nenhum arquivo...</span>';
 				html += '<input type="file" name="pergunta_audio_' + perguntas[posicao].id + '" id="pergunta_audio_' + perguntas[posicao].id + '" accept="audio/*">';
@@ -206,6 +215,22 @@
 
 					$(this).siblings('span').attr('data-original-title', val)
 					$(this).siblings('span').html(val.substring( 0, 12) + '...');
+				});
+
+
+				$('.seleciona_resposta').on('click', function() {
+					var elemento = $(this);
+
+					if(elemento.hasClass('exige_planoacao')){
+						var id = parseInt(elemento.attr('name').split('_')[1]);
+						console.log(id);
+						var html = '<div class="vertical-divider"></div><div class="col-xs-6  col-sm-6 col-md-6 col-6 plano_acao">';
+						html += '<label for="descricao_planoacao_pergunta_' + id + '">Descrição</label>';
+						html += '<textarea class="form-control" rows="3" name="descricao_planoacao_pergunta_' + id + '" id="descricao_planoacao_pergunta_' + id + '" ></textarea>';
+						html += '</div>'
+
+						elemento.parents('.linha_atual').append(html);
+					}
 				});
 			};
 
