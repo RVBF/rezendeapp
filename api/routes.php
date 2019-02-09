@@ -46,7 +46,6 @@ $app->get('/setor', function(Request $req,  Response $res, $args = []) use ($app
 	$ctrl = new ControladoraSetor($req->getQueryParams(), $sessaoUsuario);
 	$response = $ctrl->todos();
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
-
 });
 
 $app->post('/setor', function(Request $req,  Response $res, $args = []) use ($app, $session) {
@@ -117,7 +116,6 @@ $app->get('/tarefa', function(Request $req,  Response $res, $args = []) use ($ap
 	$ctrl = new ControladoraTarefa($req->getQueryParams(), $sessaoUsuario);
 	$response = $ctrl->todos();
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
-
 });
 
 $app->put('/tarefa', function(Request $req,  Response $res, $args = []) use ($app, $session) {
@@ -143,9 +141,8 @@ $app->delete('/tarefa/{id}', function(Request $req,  Response $res, $args = []) 
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraTarefa($req->getParsedBody(), $sessaoUsuario);
 	$response = $ctrl->remover($args['id']);
-	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_encode($response));
 });
-
 
 // Início das rotas para pergunta
 $app->get('/tarefa/{idTarefa}/pergunta', function(Request $req,  Response $res, $args = []) use ($app, $session) {
@@ -312,8 +309,8 @@ $app->get('/resposta/{tarefaId}', function(Request $req,  Response $res, $args =
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraResposta($req->getQueryParams(), $sessaoUsuario);
 	$response = $ctrl->todos($args['tarefaId']);
+	// Debuger::printr(json_decode(JSON::encode($response)));
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
-
 });
 
 $app->post('/resposta', function(Request $req,  Response $res, $args = []) use ($app, $session) {

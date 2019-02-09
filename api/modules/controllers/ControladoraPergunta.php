@@ -45,7 +45,6 @@ class ControladoraPergunta {
 			$erro = null;
 
 			$tarefa = $this->colecaoTarefa->comId($idTarefa);
-
 			$objetos = $this->colecaoPergunta->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $idTarefa);
 
 			foreach ($objetos as $key => $obj) {
