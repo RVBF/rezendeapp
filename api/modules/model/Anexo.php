@@ -14,7 +14,7 @@ class Anexo {
     private $resposta;
     private $arquivoBase64;
 
-	const CAMINHO_ARQUIVOS = '/../assets/images/anexos/';
+	const CAMINHO_ARQUIVOS = '/../assets/images/anexos';
 
     function __construct($id = 0, $patch = '', $tipo = '', $resposta = null) {
         $this->id = $id;

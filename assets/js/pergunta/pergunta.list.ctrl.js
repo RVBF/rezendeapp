@@ -7,8 +7,7 @@
 {
 	'use strict';
 
-	function ControladoraListagemPergunta(servicoPergunta)
-	{
+	function ControladoraListagemPergunta(servicoPergunta) {
 		var _this = this;
 		var _cont = 0;
 		var _tabela = null;
@@ -26,6 +25,7 @@
 		_this.opcoesDaTabela = function opcoesDaTabela() {
 			var objeto = $.extend(true, {}, app.dtOptions);
 			objeto.ajax = servicoPergunta.rota(_this.idTarefa);
+			console.log( servicoPergunta.rota(_this.idTarefa));
 
 			objeto.columnDefs = [ {
 					data: 'id',

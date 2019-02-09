@@ -104,7 +104,7 @@
 	dependenciasCSS.push({ url : 'vendor/pickadate/lib/compressed/themes/default.css' });
 	dependenciasCSS.push({ url : 'vendor/pickadate/lib/compressed/themes/default.time.css' });
 	dependenciasCSS.push({ url : 'vendor/pickadate/lib/compressed/themes/default.date.css' });
-	dependenciasCSS.push({ url : 'vendor/select2-bootstrap-theme/dist/select2-bootstrap.min.css'});	
+	// dependenciasCSS.push({ url : 'vendor/select2-bootstrap-theme/dist/select2-bootstrap.min.css'});	
 	dependenciasCSS.push({ url : 'vendor/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css'});
 	dependenciasCSS.push({ url : 'vendor/select2/dist/css/select2.min.css' });
 	

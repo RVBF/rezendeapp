@@ -34,23 +34,23 @@ class ServicoArquivo {
         $mime=$splited[0];
 		$data=$splited[1];
 
-        $mime_split_without_base64=explode(';', $mime,2);
-        $mime_split=explode('/', $mime_split_without_base64[0],2);
+        $mime_split_without_base64 = explode(';', $mime,2);
+        $mime_split = explode('/', $mime_split_without_base64[0],2);
 
-        $output = realpath(dirname('..\\..\\')) . Anexo::CAMINHO_ARQUIVOS. '/' . $nomePasta . '/' . $pastaEntidadeSalva . '/' . $extensao;
+        $output = realpath(dirname('..\\')) . Anexo::CAMINHO_ARQUIVOS. '/' . $nomePasta . '/' . $pastaEntidadeSalva . '/' . $extensao;
 
-        if(is_dir(realpath(dirname('..\\..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta)) {
+        if(is_dir(realpath(dirname('..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta)) {
 
-            if(is_dir(realpath(dirname('..\\..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta . '/' . $pastaEntidadeSalva)) file_put_contents($output, base64_decode($data));
+            if(is_dir(realpath(dirname('..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta . '/' . $pastaEntidadeSalva)) file_put_contents($output, base64_decode($data));
             else{
-                mkdir(realpath(dirname('..\\..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta . '/' . $pastaEntidadeSalva, 0777);
+                mkdir(realpath(dirname('..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta . '/' . $pastaEntidadeSalva, 0777);
                 file_put_contents($output, base64_decode($data));
             }
 
         }
         else {
-            mkdir(realpath(dirname('..\\..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta, 0777);
-            mkdir(realpath(dirname('..\\..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta . '/' . $pastaEntidadeSalva, 0777);
+            mkdir(realpath(dirname('..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta, 0777);
+            mkdir(realpath(dirname('..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta . '/' . $pastaEntidadeSalva, 0777);
 
             file_put_contents($output, base64_decode($data));
         }

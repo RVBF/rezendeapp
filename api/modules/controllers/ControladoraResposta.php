@@ -43,6 +43,7 @@ class ControladoraResposta {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
+
 			$dtr = new DataTablesRequest($this->params);
 			$contagem = 0;
 			$objetos = [];
@@ -50,7 +51,6 @@ class ControladoraResposta {
 			$objetos = $this->colecaoResposta->todosComTarefaId($dtr->start, $dtr->length, $tarefaId, (isset($dtr->search->value)) ? $dtr->search->value : '');
 
 			$tarefa = $this->colecaoTarefa->comId($tarefaId);
-
 			if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
 				throw new Exception("Tarefa não encontrada na base de dados.");
 			}
@@ -73,7 +73,6 @@ class ControladoraResposta {
 			$dtr->draw,
 			$erro
 		);
-
 		return $conteudo;
 	}
 
