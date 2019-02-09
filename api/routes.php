@@ -9,7 +9,7 @@ $app->get('/categorias', function(Request $req,  Response $res, $args = []) use 
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraCategoria($req->getQueryParams(), $sessaoUsuario);
 	$response = $ctrl->todos();
-	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
 
 });
 
@@ -45,7 +45,7 @@ $app->get('/setor', function(Request $req,  Response $res, $args = []) use ($app
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraSetor($req->getQueryParams(), $sessaoUsuario);
 	$response = $ctrl->todos();
-	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
 });
 
 $app->post('/setor', function(Request $req,  Response $res, $args = []) use ($app, $session) {
@@ -80,7 +80,7 @@ $app->get('/loja', function(Request $req,  Response $res, $args = []) use ($app,
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraLoja($req->getQueryParams(), $sessaoUsuario);
 	$response = $ctrl->todos();
-	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
 });
 
 $app->post('/loja', function(Request $req,  Response $res, $args = []) use ($app, $session) {
@@ -115,7 +115,7 @@ $app->get('/tarefa', function(Request $req,  Response $res, $args = []) use ($ap
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraTarefa($req->getQueryParams(), $sessaoUsuario);
 	$response = $ctrl->todos();
-	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
 });
 
 $app->put('/tarefa', function(Request $req,  Response $res, $args = []) use ($app, $session) {
@@ -150,7 +150,7 @@ $app->get('/tarefa/{idTarefa}/pergunta', function(Request $req,  Response $res, 
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraPergunta($req->getQueryParams(), $sessaoUsuario);
 	$response = $ctrl->todos($args['idTarefa']);
-	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
 
 });
 
@@ -159,7 +159,7 @@ $app->get('/tarefa/{idTarefa}/pergunta/tarefa-com-id', function(Request $req,  R
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraPergunta($req->getQueryParams(), $sessaoUsuario);
 	$response = $ctrl->comTarefaId($args['idTarefa']);
-	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
 
 });
 
@@ -212,7 +212,7 @@ $app->get('/usuario', function(Request $req,  Response $res, $args = []) use ($a
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraUsuario($req->getQueryParams(), $sessaoUsuario);
 	$response = $ctrl->todos();
-	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
 
 });
 
@@ -274,7 +274,7 @@ $app->get('/grupo-usuario', function(Request $req,  Response $res, $args = []) u
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraGrupoUsuario($req->getQueryParams(), $sessaoUsuario);
 	$response = $ctrl->todos();
-	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
 
 });
 
@@ -309,10 +309,17 @@ $app->get('/resposta/{tarefaId}', function(Request $req,  Response $res, $args =
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraResposta($req->getQueryParams(), $sessaoUsuario);
 	$response = $ctrl->todos($args['tarefaId']);
-	// Debuger::printr(json_decode(JSON::encode($response)));
-	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(JSON::encode($response)));
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
 });
 
+
+// $app->get('/tarefa', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+// 	$this->logger->addInfo("Acessando listagem de tarefa");	
+// 	$sessaoUsuario = new Sessao($session);
+// 	$ctrl = new ControladoraTarefa($req->getQueryParams(), $sessaoUsuario);
+// 	$response = $ctrl->todos();
+// 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
+// });
 $app->post('/resposta', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 	$this->logger->addInfo("Acessando o cadastro de tarefa");
 	$sessaoUsuario = new Sessao($session);

@@ -55,24 +55,25 @@ class ControladoraResposta {
 				throw new Exception("Tarefa não encontrada na base de dados.");
 			}
 			
-			foreach ($objetos as $obj) {
+			foreach ($objetos as $key => $obj) {
 				$obj->getPergunta()->setTarefa($tarefa);
 			}
 
 			$contagem = $this->colecaoResposta->contagem($tarefaId);
 		}
-		catch (\Exception $e )
-		{
-			throw new Exception("Erro ao listar Resposta.");
+		catch (\Exception $e ) {
+			throw new Exception($e->getMessage());
 		}
+
 
 		$conteudo = new DataTablesResponse(
 			$contagem,
-			$contagem, //count($objetos ),
+			count($objetos), //count($objetos ),
 			$objetos,
 			$dtr->draw,
 			$erro
 		);
+
 		return $conteudo;
 	}
 

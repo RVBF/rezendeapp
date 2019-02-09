@@ -25,7 +25,6 @@
 		_this.opcoesDaTabela = function opcoesDaTabela() {
 			var objeto = $.extend(true, {}, app.dtOptions);
 			objeto.ajax = servicoPergunta.rota(_this.idTarefa);
-			console.log( servicoPergunta.rota(_this.idTarefa));
 
 			objeto.columnDefs = [ {
 					data: 'id',
