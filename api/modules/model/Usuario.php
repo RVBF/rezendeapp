@@ -4,20 +4,19 @@
  *	Usuario
  *
  *  @author Rafael Vinicius Barros Ferreira
- *  @version	0.1
+ *  @version	1.0
  */
 class Usuario {
-
-    private $id;
-    private $login;
+	private $id;
+	private $login;
     private $senha;
-    private $gruposUsuario;
     private $colaborador;
-    private $administrador;
+	private $gruposUsuario;
+	private $administrador;
 
-    const TABELA = 'usuario';
+	const TABELA = 'usuario';
     
-	const TAMANHO_MINIMO_LOGIN = 5;
+	const TAMANHO_MINIMO_LOGIN = 4;
 	const TAMANHO_MAXIMO_LOGIN = 30;
 
 	const TAMANHO_MINIMO_SENHA = 3;
