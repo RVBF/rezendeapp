@@ -7,8 +7,7 @@ use Illuminate\Database\Capsule\Manager as DB;
  *	@version	0.1
  */
 
-class ColecaoUsuarioEmBDR implements ColecaoUsuario
-{
+class ColecaoUsuarioEmBDR implements ColecaoUsuario {
 
 	const TABELA = 'usuario';
 	const TABELA_RELACIONAL = 'usuario_grupo_usuario';
