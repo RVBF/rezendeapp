@@ -1,28 +1,38 @@
 <?php
 
 /**
- *	Tarefa
+ *	Checklist
  *
  *  @author Rafael Vinicius Barros Ferreira
  *  @version	0.1
  */
-class Tarefa {
+class Checklist {
 
 	private $id;
     private $titulo;
     private $descricao;
     private $dataLimite;
     private $dataCadastro;
+    private $tipoTarefa;
     private $setor;
     private $loja;
     private $questionador;
-    private $perguntas;
-    private $encerrada;
-
+    private $responsavel;
+]
     const TAM_TITULO_MIM = 2;
     const TAM_TITULO_MAX = 100;
 
-    function __construct($id = 0, $titulo = '', $descricao = '', $dataLimite = '', $dataCadastro = '', $setor = null, $loja = null, $questionador = null, $perguntas = [], $encerrada = false) {
+    function __construct($id = 0,
+        $titulo = '',
+        $descricao = '',
+        $dataLimite = '',
+        $dataCadastro = '',
+        $tipoTarefa = '',
+        $setor = null,
+        $loja = null,
+        $questionador = null,
+        $responsavel = null,
+    ) {
         $this->id = $id;
         $this->titulo = $titulo;
         $this->descricao = $descricao;
@@ -31,8 +41,6 @@ class Tarefa {
         $this->setor = $setor;
         $this->loja = $loja;
         $this->questionador = $questionador;
-        $this->perguntas = $perguntas;
-        $this->encerrada = $encerrada;
     }
 
     public function getId(){
@@ -74,6 +82,14 @@ class Tarefa {
     public function setDataCadastro($dataCadastro){
         $this->dataCadastro = $dataCadastro;
     }
+    
+    public function getTipoTarefa(){
+        return $this->tipoTarefa; 
+    }
+ 
+    public function setTipoTarefa($tipoTarefa){
+        $this->tipoTarefa = $tipoTarefa;
+    }
 
     public function getSetor(){
         return $this->setor; 
@@ -98,24 +114,13 @@ class Tarefa {
     public function setQuestionador($questionador){
         $this->questionador = $questionador;
     }
- 
-    public function getEncerrada(){
-        return $this->encerrada; 
-    }
-    public function setEncerrada($encerrada){
-        $this->encerrada = $encerrada;
-    }
 
-    public function getPerguntas(){
-        return $this->perguntas; 
+    public function getResponsavel(){
+        return $this->responsavel; 
     }
  
-    public function setPerguntas($perguntas){
-        $this->perguntas = $perguntas;
-    }
-
-    public function addPergunta($pergunta){
-        $this->perguntas[] = $pergunta;
+    public function setResponsavel($responsavel){
+        $this->responsavel = $responsavel;
     }
 }
 ?>

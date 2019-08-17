@@ -91,7 +91,7 @@ class ColecaoFormularioRespondidoEmBDR implements ColecaoFormularioRespondido
 			$formularioRespondido = DB::table(self::TABELA)->select(self::TABELA . '.*')->join(self::TABELA_RELACIONAL, self::TABELA_RELACIONAL . '.formulario_respondido_id', '=', self::TABELA . '.id')->where(self::TABELA_RELACIONAL . '.pergunta_id', $id)->get();
 			$formularioRespondidoObj = null;
 
-			if(count($formularioRespondido) >  0 ) {
+			if(is_countable($formularioRespondido) ? count($formularioRespondido) >  0 : false) {
 				 $formularioRespondidoObj = $this->construirObjeto($formularioRespondido[0]);
 
 			}

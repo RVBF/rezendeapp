@@ -98,7 +98,7 @@
 				router.navigate('/configuracao/grupo-usuario');
 			});
 
-			$(evento.target).find('.tarefaListagemCompleta_link').on('click', function(event){
+			$(evento.target).find('.checklistListagemCompleta_link').on('click', function(event){
 				event.preventDefault();
 				router.navigate('/tarefa');
 			});
@@ -113,7 +113,25 @@
 				router.navigate('/plano-acao');
 			})
 
+			$(evento.target).find('.configuracao_link').on('click', function (event) {
+				event.preventDefault();
+				router.navigate('/configuracao');
+			})
 
+			$(evento.target).find('.criar_checklist_link').on('click', function(event){
+				event.preventDefault();
+				router.navigate('/configuracao/criar-ckecklist');
+			});
+
+			$(evento.target).find('.perfil_link').on('click', function(event){
+				event.preventDefault();
+				router.navigate('/configuracao/perfil');
+			});
+
+			$(evento.target).find('.senha_link').on('click', function(event){
+				event.preventDefault();
+				router.navigate('/configuracao/alterar-senha');
+			});
 		}
 	};
 	

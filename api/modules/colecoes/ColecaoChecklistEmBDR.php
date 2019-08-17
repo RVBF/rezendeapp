@@ -3,13 +3,13 @@ use Illuminate\Database\Capsule\Manager as DB;
 use Carbon\Carbon;
 
 /**
- *	Coleção de Tarefa em Banco de Dados Relacional.
+ *	Coleção de Checklist em Banco de Dados Relacional.
  *
  *  @author		Rafael Vinicius Barros Ferreira
  *	@version	0.1
  */
 
-class ColecaoTarefaEmBDR implements ColecaoTarefa {
+class ColecaoChecklistEmBDR implements ColecaoChecklist {
 	const TABELA = 'tarefa';
 
 	function __construct(){}
@@ -227,7 +227,7 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 		$loja = ($row['loja_id'] > 0) ? Dice::instance()->create('ColecaoLoja')->comId($row['loja_id']) : '';
 		$questionador = ($row['questionador_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comUsuarioId($row['questionador_id']) : '';
 		$perguntas = Dice::instance()->create('ColecaoPergunta')->comTarefaId($row['id']);
-		$tarefa = new Tarefa($row['id'],$row['titulo'], $row['descricao'], $row['data_limite'], $row['data_cadastro'], $setor, $loja, $questionador, $perguntas,($row['encerrada']) ? true : false);
+		$tarefa = new Checklist($row['id'],$row['titulo'], $row['descricao'], $row['data_limite'], $row['data_cadastro'], $setor, $loja, $questionador, $perguntas,($row['encerrada']) ? true : false);
 		return $tarefa;
 	}	
 
@@ -251,7 +251,7 @@ class ColecaoTarefaEmBDR implements ColecaoTarefa {
 
 		if($quantidade == 0)throw new ColecaoException('Setor não foi encontrado na base de dados.');
 
-		if(strlen($obj->getTitulo()) <= Tarefa::TAM_TITULO_MIM && strlen($obj->getTitulo()) > Tarefa::TAM_TITULO_MAX) throw new ColecaoException('O título deve conter no mínimo '. Tarefa::TAM_TITULO_MIM . ' e no máximo '. Tarefa::TAM_TITULO_MAX . '.');
+		if(strlen($obj->getTitulo()) <= Checklist::TAM_TITULO_MIM && strlen($obj->getTitulo()) > Checklist::TAM_TITULO_MAX) throw new ColecaoException('O título deve conter no mínimo '. Checklist::TAM_TITULO_MIM . ' e no máximo '. Checklist::TAM_TITULO_MAX . '.');
 		
 		if(strlen($obj->getdescricao()) > 255 and $obj->getdescricao() <> '') throw new ColecaoException('A descrição  deve conter no máximo '. 255 . ' caracteres.');
 

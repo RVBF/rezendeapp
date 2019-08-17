@@ -183,7 +183,7 @@
 			BootstrapDialog.show({
 				type	: BootstrapDialog.TYPE_DANGER,
 				title	: 'Deseja remover esta tarefa?',
-				message	: 'Tarefa de id:' + objeto.id + ' e título :' + objeto.titulo,
+				message	: 'Checklist de id:' + objeto.id + ' e título :' + objeto.titulo,
 				size	: BootstrapDialog.SIZE_LARGE,
 				buttons	: [ {
 						label	: '<u>S</u>im',

@@ -1,5 +1,5 @@
 /**
- *  Tarefa.serv.js
+ *  Checklist.serv.js
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */
@@ -7,7 +7,7 @@
  {
 	'use strict';
 
-	function Tarefa(id, titulo, descricao, dataLimite, setor, loja) {
+	function Checklist(id, titulo, descricao, dataLimite, setor, loja) {
 		this.id = id  || 0;
 		this.titulo = titulo  || '';
 		this.descricao = descricao  || '';
@@ -23,7 +23,7 @@
 			return app.api + '/tarefa';
 		};
 
-		// Cria um objeto de Tarefa
+		// Cria um objeto de Checklist
 		this.criar = function criar(id, titulo, descricao, dataLimite, setor, loja) {
 		 
 			return {
@@ -100,7 +100,7 @@
 	}; // ServicoTarefa
 
 	// Registrando
-	app.Tarefa = Tarefa;
+	app.Checklist = Checklist;
 	app.ServicoTarefa = ServicoTarefa;
 
 })(app, $);

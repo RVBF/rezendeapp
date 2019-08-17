@@ -111,7 +111,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 					$query->orWhereRaw(self::TABELA . '.razaoSocial like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw(self::TABELA . '.nomeFantasia like "%' . $buscaCompleta . '%"');
 				});
-			
+				
 				
 				if($query->count() == 0){
 					$query->where(function($query) use ($palavras){
@@ -125,9 +125,19 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 						
 					});
 				}
+
+				if($query->count() == 0){
+					foreach ($buscaCompleta as $key => $caracterer) {
+						$query->where(function($query) use ($caracterer){
+							$query->whereRaw(self::TABELA . '.id like "%' . $caracterer . '%"');
+							$query->orWhereRaw(self::TABELA . '.razaoSocial like "%' . $caracterer . '%"');
+							$query->orWhereRaw(self::TABELA . '.nomeFantasia like "%' . $caracterer . '%"');
+						});
+					}
+				}
 				$query->groupBy(self::TABELA.'.id');
 			}
-			
+
 			$lojas = $query->offset($limite)->limit($pulo)->get();
 			$lojasObjects = [];
 			foreach ($lojas as $loja) {
@@ -185,7 +195,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 	}
 
 	private function validarDeleteLoja($id){
-		$qtdReacionamento = DB::table(ColecaoTarefaEmBDR::TABELA)->where('loja_id', $id)->count();
+		$qtdReacionamento = DB::table(ColecaoChecklistEmBDR::TABELA)->where('loja_id', $id)->count();
 
 		if($qtdReacionamento > 0){
 			throw new ColecaoException('Essa loja possue tarefas relacionados a ela! Exclua todos as tarefas cadastros e tente novamente.');

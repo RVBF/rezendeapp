@@ -16,7 +16,6 @@ class ControladoraGrupoUsuario {
 
 	private $params;
 	private $colecaoGrupoUsuario;
-	private $session;
 	private $servicoLogin;
 	private $colecaoUsuario;
 	
@@ -25,47 +24,48 @@ class ControladoraGrupoUsuario {
 		$this->colecaoGrupoUsuario = Dice::instance()->create('ColecaoGrupoUsuario');
 		$this->colecaoUsuario = Dice::instance()->create('ColecaoUsuario');
 		$this->servicoLogin = new ServicoLogin($sessao);
-		$this->sessao = $sessao;
 	}
 
 	function todos() {
 		try {
-			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
-			}
-
-			if(!$this->servicoLogin->eAdministrador()){
-				throw new Exception("Usuário sem permissão para executar ação.");
-			}
-
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
+			
+			if(!$this->servicoLogin->eAdministrador()) 	throw new Exception("Usuário sem permissão para executar ação.");
+			
 			$dtr = new DataTablesRequest($this->params);
 			$contagem = 0;
 			$objetos = [];
 			$erro = null;	
 
-			$objetos = $this->colecaoGrupoUsuario->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');
+			$objetos = $this->colecaoGrupoUsuario->todos(
+				$dtr->start,
+				$dtr->length,
+				(isset($dtr->search->value)) ? $dtr->search->value : ''
+			);
+
 			$contagem = $this->colecaoGrupoUsuario->contagem();
 		}
 		catch (\Exception $e ) {
 			throw new Exception($e->getMessage());
 		}
 
-		$conteudo = new DataTablesResponse($contagem, count($objetos), $objetos, $dtr->draw, $erro);
+		$conteudo = new DataTablesResponse($contagem, 
+			is_countable($objetos) ? count($objetos) : 0, 
+			$objetos, 
+			$dtr->draw, 
+			$erro
+		);
 
 		return $conteudo;
     }
     
     function adicionar() {
-		DB::beginTransaction();
-
 		try {
-			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
-			}
+			DB::beginTransaction();
 
-			if(!$this->servicoLogin->eAdministrador()){
-				throw new Exception("Usuário sem permissão para executar ação.");
-			}
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
+
+			if(!$this->servicoLogin->eAdministrador()) throw new Exception("Usuário sem permissão para executar ação.");
 
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'nome','descricao', 'usuarios'], $this->params);
 		
@@ -74,15 +74,22 @@ class ControladoraGrupoUsuario {
 				throw new Exception("Usuários não encontrados na base de dados.");
 			}
 
-			if(count($inexistentes) > 0) {
+			if(is_countable($inexistentes) ? count($inexistentes) > 0 : 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
 				throw new Exception($msg);
 			}
 
-			$grupoUsuario = new GrupoUsuario( 0, \ParamUtil::value($this->params, 'nome'), \ParamUtil::value($this->params, 'descricao'), $usuarios);
+			$grupoUsuario = new GrupoUsuario( 0, 
+				\ParamUtil::value($this->params, 'nome'), 
+				\ParamUtil::value($this->params, 'descricao'), 
+				$usuarios
+			);
+
+			$grupoUsuario->setAdministrador(false);
 
 			$resposta = ['grupoUsuario'=> RTTI::getAttributes($this->colecaoGrupoUsuario->adicionar($grupoUsuario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Grupo de usuário cadastrado com sucesso.']; 
+			
 			DB::commit();
 		}
 		catch (\Exception $e) {
@@ -95,28 +102,25 @@ class ControladoraGrupoUsuario {
 	}
 
     function atualizar() {
-		DB::beginTransaction();
-
 		try {
-			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
-			}
+			DB::beginTransaction();
 
-			if(!$this->servicoLogin->eAdministrador()){
-				throw new Exception("Usuário sem permissão para executar ação.");
-			}
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
+
+			if(!$this->servicoLogin->eAdministrador()) throw new Exception("Usuário sem permissão para executar ação.");
 
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'nome','descricao'], $this->params);
 
-			if(count($inexistentes) > 0) {
+			if(is_countable($inexistentes) ? count($inexistentes) > 0 : 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
 				throw new Exception($msg);
 			}
 
 			$usuarios = (isset($this->params['usuarios'])) ? $this->colecaoUsuario->todosComIds($this->params['usuarios']) : [];
-
-			$grupoUsuario = new GrupoUsuario( \ParamUtil::value($this->params, 'id'), \ParamUtil::value($this->params, 'nome'), \ParamUtil::value($this->params, 'descricao'), $usuarios);
+			$grupoDeUsuario = $this->colecaoGrupoUsuario->comId(\ParamUtil::value($this->params, 'id'));
+			$grupoDeUsuario->setNome(\ParamUtil::value($this->params, 'nome'));
+			$grupoDeUsuario-setDescricao(\ParamUtil::value($this->params), 'descricao');
 
 			$resposta = ['grupoUsuario'=> RTTI::getAttributes($this->colecaoGrupoUsuario->atualizar($grupoUsuario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Grupo de usuário cadastrado com sucesso.']; 
 			
@@ -132,21 +136,14 @@ class ControladoraGrupoUsuario {
 	}
 
 	function remover($id) {
-		DB::beginTransaction();
-
 		try {
-			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
-			}
+			DB::beginTransaction();
+			
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");
 
-			if(!$this->servicoLogin->eAdministrador()){
-				throw new Exception("Usuário sem permissão para executar ação.");
-			}
+			if(!$this->servicoLogin->eAdministrador())	throw new Exception("Usuário sem permissão para executar ação.");
 
-			if (! is_numeric($id)) {
-				$msg = 'O id informado não é numérico.';
-				return $this->geradoraResposta->erro($msg, GeradoraResposta::TIPO_TEXTO);
-			}
+			if (!is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
 
 			$this->colecaoGrupoUsuario->remover($id);
 

@@ -9,15 +9,15 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 
 /**
- * Controladora de Tarefa
+ * Controladora de Checklist
  *
  * @author	Rafael Vinicius Barros Ferreira
  * @version	0.1
  */
-class ControladoraTarefa {
+class ControladoraChecklist {
 
 	private $params;
-	private $colecaoTarefa;
+	private $colecaoChecklist;
 	private $colecaoSetor;
 	private $servicoLogin;
 	private $colecaoUsuario;
@@ -27,7 +27,7 @@ class ControladoraTarefa {
 	function __construct($params,  Sessao $sessao) {
 		$this->params = $params;
 		$this->servicoLogin = new ServicoLogin($sessao);
-		$this->colecaoTarefa = Dice::instance()->create('ColecaoTarefa');
+		$this->colecaoChecklist = Dice::instance()->create('ColecaoChecklist');
 		$this->colecaoSetor = Dice::instance()->create('ColecaoSetor');
 		$this->colecaoUsuario = Dice::instance()->create('ColecaoUsuario');
 		$this->colecaoColaborador = Dice::instance()->create('ColecaoColaborador');
@@ -48,14 +48,14 @@ class ControladoraTarefa {
 			$colaborador = $this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario());
 
 			$idsLojas = [];
-
-			foreach ($colaborador->getLojas() as $loja) {
-				$idsLojas[] = $loja->getId();
+			if($colaborador instanceof COlaborador) {
+				foreach ($colaborador->getLojas() as $loja) {
+					$idsLojas[] = $loja->getId();
+				}
 			}
+			$objetos = $this->colecaoChecklist->todosComLojaIds($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $idsLojas);
 
-			$objetos = $this->colecaoTarefa->todosComLojaIds($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $idsLojas);
-
-			$contagem = $this->colecaoTarefa->contagem($idsLojas);
+			$contagem = $this->colecaoChecklist->contagem($idsLojas);
 		}
 		catch (\Exception $e ) {
 			throw new Exception("Erro ao listar tarefas");
@@ -63,7 +63,7 @@ class ControladoraTarefa {
 
 		$conteudo = new DataTablesResponse(
 			$contagem,
-			count($objetos), //count($objetos ),
+			is_countable($objetos) ? count($objetos) : 0, //count($objetos ),
 			$objetos,
 			$dtr->draw,
 			$erro
@@ -87,7 +87,7 @@ class ControladoraTarefa {
 
 			$inexistentes = \ArrayUtil::nonExistingKeys(['titulo', 'descricao', 'dataLimite', 'setor', 'loja'], $this->params);
 
-			if(count($inexistentes) > 0) {
+			if(is_countable($inexistentes) ? count($inexistentes) > 0 : 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 	
 				throw new Exception($msg);
@@ -107,7 +107,7 @@ class ControladoraTarefa {
 			}
 			$dataLimite = new Carbon(\ParamUtil::value($this->params, 'dataLimite'), 'America/Sao_Paulo');
 
-			$tarefa = new Tarefa(
+			$tarefa = new Checklist(
 				0,
 				\ParamUtil::value($this->params, 'titulo'),
 				\ParamUtil::value($this->params, 'descricao'),
@@ -121,7 +121,7 @@ class ControladoraTarefa {
 	
 			$resposta = [];
 
-			$tarefa = $this->colecaoTarefa->adicionar($tarefa);
+			$tarefa = $this->colecaoChecklist->adicionar($tarefa);
 			$resposta = ['categoria'=> RTTI::getAttributes( $tarefa, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria cadastrada com sucesso.']; 
 			DB::commit();
 
@@ -149,7 +149,7 @@ class ControladoraTarefa {
 
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo', 'descricao', 'dataLimite', 'setor', 'loja'], $this->params);
 		
-			if(count($inexistentes) > 0) {
+			if(is_countable($inexistentes) ? count($inexistentes) > 0 : 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 	
 				throw new Exception($msg);
@@ -171,7 +171,7 @@ class ControladoraTarefa {
 			$dataLimite = new Carbon();                  // equivalent to Carbon::now()
 			$dataLimite = new Carbon(\ParamUtil::value($this->params, 'dataLimite'), 'America/Sao_Paulo');
 
-			$tarefa = $this->colecaoTarefa->comId(\ParamUtil::value($this->params, 'id'));
+			$tarefa = $this->colecaoChecklist->comId(\ParamUtil::value($this->params, 'id'));
 
 			if($tarefa->getEncerrada()) throw new Exception("Não é possível editar uma tarefa já encerrada.");
 
@@ -183,7 +183,7 @@ class ControladoraTarefa {
 	
 			$resposta = [];
 					
-			$tarefa = $this->colecaoTarefa->atualizar($tarefa);
+			$tarefa = $this->colecaoChecklist->atualizar($tarefa);
 
 			$resposta = ['categoria'=> RTTI::getAttributes( $tarefa, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria cadastrada com sucesso.']; 
 			
@@ -213,7 +213,7 @@ class ControladoraTarefa {
 			
 			$resposta = [];
 
-			$status = ($idSetor > 0) ? $this->colecaoTarefa->removerComSetorId($id, $idSetor) :  $this->colecaoTarefa->remover($id);
+			$status = ($idSetor > 0) ? $this->colecaoChecklist->removerComSetorId($id, $idSetor) :  $this->colecaoChecklist->remover($id);
 			
 			$resposta = ['status' => true, 'mensagem'=> 'Categoria removida com sucesso.']; 
 			DB::commit();

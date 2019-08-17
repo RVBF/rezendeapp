@@ -18,13 +18,13 @@ class ControladoraPergunta {
 	private $params;
 	private $colecaoPergunta;
 	private $colecaoResposta;
-	private $colecaoTarefa;
+	private $colecaoChecklist;
 	private $servicoLogin;
 	
 	function __construct($params,  Sessao $sessao) {
 		$this->params = $params;
 		$this->colecaoPergunta = Dice::instance()->create('ColecaoPergunta');
-		$this->colecaoTarefa = Dice::instance()->create('ColecaoTarefa');
+		$this->colecaoChecklist = Dice::instance()->create('ColecaoChecklist');
 		$this->colecaoResposta = Dice::instance()->create('ColecaoResposta');
 		$this->servicoLogin = new ServicoLogin($sessao);
 	}
@@ -44,7 +44,7 @@ class ControladoraPergunta {
 			$objetos = [];
 			$erro = null;
 
-			$tarefa = $this->colecaoTarefa->comId($idTarefa);
+			$tarefa = $this->colecaoChecklist->comId($idTarefa);
 			$objetos = $this->colecaoPergunta->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $idTarefa);
 
 			foreach ($objetos as $key => $obj) {
@@ -84,19 +84,19 @@ class ControladoraPergunta {
 			}
 			$inexistentes = \ArrayUtil::nonExistingKeys(['pergunta'], $this->params);
 			
-			if(count($inexistentes) > 0) {
+			if(is_countable($inexistentes) ? count($inexistentes) > 0 : 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
 				throw new Exception($msg);
 			}
 
-			$tarefa = $this->colecaoTarefa->comId($tarefaId);
+			$tarefa = $this->colecaoChecklist->comId($tarefaId);
 
 			if($tarefa->getEncerrada()) throw new Exception("Não é possível cadastrar pergunta para tarefas já encerrada.");
 
-			$tarefa = $this->colecaoTarefa->comId($tarefaId);
+			$tarefa = $this->colecaoChecklist->comId($tarefaId);
 
-			if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
+			if(!isset($tarefa) and !($tarefa instanceof Checklist)){
 				throw new Exception("Setor não encontrada na base de dados.");
 			}
 
@@ -136,19 +136,19 @@ class ControladoraPergunta {
 
 			$inexistentes = \ArrayUtil::nonExistingKeys(['data'], $this->params);
 			
-			if(count($inexistentes) > 0) {
+			if(is_countable($inexistentes) ? count($inexistentes) > 0 : 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
 				throw new Exception($msg);
 			}
 
-			$tarefa = $this->colecaoTarefa->comId($tarefaId);
+			$tarefa = $this->colecaoChecklist->comId($tarefaId);
 
 			if($tarefa->getEncerrada()) throw new Exception("Não é possível adicionar perguntas para tarefas já encerrada.");
 
-			$tarefa = $this->colecaoTarefa->comId($tarefaId);
+			$tarefa = $this->colecaoChecklist->comId($tarefaId);
 
-			if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
+			if(!isset($tarefa) and !($tarefa instanceof Checklist)){
 				throw new Exception("Setor não encontrada na base de dados.");
 			}
 	
@@ -192,19 +192,19 @@ class ControladoraPergunta {
 
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'pergunta'], $this->params);
 			
-			if(count($inexistentes) > 0) {
+			if(is_countable($inexistentes) ? count($inexistentes) > 0 : 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
 				throw new Exception($msg);
 			}
 
-			$tarefa = $this->colecaoTarefa->comId($tarefaId);
+			$tarefa = $this->colecaoChecklist->comId($tarefaId);
 
 			if($tarefa->getEncerrada()) throw new Exception("Não é possível editar pergunta para tarefas já encerrada.");
 
-			$tarefa = $this->colecaoTarefa->comId($tarefaId);
+			$tarefa = $this->colecaoChecklist->comId($tarefaId);
 
-			if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
+			if(!isset($tarefa) and !($tarefa instanceof Checklist)){
 				throw new Exception("Setor não encontrada na base de dados.");
 			}
 
