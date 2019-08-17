@@ -19,7 +19,7 @@ class ControladoraResposta {
 	private $params;
 	private $colecaoPergunta;
 	private $colecaoResposta;
-	private $colecaoTarefa;
+	private $colecaoChecklist;
 	private $colecaoAnexo;
 	private $servicoLogin;
 	private $colecaoUsuario;
@@ -30,7 +30,7 @@ class ControladoraResposta {
 		$this->colecaoPergunta = Dice::instance()->create('ColecaoPergunta');
 		$this->colecaoResposta = Dice::instance()->create('ColecaoResposta');
 		$this->colecaoAnexo = Dice::instance()->create('ColecaoAnexo');
-		$this->colecaoTarefa = Dice::instance()->create('ColecaoTarefa');
+		$this->colecaoChecklist = Dice::instance()->create('ColecaoChecklist');
 		$this->colecaoUsuario = Dice::instance()->create('ColecaoUsuario');
 		$this->colecaoFormularioRespondido = Dice::instance()->create('ColecaoFormularioRespondido'); 
 		$this->servicoArquivo = ServicoArquivo::instance();
@@ -50,9 +50,9 @@ class ControladoraResposta {
 			$erro = null;
 			$objetos = $this->colecaoResposta->todosComTarefaId($dtr->start, $dtr->length, $tarefaId, (isset($dtr->search->value)) ? $dtr->search->value : '');
 
-			$tarefa = $this->colecaoTarefa->comId($tarefaId);
-			if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
-				throw new Exception("Tarefa não encontrada na base de dados.");
+			$tarefa = $this->colecaoChecklist->comId($tarefaId);
+			if(!isset($tarefa) and !($tarefa instanceof Checklist)){
+				throw new Exception("Checklist não encontrada na base de dados.");
 			}
 			
 			foreach ($objetos as $key => $obj) {
@@ -68,7 +68,7 @@ class ControladoraResposta {
 
 		$conteudo = new DataTablesResponse(
 			$contagem,
-			count($objetos), //count($objetos ),
+			is_countable($objetos) ? count($objetos) : 0, //count($objetos ),
 			$objetos,
 			$dtr->draw,
 			$erro
@@ -94,7 +94,7 @@ class ControladoraResposta {
 			foreach($this->params['obj'] as $key => $parametros) {
 				$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'opcaoSelecionada','comentario', 'pergunta'], $parametros);
 
-				if(count($inexistentes) > 0) {
+				if(is_countable($inexistentes) ? count($inexistentes) > 0 : 0) {
 					$msg = 'Os seguintes campos obrigatórios da pergunta de id   não foram enviados: ' . implode(', ', $inexistentes);
 	
 					throw new Exception($msg);
@@ -104,10 +104,10 @@ class ControladoraResposta {
 				if(!isset($pergunta) and !($pergunta instanceof Pergunta)){
 					throw new Exception("Pergunta não encontrada na base de dados.");
 				}
-				if($tarefa == null) $tarefa = $this->colecaoTarefa->comPerguntaId($parametros['pergunta']);
+				if($tarefa == null) $tarefa = $this->colecaoChecklist->comPerguntaId($parametros['pergunta']);
 
-				if(!isset($tarefa) and !($tarefa instanceof Tarefa)){
-					throw new Exception("Tarefa não encontrada na base de dados.");
+				if(!isset($tarefa) and !($tarefa instanceof Checklist)){
+					throw new Exception("Checklist não encontrada na base de dados.");
 				}
 
 				if($tarefa->getEncerrada()) throw new Exception("Não é possível adicionar respostas para tarefas já encerrada.");
@@ -142,7 +142,7 @@ class ControladoraResposta {
 
 			$tarefa->setEncerrada(true);
 
-			$this->colecaoTarefa->atualizar($tarefa);
+			$this->colecaoChecklist->atualizar($tarefa);
 
 			DB::commit();
 

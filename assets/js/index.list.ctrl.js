@@ -85,7 +85,7 @@
             var opcoesParaHTML = '';
 
             opcoesParaHTML += '<li class="nav-item">';
-            opcoesParaHTML += '<a data-toggle="tab" href="#tarefa" aria-expanded="false" class="tarefaListagemCompleta_link nav-link active"><i class="rezende-icon fas fa-tasks"></i>Tarefa</a>';            
+            opcoesParaHTML += '<a data-toggle="tab" href="#tarefa" aria-expanded="false" class="checklistListagemCompleta_link nav-link active"><i class="rezende-icon fas fa-tasks"></i>Checklist</a>';            
             opcoesParaHTML += '</li>';
 
             opcoesParaHTML += (!temPermissao) ? '' :'<li class="nav-item">';
@@ -106,7 +106,7 @@
         _this.renderizarOpcoesMobile = function renderizarOpcoesMobile(temPermissao){
             var opcoesParaHTML = '';
             opcoesParaHTML += '<li>';
-            opcoesParaHTML += '<a data-toggle="collapse" data-target="#tarefa" class="tarefaListagemCompleta_link link_menu_mobile redireciona_mobile">Tarefa</a>';
+            opcoesParaHTML += '<a data-toggle="collapse" data-target="#tarefa" class="checklistListagemCompleta_link link_menu_mobile redireciona_mobile">Checklist</a>';
             opcoesParaHTML += (!temPermissao) ? '' :'<ul class="collapse dropdown-header-top">';
             opcoesParaHTML += (!temPermissao) ? '' :'<li>';
             opcoesParaHTML += (!temPermissao) ? '' :'<a href="categoria.html" class="categoria_link link_menu_mobile redireciona_mobile">Categoria</a>';

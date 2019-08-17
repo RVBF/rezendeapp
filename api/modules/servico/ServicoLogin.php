@@ -18,16 +18,17 @@ class ServicoLogin {
 		$this->colecaoUsuario = $colecaoUsuario;
 	}
 	
-	function login($login, $senha) {
+	function  login($login, $senha) {
 		$this->validarSenha($senha);
 
 		$usuario = null;
 		$senhaCriptografada = HashSenha::instance();
-		$senhaCriptografada = $senhaCriptografada->gerarHashDeSenhaComSaltEmMD5($senha);		
+		$senhaCriptografada = $senhaCriptografada->gerarHashDeSenhaComSaltEmMD5($senha);	
 
-		if($this->validarLogin($login) and $resultado = $this->colecaoUsuario->comLogin($login))
-		{
-			if(count($resultado) === 1)
+	
+		if($this->validarLogin($login) and $resultado = $this->colecaoUsuario->comLogin($login)) {
+			
+		if($resultado instanceof Usuario)
 			{
 				$usuario = $resultado;
 				if($usuario->getSenha() === $senhaCriptografada || $usuario->getSenha() == $senha)
@@ -152,7 +153,7 @@ class ServicoLogin {
 
 		$resultado = $this->colecaoUsuario->comEmail($email);
 
-		if(count($resultado) == 0)
+		if(is_countable($resultado) ? count($resultado) == 0 :  false)
 		{
 			throw new ColecaoException( 'O email  ' . $email . ' não corresponde a nenhuma conta cadastrada no sistema.' );
 		}
@@ -189,7 +190,7 @@ class ServicoLogin {
 
 		$resultado = $this->colecaoUsuario->comLogin($login);
 
-		if(count($resultado) == 0)
+		if(is_countable($resultado) ? count($resultado) == 0 : false)
 		{
 			throw new ColecaoException( 'O login  ' . $login . ' não corresponde a nenhuma conta cadastrada no sistema.' );
 		}

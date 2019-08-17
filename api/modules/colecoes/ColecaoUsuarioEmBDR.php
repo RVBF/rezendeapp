@@ -8,7 +8,6 @@ use Illuminate\Database\Capsule\Manager as DB;
  */
 
 class ColecaoUsuarioEmBDR implements ColecaoUsuario {
-
 	const TABELA = 'usuario';
 	const TABELA_RELACIONAL = 'usuario_grupo_usuario';
 
@@ -16,37 +15,28 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario {
 	function __construct(){}
 
 	function adicionar(&$obj) {
-		if($this->validarUsuario($obj)){
+		if($this->validarUsuario($obj)) {
 			try {	
-
-				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 				$hash = HashSenha::instance();
 
 				$id = DB::table(self::TABELA)->insertGetId([ 
 					'login' => $obj->getLogin(),
 					'senha' => $hash->gerarHashDeSenhaComSaltEmMD5($obj->getSenha())
 				]);
-				
-				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-	
+					
 				$obj->setId($id);
 	
 				return $obj;
 			}
-			catch (\Exception $e)
-			{
+			catch (\Exception $e) {
 				throw new ColecaoException("Erro ao adicionar usuário.", $e->getCode(), $e);
 			}
 		}
 	}
 
 	function remover($id) {
-
 		try {
-			if($this->validarRemocaoUsuario($id)){
-
-				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-				
+			if($this->validarRemocaoUsuario($id)) {				
 				$removido = DB::table(self::TABELA)->where('id', $id)->delete();
 
 				
@@ -390,7 +380,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario {
 	}
 
 	private function validarRemocaoUsuario($id){
-		$quantidade = DB::table(ColecaoTarefaEmBDR::TABELA)->where('questionador_id', $id)->count();
+		$quantidade = DB::table(ColecaoChecklistEmBDR::TABELA)->where('questionador_id', $id)->count();
 
 		if($quantidade > 0)throw new ColecaoException('Não foi possível excluir o usuário por que ele possui tarefas relacionadas a ele. Exclua todas as tarefas relacionadas e tente novamente.');
 

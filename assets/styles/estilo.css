@@ -7,6 +7,78 @@ html, body {
     font-size: 12px !important;
 }
 
+.card-body{
+    padding: 0px !important;
+}
+
+.header-top-area i.fas {
+    font-size: 24px;
+    color: #F6F8FA !important;
+}
+
+.navbar .card-title{
+    font-size: 24px;
+    color: #F6F8FA !important;  
+    padding: 5px !important;
+}
+
+.btn-custom {
+	padding: 1px 15px 3px 2px;
+	border-radius: 50px;
+}
+
+.btn-icon {
+	padding: 8px;
+	background: #ffffff;
+}
+
+.configuracao, .menu{
+    margin-top : 50px;
+}
+
+.configuracao ul li,
+.menu ul li {
+    margin : 15px;
+    margin-bottom: 25px !important;
+}
+.configuracao ul li a{
+    font-size : 18px !important;
+}
+
+.configuracao ul li a,
+.menu ul li a {
+    padding: 2px 10px;
+    font-size: 24px;
+    color: #100e0e;
+    text-decoration: none;
+}
+
+.menu ul li i.fas{
+  font-size: 18px !important;
+  border: 1px solid;
+  padding : 7px;
+  padding-left: 11px;
+  padding-right: 11px;
+  border-radius: 200px;
+}
+
+/* .menu ul li a:hover {
+    color: brown;
+} */
+
+.configuracao  ul li:hover a,
+.menu ul li:hover a{
+    color: brown;
+}
+
+
+.configuracao ul,.menu ul {
+    padding:0px;
+    margin:0px;
+
+    list-style:none;
+}
+
 button{
     cursor: pointer;
 }
@@ -49,11 +121,6 @@ ul {
     box-sizing: content-box;
 }
 
-.header-top-area, .footer-copyright-area {
-    background:#00a99e;
-    padding: 0px !important
-}
-
 .footer-copyright-area {
     margin-top: 40px;
 }
@@ -69,7 +136,8 @@ ul {
 
 #app .card{
     border: 0px !important;
-    padding: 0px !important;
+    padding-bottom: 10px !important;
+    height: -webkit-fill-available;
 }
 
 #app .card-body{
@@ -164,9 +232,6 @@ ul.notika-menu-wrap li a{
 .mg-t-80-b-40{
 	margin:102px 0px 40px 0px;
 }
-.box-layout .header-top-area {
-		width: 1200px;
-}
 /* Vesão modificada */
 
 .nav-tabs.rezende-menu-wrap {
@@ -237,7 +302,7 @@ ul.rezende-menu-wrap li a {
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 .main-menu-lv-int ul.main-menu-lv {
-	text-align:center;
+text-align:center;
 }
 .main-menu-lv-int ul.main-menu-lv > li{
 	display:inline-block;
@@ -350,9 +415,6 @@ ul.rezende-menu-wrap li a {
 
 #painel_listagem, #painel_formulario {
     width:auto;
-    margin-right: 80px !important;
-    margin-left: 80px !important;
-    margin-bottom: 10px;
 }
 
 .card-header{  
@@ -510,9 +572,8 @@ button{
     .fas{
         margin: 4px !important;
     }
-
-   
 }
+
 label{
     margin-bottom: 0px;
     padding: 5px;    

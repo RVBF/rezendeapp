@@ -106,8 +106,8 @@ class ColecaoRespostaEmBDR implements ColecaoResposta
 
 			$query = DB::table(self::TABELA)->select(self::TABELA . '.*')
 			->leftJoin(ColecaoPerguntaEmBDR::TABELA, ColecaoPerguntaEmBDR::TABELA . '.id', '=', self::TABELA . '.pergunta_id')
-			->leftJoin(ColecaoTarefaEmBDR::TABELA, ColecaoTarefaEmBDR::TABELA . '.id', '=', ColecaoPerguntaEmBDR::TABELA . '.tarefa_id')
-			->where(ColecaoTarefaEmBDR::TABELA .'.id', $tarefaid);
+			->leftJoin(ColecaoChecklistEmBDR::TABELA, ColecaoChecklistEmBDR::TABELA . '.id', '=', ColecaoPerguntaEmBDR::TABELA . '.tarefa_id')
+			->where(ColecaoChecklistEmBDR::TABELA .'.id', $tarefaid);
 
 			if($search != '') {
 				$buscaCompleta = $search;
@@ -172,8 +172,8 @@ class ColecaoRespostaEmBDR implements ColecaoResposta
     function contagem($tarefaId = 0) {
 		return ($tarefaId > 0) ? DB::table(self::TABELA)->select(self::TABELA . '.*')
 		->join(ColecaoPerguntaEmBDR::TABELA, ColecaoPerguntaEmBDR::TABELA . '.id', '=', self::TABELA . '.pergunta_id')
-		->join(ColecaoTarefaEmBDR::TABELA, ColecaoTarefaEmBDR::TABELA . '.id', '=', ColecaoPerguntaEmBDR::TABELA . '.tarefa_id')
-		->where(ColecaoTarefaEmBDR::TABELA .'.id', $tarefaId)
+		->join(ColecaoChecklistEmBDR::TABELA, ColecaoChecklistEmBDR::TABELA . '.id', '=', ColecaoPerguntaEmBDR::TABELA . '.tarefa_id')
+		->where(ColecaoChecklistEmBDR::TABELA .'.id', $tarefaId)
 		->count() : DB::table(self::TABELA)->count();
 	}
 }

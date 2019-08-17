@@ -82,7 +82,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 				
 				DB::table(self::TABELA_RELACIONAL)->where('colaborador_id', $obj->getId())->delete();
 
-				if(count($obj->getLojas())){
+				if(is_countable($obj->getLojas()) ? count($obj->getLojas()) : false){
 					$atuacoesLojas = [];
 
 					foreach($obj->getLojas() as $loja){
@@ -119,7 +119,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 		try {	
 			$colaborador = DB::table(self::TABELA)->where('usuario_Id', $id)->get();
 
-			$colaborador = (count($colaborador) > 0) ? $this->construirObjeto($colaborador[0]) : null;
+			if(is_countable($colaborador)) $colaborador = (count($colaborador) > 0) ? $this->construirObjeto($colaborador[0]) : null;
 
 			return $colaborador;
 		}
@@ -172,7 +172,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 		$usuario = ($row['usuario_id'] > 0) ? Dice::instance()->create('ColecaoUsuario')->comId($row['usuario_id']) : null;
         $lojas = Dice::instance()->create('ColecaoLoja')->comColaboradorId($row['id']);
 
-		$colaborador = new Colaborador($row['id'], $row['nome'], $row['sobrenome'], $row['email'], $usuario, (count($lojas) > 0) ? $lojas : []);
+		$colaborador = new Colaborador($row['id'], $row['nome'], $row['sobrenome'], $row['email'], $usuario, (is_countable($lojas)) ? $lojas : []);
 
 		return $colaborador;
 	}	

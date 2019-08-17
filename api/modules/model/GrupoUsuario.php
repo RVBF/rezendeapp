@@ -4,7 +4,7 @@
  *	GrupoDeUsuario
  *
  *  @author Rafael Vinicius Barros Ferreira
- *  @version	0.1
+ *  @version	1.0
  */
 class GrupoUsuario {
 
@@ -19,21 +19,22 @@ class GrupoUsuario {
         $this->nome =  $nome;
         $this->descricao = $descricao;
         $this->usuarios = $usuarios;
+        $his->administrador = false;
     }
 
-    public function getId(){
+    public function getId() {
        return $this->id; 
     }
 
-    public function setId($id){
+    public function setId($id) {
         $this->id = $id;
     }
 
-    public function getDescricao(){
+    public function getDescricao() {
         return $this->descricao; 
     }
  
-    public function setDescricao($descricao){
+    public function setDescricao($descricao) {
         $this->descricao = $descricao;
     }
     
@@ -53,7 +54,6 @@ class GrupoUsuario {
         $this->administrador = $administrador;
     }
 
-
     public function getUsuarios(){
         return $this->usuarios; 
     }
@@ -65,5 +65,9 @@ class GrupoUsuario {
     public function addUsuario($usuario){
         $this->usuarios[] = $usuario;
     }
+
+    public function removerUsuario($usuario){
+        $key  = array_search($usuario, $this->usuarios);
+    }    
 }
 ?>

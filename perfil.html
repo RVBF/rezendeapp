@@ -1,0 +1,58 @@
+<div class="col-xs-12  col-sm-12 col-md-12">
+    <form class="form-horizontal "  method="post" id="usuario_form">
+        <input type="hidden" id="id" name ="id" />
+
+        <div class="row form-row">
+            <div class="col-md-6 col-xs-6 col-sm-6 col-12">
+                <label for="nome">*Nome:  </label>
+                <input class="form-control campo_obrigatorio" id ="nome" name="nome"/>
+            </div>
+
+            <div class="col-md-6 col-xs-6 col-sm-6 col-12">
+                <label for="sobrenome">*Sobrenome</label>
+                <input class="form-control campo_obrigatorio" id="sobrenome" name="sobrenome"/>
+            </div>
+        </div>
+
+        <div class="row form-row">
+            <div class="col-md-6 col-sm-6 col-xs-6 col-12">
+                <label for="email">*E-mail</label>
+                <input class="form-control campo_obrigatorio email_formato" id="email" name="email"/>
+            </div>
+
+            <div class="col-xs-6 col-md-6 col-sm-6 col-12">
+                <label for="lojas">*Lojas de atuação</label>
+                <select id ="lojas"  name="lojas[]" class="form-control campo_obrigatorio select2"  multiple="multiple"></select>
+            </div>
+        </div>
+
+        <div class="row form-row">
+            <div class="col-xs-4 col-md-4 col-sm-4 col-12">
+                <label for="login">*Login</label>
+                <input class="form-control campo_obrigatorio" id="login"></input>
+            </div>
+
+            <div class="col-md-4 col-sm-4 col-xs-4 col-12">
+                <label for="senha">*Senha:</label>
+                <input type="password" id="senha" name="senha" class="form-control campo_obrigatorio" />
+            </div>
+
+            <div class="col-md-4 col-sm-4 col-xs-4 col-12">
+                <label for="confirmacao_senha">*Confirmacão de Senha:</label>
+                <input type="password" id="confirmacao_senha" name="confirmacao_senha " class="form-control campo_obrigatorio" />
+            </div>
+        </div>
+
+        <div  class="row form-row d-none">
+            <div class="col-xs-12  col-sm-12 col-md-12 col-12">
+                <br /><div id="msg" class="text-danger msg" ></div>
+            </div>
+        </div>
+
+        <div  class="row form-row">
+            <div class="col-xs-12 col-md-12 col-sm-12 col-12">
+                <button type="submit" class="btn btn-success" id="salvar">Atualizar</button>
+            </div>
+        </div>
+    </form>           
+</div>

@@ -4,12 +4,10 @@ use Illuminate\Database\Capsule\Manager as DB;
  *	Coleção de Usuario em Banco de Dados Relacional.
  *
  *  @author		Rafael Vinicius Barros Ferreira
- *	@version	0.1
+ *	@version	1.0
  */
 
-class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
-{
-
+class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario {
 	const TABELA = 'grupo_usuario';
 	const TABELA_RELACIONAL = 'usuario_grupo_usuario';
 
@@ -18,9 +16,12 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
 	function adicionar(&$obj) {
 		if($this->validarGrupoDeUsuario($obj)) {
 			try {	
-				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-				$id = DB::table(self::TABELA)->insertGetId([ 'nome' => $obj->getNome() ,'descricao' => $obj->getDescricao()]);
+				$id = DB::table(self::TABELA)->insertGetId([ 
+					'nome' => $obj->getNome() ,
+					'descricao' => $obj->getDescricao(), 
+					'eadmin' => $obj->getAdministrador()
+				]);
 				
 				$gruposUsuarios = [];
 
@@ -31,10 +32,8 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
 				DB::table(self::TABELA_RELACIONAL)->insert($gruposUsuarios);
 
 				$obj->setId($id);
-				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 			}
-			catch (\Exception $e)
-			{
+			catch (\Exception $e) {
 				throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
 			}
 		}	
@@ -43,13 +42,10 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
 	function remover($id) {
 		if($this->validarDeleteGrupoDeUsuario($id)){
 
-			try {	
-				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-				
+			try {					
 				$removido = DB::table(self::TABELA)->where('id', $id)->delete();
 				if($removido) $removido = DB::table(self::TABELA_RELACIONAL)->where('grupo_usuario_id', $id)->delete();
 
-				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 				return $removido;
 			}
 			catch (\Exception $e)
@@ -63,22 +59,25 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
 		if($this->validarGrupoDeUsuario($obj)){
 			try {
 
-				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+				DB::table(self::TABELA)->where('id', $obj->getId())->update([
+					'nome' => $obj->getNome(),
+					'descricao' => $obj->getDescricao(),
+					'eadmin' => $obj->getAdministrador()
+				]);
 
-				DB::table(self::TABELA)->where('id', $obj->getId())->update(['nome' => $obj->getNome() ,'descricao' => $obj->getDescricao()]);
 				DB::table(self::TABELA_RELACIONAL)->where('grupo_usuario_id', $obj->getId())->delete();
 
-				if(count($obj->getUsuarios())){
+				if(is_countable($obj->getUsuarios()) ? count($obj->getUsuarios()): false){
 					$gruposUsuarios = [];
 
 					foreach($obj->getUsuarios() as $usuario){
 					
 						$gruposUsuarios[] = ['usuario_id' => $usuario->getId(), 'grupo_usuario_id' =>  $obj->getId()];
 					}
+
 					DB::table(self::TABELA_RELACIONAL)->insert($gruposUsuarios);
 				}
 
-				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 				return $obj;
 			}
 			catch (\Exception $e)
@@ -89,8 +88,8 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
 	}
 
 	function comId($id){
-		try {	
-			$usuario = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
+		try {
+			$usuario = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get());
 
 			return $usuario;
 		}
@@ -120,7 +119,7 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
 
 	/**
 	 * @inheritDoc
-	 */
+	*/
 	function todos($limite = 0, $pulo = 0, $search = '') {
 		try {	
 			$query = DB::table(self::TABELA)->select(self::TABELA . '.*');
@@ -148,6 +147,17 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
 						
 					});
 				}
+
+				if($query->count() == 0){
+					foreach ($buscaCompleta as $key => $caracterer) {
+						$query->where(function($query) use ($caracterer){
+							$query->whereRaw(self::TABELA . '.id like "%' . $caracterer . '%"');
+							$query->orWhereRaw(self::TABELA . '.nome like "%' . $caracterer . '%"');
+							$query->orWhereRaw(self::TABELA . '.descricao like "%' . $caracterer . '%"');
+						});
+					}
+				}
+
 				$query->groupBy(self::TABELA.'.id');
 			}
 			
@@ -168,7 +178,7 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
 		}
 	}
 	
-	function todosComIds($ids = []) {
+	function todosComIdsDeUsuario($ids = []) {
 		try {	
 			$usuarios = DB::table(self::TABELA)->whereIn('id', $ids)->get();
 			$usuariosObjects = [];
@@ -188,7 +198,7 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario
 	function construirObjeto(array $row) {
 		$usuarios = Dice::instance()->create('ColecaoUsuario')->comGrupoId($row['id']);
 		$grupoDeUsuario = new GrupoUsuario($row['id'], $row['nome'], $row['descricao'], $usuarios);
-		$grupoDeUsuario->setAdministrador($row['administrador']);
+		$grupoDeUsuario->setAdministrador($row['eadmin']);
 		return $grupoDeUsuario;
 	}	
 

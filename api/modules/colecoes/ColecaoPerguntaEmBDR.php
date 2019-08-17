@@ -117,13 +117,13 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta {
 				$palavras = explode(' ', $buscaCompleta);
 
 				$query->rightJoin(ColecaoRespostaEmBDR::TABELA, self::TABELA .'.id', '=', ColecaoRespostaEmBDR::TABELA .'.pergunta_id');
-				$query->rightJoin(ColecaoTarefaEmBDR::TABELA, self::TABELA .'.tarefa_id', '=', ColecaoTarefaEmBDR::TABELA .'.id');
+				$query->rightJoin(ColecaoChecklistEmBDR::TABELA, self::TABELA .'.tarefa_id', '=', ColecaoChecklistEmBDR::TABELA .'.id');
 
 				$query->where(function($query) use ($buscaCompleta){
 					$query->whereRaw(self::TABELA . '.id like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw(self::TABELA . '.pergunta like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw(ColecaoRespostaEmBDR::TABELA . '.comentario like "%' . $buscaCompleta . '%"');
-					$query->orWhereRaw(ColecaoTarefaEmBDR::TABELA . '.titulo like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(ColecaoChecklistEmBDR::TABELA . '.titulo like "%' . $buscaCompleta . '%"');
 				});
 			
 				
@@ -134,7 +134,7 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta {
 								$query->whereRaw(self::TABELA . '.id like "%' . $palavra . '%"');
 								$query->orWhereRaw(self::TABELA . '.pergunta like "%' . $palavra . '%"');
 								$query->orWhereRaw(ColecaoRespostaEmBDR::TABELA . '.comentario like "%' . $palavra . '%"');
-								$query->orWhereRaw(ColecaoTarefaEmBDR::TABELA . '.titulo like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoChecklistEmBDR::TABELA . '.titulo like "%' . $palavra . '%"');
 							}
 						}
 						

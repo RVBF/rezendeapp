@@ -4,12 +4,12 @@
  *	Coleção de Grupo de Usuario
  *
  *  @author		Rafael Vinicius Barros
- *  @version	0.1
+ *  @version	1.0
  */
 
 interface ColecaoGrupoUsuario extends Colecao {
-    function todosComIds($ids = []);
-    function comUsuarioId($id = 0);
-    function todos($limite = 0, $pulo = 0, $search = '');
+	function todosComIdsDeUsuario($ids = []);
+	function comUsuarioId($id = 0);
+	function todos($limite = 0, $pulo = 0, $search = '');
 }
 ?>
