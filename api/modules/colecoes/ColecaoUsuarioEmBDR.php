@@ -9,9 +9,8 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class ColecaoUsuarioEmBDR implements ColecaoUsuario {
 	const TABELA = 'usuario';
+	const VW_TABELA_COLABORADOR_USUARIO = 'vw_colaborador_usuario';
 	const TABELA_RELACIONAL = 'usuario_grupo_usuario';
-
-
 	function __construct(){}
 
 	function adicionar(&$obj) {
@@ -36,6 +35,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario {
 
 	function remover($id) {
 		try {
+			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 			if($this->validarRemocaoUsuario($id)) {				
 				$removido = DB::table(self::TABELA)->where('id', $id)->delete();
 
@@ -52,7 +52,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario {
 			}
 			else return false;
 		}
-		catch (\Exception $e){
+		catch (\Exception $e) {
 			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
 		}
 	}
