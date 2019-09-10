@@ -21,9 +21,6 @@ class ControladoraUsuario {
 	private $colecaoColaborador;
 	private $colecaoGrupoDeUsuario;
 
-	private $session;
-
-	
 	function __construct($params, Sessao $sessao) {
 		$this->params = $params;
 		$this->colecaoUsuario = Dice::instance()->create('ColecaoUsuario');
@@ -187,21 +184,13 @@ class ControladoraUsuario {
 		DB::beginTransaction();
 
 		try {
-			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
-			}
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
+			
+			if(!$this->servicoLogin->eAdministrador()) throw new Exception("Usuário sem permissão para executar ação.");
 
-			if(!$this->servicoLogin->eAdministrador()){
-				throw new Exception("Usuário sem permissão para executar ação.");
-			}
-
-			if (! is_numeric($id)) {
-				$msg = 'O id informado não é numérico.';
-				return $this->geradoraResposta->erro($msg, GeradoraResposta::TIPO_TEXTO);
-			}
-			if(!$this->colecaoUsuario->remover($id)){
-				throw new Exception("Erro ao remover usuário.");
-			}
+			if (! is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
+			
+			if(!$this->colecaoUsuario->remover($id)) throw new Exception("Erro ao remover usuário.");
 			
 			DB::commit();
 
@@ -213,19 +202,13 @@ class ControladoraUsuario {
 		}
 
 		return $resposta;
-
 	}
 
 	function comId($id) {
-
 		try {
-			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
-			}
-			if (! is_numeric($id)) {
-				$msg = 'O id informado não é numérico.';
-				return $this->geradoraResposta->erro($msg, GeradoraResposta::TIPO_TEXTO);
-			}
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
+			
+			if (! is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
 
 			$usuario = $this->colecaoUsuario->comId($id);
 			$usuario->setGruposUsuario($this->colecaoGrupoDeUsuario->comUsuarioId($usuario->getId()));
@@ -238,7 +221,6 @@ class ControladoraUsuario {
 		}
 
 		return $resposta;
-
 	}
 }
 ?>

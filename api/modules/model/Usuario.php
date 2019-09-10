@@ -29,50 +29,50 @@ class Usuario {
         $this->gruposUsuarios = $gruposUsuario;
     }
 
-    public function getId(){
+    public function getId() {
        return $this->id; 
     }
 
-    public function setId($id){
+    public function setId($id) {
         $this->id = $id;
     }
 
-    public function getLogin(){
+    public function getLogin() {
         return $this->login; 
     }
  
-    public function setLogin($login){
+    public function setLogin($login) {
         $this->login = $login;
     }
 
-    public function getSenha(){
+    public function getSenha() {
         return $this->senha; 
     }
  
-    public function setSenha($senha){
+    public function setSenha($senha) {
         $this->senha = $senha;
     }
     
-    public function getAdministrador(){
+    public function getAdministrador() {
         return $this->administrador; 
     }
  
-    public function setAdministrador($administrador){
+    public function setAdministrador($administrador) {
         $this->administrador = $administrador;
     }
 
-    public function getGruposUsuario(){
+    public function getGruposUsuario() {
         return $this->gruposUsuario; 
     }
  
-    public function setGruposUsuario($gruposUsuario){
+    public function setGruposUsuario($gruposUsuario) {
         $this->gruposUsuario = $gruposUsuario;
     }
-    public function getColaborador(){
+    public function getColaborador() {
         return $this->colaborador; 
     }
  
-    public function setColaborador($colaborador){
+    public function setColaborador($colaborador) {
         $this->colaborador = $colaborador;
     }
 }
