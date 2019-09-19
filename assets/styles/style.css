@@ -1,0 +1,265 @@
+body{
+  font-family: 'Open Sans', sans-serif;
+}
+
+@media only screen and (max-width: 600px){
+  .container {
+      width: 90%;
+  }
+}
+
+.row-dto{
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+}
+
+.row-dto > .col.s6 {
+  margin-left: 0;
+}
+.row-dto > .col > .card-panel{
+    height: -webkit-calc(100% - (1rem + 7px));
+    height: calc(100% - (1rem + 7px));
+    padding-left: 9px;
+    padding-right: 9px;
+}
+
+.sidenav .divider-dto{
+  margin-right: 32px;
+  margin-left: 32px;
+  margin-bottom: 8px;
+}
+
+.m16-dto{
+  margin: 0 16px;
+}
+
+.logo-dto{
+  vertical-align: middle;
+}
+
+.f-12-dto{
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.sidenav .user-view .name{
+  font-weight: 600;
+}
+
+.sidenav li>a>i, .sidenav li>a>[class^="mdi-"], .sidenav li>a li>a>[class*="mdi-"], .sidenav li>a>i.material-icons{
+  margin-right: 16px;
+}
+
+.local-dto{
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  max-width: 60%;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  -o-text-overflow: ellipsis;
+     text-overflow: ellipsis;
+}
+
+.exit-dto i{
+  margin-top: -5px;
+}
+.exit-dto span{
+  position: absolute;
+  top: 12px;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.agenda-dto{
+  border-bottom: 1px solid #bfbfbf;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+.agenda-dto.plano-dto{
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+.agenda-dto:last-child{
+  border-bottom: 0;
+  margin-bottom: 0;
+}
+.agenda-dto .dia,
+.agenda-dto .data,
+.agenda-dto .exc{
+  color: #0171c4;
+}
+.agenda-dto.vermelho .dia,
+.agenda-dto.vermelho .data,
+.agenda-dto.vermelho .exc{
+  color: #f71719;
+}
+.agenda-dto.laranja .dia,
+.agenda-dto.laranja .data,
+.agenda-dto.laranja .exc{
+  color: #ff6d00;
+}
+.agenda-dto.cinza,
+.agenda-dto.cinza .dia,
+.agenda-dto.cinza .data,
+.agenda-dto.cinza .orange-text.text-accent-4{
+  color: #bdbbab!important;
+}
+.agenda-dto.cinza .exc{
+  color: #c0ca33;
+}
+.agenda-dto .dia{
+  font-size: 28px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin: 0;
+  text-align: left;
+}
+.agenda-dto .data{
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  text-align: left;
+}
+.agenda-dto p{
+  margin: 0;
+}
+.agenda-dto p:not(.exc){
+  text-transform: uppercase;
+}
+.agenda-dto strong{
+  font-weight: 700;
+}
+.agenda-dto .card-panel{
+  padding: 15px;
+}
+.button-dto{
+  height: auto;
+  line-height: normal;
+  padding: 1rem;
+}
+.button-dto i{
+  display: block;
+  font-size: 4em;
+}
+.p-relative{
+  position: relative;
+}
+.contador-dto{
+  width: 2rem;
+  height: 2rem;
+  -webkit-border-radius: 100%;
+          border-radius: 100%;
+  display: inline-block;
+  padding: 0.4rem 0;
+  text-align: center;
+  font-size: 12px;
+  position: absolute;
+  top: 48%;
+  left: 55%;
+}
+
+.label-dto{
+  display: block;
+  -webkit-transition: .1s;
+  -o-transition: .1s;
+  transition: .1s;
+  margin-top: 1rem;
+}
+.cb-dto:checked + .label-dto{
+  background: #ffeb3b;
+}
+.cb-dto{
+  display: none;
+}
+
+.subicon-dto{
+  font-size: 3rem;
+  margin-bottom: .25em;
+  display: block;
+}
+.subicon-dto span{
+  font-weight: 700;
+  font-size: 1.5rem;
+  vertical-align: middle;
+}
+
+@media (max-width: 600px) {
+  .col.igs{
+    padding: 0 .3rem;
+  }
+  .subicon-dto{
+    font-size: 2rem;
+  }
+  .subicon-dto span{
+    font-size: 1rem;
+  }
+}
+
+.ico-plus-dto{
+  display: inline-block;
+  margin: -20px 0 -8px;
+}
+
+.detalhes-dto{
+  font-size: 16px;
+  vertical-align: middle;
+  font-weight: 700;
+  color: rgba(0,0,0,0.87);
+  line-height: 1.6rem;
+  display: inline-block;
+  width: 100%;
+}
+.detalhes-dto i{
+  font-size: 30px;
+  vertical-align: middle;
+  margin-right: 1rem;
+}
+
+input:not([type]):focus:not([readonly])+label, input[type=text]:not(.browser-default):focus:not([readonly])+label, input[type=password]:not(.browser-default):focus:not([readonly])+label, input[type=email]:not(.browser-default):focus:not([readonly])+label, input[type=url]:not(.browser-default):focus:not([readonly])+label, input[type=time]:not(.browser-default):focus:not([readonly])+label, input[type=date]:not(.browser-default):focus:not([readonly])+label, input[type=datetime]:not(.browser-default):focus:not([readonly])+label, input[type=datetime-local]:not(.browser-default):focus:not([readonly])+label, input[type=tel]:not(.browser-default):focus:not([readonly])+label, input[type=number]:not(.browser-default):focus:not([readonly])+label, input[type=search]:not(.browser-default):focus:not([readonly])+label, textarea.materialize-textarea:focus:not([readonly])+label,
+.dropdown-content li>a, .dropdown-content li>span,
+.input-field .prefix.active
+{
+  color: #ff6d00;
+}
+.select-wrapper input.select-dropdown:focus{
+  border-bottom-color: #ff6d00;
+}
+
+input:not([type]):focus:not([readonly]), input[type=text]:not(.browser-default):focus:not([readonly]), input[type=password]:not(.browser-default):focus:not([readonly]), input[type=email]:not(.browser-default):focus:not([readonly]), input[type=url]:not(.browser-default):focus:not([readonly]), input[type=time]:not(.browser-default):focus:not([readonly]), input[type=date]:not(.browser-default):focus:not([readonly]), input[type=datetime]:not(.browser-default):focus:not([readonly]), input[type=datetime-local]:not(.browser-default):focus:not([readonly]), input[type=tel]:not(.browser-default):focus:not([readonly]), input[type=number]:not(.browser-default):focus:not([readonly]), input[type=search]:not(.browser-default):focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly])
+{
+  border-bottom: 1px solid #ff6d00;
+  -webkit-box-shadow: 0 1px 0 0 #ff6d00;
+  box-shadow: 0 1px 0 0 #ff6d00;
+}
+
+.fw-700-dto{
+  font-weight: 700;
+}
+
+.mt-0-dto{
+  margin-top: 0;
+}
+.mb-0-dto{
+  margin-bottom: 0;
+}
+.p-0-dto{
+  padding: 0!important;
+}
+.select-wrapper .caret{
+  fill: #ff6d00;
+}
+.w-100{
+  width: 100%;
+}
+.w-80{
+  width: 80%;
+}

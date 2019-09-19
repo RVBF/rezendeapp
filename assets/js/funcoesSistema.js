@@ -24,28 +24,28 @@
 				});
 			});
 
-			$(evento.target).find('.data').each(function(){
-                $(this).pickadate({
-					// Strings and translations
-					monthsFull: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-					monthsShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-					weekdaysFull: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-					weekdaysShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
-					showMonthsShort: undefined,
-					showWeekdaysFull: undefined,
-					// Buttons
-					today: 'Hoje',
-					clear: 'Limpar',
-					close: 'Fechar',
+			// $(evento.target).find('.data').each(function(){
+            //     $(this).pickadate({
+			// 		// Strings and translations
+			// 		monthsFull: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+			// 		monthsShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+			// 		weekdaysFull: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+			// 		weekdaysShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+			// 		showMonthsShort: undefined,
+			// 		showWeekdaysFull: undefined,
+			// 		// Buttons
+			// 		today: 'Hoje',
+			// 		clear: 'Limpar',
+			// 		close: 'Fechar',
 
-					// Accessibility labels
-					labelMonthNext: 'Próximo Mês',
-					labelMonthPrev: 'Mês Anterior',
-					labelMonthSelect: 'Selecione o Mês',
-					labelYearSelect: 'Selecione o Ano',
-					min :  moment()
-				});
-			});
+			// 		// Accessibility labels
+			// 		labelMonthNext: 'Próximo Mês',
+			// 		labelMonthPrev: 'Mês Anterior',
+			// 		labelMonthSelect: 'Selecione o Mês',
+			// 		labelYearSelect: 'Selecione o Ano',
+			// 		min :  moment()
+			// 	});
+			// });
 
 			$(evento.target).find('.hora').each(function(){
                 $(this).pickatime({
@@ -59,9 +59,9 @@
 				});
 			});
 
-			$(evento.target).find('.toltip').each(function(){
-			    $(this).tooltip(); 
-			});
+			// $(evento.target).find('.toltip').each(function(){
+			//     $(this).tooltip(); 
+			// });
 
 			$(evento.target).find(".efetuar_logout").on('click', function(event){
 				var servico = new app.ServicoLogout();
@@ -184,7 +184,7 @@
 		/*----------------------------
 		 jQuery tooltip
 		------------------------------ */
-		$('[data-toggle="tooltip"]').tooltip();
+		// $('[data-toggle="tooltip"]').tooltip();
 		/*--------------------------
 		 popover
 		---------------------------- */	
@@ -237,17 +237,17 @@
 	}
 
 	$(document).ready(function() {			
-		$('.toltip').tooltip(); 
+		// $('.toltip').tooltip(); 
 		if(window.location.href == 'http://rezendeconstrucao.com.br/rezendeapp/' || window.location.href == 'http://rezendeapp.local/') router.navigate('/');
 		
-		$.validator.addMethod("cRequired", $.validator.methods.required, "Campo obrigatório.");
-		$.validator.addMethod("emailFormat", function(email) {
-			var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
-    		return pattern.test(email);
-		}, "Formato inválido para e-mail.");
+		// // $.validator.addMethod("cRequired", $.validator.methods.required, "Campo obrigatório.");
+		// $.validator.addMethod("emailFormat", function(email) {
+		// 	var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+    	// 	return pattern.test(email);
+		// }, "Formato inválido para e-mail.");
 
-		$.validator.addClassRules("campo_obrigatorio", {cRequired: true});
-		$.validator.addClassRules("email_formato", {emailFormat: true});
+		// $.validator.addClassRules("campo_obrigatorio", {cRequired: true});
+		// $.validator.addClassRules("email_formato", {emailFormat: true});
 
 		
 		setInterval(function() {

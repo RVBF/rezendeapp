@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Rezende</title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap" rel="stylesheet">
+  <link href="assets/styles/materialdesignicons.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+
+  <link href="assets/styles/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="assets/styles/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body class="grey lighten-4">
+  <nav class="orange accent-4" role="navigation">
+    <div class="nav-wrapper container">
+
+      <span class="center local-dto">P.A</span>
+      <a href="index.html" class="left m16-dto"><i class="material-icons">navigate_before</i></a>
+      <a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>
+
+    </div>
+  </nav>
+
+
+  <div class="container">
+    <div class="section">
+
+      <div class="row mb-0-dto">
+        <div class="col">
+          <h6 class="fw-700-dto mb-0-dto">Braulio Damaceno Silva</h6>
+          <p class="mt-0-dto">Logística</p>
+        </div>
+      </div>
+
+      <div class="row">
+
+        <div class="input-field col s6 m6 mb-0-dto">
+          <select>
+            <option value="" disabled selected>Unidade</option>
+            <option value="1">Opção 1</option>
+            <option value="2">Opção 2</option>
+            <option value="3">Opção 3</option>
+          </select>
+        </div>
+        <div class="input-field col s6 m6">
+          <select>
+            <option value="" disabled selected>Tipo</option>
+            <option value="1">Opção 1</option>
+            <option value="2">Opção 2</option>
+            <option value="3">Opção 3</option>
+          </select>
+        </div>
+
+        <div class="col">
+
+
+          <div class="card-panel left-align">
+
+            <div class="row">
+              <div class="input-field col s12 mb-0-dto">
+                <textarea id="textarea1" class="materialize-textarea"></textarea>
+                <label for="textarea1">Descreva a Não Conformidade</label>
+              </div>
+              <div class="input-field col s12 mb-0-dto">
+                <i class="prefix mdi mdi-plus-circle-outline"></i>
+                <textarea id="icon_prefix" class="materialize-textarea validate"></textarea>
+                <label for="icon_prefix">Descreva o P.A</label>
+              </div>
+              <div class="input-field col s12 mb-0-dto">
+                <i class="prefix mdi mdi-calendar"></i>
+                <input id="data" type="text" class="validate">
+                <label for="data">Data de Execução</label>
+              </div>
+              <div class="input-field col s12">
+                <input id="r" type="tel" class="validate">
+                <label for="r">Responsável</label>
+              </div>
+              <div class="col center-align w-100">
+                <br>
+                <a class="waves-effect waves-light btn white grey-text text-darken-4 button-dto">
+                  <i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4"></i>
+                  Finalizar <br>
+                  plano de ação
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+
+
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="assets/js/materialize.js"></script>
+  <script src="assets/js/init.js"></script>
+
+  </body>
+</html>
