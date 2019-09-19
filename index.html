@@ -1,54 +1,204 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="Description" content="Author: Rafael Vinicius Barros Ferreira, Description: Software desenvolvido para Rezende Materiais de construção.">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <title>RezendeApp</title>
-      <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="Description" content="Author: Rafael Vinicius Barros Ferreira, Description: Software desenvolvido para Rezende Materiais de construção.">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+	
+	<title>RezendeApp</title>
+	<!-- TODO add manifest here -->
+	<link rel="manifest" href="manifest.json">
+	<!-- 
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap" rel="stylesheet">
+	<link href="assets/styles/materialdesignicons.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 
-      <script type="text/javascript" async="true" defer="true" src="assets/js/includes.js"></script>
+	<link href="assets/styles/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+	<link href="assets/styles/style.css" type="text/css" rel="stylesheet" media="screen,projection"/> -->
 
-      <!-- TODO add manifest here -->
-      <link rel="manifest" href="manifest.json">
-      <!-- Add to home screen for Safari on iOS -->
-      <meta name="apple-mobile-web-app-capable" content="yes">
-      <meta name="apple-mobile-web-app-status-bar-style" content="black">
-      <meta name="apple-mobile-web-app-title" content="Weather PWA">
-      <link rel="shortcut icon" href="assets/images/icons/Logo_Rezende_Icone_512x512.png" type="image/x-icon">
-      <link rel="apple-touch-icon" href="assets/images/icons/Logo_Rezende_Icone_152x152.png">
-      <meta name="msapplication-TileImage" content="assets/images/icons/Logo_Rezende_Icone_144x144.png">
-      <meta name="msapplication-TileColor" content="#f9f9f9">
-      <meta name="theme-color" content="#f9f9f9">
-  </head>
+	<script type="text/javascript" async="true" defer="true" src="assets/js/includes.js"></script>
 
-  <body>
+	<!-- Add to home screen for Safari on iOS -->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-title" content="Weather PWA">
+	<link rel="shortcut icon" href="assets/images/icons/Logo_Rezende_Icone_512x512.png" type="image/x-icon">
+	<link rel="apple-touch-icon" href="assets/images/icons/Logo_Rezende_Icone_152x152.png">
+	<meta name="msapplication-TileImage" content="assets/images/icons/Logo_Rezende_Icone_144x144.png">
+	<meta name="msapplication-TileColor" content="#f9f9f9">
+	<meta name="theme-color" content="#f9f9f9">
+</head>
+<body class="grey lighten-4">  
+	<header>
+		<nav class="orange accent-4" role="navigation">
+				<div class="nav-wrapper container">
+					<a id="logo-container" href="#" class="brand-logo center"><img src="assets/images/logo_branco.png" alt="" class="logo-dto"></a>
 
-    <nav class="navbar navbar-expand navbar-dark bg-dark static-top header-top-area"> 
-		<div class="col-xs-6 col-md-6 col-sm-6 col-4">
-			<button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
-				<i class="fas fa-bars"></i>
-			</button>
-		</div>    
-		
-		<div class="col-xs-6 col-md-6 col-sm-6 col-8">
-				<h5 class="card-title">Home</h5>
-		</div>
-		
-    </nav>
+					<a href="#" data-target="nav-mobile" class="sidenav-trigger button-collapse show-on-large"><i class="material-icons">menu</i></a>
 
-    <div class="main-panel">
-        <div class="main-content">
-            <div class="content-wrapper">
-                <div id="app">
-                </div>
-            </div>
-        </div> 
-    </div>          
+					<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>
 
-    <noscript>
-      <p>Por favor habilite o JavaScript!</p>
-    </noscript>
-  </body>
+					<ul id="nav-mobile" class="sidenav">
+					<li><div class="user-view ">
+						<a href="#user"><img class="responsive-img" src="assets/images/logo.jpg"></a>
+						<a href="#name"><span class="name grey-text text-darken-4">Braulio Damaceno Silva</span></a>
+						<a href="#email"><span class="email grey-text text-darken-4">Logística</span></a>
+					</div></li>
+					<li><a href="checklist.html" class="waves-effect" ><i class="mdi mdi-clipboard-check orange-text">playlist_add</i>CHECKLIST</a></li>
+					<li><div class="divider divider-dto"></div></li>
+					<li><a href="pa-listagem.html" class="waves-effect" ><i class="mdi mdi-bullseye-arrow orange-text"></i>PLANOS DE AÇÃO</a></li>
+					<li><div class="divider divider-dto"></div></li>
+					<li><a href="checklist-organizacao.html" class="waves-effect" ><i class="mdi mdi-clipboard-alert-outline orange-text"></i>PÊNDENCIAS</a></li>
+					<li><div class="divider divider-dto"></div></li>
+					<li><a href="inteligencia.html" class="waves-effect" ><i class="mdi mdi-podcast orange-text"></i>INTELIGÊNCIA DE MERCADO</a></li>
+					<li><div class="divider divider-dto"></div></li>
+					<li><a href="notificacoes.html" class="waves-effect" ><i class="mdi mdi-bell-ring-outline orange-text"></i>NOTIFICAÇÕES</a></li>
+					<li><div class="divider divider-dto"></div></li>
+					<li><a href="rd.html" class="waves-effect" ><i class="mdi mdi-medal orange-text"></i>R&D DE TALENTOS</a></li>
+
+					<br>
+
+					<li><a href="configuracoes.html" class="waves-effect" ><i class="mdi mdi-settings-outline orange-text"></i>CONFIGURAÇÕES</a></li>
+					<li><div class="divider divider-dto"></div></li>
+					<li><a href="#!" class="waves-effect" ><i class="mdi mdi-exit-to-app orange-text"></i>SAIR</a></li>
+
+					</ul>
+
+				</div>
+		</nav>	
+	</header>
+
+<main class="container">
+		<section>
+			<div class="row mb-0-dto">
+				<div class="col">
+					<h6 class="fw-700-dto mb-0-dto">Braulio Damaceno Silva</h6>
+					<p class="mt-0-dto">Logística</p>
+				</div>
+			</div>
+		</section>
+
+		<section>
+			<div class="row row-dto">
+				<a href="checklist.html" class="col m4 l3 s6">
+					<div class="card-panel center-align">
+						<i class="mdi mdi-clipboard-check light-blue-text text-darken-4 medium"></i>
+						<div class="grey-text text-darken-4 f-12-dto">
+							CHECKLIST
+						</div>
+					</div>
+				</a>
+
+				<a href="pa-listagem.html" class="col m4 l3 s6">
+					<div class="card-panel center-align">
+						<i class="mdi mdi-bullseye-arrow medium purple-text"></i>
+						<div class="grey-text text-darken-4 f-12-dto">
+							Plano de Ação
+						</div>
+					</div>
+				</a>
+
+				<a href="checklist-organizacao.html" class="col m4 l3 s6">
+					<div class="card-panel center-align">
+						<i class="mdi mdi-clipboard-alert-outline medium light-green-text text-accent-3"></i>
+						<div class="grey-text text-darken-4 f-12-dto">
+							Pêndencias
+						</div>
+					</div>
+				</a>
+
+				<a href="inteligencia.html" class="col m4 l3 s6">
+					<div class="card-panel center-align">
+						<i class="mdi mdi-podcast medium cyan-text text-lighten-2"></i>
+						<div class="grey-text text-darken-4 f-12-dto">
+							Inteligência de mercado
+						</div>
+					</div>
+				</a>
+
+				<a href="notificacoes.html" class="col m4 l3 s6 p-relative">
+					<div class="card-panel center-align ">
+						<i class="mdi mdi-bell-ring-outline medium purple-text"></i>
+						<div class="grey-text text-darken-4 f-12-dto">
+							Notificações
+						</div>
+					</div>
+					<span class="quantidade-dto white-text deep-orange darken-1 contador-dto">23</span>
+				</a>
+
+				<a href="rd.html" class="col m4 l3 s6">
+					<div class="card-panel center-align">
+						<i class="mdi mdi-medal medium orange-text medium"></i>
+						<div class="grey-text text-darken-4 f-12-dto">
+							R&D de Talentos
+						</div>
+					</div>
+				</a>
+			</div>
+		</section>
+
+		<section>
+			<div class="row">
+				<div class="col s12">
+					<div class="card-panel left-align">
+
+						<div class="row agenda-dto">
+							<h6 class="center-align">MINHAS ATIVIDADES</h6>
+						</div>
+
+						<div class="row agenda-dto valign-wrapper">
+							<div class="col xl1 m2 s3">
+								<p class="dia">Ter</p>
+								<p class="data">01/05</p>
+							</div>
+							<div class="col xl11 m10 s9">
+								<p><i class="mdi mdi-map-marker-radius orange-text text-accent-4"></i> <strong>Matriz</strong> Centro - Nova Friburgo</p>
+								<p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">Checklist de Organização</strong></p>
+								<p class="exc"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>260 dias de atraso</strong></p>
+							</div>
+						</div>
+
+						<div class="row agenda-dto valign-wrapper vermelho">
+							<div class="col xl1 m2 s3">
+								<p class="dia">Ter</p>
+								<p class="data">01/05</p>
+							</div>
+							
+							<div class="col xl11 m10 s9">
+								<p><i class="mdi mdi-map-marker-radius orange-text text-accent-4"></i> <strong>Matriz</strong> Centro - Nova Friburgo</p>
+								<p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">Checklist de Organização</strong></p>
+								<p class="exc"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>26 dias</strong></p>
+							</div>
+						</div>
+
+						<div class="row agenda-dto valign-wrapper">
+							<div class="col xl1 m2 s3">
+								<p class="dia">Ter</p>
+								<p class="data">01/05</p>
+							</div>
+							
+							<div class="col xl11 m10 s9">
+								<p><i class="mdi mdi-map-marker-radius orange-text text-accent-4"></i> <strong>Matriz</strong> Centro - Nova Friburgo</p>
+								<p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">Checklist de Organização</strong></p>
+								<p class="exc"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>260 dias de atraso</strong></p>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+
+	<!--  Scripts-->
+	<!-- <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script src="assets/js/materialize.js"></script>
+	<script src="assets/js/init.js"></script> -->
+
+	<noscript>
+		<p>Por favor habilite o JavaScript!</p>
+	</noscript>
+</body>
 </html>

@@ -3,7 +3,7 @@
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */
-(function(window, app, $, toastr, BootstrapDialog)
+(function(window, app, $, toastr)
 {
 	'use strict';
 
@@ -150,4 +150,4 @@
 
 	// Registrando
 	app.ControladoraListagemSetor = ControladoraListagemSetor;
-})(window, app, jQuery, toastr, BootstrapDialog);
+})(window, app, jQuery, toastr);

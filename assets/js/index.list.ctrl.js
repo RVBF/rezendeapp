@@ -40,7 +40,7 @@
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */
-(function(window, app, $, toastr, BootstrapDialog)
+(function(window, app, $, toastr)
 {
 	'use strict';
 
@@ -162,8 +162,8 @@
                 _this.renderizarOpcoesMobile(resposta.status);
             };
             
-			var  jqXHR = servicoIndex.temPermissao();
-			jqXHR.done(sucesso);
+			// var  jqXHR = servicoIndex.temPermissao();
+			// jqXHR.done(sucesso);
         };
 
 		_this.configurar = function configurar() {
@@ -173,7 +173,7 @@
 
 	// Registrando
 	app.ControladoraIndex = ControladoraIndex;
-})(window, app, jQuery, toastr, BootstrapDialog);
+})(window, app, jQuery, toastr);
 
 $(document).ready(function() {
     var servicoIndex = new app.ServicoIndex();

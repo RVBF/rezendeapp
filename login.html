@@ -1,57 +1,79 @@
 
-<div class="container" id="pagina_login">
-    <div class="vertical-offset-100 row justify-content-md-center">
-        <div class="col-xs-12 col-md-8 col-sm-12 col-12">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Rezende</title>
 
-                <div class="row form-row justify-content-center">
-                    <div class="col-md-4 col-sm-7 col-12 logo-area">
-                        <img src="assets/images/logo_App.png" alt="">
-                    </div>
-                </div>
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap" rel="stylesheet">
+  <link href="assets/styles/materialdesignicons.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 
-                <div class="col-xs-12 col-md-12 col-sm-12 col-12">
-                    <form class="form-horizontal" accept-charset="UTF-8" role="form" id="form_login" name="form_login" method="post">
-                        <div class="row form-row justify-content-center">
-                            <div class="col-md-8 col-sm-7 col-12">
-                                <label for="login">Usuário</label>
-                                <input type="text" name="login" id="login" class="form-control" placeholder="Entre com login">
-                            </div>
-                        </div>
+  <link href="assets/styles/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="assets/styles/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body class="">
 
-                        <div class="row form-row justify-content-center">
-                            <div class="col-md-8 col-sm-7 col-12">
-                                <label for="senha">Senha</label>
-                                <input type="password" name="senha" id="senha" class="form-control" placeholder="senha">
-                            </div>
-                        </div>
 
-                        <div class="row form-row justify-content-center">
-                            <div class="col-md-12 col-sm-12 col-12">
-                                <div class="row justify-content-center">
-                                    <div class="col-xs-2 col-md-1 col-sm-2 col-5">
-                                            <button type="submit" class="btn btn-primary"  id="entrar">Entrar</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+  <center>
+      <div class="section"></div>
+      <div class="section"></div>
+      <div class="section"></div>
 
-                        <div class="row form-row justify-content-center">
-                            <div class="col-md-8 col-sm-7 col-12">
-                                <br /><div id="msg" class="text-danger" ></div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                            
+      <img class="responsive-img" style="width: 250px;" src="assets/images/loog-rezende.jpg" />
+
+      <div class="section">
+
+        <div class="container">
+        <div class="row">
+
+          <form class="col s12 l8 m10 offset-l2 offset-m1" method="post">
+            <div class='row'>
+              <div class='col s12'>
+              </div>
             </div>
-    </div>
-</div>
 
-<script>
-    $(document).ready(function() {
-        var servicoLogin = new app.ServicoLogin();
-        var crltLogin = new app.ControladoraFormLogin(servicoLogin);
-        crltLogin.configurar();  
-    });
-</script>
-    
+            <div class='row'>
+              <div class='col s12'>
+                <div class='input-field'>
+                  <i class="prefix mdi mdi-account-circle"></i>
+                  <input class='validate' type='email' name='email' id='email' />
+                  <label for='email'>E-mail</label>
+                </div>
+                <div class='input-field'>
+                  <i class="prefix mdi mdi-lock"></i>
+                  <input class='validate' type='password' name='password' id='password' />
+                  <label for='password'>Senha</label>
+                </div>
+                <label style='float: right;'>
+  								<a class='orange-text text-accent-4' href='#!'><b>Esqueci minha senha</b></a>
+  							</label>
+              </div>
+            </div>
+            <div class='row'>
+              <div class='col s12'>
+                <!-- <button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect yellow accent-3 grey-text text-darken-4'>Entrar</button> -->
+                <a href="index.html" class='col s12 btn btn-large waves-effect yellow accent-3 grey-text text-darken-4'>Entrar</a>
+              </div>
+            </div>
+            <div class='row'>
+              <div class='col s12'>
+                <button type='submit' name='btn_login' style="float: none" class='col s9 btn btn-large waves-effect yellow accent-3 grey-text text-darken-4'>Cadastre-se</button>
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+      </div>
+
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="assets/js/materialize.js"></script>
+  <script src="assets/js/init.js"></script>
+
+  </body>
+</html>

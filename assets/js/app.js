@@ -3,7 +3,7 @@ var app = {
   api : '/api'
 };
 
-(function(app, document, $, toastr, BootstrapDialog, window, moment) {
+(function(app, document, $, toastr,  window) {
   'use strict';
 	// Opções para mensagens
 	toastr.options.closeButton = false;
@@ -29,112 +29,101 @@ var app = {
 		$('select.form-control').removeClass('form-control').css('width', '100%')
 	}
 
-	// Opções para diálogos
-	BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_DEFAULT] = 'Informação';
-	BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_INFO] = 'Informação';
-	BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_PRIMARY] = 'Informação';
-	BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_SUCCESS] = 'Sucesso';
-	BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_WARNING] = 'Aviso';
-	BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_DANGER] = 'Erro';
-	BootstrapDialog.DEFAULT_TEXTS['OK'] = 'OK';
-	BootstrapDialog.DEFAULT_TEXTS['CANCEL'] = 'Cancelar';
-	BootstrapDialog.DEFAULT_TEXTS['CONFIRM'] = 'Confirmação';
+	// $.validator.setDefaults({
+	// 	ignore: [],
+	// 	highlight: function(element)
+	// 	{
+	// 		$(element).closest('.row').addClass('has-error');
+	// 	},
+	// 	unhighlight: function(element)
+	// 	{
+	// 		$(element).closest('.row').removeClass('has-error');
+	// 	},
+	// 	errorElement: 'span',
+	// 	errorClass: 'help-block',
+	// 	errorPlacement: function (error, element)
+	// 	{
+	// 		var possivelSelect2 = element.parent('div');
+	// 		var possivelInputaAddon = element.parent('div .input-group').nextAll('div .menu_input_addon_erro:first');
+	// 		if(possivelSelect2.length)
+	// 		{
+	// 			element = possivelSelect2;
+	// 		}
+	// 		else
+	// 		{
+	// 			if(possivelInputaAddon.length)
+	// 			{
+	// 				element = possivelInputaAddon;
+	// 			}
+	// 		}
 
-	$.validator.setDefaults({
-		ignore: [],
-		highlight: function(element)
-		{
-			$(element).closest('.row').addClass('has-error');
-		},
-		unhighlight: function(element)
-		{
-			$(element).closest('.row').removeClass('has-error');
-		},
-		errorElement: 'span',
-		errorClass: 'help-block',
-		errorPlacement: function (error, element)
-		{
-			var possivelSelect2 = element.parent('div');
-			var possivelInputaAddon = element.parent('div .input-group').nextAll('div .menu_input_addon_erro:first');
-			if(possivelSelect2.length)
-			{
-				element = possivelSelect2;
-			}
-			else
-			{
-				if(possivelInputaAddon.length)
-				{
-					element = possivelInputaAddon;
-				}
-			}
-
-			element.append(error);
-		}
-	});
+	// 		element.append(error);
+	// 	}
+	// });
 
 	// Opções padrão para o DataTables ----------------------------------------
-	app.dtOptions = {
-		"autoWidth": true,
-		"processing":true,
-		"serverSide":true,
-		"destroy": true,
-		"select": 'single',
-		"scrollX": true,
-		"scrollY": "200px",
-        "scrollCollapse": true,
-		"table-layout": "fixed",
-		"ajax" :{
-			 "type": "POST"
-		},
-		"pageLength": 20,
-		"lengthMenu":[[20, 30, 50, 100], [20, 30, 50, 100] ],
-		"paging":true,
-		"searching":false,
-		"ordering":true,
-		"language"	: {
-			"sEmptyTable": "Nenhum registro encontrado",
-			"sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-			"sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
-			"sInfoFiltered": "(Filtrados de _MAX_ registros)",
-			"sInfoPostFix": "",
-			"sInfoThousands": ".",
-			"sLengthMenu": "_MENU_ resultados por página",
-			"sLoadingRecords": "Carregando...",
-			"sProcessing": "Processando...",
-			"sZeroRecords": "Nenhum registro encontrado",
-			"sSearch": "Pesquisar",
-			"oPaginate": {
-				"sNext": "Próximo",
-				"sPrevious": "Anterior",
-				"sFirst": "Primeiro",
-				"sLast": "Último"
-			},
-			"oAria": {
-				"sSortAscending": ": Ordenar colunas de forma ascendente",
-				"sSortDescending": ": Ordenar colunas de forma descendente"
-			},
-			"select": {
-				"rows": {
-					"_": "Selecionado %d linhas",
-					"0": "Nenhuma linha selecionada",
-					"1": "Selecionado 1 linha"
-				}
-			}
-		},
-		"bFilter" : true,
-		"searching" : true,
-		"searchDelay": 600,
-		"order": [[0, 'desc']]
-	};
+	// app.dtOptions = {
+	// 	"autoWidth": true,
+	// 	"processing":true,
+	// 	"serverSide":true,
+	// 	"destroy": true,
+	// 	"select": 'single',
+	// 	"scrollX": true,
+	// 	"scrollY": "200px",
+    //     "scrollCollapse": true,
+	// 	"table-layout": "fixed",
+	// 	"ajax" :{
+	// 		 "type": "POST"
+	// 	},
+	// 	"pageLength": 20,
+	// 	"lengthMenu":[[20, 30, 50, 100], [20, 30, 50, 100] ],
+	// 	"paging":true,
+	// 	"searching":false,
+	// 	"ordering":true,
+	// 	"language"	: {
+	// 		"sEmptyTable": "Nenhum registro encontrado",
+	// 		"sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+	// 		"sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+	// 		"sInfoFiltered": "(Filtrados de _MAX_ registros)",
+	// 		"sInfoPostFix": "",
+	// 		"sInfoThousands": ".",
+	// 		"sLengthMenu": "_MENU_ resultados por página",
+	// 		"sLoadingRecords": "Carregando...",
+	// 		"sProcessing": "Processando...",
+	// 		"sZeroRecords": "Nenhum registro encontrado",
+	// 		"sSearch": "Pesquisar",
+	// 		"oPaginate": {
+	// 			"sNext": "Próximo",
+	// 			"sPrevious": "Anterior",
+	// 			"sFirst": "Primeiro",
+	// 			"sLast": "Último"
+	// 		},
+	// 		"oAria": {
+	// 			"sSortAscending": ": Ordenar colunas de forma ascendente",
+	// 			"sSortDescending": ": Ordenar colunas de forma descendente"
+	// 		},
+	// 		"select": {
+	// 			"rows": {
+	// 				"_": "Selecionado %d linhas",
+	// 				"0": "Nenhuma linha selecionada",
+	// 				"1": "Selecionado 1 linha"
+	// 			}
+	// 		}
+	// 	},
+	// 	"bFilter" : true,
+	// 	"searching" : true,
+	// 	"searchDelay": 600,
+	// 	"order": [[0, 'desc']]
+	// };
 
-	$.fn.dataTable.ext.errMode = 'none';
+	// $.fn.dataTable.ext.errMode = 'none';
 
-	$.fn.extend({
-		desabilitar: function (status) {
-			$(this).find("*").each(function(){
-				$(this).prop('disabled', status);
-			});
-		}
-	});
-})(app, document, jQuery, toastr, BootstrapDialog, window, moment);
+	// $.fn.extend({
+	// 	desabilitar: function (status) {
+	// 		$(this).find("*").each(function(){
+	// 			$(this).prop('disabled', status);
+	// 		});
+	// 	}
+	// });
+})(app, document, jQuery, toastr,  window);
   

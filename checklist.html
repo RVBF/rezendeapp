@@ -1,137 +1,127 @@
-<div class="card">
-    <div class="card-header  bg-dark text-white">
-        <div class="row">
-            <div class="col-md-4 col-sm-4 col-xs-4 col-4 align-self-center">
-                <h6 class="card-title">Checklist</h6>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Rezende</title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap" rel="stylesheet">
+  <link href="assets/styles/materialdesignicons.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+
+  <link href="assets/styles/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="assets/styles/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body class="grey lighten-4">
+  <nav class="orange accent-4" role="navigation">
+    <div class="nav-wrapper container">
+
+      <span class="center local-dto">Checklist</span>
+      <a href="index.html" class="left m16-dto"><i class="material-icons">navigate_before</i></a>
+      <a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>
+
+    </div>
+  </nav>
+
+
+  <div class="container">
+    <div class="section">
+
+      <div class="row mb-0-dto">
+        <div class="col">
+          <h6 class="fw-700-dto mb-0-dto">Braulio Damaceno Silva</h6>
+          <p class="mt-0-dto">Logística</p>
+        </div>
+      </div>
+
+      <div class="row">
+
+        <div class="col s12">
+
+          <div class="card-panel left-align">
+
+            <div class="row agenda-dto valign-wrapper">
+              <div class="col xl1 m2 s3">
+                <p class="dia">Ter</p>
+                <p class="data">01/05</p>
+              </div>
+              <div class="col xl11 m10 s9">
+                <p><i class="mdi mdi-map-marker-radius orange-text text-accent-4"></i> <strong>Matriz</strong> Centro - Nova Friburgo</p>
+                <p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">Checklist de Organização</strong></p>
+                <p class="exc"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>260 dias de atraso</strong></p>
+              </div>
             </div>
 
-            <div class="col-md-8 col-sm-8 col-xs-8 col-8">
-                <div class="justify-content-end row opcoes_modulos">
-                    <button aria-hidden="true" role="presentation" type="button" aria-label="cadastrar" class="btn  btn-sm btn-light" id="atualizar"><i class="fas fa-sync-alt"></i></button>
-                    <button aria-hidden="true" role="presentation" type="button" aria-label="cadastrar" class="btn  btn-sm btn-primary" id="cadastrar"><i class="fas fa-plus"></i></button>
-                    <button disabled="disabled" aria-hidden="true" role="presentation" type="button" aria-label="editar" class="btn  btn-sm btn-warning depende_selecao" id="editar"><i class="far fa-edit"></i></button>
-                    <button disabled="disabled" aria-hidden="true" role="presentation" type="button" aria-label="remover" class="btn  btn-sm btn-danger depende_selecao" id="remover"><i class="far fa-trash-alt"></i></button>         
-                </div>
+            <div class="row agenda-dto valign-wrapper vermelho">
+              <div class="col xl1 m2 s3">
+                <p class="dia">Ter</p>
+                <p class="data">01/05</p>
+              </div>
+              <div class="col xl11 m10 s9">
+                <p><i class="mdi mdi-map-marker-radius orange-text text-accent-4"></i> <strong>Matriz</strong> Centro - Nova Friburgo</p>
+                <p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">Checklist de Organização</strong></p>
+                <p class="exc"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>26 dias</strong></p>
+              </div>
             </div>
-        </div>                     
-    </div>
-    
-    <div class="card desabilitado d-none" id="painel_formulario">
-        <div class="card-body">
-            <div class="container-fuid">
-                <div class="col-xs-12  col-sm-12 col-md-12">
-                    <form class="form-horizontal " id="tarefa_form">
-                        <input type="hidden" id="id" name ="id" />
 
-                        <div class="row form-row">
-                            <div class="col-xs-4 col-md-4 col-sm-4 col-12">
-                                <label for="titulo">*Título</label>
-                                <input type="text" class="form-control campo_obrigatorio" id="titulo" name="titulo">
-                            </div>
+            <div class="row agenda-dto valign-wrapper">
+              <div class="col xl1 m2 s3">
+                <p class="dia">Ter</p>
+                <p class="data">01/05</p>
+              </div>
+              <div class="col xl11 m10 s9">
+                <p><i class="mdi mdi-map-marker-radius orange-text text-accent-4"></i> <strong>Matriz</strong> Centro - Nova Friburgo</p>
+                <p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">Checklist de Organização</strong></p>
+                <p class="exc"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>260 dias de atraso</strong></p>
+              </div>
+            </div>
 
-                            <div class="col-xs-4 col-md-4 col-sm-4 col-12">
-                                <label for="loja">*Loja</label>
-                                <select id="loja"  name="loja" class="form-control select2 campo_obrigatorio"></select>
-                            </div>
-    
-                            <div class="col-xs-4 col-md-4 col-sm-4 col-12">
-                                <label for="setor">*Setor</label>
-                                <select id="setor"  name="setor" class="form-control select2 campo_obrigatorio"></select>
-                            </div>
-                        </div>
+            <div class="row agenda-dto">
+              <br>
+              <h6 class="center-align">EXECUTADOS</h6>
+            </div>
 
-                        <div class="row form-row">
-                            <div class="col-xs-6 col-md-6 col-sm-6 col-12">
-                                <label for="data_limite">*Data limite</label>
-                                <input type="text" class="form-control data" id="data_limite"/>
-                            </div>
-    
-                            <div class="col-xs-6 col-md-6 col-sm-6 col-12">
-                                <div class="form-group">
-                                    <label for="hora_limite">*Hora limite</label>
-                                    <input type="text" class="form-control hora" id="hora_limite"/>
-                                </div>
-                            </div>
-                        </div> 
-                                
-                        <div class="row form-row">
-                            <div class="col-xs-12 col-md-12 col-sm-12 col-12">
-                                <label for="descricao">Descrição</label>
-                                <textarea class="form-control" rows="2" id="descricao"></textarea>
-                            </div>
-                        </div>  
-    
-                        <div  class="row form-row d-none">
-                            <div class="col-xs-12  col-sm-12 col-md-12">
-                                <br /><div id="msg" class="text-danger msg" ></div>
-                            </div>
-                        </div>
-    
-                        <div class="row form-row">
-                            <div class="col-xs-12 col-md-12 col-sm-12 col-12">
-                                <button type="submit" class="btn btn-success" id="salvar"><i class="fas fa-check"></i></i></button>
-                                <button type="button" class="btn btn-default" id="cancelar_edicao"><i class="fas fa-sign-out-alt"></i></button>
-                            </div>
-                        </div>
-                    </form>           
-                </div>
-            </div>            
-        </div>
-    </div>
+            <div class="row agenda-dto valign-wrapper cinza">
+              <div class="col xl1 m2 s3">
+                <p class="dia">Ter</p>
+                <p class="data">01/05</p>
+              </div>
+              <div class="col xl11 m10 s9">
+                <p><i class="mdi mdi-map-marker-radius orange-text text-accent-4"></i> <strong>Matriz</strong> Centro - Nova Friburgo</p>
+                <p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">Checklist de Organização</strong></p>
+                <p class="exc"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>Feito</strong></p>
+              </div>
+            </div>
 
-    <div class="card-body" id="painel_listagem">
-        <div class="container-fuid">
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <table class="table" style="width:100%" id="tarefa_listagem">
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Título</th>
-                            <th>Descrição</th>
-                            <th>Setor</th>
-                            <th>Loja</th>
-                            <th>Prazo</th>
-                            <th>Questionador</th>
-                            <th>Respondida</th>
-                            <th>Opções</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th>Id</th>
-                            <th>Título</th>
-                            <th>Descrição</th>
-                            <th>Setor</th>
-                            <th>Loja</th>
-                            <th>Prazo</th>
-                            <th>Questionador</th>
-                            <th>Respondida</th>
-                            <th>Opções</th>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div> 
+            <div class="row agenda-dto valign-wrapper cinza">
+              <div class="col xl1 m2 s3">
+                <p class="dia">Ter</p>
+                <p class="data">01/05</p>
+              </div>
+              <div class="col xl11 m10 s9">
+                <p><i class="mdi mdi-map-marker-radius orange-text text-accent-4"></i> <strong>Matriz</strong> Centro - Nova Friburgo</p>
+                <p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">Checklist de Organização</strong></p>
+                <p class="exc"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>Feito</strong></p>
+              </div>
+            </div>
+
+          </div>
+
         </div>
 
-    </div> 
-</div>
+      </div>
 
-<script>
-    $(document).ready(function() {
-        var servicoTarefa = new app.ServicoTarefa();
-        var controladoraListagemTarefa = new app.ControladoraListagemTarefa(servicoTarefa);
-        controladoraListagemTarefa.configurar();
-    });
-</script>
+    </div>
+  </div>
+
+
+
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="assets/js/materialize.js"></script>
+  <script src="assets/js/init.js"></script>
+
+  </body>
+</html>

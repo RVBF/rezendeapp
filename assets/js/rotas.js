@@ -12,9 +12,36 @@
 	var conteudo = $('#app');
 	
 	var carregarPagina = function carregarPagina(pagina) {
-		var sessao = new app.Sessao();
-		var sucesso = function sucesso(data, textStatus, jqXHR) {
-			if('login.html' ==  pagina) $('body').empty().load(pagina);
+		// var sessao = new app.Sessao();
+		// var sucesso = function sucesso(data, textStatus, jqXHR) {
+		// 	if('login.html' ==  pagina) $('body').empty().load(pagina);
+		// 	else {
+		// 		if(conteudo.length > 0){
+		// 			conteudo.empty().load(pagina);
+		// 		}
+		// 		else{
+		// 			$('body').empty().load('index.html', function(){
+		// 				router.navigate('/');
+		// 			});
+		// 		}
+		// 	}
+		// };
+
+		// var erro = function erro(jqXHR, textStatus, errorThrown)  {
+		// 	var mensagem = jqXHR.responseText || 'Erro ao acessar página.';
+		// 	toastr.error(mensagem);
+
+		// 	if(sessao.getSessao() == null || sessao.getSessao() == '') {
+		// 		sessao.limparSessionStorage();
+		// 	}
+
+		// 	$('body').empty().load('login.html');
+		// };
+
+		// var jqXHR = sessao.verificarSessao();
+		// jqXHR.fail(erro).done(sucesso);
+
+		if('login.html' ==  pagina) $('body').empty().load(pagina);
 			else {
 				if(conteudo.length > 0){
 					conteudo.empty().load(pagina);
@@ -25,21 +52,6 @@
 					});
 				}
 			}
-		};
-
-		var erro = function erro(jqXHR, textStatus, errorThrown)  {
-			var mensagem = jqXHR.responseText || 'Erro ao acessar página.';
-			toastr.error(mensagem);
-
-			if(sessao.getSessao() == null || sessao.getSessao() == '') {
-				sessao.limparSessionStorage();
-			}
-
-			$('body').empty().load('login.html');
-		};
-
-		var jqXHR = sessao.verificarSessao();
-		jqXHR.fail(erro).done(sucesso);
 	};
 
 	let verficarLogin = function (req, event, next) {
