@@ -87,11 +87,7 @@
 	dependenciasCSS.push({ url : 'assets/styles/materialdesignicons.css', opcoes : { media : 'screen,projection' }});
 	dependenciasCSS.push({ url : 'assets/styles/materialize.min.css', opcoes : { media : 'screen,projection' }});
 	dependenciasCSS.push({ url : 'assets/styles/style.css', opcoes : { media : 'screen,projection' }});
-	// dependenciasCSS.push({ url : 'https://fonts.googleapis.com/css/?family=Roboto:100,300,400,700,900' });
-	// dependenciasCSS.push({ url : 'assets/styles/main.css' });
-	// dependenciasCSS.push({ url : 'vendor/font-awesome/web-fonts-with-css/css//fontawesome-all.css' });
-	// dependenciasCSS.push({ url : 'vendor/bootstrap/dist/css//bootstrap.css' });
-	// dependenciasCSS.push({ url : 'assets/styles/bootstrap.css' });
+	dependenciasCSS.push({ url : 'assets/styles/estilo.css' });
 
 	// dependenciasCSS.push({ url : 'vendor/bootstrap/dist/css//bootstrap-reboot.css' });
 	// dependenciasCSS.push({ url : 'vendor/bootstrap/dist/css//bootstrap-grid.css' });
@@ -153,7 +149,6 @@
 		// loader.script('vendor/downloadjs/download.min.js');
 
         // Inicialização
-		// loader.script('assets/js/jquery.meanmenu.js');
 		loader.script('assets/js/materialize.js');		
 		loader.script('assets/js/init.js');		
 		loader.script('assets/js/app.js');
