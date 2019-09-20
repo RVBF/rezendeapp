@@ -3,8 +3,7 @@
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */
-(function(app, $)
-{
+(function(app, $) {
    'use strict';
 
    function ServicoIndex() { // Model
@@ -20,6 +19,13 @@
                grupos : grupos  || 0,
                usuarios : usuarios || ''
            };
+       };
+
+       _this.carregarListagemDeAtividades = function carregarListagemDeAtividades() {
+            return $.ajax({
+                type: "GET",
+                url: _this.rota() + '/minhas-atividades'
+            });
        };
 
        _this.temPermissao = function temPermissao() {
@@ -40,8 +46,7 @@
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */
-(function(window, app, $, toastr)
-{
+(function(window, app, $, toastr){
 	'use strict';
 
 	function ControladoraIndex(servicoIndex)
@@ -156,18 +161,29 @@
 
         _this.renderizarOpcoesHTML = function renderizarOpcoesHTMLname() {
             var sucesso = function (resposta) {
-                _this.opcoesDropNavbarParaHTML(resposta.status);
-                _this.opcoesNavbarParaHTML(resposta.status);
+                // _this.opcoesDropNavbarParaHTML(resposta.status);
+                // _this.opcoesNavbarParaHTML(resposta.status);
 
-                _this.renderizarOpcoesMobile(resposta.status);
+                // _this.renderizarOpcoesMobile(resposta.status);
             };
             
-			// var  jqXHR = servicoIndex.temPermissao();
-			// jqXHR.done(sucesso);
+			var  jqXHR = servicoIndex.temPermissao();
+			jqXHR.done(sucesso);
+        };
+
+        _this.renderizarAtividadesUsuario = function renderizarAtividadesUsuario(){
+            
+            var sucesso = function (resposta) {
+                console.log(resposta);
+            };
+
+            var  jqXHR = servicoIndex.carregarListagemDeAtividades();
+			jqXHR.done(sucesso);
         };
 
 		_this.configurar = function configurar() {
-            this.renderizarOpcoesHTML();
+            this.renderizarOpcoesHTML();  
+            _this.renderizarAtividadesUsuario();
 		};
 	} // ControladoraIndex
 
