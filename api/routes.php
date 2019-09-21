@@ -246,6 +246,7 @@ $app->delete('/usuario/{id}', function(Request $req,  Response $res, $args = [])
 $app->post('/login', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraLogin($req->getParsedBody(), $sessaoUsuario);
+	Debuger::printr($req->getParsedBody());
 	$response = $ctrl->logar();
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 });

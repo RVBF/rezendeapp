@@ -85,12 +85,12 @@
 	dependenciasCSS.push({ url : 'https://fonts.googleapis.com/icon?family=Material+Icons' });
 	dependenciasCSS.push({ url : 'https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap' });	
 	dependenciasCSS.push({ url : 'assets/styles/materialdesignicons.css', opcoes : { media : 'screen,projection' }});
-	dependenciasCSS.push({ url : 'assets/styles/materialize.min.css', opcoes : { media : 'screen,projection' }});
+	dependenciasCSS.push({ url : 'assets/styles/materialize.css', opcoes : { media : 'screen,projection' }});
 	dependenciasCSS.push({ url : 'assets/styles/style.css', opcoes : { media : 'screen,projection' }});
 	dependenciasCSS.push({ url : 'assets/styles/estilo.css' });
 
-	// dependenciasCSS.push({ url : 'vendor/bootstrap/dist/css//bootstrap-reboot.css' });
-	// dependenciasCSS.push({ url : 'vendor/bootstrap/dist/css//bootstrap-grid.css' });
+	// dependenciasCSS.push({ url : 'vendor/tether/dist/css/tether.min.css' });	
+	// dependenciasCSS.push({ url : 'vendor/bootstrap/dist/css/bootstrap.min.css' });
 	// dependenciasCSS.push({ url : 'vendor/datatables.net-dt/css//jquery.dataTables.min.css' });
 	// dependenciasCSS.push({ url : 'vendor/datatables/media/css//dataTables.bootstrap4.css' });
 	// dependenciasCSS.push({ url : 'vendor/datatables.net-responsive-dt/css//responsive.dataTables.min.css' });
@@ -123,7 +123,8 @@
 
 	dependenciasJavaScript.push({url : 'vendor/jquery/dist/jquery.min.js', async : true, onLoad : function(dependenciasJavaScript){
 		// loader.script('vendor/popper.js/dist/umd/popper.min.js');
-		// loader.script('vendor/bootstrap/dist/js/bootstrap.js');
+		// loader.script('vendor/tether/dist/js/tether.min.js');
+		// loader.script('vendor/bootstrap/dist/js/bootstrap.min.js');
 		// loader.script('vendor/bootstrap/dist/js/bootstrap.bundle.js');
 		// loader.script('vendor/datatables/media/js/jquery.dataTables.js');
 		// loader.script('vendor/datatables/media/js/dataTables.bootstrap4.min.js');
