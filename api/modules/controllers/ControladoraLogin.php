@@ -23,7 +23,7 @@ class ControladoraLogin {
 		try {
 			$inexistentes = \ArrayUtil::nonExistingKeys([ 'login', 'senha' ], $this->params);
 
-			if(is_countable($inexistentes) ? count($inexistentes) > 0 : false) {
+			if(is_countable($inexistentes) ? is_countable($inexistentes) > 0 : false) {
 				$msg = 'Os seguintes campos não foram enviados: ' . implode(', ', $inexistentes);
 				throw new Exception($msg);
 				
