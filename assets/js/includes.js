@@ -137,7 +137,7 @@
 		// loader.script('vendor/datatables.net-select/js/dataTables.select.min.js');
 		// loader.script('vendor/datatables.net-select-dt/js/select.dataTables.js');
 		loader.script('vendor/toastr/toastr.min.js');
-		// loader.script('vendor/jquery-validation/dist/jquery.validate.min.js');
+		loader.script('vendor/jquery-validation/dist/jquery.validate.min.js');
 		loader.script('vendor/grapnel/dist/grapnel.min.js');
 		// loader.script('assets/js/bootstrap.js');
 		// loader.script('vendor/bootstrap-dialog/dist/js/bootstrap-dialog.min.js');
