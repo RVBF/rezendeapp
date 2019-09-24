@@ -29,37 +29,37 @@ var app = {
 		$('select.form-control').removeClass('form-control').css('width', '100%')
 	}
 
-	// $.validator.setDefaults({
-	// 	ignore: [],
-	// 	highlight: function(element)
-	// 	{
-	// 		$(element).closest('.row').addClass('has-error');
-	// 	},
-	// 	unhighlight: function(element)
-	// 	{
-	// 		$(element).closest('.row').removeClass('has-error');
-	// 	},
-	// 	errorElement: 'span',
-	// 	errorClass: 'help-block',
-	// 	errorPlacement: function (error, element)
-	// 	{
-	// 		var possivelSelect2 = element.parent('div');
-	// 		var possivelInputaAddon = element.parent('div .input-group').nextAll('div .menu_input_addon_erro:first');
-	// 		if(possivelSelect2.length)
-	// 		{
-	// 			element = possivelSelect2;
-	// 		}
-	// 		else
-	// 		{
-	// 			if(possivelInputaAddon.length)
-	// 			{
-	// 				element = possivelInputaAddon;
-	// 			}
-	// 		}
+	$.validator.setDefaults({
+		ignore: [],
+		highlight: function(element)
+		{
+			$(element).closest('.row').addClass('has-error');
+		},
+		unhighlight: function(element)
+		{
+			$(element).closest('.row').removeClass('has-error');
+		},
+		errorElement: 'span',
+		errorClass: 'help-block',
+		errorPlacement: function (error, element)
+		{
+			var possivelSelect2 = element.parent('div');
+			var possivelInputaAddon = element.parent('div .input-group').nextAll('div .menu_input_addon_erro:first');
+			if(possivelSelect2.length)
+			{
+				element = possivelSelect2;
+			}
+			else
+			{
+				if(possivelInputaAddon.length)
+				{
+					element = possivelInputaAddon;
+				}
+			}
 
-	// 		element.append(error);
-	// 	}
-	// });
+			element.append(error);
+		}
+	});
 
 	// Opções padrão para o DataTables ----------------------------------------
 	// app.dtOptions = {
@@ -112,18 +112,18 @@ var app = {
 	// 	},
 	// 	"bFilter" : true,
 	// 	"searching" : true,
-	// 	"searchDelay": 600,
+	// 	"searchDelay": 600,	$.fn.extend({
 	// 	"order": [[0, 'desc']]
 	// };
 
 	// $.fn.dataTable.ext.errMode = 'none';
 
-	// $.fn.extend({
-	// 	desabilitar: function (status) {
-	// 		$(this).find("*").each(function(){
-	// 			$(this).prop('disabled', status);
-	// 		});
-	// 	}
-	// });
+	$.fn.extend({
+		desabilitar: function (status) {
+			$(this).find("*").each(function(){
+				$(this).prop('disabled', status);
+			});
+		}
+	});
 })(app, document, jQuery, toastr,  window);
   

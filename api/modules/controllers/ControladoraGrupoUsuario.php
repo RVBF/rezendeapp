@@ -50,7 +50,7 @@ class ControladoraGrupoUsuario {
 		}
 
 		$conteudo = new DataTablesResponse($contagem, 
-			is_countable($objetos) ? count($objetos) : 0, 
+			is_array($objetos) ? count($objetos) : 0, 
 			$objetos, 
 			$dtr->draw, 
 			$erro
@@ -74,7 +74,7 @@ class ControladoraGrupoUsuario {
 				throw new Exception("Usuários não encontrados na base de dados.");
 			}
 
-			if(is_countable($inexistentes) ? count($inexistentes) > 0 : 0) {
+			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
 				throw new Exception($msg);
@@ -111,7 +111,7 @@ class ControladoraGrupoUsuario {
 
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'nome','descricao'], $this->params);
 
-			if(is_countable($inexistentes) ? count($inexistentes) > 0 : 0) {
+			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
 				throw new Exception($msg);
