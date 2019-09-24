@@ -23,18 +23,15 @@ class ControladoraLogin {
 		try {
 			$inexistentes = \ArrayUtil::nonExistingKeys([ 'login', 'senha' ], $this->params);
 
-			if(is_countable($inexistentes) ? count($inexistentes) > 0 : false) {
+			if(is_array($inexistentes) ? count($inexistentes) > 0 : false) {
 				$msg = 'Os seguintes campos não foram enviados: ' . implode(', ', $inexistentes);
 				throw new Exception($msg);
-				
-				// return $this->geradoraResposta->erro($msg, GeradoraResposta::TIPO_TEXTO);
 			}
 	
 			$usuario = $this->servico->login(\ParamUtil::value($this->params, 'login'), \ParamUtil::value($this->params, 'senha'));
+			$conteudo = is_a($usuario, 'Usuario') ? ['id' => $usuario->getId(), 'nome'=> $usuario->getLogin(), 'admin' => $usuario->getAdministrador()] : [];
 
-			$conteudo = ['id' => $usuario->getId(), 'nome'=> $usuario->getLogin(), 'admin' => $usuario->getAdministrador()];
-
-			$resposta = ['usuario'=> $conteudo, 'status' => true, 'mensagem'=> 'Logado Com sucesso.']; 
+			$resposta = ['usuario'=> $conteudo, 'status' => count($conteudo) ? true : false, 'mensagem'=> count($conteudo) ? 'Logado Com sucesso.' : 'Erro ao logar.' ]; 
 		}
 		catch (\Exception $e) {
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
