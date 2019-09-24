@@ -68,7 +68,7 @@ class ControladoraResposta {
 
 		$conteudo = new DataTablesResponse(
 			$contagem,
-			is_countable($objetos) ? count($objetos) : 0, //count($objetos ),
+			is_array($objetos) ? count($objetos) : 0, //count($objetos ),
 			$objetos,
 			$dtr->draw,
 			$erro
@@ -94,7 +94,7 @@ class ControladoraResposta {
 			foreach($this->params['obj'] as $key => $parametros) {
 				$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'opcaoSelecionada','comentario', 'pergunta'], $parametros);
 
-				if(is_countable($inexistentes) ? count($inexistentes) > 0 : 0) {
+				if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
 					$msg = 'Os seguintes campos obrigatórios da pergunta de id   não foram enviados: ' . implode(', ', $inexistentes);
 	
 					throw new Exception($msg);

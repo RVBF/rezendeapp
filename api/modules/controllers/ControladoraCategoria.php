@@ -48,7 +48,7 @@ class ControladoraCategoria {
 
 		$conteudo = new DataTablesResponse(
 			$contagem,
-			is_countable($objetos) ? count($objetos : 0, //count($objetos ),
+			is_array($objetos) ? count($objetos) : 0, //count($objetos ),
 			$objetos,
 			$dtr->draw,
 			$erro
