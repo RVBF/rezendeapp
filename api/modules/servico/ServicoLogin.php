@@ -27,7 +27,6 @@ class ServicoLogin {
 
 	
 		if($this->validarLogin($login) and $resultado = $this->colecaoUsuario->comLogin($login)) {
-			
 		if($resultado instanceof Usuario)
 			{
 				$usuario = $resultado;
@@ -153,7 +152,7 @@ class ServicoLogin {
 
 		$resultado = $this->colecaoUsuario->comEmail($email);
 
-		if(is_countable($resultado) ? count($resultado) == 0 :  false)
+		if(is_array($resultado) ? count($resultado) == 0 :  false)
 		{
 			throw new ColecaoException( 'O email  ' . $email . ' não corresponde a nenhuma conta cadastrada no sistema.' );
 		}
@@ -190,7 +189,8 @@ class ServicoLogin {
 
 		$resultado = $this->colecaoUsuario->comLogin($login);
 
-		if(is_countable($resultado) ? count($resultado) == 0 : false)
+
+		if(!$resultado)
 		{
 			throw new ColecaoException( 'O login  ' . $login . ' não corresponde a nenhuma conta cadastrada no sistema.' );
 		}

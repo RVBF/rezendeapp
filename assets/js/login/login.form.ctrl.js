@@ -63,7 +63,7 @@
 					if(data.status) {
 						window.sessionStorage.setItem('usuario', JSON.stringify(data.usuario));
 						$('body').empty().load('index.html', function(){
-							// router.navigate('/');
+							router.navigate('/');
 							location.reload();
 						});
 					}
