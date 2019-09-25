@@ -104,6 +104,11 @@
 				event.preventDefault();
 				router.navigate('/add-checklist');
 			});
+
+			$(evento.target).find('.colaboradores_link').on('click', function(event){
+				event.preventDefault();
+				router.navigate('/colaboradores');
+			});
 		}
 	};
 	

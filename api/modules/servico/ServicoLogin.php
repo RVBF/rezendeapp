@@ -24,7 +24,6 @@ class ServicoLogin {
 		$usuario = null;
 		$senhaCriptografada = HashSenha::instance();
 		$senhaCriptografada = $senhaCriptografada->gerarHashDeSenhaComSaltEmMD5($senha);	
-
 	
 		if($this->validarLogin($login) and $resultado = $this->colecaoUsuario->comLogin($login)) {
 		if($resultado instanceof Usuario)
