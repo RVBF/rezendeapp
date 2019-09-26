@@ -150,7 +150,8 @@
 		// loader.script('vendor/moment/min/moment.min.js');
 		// loader.script('vendor/downloadjs/download.min.js');
 
-        // Inicialização
+		// Inicialização
+		loader.script('assets/js/listagem.js');
 		loader.script('assets/js/materialize.js');		
 		loader.script('assets/js/init.js');		
 		loader.script('assets/js/app.js');
