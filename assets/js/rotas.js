@@ -40,32 +40,6 @@
 
 		var jqXHR = sessao.verificarSessao();
 		jqXHR.fail(erro).done(sucesso);
-
-		// if('login.html' ==  pagina) $('body').empty().load(pagina);
-		// 	else {
-		// 		if(conteudo.length > 0){
-		// 			conteudo.empty().load(pagina);
-		// 		}
-		// 		else{
-		// 			$('body').empty().load('index.html', function(){
-		// 				router.navigate('/');
-		// 			});
-		// 		}
-		// 	}
-			// if('login.html' ==  pagina) $('body').empty().load(pagina);
-			// else {
-			// 	if(conteudo.length > 0){
-			// 		conteudo.empty().load(pagina);
-			// 	}
-			// 	else{
-			// 		$('body').empty().load('index.html', function(){
-			// 			router.navigate('/');
-			// 		});
-			// 	}
-			// }
-
-			// console.log(pagina);
-			// router.navigate(pagina);
 	};
 
 	let verficarLogin = function (req, event, next) {
