@@ -48,12 +48,17 @@
 		_this.renderizarOpcoesDePesquisa  = function renderizarOpcoesDePesquisa() {
 			var html = '';
 			html += '<div class="row">';
-			html += '<div class="col col-md-10 col-lg-10 col-sm-10  col-9 input-field">';
-			html += '<i class="fas fa-search prefix f-12-dto"></i>';
+			html += '<div class="sem-espacamentos">';
+            html += '<a href="#" class="ico-plus-dto adicao ' + opcoes.cadastrarLink + '">';
+            html += '<i class="fas fa-plus orange-text text-accent-3 small"></i>';
+            html += '</a>';
+        	html += '</div>';
+			html += '<div class="col col-md-8 col-lg-10 col-sm-8  col-6 input-field">';
+			html += '<i class="fas fa-search prefix f-12-dto orange-text text-accent-3 small"></i>';
 			html += '<input class="validate f-12-dto" type="search" name="pesquisar_itens" id="pesquisar_itens"/>';
 			html += '<label for="pesquisar_itens">Pesquisar</label>';
 			html += '</div>';
-			html += '<div class="col col-md-2 col-lg-2 col-sm-2  col-3">';
+			html += '<div class="col col-md-2 col-lg-1 col-sm-2  col-3">';
 			html += ' <select name="qtd_resultados" id="qtd_resultados" class="qtd_resultados_pesquisapadrao">';
 
 			for (var indice in opcoes.lengthMenu) {
@@ -68,10 +73,10 @@
 			listagemPadrao.prepend(html);
 		};
 
-		_this.renderizarInfo = function (data) {
+		_this.renderizarInfo = function renderizarInfo (data) {
 			var html = '';
 			html += '<div class="col col-12 col-sm-6 col-md-6 col-lg-6 informacao_exibicao">';
-			html += '<div class="informacoes_listagem" id="informacoes_listagem" role="status" aria-live="polite">Mostrando ' + data.draw + ' até ' + data.recordsFiltered + ' de ' + data.recordsTotal + ' registros</div>';
+			html += '<div class="informacoes_listagem" id="informacoes_listagem" role="status" aria-live="polite">Mostrando ' + data.draw + ' até ' + data.recordsFiltered + ' de ' + data.recordsTotal + ' registros.</div>';
 			html += '</div>'
 
 			html += '<div class="col-12 col-sm-6 col-md-6 col-lg-6 paginacao d-flex justify-content-end">';
@@ -85,6 +90,32 @@
 		_this.renderizarTabela  = function  renderizarTabela() {
 			_this.renderizarOpcoesDePesquisa();
 			_this.renderizarRegistros();
+		};
+
+		_this.renderizarBotoes = function renderizarBotoes(data){
+			
+		};
+
+		_this.atualizarTabelainfo = function atualizarInfo(data) {
+			listagemPadrao.find('.informacoes_listagem').empty().html('Mostrando ' + data.draw + ' até ' + data.recordsFiltered + ' de ' + data.recordsTotal + ' registros');
+			
+			listagemPadrao.find('paginacao_listagem').empty().html(_this.renderizarBotoes(data));
+		};
+
+		_this.atualizarTabela = function atualizarTabela(){
+			var sucesso = function (resposta) {
+				listagemPadrao.find('.linhas').append(_this.renderizarRows(resposta.data));
+				listagemPadrao.find('.info').append(_this.renderizarInfo(resposta));
+			};
+
+			var erro = function(resposta) {
+				var mensagem = jqXHR.responseText || 'Erro ao popular select de farmácias.';
+				toastr.error(mensagem);
+				return false;
+			};
+
+			var  jqXHR = _this.requisitarRegistros();
+			jqXHR.done(sucesso).fail(erro);	
 		};
 
 		_this.configurar = function configurar() {

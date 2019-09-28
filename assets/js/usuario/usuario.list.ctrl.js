@@ -32,10 +32,11 @@
 			objeto.searching = true;
 			objeto.searchDelay = 600;	
 			objeto.order = 'DESC';
+			objeto.cadastrarLink = 'cadastrar_colaborador_link';
 			objeto.columnDefs = function (data){
 				var html = '';
-				html += '<div class="col co-lg-2 col-md-2 col-sm-2 col-4">';
-				html += '<img src="https://acotelha.com.br/wp-content/uploads/2018/02/AVATAR-PARA-O-SITE-02.png" class="demo-avatar"></img>';
+				html += '<div class="col co-lg-2 col-md-2 col-sm-2 col-4 ">';
+				html += '<img src="https://acotelha.com.br/wp-content/uploads/2018/02/AVATAR-PARA-O-SITE-02.png" class="avatar"></img>';
 				html += '</div>';
 				
 				html += '<div class="col co-lg-6 col-md-6 col-sm-6 col-8">'
