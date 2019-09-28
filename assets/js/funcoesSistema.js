@@ -109,6 +109,11 @@
 				event.preventDefault();
 				router.navigate('/colaboradores');
 			});
+
+			$(evento.target).find('.cadastrar_colaborador_link').on('click', function (event) {
+				event.preventDefault();
+				router.navigate('/cadastrar-colaborador');
+			});
 		}
 	};
 	

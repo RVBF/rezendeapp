@@ -88,8 +88,8 @@
 	dependenciasCSS.push({ url : 'assets/styles/materialdesignicons.css', opcoes : { media : 'screen,projection' }});
 	dependenciasCSS.push({ url : 'assets/styles/materialize.css', opcoes : { media : 'screen,projection' }});
 	dependenciasCSS.push({ url : 'vendor/font-awesome/css/all.min.css', opcoes : { media : 'screen,projection' }});
-	dependenciasCSS.push({ url : 'assets/styles/estilo.css', opcoes : { media : 'screen,projection' }});
 	dependenciasCSS.push({ url : 'assets/styles/style.css', opcoes : { media : 'screen,projection' }});
+	dependenciasCSS.push({ url : 'assets/styles/estilo.css', opcoes : { media : 'screen,projection' }});
 
 	// dependenciasCSS.push({ url : 'vendor/tether/dist/css/tether.min.css' });	
 	// dependenciasCSS.push({ url : 'vendor/datatables.net-dt/css//jquery.dataTables.min.css' });
