@@ -13,15 +13,21 @@
 			});	
 		};
 
-		_this.renderizarRows = function renderizarRows(resposta){
+		_this.renderizarRows = function renderizarRows(data){
 			var html = '';
 			html += '<div class="card-panel left-align">';
+
 			if(typeof opcoes.columnDefs == 'function'){
-				for( let indice in resposta) {
-					html += '<div class="row listagem-padrao-item valign-wrapper">';
-					html += opcoes.columnDefs(resposta[indice]);
-					html += '</div>';
-				};
+				if(data.length > 0){
+					for( let indice in data) {
+						html += '<div class="row listagem-padrao-item valign-wrapper">';
+						html += opcoes.columnDefs(data[indice]);
+						html += '</div>';
+					};
+				}
+				else{
+					html += '<p class="text-center">Nenhum resultado encontrado!</p>';
+				}
 			}
 
 			html += '</div>';
@@ -75,14 +81,17 @@
 
 		_this.renderizarInfo = function renderizarInfo (data) {
 			var html = '';
-			html += '<div class="col col-12 col-sm-6 col-md-6 col-lg-6 informacao_exibicao">';
-			html += '<div class="informacoes_listagem" id="informacoes_listagem" role="status" aria-live="polite">Mostrando ' + data.draw + ' até ' + data.recordsFiltered + ' de ' + data.recordsTotal + ' registros.</div>';
-			html += '</div>'
+			html += '<div class="row">';
+				html += '<div class="col col-12 col-sm-12 col-md-6 col-lg-6 informacao_exibicao    text-xl-center text-sm-center text-sm-center text-md-left text-lg-left">';
+				html += '<div class="informacoes_listagem" id="informacoes_listagem" role="status" aria-live="polite">Mostrando ' + data.draw + ' até ' + data.recordsFiltered + ' de ' + data.recordsTotal + ' registros.</div>';
+				html += '</div>'
 
-			html += '<div class="col-12 col-sm-6 col-md-6 col-lg-6 paginacao d-flex justify-content-end">';
-			html += '<div class="paginacao_listagem " id="listagem_paginacao">';
-			html += '<a class="paginate_button previous disabled" aria-controls="example" data-dt-idx="0" tabindex="0" id="example_previous"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Anterior </font></font></a><span><a class="paginate_button current" aria-controls="example" data-dt-idx="1" tabindex="0"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">1 </font></font></a><a class="paginate_button " aria-controls="example" data-dt-idx="2" tabindex="0"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">2 </font></font></a><a class="paginate_button " aria-controls="example" data-dt-idx="3" tabindex="0"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">3 </font></font></a><a class="paginate_button " aria-controls="example" data-dt-idx="4" tabindex="0"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">4 </font></font></a><a class="paginate_button " aria-controls="example" data-dt-idx="5" tabindex="0"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">5 </font></font></a><a class="paginate_button " aria-controls="example" data-dt-idx="6" tabindex="0"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">6</font></font></a></span><a class="paginate_button next" aria-controls="example" data-dt-idx="7" tabindex="0" id="example_next"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"> Próximo</font></font></a></div>';
+				html += '<div class="col col-12 col-sm-12 col-md-6 col-lg-6 paginaca  d-xl-flex justify-content-xl-center   d-sm-flex justify-content-sm-center d-md-flex justify-content-md-start d-lg-flex justify-content-lg-start">';
+				html += '<div class="paginacao_listagem " id="listagem_paginacao">';
+				html += _this.renderizarBotoes(data);
+				html += '</div>';
 			html += '</div>';
+
 
 			return html;
 		};
@@ -93,7 +102,33 @@
 		};
 
 		_this.renderizarBotoes = function renderizarBotoes(data){
-			
+			let resultadosPorPagina = listagemPadrao.find('#qtd_resultados').val();
+			let quantidadeBotoes =  Math.ceil(data.recordsTotal/resultadosPorPagina);
+			let html = '';
+			html += '<a class="paginacao anterior disabled" data-dt-idx="0" tabindex="0" id="anterior">';
+			html += '<font style="vertical-align: inherit;">';
+			html += '<font style="vertical-align: inherit;">Anterior </font>';
+			html += '</font>';
+			html += '</a>';
+			html += '<span>';
+			var i;
+			console.log(quantidadeBotoes);
+			for(i = 1; i<= quantidadeBotoes; i++){
+				html += '<a class="paginacao current" data-dt-idx="' + i  + '" tabindex="0">';
+				html += '	<font style="vertical-align: inherit;">';
+				html += '	<font style="vertical-align: inherit;">' + i + '</font>';
+				html += '</font>';
+				html += '</a>';
+			}
+
+			html += '<a class="paginacao proximo" data-dt-idx="' + i  +'" tabindex="0" id="proximo">';
+			html += '<font style="vertical-align: inherit;">';
+			html += '<font style="vertical-align: inherit;"> Próximo</font>';
+			html += '</font>';
+			html += '</a>';
+			html += '</span>';
+
+			return html
 		};
 
 		_this.atualizarTabelainfo = function atualizarInfo(data) {
