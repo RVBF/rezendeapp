@@ -74,7 +74,8 @@
 	router.get('/', criarRotaPara('inicio.html'));
 	router.get('/checklist', criarRotaPara('checklist.html'));
 	router.get('/colaboradores', criarRotaPara('colaboradores.html'));
-    router.get('/cadastrar-colaborador', criarRotaPara('pa-cadastro.html'));	
+	router.get('/cadastrar-colaborador', criarRotaPara('formulario-colaborador.html'));	
+	router.get('/lojas', criarRotaPara('loja.html'));
 	router.get('/add-checklist', criarRotaPara('add-checklist.html'));
 	router.get('/plano-acao', criarRotaPara('pa-listagem.html'));
 	router.get('/checklist-organizacao', criarRotaPara('checklist-organizacao.html'));

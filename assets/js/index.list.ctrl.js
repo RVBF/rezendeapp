@@ -35,8 +35,7 @@
            });
        };
    }; // ServicoIndex
-
-   // Registrando
+   // Registrandonome_usuario
    app.ServicoIndex = ServicoIndex;
 })(app, $);
 

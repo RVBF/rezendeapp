@@ -1,5 +1,7 @@
 (function(window ,app, document, $) {
 	'use strict';
+
+
 	function iniciarFuncoesPadroesSistema(event)
 	{
 		var evento = event;
@@ -22,6 +24,12 @@
 					overwriteInitial: false,
 					initialPreviewAsData: true
 				});
+			});
+			var instances = M.FormSelect.init($(evento.target).find('.select'), {});
+
+			$(evento.target).find('.select').on('click', function () {
+
+				$(this).formSelect();
 			});
 
 			// $(evento.target).find('.data').each(function(){
@@ -114,9 +122,16 @@
 				event.preventDefault();
 				router.navigate('/cadastrar-colaborador');
 			});
+
+
+			$(evento.target).find('.loja_link').on('click', function (event) {
+				event.preventDefault();
+				router.navigate('/lojas');
+			});
+
 		}
 	};
-	
+	  
 	var bodyEvento = {target: 'body'};
 	iniciarFuncoesPadroesSistema(bodyEvento);
 

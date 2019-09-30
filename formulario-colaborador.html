@@ -1,0 +1,97 @@
+<section>
+   <div class="row">
+		<div class="col-md-12 col-12 col-sm-12 col-lg-12">
+			<div class="card-panel left-align">
+				<div class="row">
+					<div class="col-12  col-sm-12 col-md-12 col-lg-12">
+						<form class="form-horizontal "  method="post" id="colaborador_form">
+							<input type="hidden" id="id" name ="id" />
+		
+							<div class="row form-row">
+								<div class="col col-md-6 col-12 col-sm-12 col-lg-6">
+									<div class="input-field">
+										<input type="text" class="form-control validate " id ="nome" name="nome"/>
+										<label for="nome">*Nome: </label>
+									</div>
+									
+								</div>
+
+								<div class="col col-md-6 col-12 col-sm-12 col-lg-6 ">
+									<div class="input-field">
+										<input type="text" class="form-control validate" id="sobrenome" name="sobrenome"/>
+										<label for="sobrenome">*Sobrenome</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="row form-row">
+								<div class="col-md-12 col-12 col-sm-12 col-lg-12">
+									<div class="input-field">
+										<input type="email" class="form-control" id="email" name="email"/>
+										<label for="email">*E-mail</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="row form-row">
+								<div class="col-md-6 col-12 col-sm-12 col-lg-6 ">
+									<div class=" input-field">
+										<select id ="lojas"  name="lojas[]" class="select" multiple><option value="" disabled selected>Lojas</option></select>
+									</div>
+								</div>
+										
+								<div class="col-md-6 col-12 col-sm-12 col-lg-6">
+									<div class="input-field">
+										<input type="text" class="form-control"  id="login"></input>
+										<label for="login">*Login</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="row form-row">
+								<div class="col-md-6 col-12 col-sm-12 col-lg-6">
+									<div class="input-field">
+										<input type="password" id="senha" name="senha" class="form-control" />
+										<label for="senha">*Senha:</label>
+									</div>
+								</div>
+
+				
+								<div class="col-md-6 col-12 col-sm-12 col-lg-6">
+									<div class="input-field">
+										<input type="password" id="confirmacao_senha" name="confirmacao_senha" class="form-control"/>
+										<label for="confirmacao_senha">*Confirmacão de Senha:</label>
+									</div>
+								</div>
+							</div>
+
+							<div  class="row form-row d-none">
+								<div class="col-xs-12  col-sm-12 col-md-12 col-12">
+									<br /><div id="msg" class="text-danger msg" ></div>
+								</div>
+							</div>
+								
+
+							<div class="row form-row">
+								<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end">
+									<a class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">
+										<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>
+											Finalizar<br>
+											plano de ação
+									</a>
+								</div>
+							
+								<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-start justify-content-md-start ">
+									<a class="waves-effect waves-light btn white grey-text text-darken-4 button-dto f-12-dto">
+										<i class="mdi mdi-close-circle-outline yellow-text text-accent-4"></i>
+										Cancelar
+									</a>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+</section>
