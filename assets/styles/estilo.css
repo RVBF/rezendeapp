@@ -72,6 +72,16 @@ select.qtd_resultados_pesquisapadrao {
     margin-left: 0.75rem;
 }
 
+.listagem-padrao .informacao_exibicao{
+    text-align: left;
+}
+
+.listagem-padrao .paginacao{
+    text-align: right;
+}
+
+
+
 .card-panel{
     padding: 1em;
 }
@@ -96,6 +106,7 @@ form .quebra-linha{
     -moz-osx-font-smoothing: grayscale;
 }
 
+
 @media(min-width:100px) and (max-width: 635px) {
     .listagem-padrao-item .opcoes{
         border: 0px;
@@ -106,6 +117,14 @@ form .quebra-linha{
     .listagem-padrao-item .opcoes{
         border-left: 0px !important; 
     }
+
+    .listagem-padrao .informacao_exibicao{
+        text-align: center !important;
+    }
+    
+    .listagem-padrao .paginacao{
+        text-align: center !important;
+    }
 }
 
 @media(max-width: 400px){
@@ -113,10 +132,26 @@ form .quebra-linha{
         margin-bottom: 8em;
     
     }
+
+    .listagem-padrao .informacao_exibicao{
+        text-align: center !important;
+    }
+    
+    .listagem-padrao .paginacao{
+        text-align: center !important;
+    }
 };
 
 @media(min-width: 575px) and (max-width: 800px){
     .listagem-padrao-item .opcoes{
         border-left: 0px !important; 
+    }
+
+    .listagem-padrao .informacao_exibicao{
+        text-align: center !important;
+    }
+    
+    .listagem-padrao .paginacao{
+        text-align: center !important;
     }
 };
