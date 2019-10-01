@@ -82,11 +82,11 @@
 		_this.renderizarInfo = function renderizarInfo (data) {
 			var html = '';
 			html += '<div class="row">';
-				html += '<div class="col col-12 col-sm-12 col-md-6 col-lg-6 informacao_exibicao    text-xl-center text-sm-center text-sm-center text-md-left text-lg-left">';
+				html += '<div class="col col-12 col-sm-12 col-md-6 col-lg-6 informacao_exibicao">';
 				html += '<div class="informacoes_listagem" id="informacoes_listagem" role="status" aria-live="polite">Mostrando ' + data.draw + ' até ' + data.recordsFiltered + ' de ' + data.recordsTotal + ' registros.</div>';
 				html += '</div>'
 
-				html += '<div class="col col-12 col-sm-12 col-md-6 col-lg-6 paginaca  d-xl-flex justify-content-xl-center   d-sm-flex justify-content-sm-center d-md-flex justify-content-md-start d-lg-flex justify-content-lg-start">';
+				html += '<div class="col col-12 col-sm-12 col-md-6 col-lg-6 paginacao">';
 				html += '<div class="paginacao_listagem " id="listagem_paginacao">';
 				html += _this.renderizarBotoes(data);
 				html += '</div>';
@@ -105,7 +105,7 @@
 			let resultadosPorPagina = listagemPadrao.find('#qtd_resultados').val();
 			let quantidadeBotoes =  Math.ceil(data.recordsTotal/resultadosPorPagina);
 			let html = '';
-			html += '<a class="paginacao anterior disabled" data-dt-idx="0" tabindex="0" id="anterior">';
+			html += '<a class="paginacao-anterior disabled paginate_button" data-dt-idx="0" tabindex="0" id="anterior">';
 			html += '<font style="vertical-align: inherit;">';
 			html += '<font style="vertical-align: inherit;">Anterior </font>';
 			html += '</font>';
@@ -114,14 +114,16 @@
 			var i;
 			console.log(quantidadeBotoes);
 			for(i = 1; i<= quantidadeBotoes; i++){
-				html += '<a class="paginacao current" data-dt-idx="' + i  + '" tabindex="0">';
+				let classes = (i== 1) ? 'paginacao-atual paginate_button' : ' paginate_button';
+
+				html += '<a class="' + classes + '" data-dt-idx="' + i  + '" tabindex="0">';
 				html += '	<font style="vertical-align: inherit;">';
 				html += '	<font style="vertical-align: inherit;">' + i + '</font>';
 				html += '</font>';
 				html += '</a>';
 			}
 
-			html += '<a class="paginacao proximo" data-dt-idx="' + i  +'" tabindex="0" id="proximo">';
+			html += '<a class="paginacao-proximo paginate_button" data-dt-idx="' + i  +'" tabindex="0" id="proximo">';
 			html += '<font style="vertical-align: inherit;">';
 			html += '<font style="vertical-align: inherit;"> Próximo</font>';
 			html += '</font>';
