@@ -36,11 +36,19 @@
 			objeto.columnDefs = function (data){
 				var html = '';
 					
-				html += '<div class="col co-lg-12 col-md-12 col-sm-12 col-12">'
+				html += '<div class="col co-lg-8 col-md-8 col-sm-8 col-12">'
 				html += '<p class="f-12-dto"><strong>Razão Social : </strong>'+ data.razaoSocial + '</p>'
 				html += '<p class="f-12-dto"><strong>Nome Fantasia : </strong>'+ data.nomeFantasia + '</p>'
 				html += '<p class="f-12-dto"> <strong>Loja</strong>  Loja Conselheiro - Nova Friburgo</p>';
 				html += '</div>';
+
+
+				html += '<div class="col co-lg-4 col-md-4 col-sm-4 col-12 opcoes">';
+				html += '<p class="f-12-dto"><i class="mdi mdi-table-edit editar_loja_link"></i> Editar</p>';
+				html += '<p class="f-12-dto"><i class="mdi mdi-loupe"></i> Visualizar</p>';
+				html += '<p class="f-12-dto"><i class="mdi mdi-delete"> </i> Excluir</p>';
+				html += '</div>';
+
 				return html;
 			};
 

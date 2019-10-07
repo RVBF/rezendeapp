@@ -112,7 +112,7 @@
 			html += '</a>';
 			html += '<span>';
 			var i;
-			console.log(quantidadeBotoes);
+
 			for(i = 1; i<= quantidadeBotoes; i++){
 				let classes = (i== 1) ? 'paginacao-atual paginate_button' : ' paginate_button';
 
