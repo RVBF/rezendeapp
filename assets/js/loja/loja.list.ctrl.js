@@ -7,7 +7,7 @@
 {
 	'use strict';
 
-	function ControladoraListagemLoja(Loja)
+	function ControladoraListagemLoja(servicoLoja)
 	{
 		var _this = this;
 		var _cont = 0;
@@ -17,31 +17,36 @@
 		_this.botaoRemover = $('#remover');
 		_this.botaoAtualizar = $('#atualizar');
 		_this.idTabela = $('#loja');
-		var ctrlFormulario = new app.ControladoraFormLoja(Loja);
+		var ctrlFormulario = new app.ControladoraFormLoja(servicoLoja);
 
 		//Configura a tabela
 		_this.opcoesDaTabela = function opcoesDaTabela() {
-			var objeto = $.extend(true, {}, app.dtOptions);
-			objeto.ajax = Loja.rota();
+			var objeto =  new Object();
+			objeto.ajax = servicoLoja.rota();
 
-			objeto.columnDefs = [ {
-					data: 'id',
-					targets: 0,
-					responsivePriority: 3,
-					visible : true
-				}, {
-					data: 'razaoSocial',
-					responsivePriority: 2,
-					targets: 1
-                }, {
-					data: 'nomeFantasia',
-					responsivePriority: 1,
-					targets: 2
-                }
-			];
+			objeto.carregando = true;
+			objeto.pageLength = 20;
+			objeto.lengthMenu =  [20, 30, 40, 100];
+			objeto.searching= true;
+			objeto.ordering= true;
+			objeto.searching = true;
+			objeto.searchDelay = 600;	
+			objeto.order = 'DESC';
+			objeto.cadastrarLink = 'cadastrar_loja_link';
+			objeto.columnDefs = function (data){
+				var html = '';
+					
+				html += '<div class="col co-lg-12 col-md-12 col-sm-12 col-12">'
+				html += '<p class="f-12-dto"><strong>Razão Social : </strong>'+ data.razaoSocial + '</p>'
+				html += '<p class="f-12-dto"><strong>Nome Fantasia : </strong>'+ data.nomeFantasia + '</p>'
+				html += '<p class="f-12-dto"> <strong>Loja</strong>  Loja Conselheiro - Nova Friburgo</p>';
+				html += '</div>';
+				return html;
+			};
 
 			return objeto;
-		};'.selected'
+		};
+
 
 		_this.cadastrar = function cadastrar() {
 			var modoEdicao = false;
@@ -143,20 +148,7 @@
 		};
 
 		_this.configurar = function configurar() {
-			_tabela = _this.idTabela.DataTable(_this.opcoesDaTabela());
-			_this.botaoCadastrar.on('click',_this.cadastrar);
-			_this.botaoEditar.on('click', _this.editar)
-			_this.botaoAtualizar.on('click',_this.atualizar);
-			_this.botaoRemover.on('click', _this.remover);
-			$('.ir_tarefas').on('click', function(){
-				event.preventDefault();
-				var objeto = _tabela.row('.selected').data();
-
-				router.navigate('/setor/' + objeto.id +'/tarefa' );
-			});
-
-			_tabela.on('select',_this.selecionar);
-			_tabela.on('deselect', _this.deselect);		
+			_tabela = _this.idTabela.listar(_this.opcoesDaTabela());
 		};
 	} // ControladoraListagemLoja
 

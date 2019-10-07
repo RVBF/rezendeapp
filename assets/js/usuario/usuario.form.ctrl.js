@@ -116,8 +116,7 @@
 			
 			};
 
-			var erro = function(resposta)
-			{
+			var erro = function(resposta) {
 				var mensagem = jqXHR.responseText || 'Erro ao popular select de farmácias.';
 				toastr.error(mensagem);
 				return false;

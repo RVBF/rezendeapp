@@ -39,7 +39,7 @@ class ControladoraPermissaoAdministrativa {
 			}
 
 			$inexistentes = \ArrayUtil::nonExistingKeys(['grupos', 'usuarios'], $this->params);
-			if(is_countable($inexistentes) ? count($inexistentes) > 0 : 0) {
+			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
 				throw new Exception($msg);

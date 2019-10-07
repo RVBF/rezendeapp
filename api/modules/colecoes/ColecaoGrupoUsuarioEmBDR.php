@@ -67,7 +67,7 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario {
 
 				DB::table(self::TABELA_RELACIONAL)->where('grupo_usuario_id', $obj->getId())->delete();
 
-				if(is_countable($obj->getUsuarios()) ? count($obj->getUsuarios()): false){
+				if(is_array($obj->getUsuarios()) ? count($obj->getUsuarios()): false){
 					$gruposUsuarios = [];
 
 					foreach($obj->getUsuarios() as $usuario){
