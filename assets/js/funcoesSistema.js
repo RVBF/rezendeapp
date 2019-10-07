@@ -129,6 +129,15 @@
 				router.navigate('/lojas');
 			});
 
+			$(evento.target).find('.cadastrar_loja_link').on('click', function (event) {
+				event.preventDefault();
+				router.navigate('/cadastrar-loja');
+			});
+
+			$(evento.target).find('.editar_loja_link').on('click', function (event) {
+				event.preventDefault();
+				router.navigate('/editar-loja');
+			});
 		}
 	};
 	  

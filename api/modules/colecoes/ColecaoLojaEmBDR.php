@@ -19,18 +19,19 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 	function adicionar(&$obj) {
 		if($this->validarLoja($obj)){
 			try {	
-				$id = DB::table(self::TABELA)->insertGetId(['razaoSocial' => $obj->getRazaoSocial(), 'nomeFantasia' => $obj->getNomeFantasia()]);
-				
-				$obj->setId($id);
+				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-				return $obj;
+				$id = DB::table(self::TABELA)->insertGetId(['razaoSocial' => $obj->getRazaoSocial(), 'nomeFantasia' => $obj->getNomeFantasia()]);
+
+				$obj->setId($id);
+				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 			}
-			catch (\Exception $e)
-			{
+			catch (\Exception $e) {
 				throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
 			}
 		}
-		
+
+		return $obj;
 	}
 
 	function remover($id) {
