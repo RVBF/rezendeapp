@@ -372,4 +372,17 @@ $app->get('/index/tem-permissao', function(Request $req,  Response $res, $args =
 	else $resposta['mensagem'] = 'Usuario não possui permissão para acessar funcionalidade';
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($resposta)));
 });
+
+
+
+$app->get('/index/atividades-usuario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Acessando o cadastro de tarefa");
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraUsuario($req->getParsedBody(), $sessaoUsuario);
+	$resposta = $ctrl->comId($sessaoUsuario->idUsuario());
+	
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($resposta)));
+});
+
+
 ?>

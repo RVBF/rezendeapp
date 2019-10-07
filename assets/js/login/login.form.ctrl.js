@@ -88,6 +88,7 @@
 			_this.formulario.find('#login').focus(); // Coloca o foco no 1° input = nome;
 			_this.formulario.submit(false);
 			_this.botaoLogar.on('click', _this.logar);
+			console.log('entrei');
 		};
 	}; // ControladoraFormLogin
 

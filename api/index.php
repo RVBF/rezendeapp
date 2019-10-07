@@ -5,11 +5,10 @@ use phputil\FileBasedSession as Session;
 
 /**
 *  @author Rafael Vinicius Barros Fereira
+*  @version	1.0
 */
-
 // Realiza ajustes de zona, data e hora do servidor
 date_default_timezone_set('America/Sao_Paulo' );
-
 require_once 'bootstrap.php';
 
 $session = new Session();

@@ -232,7 +232,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 	}	
 
     function contagem($idsLojas = []) {
-		if(is_countable($idsLojas))
+		if(is_array($idsLojas))
 		return (count() > 0) ?  DB::table(self::TABELA)->whereIn('loja_id', $idsLojas)->count() : DB::table(self::TABELA)->count();
 	}
 

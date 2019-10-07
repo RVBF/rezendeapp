@@ -194,7 +194,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario {
 	function comLogin($login)
 	{
 		try {
-			
+
 			if(DB::table(self::TABELA)->where('login', $login)->count() > 0) $usuario = $this->construirObjeto(DB::table(self::TABELA)->where('login', $login)->get()[0]);
 			else $usuario = null;
 			return $usuario;
