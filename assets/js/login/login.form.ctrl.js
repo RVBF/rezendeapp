@@ -55,7 +55,7 @@
 			opcoes.submitHandler = function submitHandler(form) {
 				var obj = _this.conteudo();
 
-				_this.formulario.desabilitar(true);
+				// _this.formulario.desabilitar(true);
 
 				var sucesso = function sucesso(data, textStatus, jqXHR) {
 					window.sucessoPadrao(data, textStatus, jqXHR);
@@ -88,7 +88,6 @@
 			_this.formulario.find('#login').focus(); // Coloca o foco no 1° input = nome;
 			_this.formulario.submit(false);
 			_this.botaoLogar.on('click', _this.logar);
-			console.log('entrei');
 		};
 	}; // ControladoraFormLogin
 
