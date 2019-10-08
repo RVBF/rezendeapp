@@ -3,8 +3,9 @@ var app = {
   api : '/api'
 };
 
-(function(app, document, $, toastr,  window) {
+(function(app, document, $, toastr,  window, BootstrapDialog) {
   'use strict';
+
 	// Opções para mensagens
 	toastr.options.closeButton = false;
 	toastr.options.debug = false;
@@ -61,6 +62,18 @@ var app = {
 		}
 	});
 
+	// Opções para diálogos
+	BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_DEFAULT] = 'Informação';
+	BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_INFO] = 'Informação';
+	BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_PRIMARY] = 'Informação';
+	BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_SUCCESS] = 'Sucesso';
+	BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_WARNING] = 'Aviso';
+	BootstrapDialog.DEFAULT_TEXTS[BootstrapDialog.TYPE_DANGER] = 'Erro';
+	BootstrapDialog.DEFAULT_TEXTS['OK'] = 'OK';
+	BootstrapDialog.DEFAULT_TEXTS['CANCEL'] = 'Cancelar';
+	BootstrapDialog.DEFAULT_TEXTS['CONFIRM'] = 'Confirmação';
+
+
 	$.fn.extend({
 		desabilitar: function (status) {
 			$(this).find("*").each(function(){
@@ -68,5 +81,6 @@ var app = {
 			});
 		}
 	});
-})(app, document, jQuery, toastr,  window);
+
+})(app, document, jQuery, toastr,  window, BootstrapDialog);
   

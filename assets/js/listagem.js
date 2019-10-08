@@ -39,6 +39,8 @@
 			var sucesso = function (resposta) {
 				listagemPadrao.find('.linhas').append(_this.renderizarRows(resposta.data));
 				listagemPadrao.find('.info').append(_this.renderizarInfo(resposta));
+
+				opcoes.rowsCallback(resposta);
 			};
 
 			var erro = function(resposta) {
