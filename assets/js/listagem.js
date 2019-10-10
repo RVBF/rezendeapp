@@ -5,15 +5,70 @@
 	function ListagemPadrao(elemento, opcoes) {
 		var _this = this;
 		var listagemPadrao = elemento;
+		var ultimaResposta = null;
+		_this.objetos = null
 
+		_this.definirEventosTabela = function definirEventosTabela(){
+			listagemPadrao.find('.atualizar').on('click', _this.atualizarTabela);
+			listagemPadrao.on('click', '.paginate_button',function () {
+				var atual = $(this);
+				var paginaAnterior = listagemPadrao.find('#listagem_paginacao').find('.pagina-atual').first();
+
+				paginaAnterior.removeClass('pagina-atual');
+				atual.addClass('pagina-atual');
+				_this.atualizarTabela();
+			});
+		};
+
+		_this.paginaAtual = function paginaAtual(){
+			return listagemPadrao.find('#listagem_paginacao').find('.pagina-atual').first().attr('data-dt-idx');
+		};
+
+		_this.inicioDaPagina = function inicioDaPagina() {
+			var limiteResultadosExibidos = parseInt($('#qtd_resultados').val());
+			var somatorioDeTamanho = 0;
+			for(var i =1; i < _this.paginaAtual; i++){
+				somatorioDeTamanho += _this.paginaAtual;
+				console.log(somatorioDeTamanho);
+
+			}
+
+			return somatorioDeTamanho;
+		};
+
+		_this.tamanhoPagina = function tamanhoPagina() {
+			var limiteResultadosExibidos = parseInt($('#qtd_resultados').val());
+			var somatorioDeTamanho = 0;
+			for(var i =1; i < _this.paginaAtual; i++){
+				somatorioDeTamanho += _this.paginaAtual;
+				console.log(somatorioDeTamanho);
+
+			}
+
+			return somatorioDeTamanho;
+		};
+		
 		_this.requisitarRegistros = function requisitarRegistros() {
+			var parametrosRequisicao =  function parametrosRequisicao() {
+				var limiteResultadosExibidos = $('#qtd_resultados').val();
+				var objeto = {
+					start : _this.inicioDaPagina(),
+					length :  10
+				};
+
+				return objeto
+			};
+
 			return $.ajax({
 				type: "GET",
-				url: opcoes.ajax
+				url: opcoes.ajax,
+				dataType: 'json',
+				data: parametrosRequisicao()
 			});	
 		};
 
 		_this.renderizarRows = function renderizarRows(data){
+			_this.objetos = data;
 			var html = '';
 			html += '<div class="card-panel left-align">';
 
@@ -34,13 +89,13 @@
 
 			return html;
 		};
-
 		_this.renderizarRegistros = function () {
 			var sucesso = function (resposta) {
-				listagemPadrao.find('.linhas').append(_this.renderizarRows(resposta.data));
-				listagemPadrao.find('.info').append(_this.renderizarInfo(resposta));
+				ultimaResposta = resposta;
+				listagemPadrao.find('.linhas').empty().append(_this.renderizarRows(resposta.data));
+				listagemPadrao.find('.info').empty().append(_this.renderizarInfo(resposta));
 
-				opcoes.rowsCallback(resposta);
+				if(typeof opcoes.rowsCallback == 'function') opcoes.rowsCallback(resposta);
 			};
 
 			var erro = function(resposta) {
@@ -59,6 +114,9 @@
 			html += '<div class="sem-espacamentos">';
             html += '<a href="#" class="ico-plus-dto adicao ' + opcoes.cadastrarLink + '">';
             html += '<i class="fas fa-plus orange-text text-accent-3 small"></i>';
+			html += '</a>';
+			html += '<a href="#" class="ico-plus-dto atualizar">';
+            html += '<i class="fas fa-sync orange-text text-accent-3 small"></i>';
             html += '</a>';
         	html += '</div>';
 			html += '<div class="col col-md-8 col-lg-10 col-sm-8  col-6 input-field">';
@@ -85,7 +143,7 @@
 			var html = '';
 			html += '<div class="row">';
 				html += '<div class="col col-12 col-sm-12 col-md-6 col-lg-6 informacao_exibicao">';
-				html += '<div class="informacoes_listagem" id="informacoes_listagem" role="status" aria-live="polite">Mostrando ' + data.draw + ' até ' + data.recordsFiltered + ' de ' + data.recordsTotal + ' registros.</div>';
+				html += '<div class="informacoes_listagem" id="informacoes_listagem" role="status" aria-live="polite">Mostrando ' + (_this.inicioDaPagina()+1) + ' até ' + data.recordsFiltered + ' de ' + data.recordsTotal + ' registros.</div>';
 				html += '</div>'
 
 				html += '<div class="col col-12 col-sm-12 col-md-6 col-lg-6 paginacao">';
@@ -116,7 +174,7 @@
 			var i;
 
 			for(i = 1; i<= quantidadeBotoes; i++){
-				let classes = (i== 1) ? 'paginacao-atual paginate_button' : ' paginate_button';
+				let classes = (i== 1) ? 'pagina-atual paginate_button' : ' paginate_button';
 
 				html += '<a class="' + classes + '" data-dt-idx="' + i  + '" tabindex="0">';
 				html += '	<font style="vertical-align: inherit;">';
@@ -135,16 +193,14 @@
 			return html
 		};
 
-		_this.atualizarTabelainfo = function atualizarInfo(data) {
-			listagemPadrao.find('.informacoes_listagem').empty().html('Mostrando ' + data.draw + ' até ' + data.recordsFiltered + ' de ' + data.recordsTotal + ' registros');
-			
-			listagemPadrao.find('paginacao_listagem').empty().html(_this.renderizarBotoes(data));
-		};
-
-		_this.atualizarTabela = function atualizarTabela(){
+		_this.atualizarTabela = function atualizarTabela(event){
+			if(event != undefined) event.preventDefault();
 			var sucesso = function (resposta) {
-				listagemPadrao.find('.linhas').append(_this.renderizarRows(resposta.data));
-				listagemPadrao.find('.info').append(_this.renderizarInfo(resposta));
+				ultimaResposta = resposta;
+				listagemPadrao.find('.linhas').empty().append(_this.renderizarRows(resposta.data));
+				listagemPadrao.find('.info').empty().append(_this.renderizarInfo(resposta));
+
+				if(typeof opcoes.rowsCallback == 'function') opcoes.rowsCallback(resposta);
 			};
 
 			var erro = function(resposta) {
@@ -159,9 +215,10 @@
 
 		_this.configurar = function configurar() {
 			_this.renderizarTabela();
+			_this.definirEventosTabela();
 		};
 
-	} // ListagemPadrao	
+	}; // ListagemPadrao	
 
 	// Registrando
 	window.listagemPadrao = ListagemPadrao;
@@ -169,7 +226,10 @@
 	$.fn.extend({
 		listar: function (opcoes) {
 			var listagemPadrao = new ListagemPadrao($(this[0]), opcoes);
+			$(this[0]).data('instanciaTabela', listagemPadrao);
 			listagemPadrao.configurar();
+
+			return listagemPadrao;
 		}
 	});
 })(window, jQuery);

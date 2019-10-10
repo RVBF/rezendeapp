@@ -32,13 +32,12 @@ class ControladoraLoja {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
-
+			
 			$dtr = new DataTablesRequest($this->params);
-
+			// Debuger::printr($this->params);
 			$contagem = 0;
 			$objetos = [];
 			$erro = null;
-
 			$objetos = $this->colecaoLoja->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');
 
 			$contagem = $this->colecaoLoja->contagem();
@@ -50,7 +49,7 @@ class ControladoraLoja {
 
 		$conteudo = new DataTablesResponse(
 			$contagem,
-			$contagem, //count($objetos ),
+			count($objetos), //count($objetos ),
 			$objetos,
 			$dtr->draw,
 			$erro

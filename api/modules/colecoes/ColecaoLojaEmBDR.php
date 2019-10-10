@@ -196,16 +196,23 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 	}
 
 	private function validarDeleteLoja($id){
-		$qtdReacionamento = DB::table(ColecaoChecklistEmBDR::TABELA)->where('loja_id', $id)->count();
+		// $qtdReacionamento = DB::table(ColecaoChecklistEmBDR::TABELA)->where('loja_id', $id)->count();
 
-		if($qtdReacionamento > 0){
-			throw new ColecaoException('Essa loja possue tarefas relacionados a ela! Exclua todos as tarefas cadastros e tente novamente.');
-		}
+		// if($qtdReacionamento > 0){
+		// 	throw new ColecaoException('Essa loja possue tarefas relacionados a ela! Exclua todos as tarefas cadastros e tente novamente.');
+		// }
 
-		$qtdReacionamento = DB::table(ColecaoColaboradorEmBDR::TABELA_RELACIONAL)->where('loja_id', $id)->count();
+		// $qtdReacionamento = DB::table(ColecaoColaboradorEmBDR::TABELA_RELACIONAL)->where('loja_id', $id)->count();
 
-		if($qtdReacionamento > 0){
-			throw new ColecaoException('Essa loja possue usuários relacionados a ela! Exclua todos os usuários cadastros e tente novamente.');
+		// if($qtdReacionamento > 0){
+		// 	throw new ColecaoException('Essa loja possue usuários relacionados a ela! Exclua todos os usuários cadastros e tente novamente.');
+		// }
+
+		$qtdReacionamento = DB::table(self::TABELA)->where('id', $id)->count();
+		
+		if($qtdReacionamento == 0){
+			throw new ColecaoException('Loja Inexistente!');
+			return false;
 		}
 
 		return true;

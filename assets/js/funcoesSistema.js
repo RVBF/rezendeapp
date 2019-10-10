@@ -207,33 +207,12 @@
 		};
 
 		window.sucessoPadrao = function sucessoPadrao(data, textStatus, jqXHR){
-			// var datatable = $('body').find('.table').DataTable();
-
-			// if(data.status){
-			// 	if($('body').find('.table').length) datatable.ajax.reload();
-			// 	toastr.success(data.mensagem);
-			// }
-			// else{
-			// 	toastr.error(data.mensagem);
-			// }
-		};
-
-		window.sucessoParaFormulario = function sucerepostas_formssoParaFormulario( data, textStatus, jqXHR ) {
-			var contexto = $('body').find('#painel_formulario');
-			
-			window.sucessoPadrao(data, textStatus, jqXHR);
-
 			if(data.status){
-				contexto.find('form')[0].reset();
-				contexto.desabilitar(true);
-				contexto.addClass('desabilitado');
-				contexto.addClass('d-none');
+				// if($('body').find('.table').length) datatable.ajax.reload();
+				toastr.success(data.mensagem);
 			}
 			else{
-				contexto.desabilitar(false);
-				contexto.find('form').find('.msg').empty();
-				contexto.find('form').find('.msg').append(data.mensagem);
-				contexto.find('form').find('.msg').parents('.row').removeClass('d-none');
+				toastr.error(data.mensagem);
 			}
 		};
 	});
