@@ -18,7 +18,7 @@ class Checklist {
     private $loja;
     private $questionador;
     private $responsavel;
-]
+
     const TAM_TITULO_MIM = 2;
     const TAM_TITULO_MAX = 100;
 
@@ -31,7 +31,7 @@ class Checklist {
         $setor = null,
         $loja = null,
         $questionador = null,
-        $responsavel = null,
+        $responsavel = null
     ) {
         $this->id = $id;
         $this->titulo = $titulo;

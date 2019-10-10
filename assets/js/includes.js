@@ -83,26 +83,29 @@
 	var dependenciasCSS = [];
 	
 	dependenciasCSS.push({ url : 'https://fonts.googleapis.com/icon?family=Material+Icons' });
-	dependenciasCSS.push({ url : 'https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap' });	
+	dependenciasCSS.push({ url : 'https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap' });
+	dependenciasCSS.push({ url : 'vendor/bootstrap/dist/css/bootstrap.min.css'});	
+	dependenciasCSS.push({ url : 'assets/styles/bootstrap3.css'});
+	
+	dependenciasCSS.push({ url : 'vendor/bootstrap/dist/css/bootstrap-reboot.css' });
+	dependenciasCSS.push({ url : 'vendor/bootstrap/dist/css/bootstrap-grid.css' });
+	
 	dependenciasCSS.push({ url : 'assets/styles/materialdesignicons.css', opcoes : { media : 'screen,projection' }});
-	dependenciasCSS.push({ url : 'assets/styles/materialize.min.css', opcoes : { media : 'screen,projection' }});
+	dependenciasCSS.push({ url : 'assets/styles/materialize.css', opcoes : { media : 'screen,projection' }});
+	dependenciasCSS.push({ url : 'vendor/font-awesome/css/all.min.css', opcoes : { media : 'screen,projection' }});
 	dependenciasCSS.push({ url : 'assets/styles/style.css', opcoes : { media : 'screen,projection' }});
-	// dependenciasCSS.push({ url : 'https://fonts.googleapis.com/css/?family=Roboto:100,300,400,700,900' });
-	// dependenciasCSS.push({ url : 'assets/styles/main.css' });
-	// dependenciasCSS.push({ url : 'vendor/font-awesome/web-fonts-with-css/css//fontawesome-all.css' });
-	// dependenciasCSS.push({ url : 'vendor/bootstrap/dist/css//bootstrap.css' });
-	// dependenciasCSS.push({ url : 'assets/styles/bootstrap.css' });
+	dependenciasCSS.push({ url : 'assets/styles/estilo.css', opcoes : { media : 'screen,projection' }});
 
-	// dependenciasCSS.push({ url : 'vendor/bootstrap/dist/css//bootstrap-reboot.css' });
-	// dependenciasCSS.push({ url : 'vendor/bootstrap/dist/css//bootstrap-grid.css' });
+	dependenciasCSS.push({ url : 'vendor/tether/dist/css/tether.min.css' });	
+	dependenciasCSS.push({ url : 'vendor/bootstrap3-dialog/dist/css//bootstrap-dialog.min.css' });
+	dependenciasCSS.push({ url : 'vendor/toastr/toastr.min.css' });
 	// dependenciasCSS.push({ url : 'vendor/datatables.net-dt/css//jquery.dataTables.min.css' });
 	// dependenciasCSS.push({ url : 'vendor/datatables/media/css//dataTables.bootstrap4.css' });
 	// dependenciasCSS.push({ url : 'vendor/datatables.net-responsive-dt/css//responsive.dataTables.min.css' });
 
 	// dependenciasCSS.push({ url : 'vendor/datatables.net-responsive-bs4/css//responsive.bootstrap4.css' });
 	// dependenciasCSS.push({ url : 'vendor/datatables.net-select-dt/css//select.dataTables.min.css' });
-	// dependenciasCSS.push({ url : 'vendor/bootstrap-dialog/dist/css//bootstrap-dialog.min.css' });
-	// dependenciasCSS.push({ url : 'vendor/toastr/toastr.min.css' });
+
 	// dependenciasCSS.push({ url : 'vendor/pickadate/lib/compressed/themes/default.css' });
 	// dependenciasCSS.push({ url : 'vendor/pickadate/lib/compressed/themes/default.time.css' });
 	// dependenciasCSS.push({ url : 'vendor/pickadate/lib/compressed/themes/default.date.css' });
@@ -127,8 +130,16 @@
 
 	dependenciasJavaScript.push({url : 'vendor/jquery/dist/jquery.min.js', async : true, onLoad : function(dependenciasJavaScript){
 		// loader.script('vendor/popper.js/dist/umd/popper.min.js');
-		// loader.script('vendor/bootstrap/dist/js/bootstrap.js');
-		// loader.script('vendor/bootstrap/dist/js/bootstrap.bundle.js');
+		loader.script('vendor/tether/dist/js/tether.min.js');
+		loader.script('vendor/bootstrap/dist/js/bootstrap.min.js');	
+		loader.script('vendor/toastr/toastr.min.js');
+		loader.script('assets/js/bootstrap.js');
+
+		loader.script('vendor/bootstrap3-dialog/dist/js/bootstrap-dialog.min.js');
+
+		loader.script('vendor/jquery-validation/dist/jquery.validate.min.js');
+		loader.script('vendor/grapnel/dist/grapnel.min.js');		
+
 		// loader.script('vendor/datatables/media/js/jquery.dataTables.js');
 		// loader.script('vendor/datatables/media/js/dataTables.bootstrap4.min.js');
 		// loader.script('vendor/datatables/media/js/dataTables.bootstrap.js');
@@ -139,11 +150,7 @@
 		// loader.script('vendor/datatables.net-responsive-bs4/js/responsive.bootstrap4.js');
 		// loader.script('vendor/datatables.net-select/js/dataTables.select.min.js');
 		// loader.script('vendor/datatables.net-select-dt/js/select.dataTables.js');
-		loader.script('vendor/toastr/toastr.min.js');
-		// loader.script('vendor/jquery-validation/dist/jquery.validate.min.js');
-		loader.script('vendor/grapnel/dist/grapnel.min.js');
-		// loader.script('assets/js/bootstrap.js');
-		// loader.script('vendor/bootstrap-dialog/dist/js/bootstrap-dialog.min.js');
+	
 		// loader.script('vendor/pickadate/lib/compressed/picker.js');
 		// loader.script('vendor/pickadate/lib/compressed/picker.date.js');
 		// loader.script('vendor/pickadate/lib/compressed/picker.time.js');
@@ -152,8 +159,8 @@
 		// loader.script('vendor/moment/min/moment.min.js');
 		// loader.script('vendor/downloadjs/download.min.js');
 
-        // Inicialização
-		// loader.script('assets/js/jquery.meanmenu.js');
+		// Inicialização
+		loader.script('assets/js/listagem.js');
 		loader.script('assets/js/materialize.js');		
 		loader.script('assets/js/init.js');		
 		loader.script('assets/js/app.js');

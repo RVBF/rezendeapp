@@ -10,12 +10,14 @@ class ControladoraLogin {
 	private $params;
 	private $servico;
 	private $colecaoUsuario;
+	private $colecaoColaborador;
 	private $sessao;
 
 	function __construct($params, Sessao $sessao) {
 		$this->params = $params;
 		$this->sessao = $sessao;
 		$this->colecaoUsuario = Dice::instance()->create('ColecaoUsuario');
+		$this->colecaoColaborador= Dice::instance()->create('ColecaoColaborador');
 		$this->servico = new ServicoLogin($this->sessao, $this->colecaoUsuario);
 	}
 
@@ -23,18 +25,16 @@ class ControladoraLogin {
 		try {
 			$inexistentes = \ArrayUtil::nonExistingKeys([ 'login', 'senha' ], $this->params);
 
-			if(is_countable($inexistentes) ? count($inexistentes) > 0 : false) {
+			if(is_array($inexistentes) ? count($inexistentes) > 0 : false) {
 				$msg = 'Os seguintes campos não foram enviados: ' . implode(', ', $inexistentes);
 				throw new Exception($msg);
-				
-				// return $this->geradoraResposta->erro($msg, GeradoraResposta::TIPO_TEXTO);
 			}
 	
 			$usuario = $this->servico->login(\ParamUtil::value($this->params, 'login'), \ParamUtil::value($this->params, 'senha'));
+			$colaborador = $this->colecaoColaborador->comUsuarioId($usuario->getId());
+			$conteudo = is_a($usuario, 'Usuario') ? ['id' => $usuario->getId(), 'login'=> $usuario->getLogin(), 'admin' => $usuario->getAdministrador(), 'nome' => $colaborador->getNome() . ' ' . $colaborador->getSobrenome()] : [];
 
-			$conteudo = ['id' => $usuario->getId(), 'nome'=> $usuario->getLogin(), 'admin' => $usuario->getAdministrador()];
-
-			$resposta = ['usuario'=> $conteudo, 'status' => true, 'mensagem'=> 'Logado Com sucesso.']; 
+			$resposta = ['usuario'=> $conteudo, 'status' => count($conteudo) ? true : false, 'mensagem'=> count($conteudo) ? 'Logado Com sucesso.' : 'Erro ao logar.' ]; 
 		}
 		catch (\Exception $e) {
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 

@@ -32,13 +32,12 @@ class ControladoraLoja {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
-
+			
 			$dtr = new DataTablesRequest($this->params);
-
+			// Debuger::printr($this->params);
 			$contagem = 0;
 			$objetos = [];
 			$erro = null;
-
 			$objetos = $this->colecaoLoja->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');
 
 			$contagem = $this->colecaoLoja->contagem();
@@ -50,7 +49,7 @@ class ControladoraLoja {
 
 		$conteudo = new DataTablesResponse(
 			$contagem,
-			$contagem, //count($objetos ),
+			count($objetos), //count($objetos ),
 			$objetos,
 			$dtr->draw,
 			$erro
@@ -74,7 +73,7 @@ class ControladoraLoja {
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'razaoSocial','nomeFantasia'], $this->params);
 			$resposta = [];
 
-			if(is_countable($inexistentes) ? count($inexistentes) > 0 : 0) {
+			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
 				throw new Exception($msg);
@@ -114,7 +113,7 @@ class ControladoraLoja {
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'razaoSocial','nomeFantasia'], $this->params);
 			$resposta = [];
 
-			if(is_countable($inexistentes) ? count($inexistentes) > 0 : 0) {
+			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
 				throw new Exception($msg);
