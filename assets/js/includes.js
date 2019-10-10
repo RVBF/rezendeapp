@@ -133,10 +133,12 @@
 		loader.script('vendor/tether/dist/js/tether.min.js');
 		loader.script('vendor/bootstrap/dist/js/bootstrap.min.js');	
 		loader.script('vendor/toastr/toastr.min.js');
+		loader.script('assets/js/bootstrap.js');
+
+		loader.script('vendor/bootstrap3-dialog/dist/js/bootstrap-dialog.min.js');
+
 		loader.script('vendor/jquery-validation/dist/jquery.validate.min.js');
 		loader.script('vendor/grapnel/dist/grapnel.min.js');		
-		loader.script('vendor/bootstrap3-dialog/dist/js/bootstrap-dialog.min.js');
-		loader.script('assets/js/bootstrap.js');
 
 		// loader.script('vendor/datatables/media/js/jquery.dataTables.js');
 		// loader.script('vendor/datatables/media/js/dataTables.bootstrap4.min.js');

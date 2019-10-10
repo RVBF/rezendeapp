@@ -46,7 +46,10 @@
 				};
 				
 				var jqXHR = _this.alterar ? servicoLoja.atualizar(obj) : servicoLoja.adicionar(obj);
-				jqXHR.done(window.sucessoParaFormulario).fail(window.erro).always(terminado);
+				jqXHR.done(function() {
+					router.navigate('/lojas');
+					toastr.success('Loja Adicionada com sucesso!')
+				}).fail(window.erro).always(terminado);
 
 				if(_this.alterar){
 					$('.depende_selecao').each(function(){

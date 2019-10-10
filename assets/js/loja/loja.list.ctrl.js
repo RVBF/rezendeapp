@@ -24,19 +24,18 @@
 			objeto.ajax = servicoLoja.rota();
 
 			objeto.carregando = true;
-			objeto.pageLength = 20;
-			objeto.lengthMenu =  [20, 30, 40, 100];
+			objeto.pageLength = 10;
+			objeto.lengthMenu =  [10, 30, 40, 100];
 			objeto.searching= true;
 			objeto.ordering= true;
 			objeto.searching = true;
 			objeto.searchDelay = 600;	
-			objeto.order = 'DESC';
 			objeto.cadastrarLink = 'cadastrar_loja_link';
 			objeto.columnDefs = function (data){
 				var html = '';
 					
 				html += '<div class="col co-lg-8 col-md-8 col-sm-8 col-12 objeto" data="'+ data.id +'">'
-				html += '<p class="f-12-dto razaosocial" data="'+ data.razaoSocial +'"><strong>Razão Social : </strong>'+ data.razaoSocial + '</p>'
+				html += '<p class="f-12-dto razaoSocial" data="'+ data.razaoSocial +'"><strong>Razão Social : </strong>'+ data.razaoSocial + '</p>'
 				html += '<p class="f-12-dto nomeFantasia"  data="'+ data.nomeFantasia +'"><strong>Nome Fantasia : </strong>'+ data.nomeFantasia + '</p>'
 				html += '<p class="f-12-dto"> <strong>Loja</strong>  Loja Conselheiro - Nova Friburgo</p>';
 				html += '</div>';
@@ -79,25 +78,26 @@
 		};
 
 		_this.atualizar = function atualizar(){
- 			_tabela.ajax.reload();
+			_tabela.atualizarTabela();
 		};
 
 		_this.remover = function remover(event){
-			let id =$(this).parents('.objeto').attr('data');
-			let razaoSocial = $(this).parents('.objeto').find('.razaosocial').attr('data');
-			let nomeFantasia = $(this).parents('.objeto').find('.nomeFantasia').attr('data');
+			let id =$(this).parents('.listagem-padrao-item').find('.objeto').attr('data');
+			let razaoSocial = $(this).parents('.listagem-padrao-item').find('.razaoSocial').attr('data');
+			let nomeFantasia = $(this).parents('.listagem-padrao-item').find('.nomeFantasia').attr('data');
 
 			BootstrapDialog.show({
 				type	: BootstrapDialog.TYPE_DANGER,
 				title	: 'Deseja remover esta Loja?',
-				message	: 'Loja: ' + razaoSocial + '/' + nomeFantasia,
+				message	: 'Razão Social: ' + razaoSocial + '<br> Nome Fantasia :' + nomeFantasia,
 				size	: BootstrapDialog.SIZE_LARGE,
 				buttons	: [ {
 						label	: '<u>S</u>im',
 						hotkey	: 'S'.charCodeAt(0),
 						action	: function(dialog){
-							Loja.remover(id).done(window.sucessoPadrao).fail(window.erro);
+							servicoLoja.remover(id).done(window.sucessoPadrao).fail(window.erro);
 							_this.atualizar();
+
 							dialog.close();
 						}
 					}, {
@@ -114,27 +114,6 @@
 		_this.visualizar = function visualizar(){
 			var objeto = _tabela.row($(this).parent(' td').parent('tr')).data();
 			router.navigate('/categoria/visualizar/' +  objeto.id + '/');
-
-		};
-
-		_this.selecionar = function selecionar() {
-			var objeto = _tabela.row('.selected').data();
-
-			$('.depende_selecao').each(function(){
-				$(this).prop('disabled', false);
-			});
-
-			$('.opcoes').removeClass('desabilitado').removeClass('d-none');data
-			$('.opcoes').desabilitar(false);
-		};
-
-		_this.deselect = function deselect() {
-			$('.depende_selecao').each(function(){
-				$(this).prop('disabled', true);
-			});
-			
-			$('.opcoes').addClass('desabilitado').addClass('d-none');
-			$('.opcoes').desabilitar(true);
 		};
 
 		_this.configurar = function configurar() {
