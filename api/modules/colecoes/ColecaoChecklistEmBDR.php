@@ -10,7 +10,7 @@ use Carbon\Carbon;
  */
 
 class ColecaoChecklistEmBDR implements ColecaoChecklist {
-	const TABELA = 'tarefa';
+	const TABELA = 'checklist';
 
 	function __construct(){}
 

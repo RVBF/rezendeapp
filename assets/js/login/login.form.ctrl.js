@@ -55,11 +55,9 @@
 			opcoes.submitHandler = function submitHandler(form) {
 				var obj = _this.conteudo();
 
-				_this.formulario.desabilitar(true);
+				// _this.formulario.desabilitar(true);
 
 				var sucesso = function sucesso(data, textStatus, jqXHR) {
-					window.sucessoPadrao(data, textStatus, jqXHR);
-
 					if(data.status) {
 						window.sessionStorage.setItem('usuario', JSON.stringify(data.usuario));
 						$('body').empty().load('index.html', function(){

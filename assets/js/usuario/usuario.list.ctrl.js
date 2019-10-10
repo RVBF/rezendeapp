@@ -16,34 +16,49 @@
 		_this.botaoEditar = $('#editar');
 		_this.botaoRemover = $('#remover');
 		_this.botaoAtualizar = $('#atualizar');
-		_this.idTabela = $('#usuario');
+		_this.idTabela = $('#listagem_colaboradores');
 		var ctrlFormulario = new app.ControladoraFormUsuario(servicoUsuario);
 
 		//Configura a tabela
 		_this.opcoesDaTabela = function opcoesDaTabela() {
-			var objeto = $.extend(true, {}, app.dtOptions);
+			var objeto =  new Object();
 			objeto.ajax = servicoUsuario.rota();
 
-			objeto.columnDefs = [ {
-					data: 'id',
-					targets: 0,
-					visible : true
-				}, {
-					data: function(data) {
-						return data.colaborador.nome + ' ' + data.colaborador.sobrenome 	
-					},
-					targets: 1
-				}, {
-					data: 'colaborador.email',
-					targets: 2
-                }, {
-					data: 'login',
-					targets: 3
-                }
-			];
+			objeto.carregando = true;
+			objeto.pageLength = 20;
+			objeto.lengthMenu =  [20, 30, 40, 100];
+			objeto.searching= true;
+			objeto.ordering= true;
+			objeto.searching = true;
+			objeto.searchDelay = 600;	
+			objeto.order = 'DESC';
+			objeto.cadastrarLink = 'cadastrar_colaborador_link';
+			objeto.columnDefs = function (data){
+				var html = '';
+				html += '<div class="col co-lg-2 col-md-2 col-sm-2 col-4 ">';
+				html += '<img src="https://acotelha.com.br/wp-content/uploads/2018/02/AVATAR-PARA-O-SITE-02.png" class="avatar"></img>';
+				html += '</div>';
+				
+				html += '<div class="col co-lg-6 col-md-6 col-sm-6 col-8">'
+				html += '<p class="f-12-dto"><strong>Nome : </strong>'+ data.colaborador.nome + ' ' + data.colaborador.sobrenome + '</p>'
+				html += '<p class="f-12-dto"><strong>Email : </strong>'+ data.colaborador.email + '</p>'
+				
+				html += '<p class="f-12-dto"><strong>Setor : </strong>TI</p>';
+				html += '<p class="f-12-dto"> <strong>Loja</strong>  Loja Conselheiro - Nova Friburgo</p>';
+				html += '<p class="f-12-dto"> <strong>Usuário: </strong>  '+ data.login +  '</p>';
+				html += '</div>';
+
+				html += '<div class="col co-lg-4 col-md-4 col-sm-4 col-12 opcoes">';
+				html += '<p class="f-12-dto"><i class="mdi mdi-table-edit"></i> Editar</p>';
+				html += '<p class="f-12-dto"><i class="mdi mdi-loupe"></i> Visualizar</p>';
+				html += '<p class="f-12-dto"><i class="mdi mdi-delete"> </i> Excluir</p>';
+				html += '</div>';
+
+				return html;
+			};
 
 			return objeto;
-		};'.selected'
+		};
 
 		_this.cadastrar = function cadastrar() {
 			var modoEdicao = false;
@@ -120,34 +135,12 @@
 
 		}; // remover
 
-		_this.selecionar = function selecionar() {
-			var objeto = _tabela.row('.selected').data();
-
-			$('.depende_selecao').each(function(){
-				$(this).prop('disabled', false);
-			});
-
-			$('.opcoes').removeClass('desabilitado').removeClass('d-none');
-			$('.opcoes').desabilitar(false);
-		};
-
-		_this.deselect = function deselect() {
-			$('.depende_selecao').each(function(){
-				$(this).prop('disabled', true);
-			});
-			
-			$('.opcoes').addClass('desabilitado').addClass('d-none');
-			$('.opcoes').desabilitar(true);
-		};
-
 		_this.configurar = function configurar() {
-			_tabela = _this.idTabela.DataTable(_this.opcoesDaTabela());
+			_tabela = _this.idTabela.listar(_this.opcoesDaTabela());
 			_this.botaoCadastrar.on('click',_this.cadastrar);
 			_this.botaoEditar.on('click', _this.editar)
 			_this.botaoAtualizar.on('click',_this.atualizar);
 			_this.botaoRemover.on('click', _this.remover);;
-			_tabela.on('select',_this.selecionar);
-			_tabela.on('deselect', _this.deselect);		
 		};
 	} // ControladoraListagemUsuario
 

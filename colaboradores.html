@@ -1,0 +1,21 @@
+
+<section class="listagem-padrao" id="listagem_colaboradores">    
+    <div class="row">
+		<div class="col col-sm-12 col-12">
+			<div class="linhas"> </div>
+		</div>
+    </div>
+    <div class="row">
+        <div class="info"></div>
+    </div>
+</section>
+
+
+<script>
+    $(document).ready(function() {
+        var servicoUsuario = new app.ServicoUsuario();
+        var crltusuario = new app.ControladoraListagemUsuario(servicoUsuario);
+
+        crltusuario.configurar();
+    });
+</script>
