@@ -21,44 +21,43 @@
 		};
 
 		_this.paginaAtual = function paginaAtual(){
-			return listagemPadrao.find('#listagem_paginacao').find('.pagina-atual').first().attr('data-dt-idx');
+			return parseInt(listagemPadrao.find('#listagem_paginacao').find('.pagina-atual').first().attr('data-dt-idx'));
 		};
 
 		_this.inicioDaPagina = function inicioDaPagina() {
-			var limiteResultadosExibidos = parseInt($('#qtd_resultados').val());
-			var somatorioDeTamanho = 0;
-			for(var i =1; i < _this.paginaAtual; i++){
-				somatorioDeTamanho += _this.paginaAtual;
-				console.log(somatorioDeTamanho);
+			let limiteResultadosExibidos = parseInt($('#qtd_resultados').val());
 
-			}
-
-			return somatorioDeTamanho;
+			return (listagemPadrao.find('.linhas').find('.listagem-padrao-item').length == 0) ? 0 : _this.tamanhoPagina() - limiteResultadosExibidos;
 		};
 
 		_this.tamanhoPagina = function tamanhoPagina() {
-			var limiteResultadosExibidos = parseInt($('#qtd_resultados').val());
-			var somatorioDeTamanho = 0;
-			for(var i =1; i < _this.paginaAtual; i++){
-				somatorioDeTamanho += _this.paginaAtual;
-				console.log(somatorioDeTamanho);
-
+			let limiteResultadosExibidos = parseInt($('#qtd_resultados').val());
+			let somatorioDeTamanho = 0;
+			
+			if(listagemPadrao.find('.linhas').find('.listagem-padrao-item').length == 0){
+				return opcoes.length;
+			}else{
+				for(var i =1; i <= _this.paginaAtual(); i++) {
+					somatorioDeTamanho += limiteResultadosExibidos;
+					
+				}
+				return somatorioDeTamanho;
 			}
-
-			return somatorioDeTamanho;
 		};
 		
 		_this.requisitarRegistros = function requisitarRegistros() {
 			var parametrosRequisicao =  function parametrosRequisicao() {
 				var limiteResultadosExibidos = $('#qtd_resultados').val();
+
 				var objeto = {
 					start : _this.inicioDaPagina(),
-					length :  10
+					length : _this.tamanhoPagina()
 				};
 
 				return objeto
 			};
 
+			console.log(parametrosRequisicao());
 			return $.ajax({
 				type: "GET",
 				url: opcoes.ajax,
