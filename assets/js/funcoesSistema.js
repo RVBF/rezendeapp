@@ -138,6 +138,16 @@
 				event.preventDefault();
 				router.navigate('/editar-loja');
 			});
+
+			$(evento.target).find('.setor_link').on('click', function (event) {
+				event.preventDefault();
+				router.navigate('/setores');
+			});
+			
+			$(evento.target).find('.cadastrar_setor_link').on('click', function(event) {
+				event.preventDefault();
+				router.navigate('/cadastrar-setor');
+			});
 		}
 	};
 	  

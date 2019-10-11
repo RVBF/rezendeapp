@@ -21,27 +21,41 @@
 
 		//Configura a tabela
 		_this.opcoesDaTabela = function opcoesDaTabela() {
-			var objeto = $.extend(true, {}, app.dtOptions);
+			var objeto =  new Object();
 			objeto.ajax = servicoSetor.rota();
 
-			objeto.columnDefs = [ {
-					data: 'id',
-					targets: 0,
-					visible : true
-				}, {
-					data: 'titulo',
-					targets: 1
-				}, {
-					data: 'descricao',
-					targets: 2
-				}, {
-					data: 'categoria.titulo',
-					targets: 3
-				}
-			];
+			objeto.carregando = true;
+			objeto.pageLength = 10;
+			objeto.lengthMenu =  [10, 30, 40, 100];
+			objeto.searching= true;
+			objeto.ordering= true;
+			objeto.searching = true;
+			objeto.searchDelay = 600;	
+			objeto.cadastrarLink = 'cadastrar_setor_link';
+			objeto.columnDefs = function (data){
+				var html = '';
+					
+				html += '<div class="col co-lg-8 col-md-8 col-sm-8 col-12 objeto" data="'+ data.id +'">'
+				html += '<p class="f-12-dto titulo" data="'+ data.titulo +'"><strong>Título: </strong>'+ data.titulo + '</p>'
+				html += '<p class="f-12-dto descricao"  data="'+ data.descricao +'"><strong>Descrição : </strong>'+ data.descricao + '</p>'
+				html += '</div>';
+
+
+				html += '<div class="col co-lg-4 col-md-4 col-sm-4 col-12 opcoes">';
+				html += '<div class="col col-4"><a class="f-12-dto grey lighten-4 btn editar_loja_link"><i class="mdi mdi-table-edit"></i> </a></div>';
+				html += '<div class="col col-4"><a class="f-12-dto grey lighten-4 btn visualizar_loja_link"><i class="mdi mdi-loupe"></i> </a></div>';
+				html += '<div class="col col-4"><a class="f-12-dto grey lighten-4 btn remover_loja_link" id ="remover"><i class="mdi mdi-delete"> </i> </a></div>';
+				html += '</div>';
+
+				return html;
+			};
+
+			objeto.rowsCallback = function(resposta){
+				$('.remover_loja_link').on('click', _this.remover);
+			};
 
 			return objeto;
-		};'.selected'
+		};
 
 		_this.cadastrar = function cadastrar() {
 			var modoEdicao = false;
@@ -137,14 +151,7 @@
 		};
 
 		_this.configurar = function configurar() {
-			_tabela = _this.idTabela.DataTable(_this.opcoesDaTabela());
-			_this.botaoCadastrar.on('click',_this.cadastrar);
-			_this.botaoEditar.on('click', _this.editar)
-			_this.botaoAtualizar.on('click',_this.atualizar);
-			_this.botaoRemover.on('click', _this.remover);
-
-			_tabela.on('select',_this.selecionar);
-			_tabela.on('deselect', _this.deselect);		
+			_tabela = _this.idTabela.listar(_this.opcoesDaTabela());
 		};
 	} // ControladoraListagemSetor
 

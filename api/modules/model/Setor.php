@@ -10,16 +10,14 @@ class Setor {
     private $id;
     private $titulo;
     private $descricao;
-    private $categoria;
 
     const TAM_MIN_TITUlO = 2;
     const TAM_MAX_TITUlO = 100;
 
-    function __construct($id = 0, $titulo = '', $descricao = '', $categoria = null) {
+    function __construct($id = 0, $titulo = '', $descricao = '') {
         $this->id = $id;
         $this->titulo = $titulo;
         $this->descricao = $descricao;
-        $this->categoria = $categoria;
     }
 
     public function getId(){
@@ -37,15 +35,7 @@ class Setor {
     public function setDescricao($descricao){
         $this->descricao = $descricao;
     }
-
-    public function getCategoria(){
-        return $this->categoria; 
-    }
- 
-    public function setCategoria(Categoria $categoria){
-        $this->categoria = $categoria;
-    }
-
+    
     public function getTitulo(){
         return $this->titulo; 
     }

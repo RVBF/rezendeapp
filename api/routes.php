@@ -41,11 +41,12 @@ $app->delete('/categorias/{id}', function(Request $req,  Response $res, $args = 
 
 // Início das rotas para setor
 $app->get('/setor', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-	$this->logger->addInfo("Acessando listagem de setor");	
+	$this->logger->addInfo("Acessando listagem de setores");	
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraSetor($req->getQueryParams(), $sessaoUsuario);
 	$response = $ctrl->todos();
-	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
+
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 });
 
 $app->post('/setor', function(Request $req,  Response $res, $args = []) use ($app, $session) {

@@ -1,5 +1,7 @@
 <?php
 use Illuminate\Database\Capsule\Manager as DB;
+use \phputil\RTTI;
+
 /**
  *	Coleção de Setor em Banco de Dados Relacional.
  *
@@ -16,16 +18,14 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 		if($this->validarSetor($obj)){
 			try {	
 
-				$id = DB::table(self::TABELA)->insertGetId(['titulo' => $obj->getTitulo(),
-					'descricao'=> $obj->getDescricao(),
-					'categoria_id'=> $obj->getCategoria()->getId()
-				]);
-				
+				$id = DB::table(self::TABELA)->insertGetId(['titulo' => $obj->getTitulo(), 'descricao'=> $obj->getDescricao()]);
+
 				$obj->setId($id);
 
 				return $obj;
 			}
 			catch (\Exception $e) {
+
 				throw new ColecaoException("Erro ao cadastrar setor.", $e->getCode(), $e);
 			}
 		}
@@ -87,20 +87,16 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 	 */
 	function todos($limite = 0, $pulo = 0, $search = '') {
 		try {	
-
 			$query = DB::table(self::TABELA)->select(self::TABELA . '.*');
 
 			if($search != '') {
 				$buscaCompleta = $search;
 				$palavras = explode(' ', $buscaCompleta);
 				
-				$query->leftJoin(ColecaoCategoriaEmBDR::TABELA, ColecaoCategoriaEmBDR::TABELA . '.id', '=', self::TABELA . '.categoria_id');
-
 				$query->where(function($query) use ($buscaCompleta){
 					$query->whereRaw(self::TABELA . '.id like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw(self::TABELA . '.titulo like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw(self::TABELA . '.descricao like "%' . $buscaCompleta . '%"');
-					$query->orWhereRaw(ColecaoCategoriaEmBDR::TABELA . '.titulo like "%' . $buscaCompleta . '%"');
 
 				});
 				
@@ -112,7 +108,6 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 								$query->whereRaw(self::TABELA . '.id like "%' . $palavra . '%"');
 								$query->orWhereRaw(self::TABELA . '.titulo like "%' . $palavra . '%"');
 								$query->orWhereRaw(self::TABELA . '.descricao like "%' . $buscaCompleta . '%"');
-								$query->orWhereRaw(ColecaoCategoriaEmBDR::TABELA . '.titulo like "%' . $buscaCompleta . '%"');
 							}
 						}
 						
@@ -125,8 +120,7 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 
 			$setorObjects = [];
 			foreach ($setors as $setor) {
-
-				$setorObjects[] =  $this->construirObjeto($setor);
+				$setorObjects[] = RTTI::getAttributes($this->construirObjeto($setor),RTTI::allFlags());
 			}
 
 			return $setorObjects;
@@ -138,8 +132,7 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 	}
 
 	function construirObjeto(array $row) {
-		$categoria = ($row['categoria_id'] > 0) ? Dice::instance()->create('ColecaoCategoria')->comId($row['categoria_id']) : null;
-		$setor = new Setor($row['id'],$row['titulo'], $row['descricao'], $categoria);
+		$setor = new Setor($row['id'],$row['titulo'], $row['descricao']);
 
 		return $setor;
 	}
@@ -153,7 +146,7 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 			throw new ColecaoException('Valor inválido para título.');
 		}
 
-		$quantidade = DB::table(self::TABELA)->where('titulo', $obj->getTitulo())->where('categoria_id', $obj->getCategoria()->getId())->where('id', '<>', $obj->getId())->count();
+		$quantidade = DB::table(self::TABELA)->where('titulo', $obj->getTitulo())->where('id', '<>', $obj->getId())->count();
 
 		if($quantidade > 0){
 			throw new ColecaoException('Já exite um setor cadastrado com esse título');
