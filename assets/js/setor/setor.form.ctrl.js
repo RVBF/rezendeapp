@@ -23,14 +23,10 @@
 					"titulo": {required : true,
 						rangelength : [ 2, 100 ] 
 					},
-					"categoria" :{required : true}
 
 				},
 
 				messages: {
-					"categoria": {
-						required    : "O campo categoria é obrigatório."
-					},
 					"titulo": {
 						required    : "O campo título é obrigatório.",
 						rangelength : "O campo deve conter no mínimo {2} e no máximo {100} caracteres."
@@ -40,13 +36,18 @@
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
 				var obj = _this.conteudo();
-
+				
+				var terminado = function() {
+					_this.formulario.desabilitar(false);
+				};
+				
 				_this.formulario.desabilitar(true);
 			
 				var jqXHR = _this.alterar ? servicoSetor.atualizar(obj) : servicoSetor.adicionar(obj);
-				jqXHR.done(window.sucessoParaFormulario).always(function(){
-					_this.formulario.desabilitar(false);
-				});
+				jqXHR.done(function() {
+					router.navigate('/setores');
+					toastr.success('Loja Adicionada com sucesso!')
+				}).fail(window.erro).always(terminado);
 
 				if(_this.alterar){
 					$('.depende_selecao').each(function(){
@@ -63,8 +64,7 @@
 			return servicoSetor.criar(
                 $('#id').val(),
                 $('#titulo').val(),
-				$('#descricao').val(),
-				$('#categoria').val()
+				$('#descricao').val()
 			);
 		};
 
@@ -73,39 +73,9 @@
 			_this.cancelarModoEdicao.on('click', _this.cancelar);
 		};
 
-		_this.popularSelectCategorias  =  function popularSelectCategorias(valor = 0)
-		{
-			var sucesso = function (resposta) {
-				$("#categoria").empty();
-
-				$.each(resposta.data, function(i ,item) {
-					$("#categoria").append($('<option>', {
-						value: item.id,
-						text: item.titulo
-					}));
-				});
-
-				$('#categoria').trigger('change');
-			};
-
-			var erro = function(resposta)
-			{
-				var mensagem = jqXHR.responseText || 'Erro ao popular select de farmácias.';
-				toastr.error(mensagem);
-				return false;
-			}
-			var servCategoria = new app.ServicoCategoria();
-			var  jqXHR = servCategoria.todos();
-			jqXHR.done(sucesso).fail(erro);
-		};
-
-
 		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro() {
-			_this.formulario.parents('#painel_formulario').removeClass('desabilitado').desabilitar(false);
-			_this.formulario.parents('#painel_formulario').removeClass('d-none');
 			_this.formulario.find('#tiulo').focus();
 			_this.configurarBotoes();
-			_this.popularSelectCategorias();
 		};
 
 		_this.iniciarFormularioModoEdicao = function iniciarFormularioModoEdicao() {
@@ -128,33 +98,17 @@
 		_this.desenhar = function desenhar(obj) {
 			_this.formulario.find('#id').val(obj.id);
 			_this.formulario.find('#titulo').val(obj.titulo);
-			_this.formulario.find('#categoria').val(obj.categoria.id).trigger('change');
 			_this.formulario.find('#descricao').val(obj.descricao);
 		};
 
 		_this.salvar = function salvar() {
 			_this.formulario.validate(criarOpcoesValidacao());
         };
-		
-		_this.cancelar = function cancelar(event) {
-			var contexto = _this.formulario.parents('#painel_formulario');
-			contexto.addClass('desabilitado');
-			
-			_this.formulario.find('.msg').empty();
-			_this.formulario.find('.msg').parents('.row').addClass('d-none');
 
-			contexto.addClass('d-none');
-			contexto.desabilitar(true);
-
-		};
 
 		// Configura os eventos do formulário
 		_this.configurar = function configurar(status = false) {
 			_this.definirForm(status);
-			$('.select2').select2({
-				theme: 'bootstrap4',
-				width: '100%',
-			});
 		};
 	}; // ControladoraFormSetor
 

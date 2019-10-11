@@ -100,7 +100,7 @@ form .quebra-linha{
     padding: 0px !important;
 }
 
-.fa, .fab, .fad, .fal, .far, .fas:before{
+.fa, .fab, .fad, .fal, .far, .fas{
     display: inline-block;
     font-size: 24px;
     text-rendering: auto;

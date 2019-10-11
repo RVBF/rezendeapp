@@ -6,6 +6,7 @@
 		var _this = this;
 		var listagemPadrao = elemento;
 		var ultimaResposta = null;
+		_this.paginacao = {};
 		_this.objetos = null
 
 		_this.definirEventosTabela = function definirEventosTabela(){
@@ -47,17 +48,14 @@
 		
 		_this.requisitarRegistros = function requisitarRegistros() {
 			var parametrosRequisicao =  function parametrosRequisicao() {
-				var limiteResultadosExibidos = $('#qtd_resultados').val();
-
-				var objeto = {
+				_this.paginacao = {
 					start : _this.inicioDaPagina(),
-					length : _this.tamanhoPagina()
+					length : parseInt($('#qtd_resultados').val())
 				};
 
-				return objeto
+				return _this.paginacao;
 			};
 
-			console.log(parametrosRequisicao());
 			return $.ajax({
 				type: "GET",
 				url: opcoes.ajax,
@@ -139,10 +137,18 @@
 		};
 
 		_this.renderizarInfo = function renderizarInfo (data) {
+			console.log(data);
+			let inicio = (_this.paginacao.start + 1) , tamanhoPagina = (_this.paginacao.length == undefined) ? parseInt($('#qtd_resultados').val()) : _this.paginacao.length;
+			if(_this.objetos.length == 0){
+				tamanhoPagina = 0;
+				inicio --;
+			}
+
+			if(tamanhoPagina > data.recordsTotal) tamanhoPagina = data.recordsTotal;
 			var html = '';
 			html += '<div class="row">';
 				html += '<div class="col col-12 col-sm-12 col-md-6 col-lg-6 informacao_exibicao">';
-				html += '<div class="informacoes_listagem" id="informacoes_listagem" role="status" aria-live="polite">Mostrando ' + (_this.inicioDaPagina()+1) + ' até ' + data.recordsFiltered + ' de ' + data.recordsTotal + ' registros.</div>';
+				html += '<div class="informacoes_listagem" id="informacoes_listagem" role="status" aria-live="polite">Mostrando ' + inicio + ' até ' + tamanhoPagina + ' de ' + data.recordsTotal + ' registros.</div>';
 				html += '</div>'
 
 				html += '<div class="col col-12 col-sm-12 col-md-6 col-lg-6 paginacao">';

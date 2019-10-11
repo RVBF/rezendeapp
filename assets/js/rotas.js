@@ -72,13 +72,21 @@
 
 	// Rotas: adicione sua rota ACIMA das existentes, a seguir. -Rafael
 	router.get('/', criarRotaPara('inicio.html'));
+
 	router.get('/checklist', criarRotaPara('checklist.html'));
+	router.get('/add-checklist', criarRotaPara('add-checklist.html'));
+
 	router.get('/colaboradores', criarRotaPara('colaboradores.html'));
 	router.get('/cadastrar-colaborador', criarRotaPara('formulario-colaborador.html'));	
+	
 	router.get('/lojas', criarRotaPara('loja.html'));
 	router.get('/cadastrar-loja', criarRotaPara('formulario-loja.html'));
 	router.get('/editar-loja/:id', criarRotaPara('formulario-loja.html'));
-	router.get('/add-checklist', criarRotaPara('add-checklist.html'));
+
+	router.get('/setores', criarRotaPara('setor.html'));
+	router.get('/cadastrar-setor', criarRotaPara('formulario-setor.html'));
+	router.get('/editar-setor/:id', criarRotaPara('formulario-setor.html'));
+	
 	router.get('/plano-acao', criarRotaPara('pa-listagem.html'));
 	router.get('/checklist-organizacao', criarRotaPara('checklist-organizacao.html'));
 	router.get('/inteligencia', criarRotaPara('inteligencia.html'));

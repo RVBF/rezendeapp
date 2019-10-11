@@ -1,0 +1,60 @@
+<section id="painel_formulario">
+   <div class="row">
+		<div class="col-md-12 col-12 col-sm-12 col-lg-12">
+			<div class="card-panel left-align">
+				<div class="row">
+					<div class="col-12  col-sm-12 col-md-12 col-lg-12">
+						<form class="form-horizontal "  method="post" id="setor_form">
+							<input type="hidden" id="id" name ="id" />
+		
+							<div class="row form-row">
+								<div class="col col-md-12 col-12 col-sm-12 col-lg-12">
+									<div class="input-field">
+										<input type="text" class="form-control validate " id ="titulo" name="titulo"/>
+										<label for="titulo">*Título: </label>
+									</div>
+									
+								</div>
+                            </div>
+                            
+                            <div class="row form-row">
+                                <div class="col col-md-12 col-12 col-sm-12 col-lg-12 ">
+                                    <div class="input-field">
+                                        <textarea class=" materialize-textarea validate" id="descricao" name="descricao" rows="5"></textarea>
+                                        <label for="descricao">*Descrição</label>
+                                    </div>
+                                </div>    
+                            </div>
+
+							<div class="row form-row">
+								<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end">
+									<button type="submit" id="salvar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">
+										<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>
+											Finalizar<br>
+											plano de ação
+									</button>
+								</div>
+							
+								<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-start justify-content-md-start ">
+									<button class="waves-effect waves-light btn white grey-text text-darken-4 button-dto f-12-dto setor_link">
+										<i class="mdi mdi-close-circle-outline yellow-text text-accent-4"></i>
+										Cancelar
+									</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+</section>
+
+
+<script>
+    $(document).ready(function() {
+        var servicoSetor = new app.ServicoSetor();
+        var crltSetor = new app.ControladoraFormSetor(servicoSetor);
+        crltSetor.configurar();
+    });
+</script>

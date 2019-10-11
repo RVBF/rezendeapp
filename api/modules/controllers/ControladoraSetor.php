@@ -38,22 +38,28 @@ class ControladoraSetor {
 			}
 
 			$dtr = new DataTablesRequest($this->params);
+
 			$contagem = 0;
 			$objetos = [];
 			$erro = null;
 
 			$objetos = $this->colecaoSetor->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');
-
+		
 			$contagem = $this->colecaoSetor->contagem();
 		}
 		catch (\Exception $e )
 		{
-			throw new Exception("Erro ao listar setor.");
+			throw new Exception("Erro ao listar lojas.");
 		}
+		$conteudo = new DataTablesResponse(
+			$contagem,
+			count($objetos), //count($objetos ),
+			$objetos,
+			$dtr->draw,
+			$erro
+		);
 
-		$conteudo = new DataTablesResponse($contagem,$contagem, $objetos, $dtr->draw, $erro);
-
-		return $conteudo;
+		return  RTTI::getAttributes($conteudo, RTTI::allFlags());
 	}
 
 	function adicionar() {
@@ -64,9 +70,9 @@ class ControladoraSetor {
 				throw new Exception("Erro ao acessar página.");				
 			}
 
-			if(!$this->servicoLogin->eAdministrador()){
-				throw new Exception("Usuário sem permissão para executar ação.");
-			}
+			// if(!$this->servicoLogin->eAdministrador()){
+			// 	throw new Exception("Usuário sem permissão para executar ação.");
+			// }
 
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo','descricao','categoria'], $this->params);
 			$resposta = [];
@@ -77,17 +83,10 @@ class ControladoraSetor {
 				throw new Exception($msg);
 			}
 
-			$categoria = $this->colecaoCategoria->comId(\ParamUtil::value($this->params, 'categoria'));
-
-			if(!isset($categoria) and !($categoria instanceof Categoria)){
-				throw new Exception("Categoria não encontrada na base de dados.");
-			}
-
 			$setor = new Setor(
 				0,
 				\ParamUtil::value($this->params, 'titulo'),
-				\ParamUtil::value($this->params, 'descricao'),
-				$categoria
+				\ParamUtil::value($this->params, 'descricao')
 			);
 			$resposta = ['setor'=> RTTI::getAttributes($this->colecaoSetor->adicionar($setor), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Setor cadastrado com sucesso.']; 
 			
