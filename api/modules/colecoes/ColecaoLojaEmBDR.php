@@ -20,7 +20,6 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 		if($this->validarLoja($obj)){
 			try {	
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
 				$id = DB::table(self::TABELA)->insertGetId(['razaoSocial' => $obj->getRazaoSocial(), 'nomeFantasia' => $obj->getNomeFantasia()]);
 
 				$obj->setId($id);
