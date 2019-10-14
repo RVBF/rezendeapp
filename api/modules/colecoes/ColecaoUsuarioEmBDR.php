@@ -20,11 +20,12 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario {
 
 				$id = DB::table(self::TABELA)->insertGetId([ 
 					'login' => $obj->getLogin(),
-					'senha' => $hash->gerarHashDeSenhaComSaltEmMD5($obj->getSenha())
+					'senha' => $hash->gerarHashDeSenhaComSaltEmMD5($obj->getSenha()),
+					'administrador' => false
 				]);
 					
 				$obj->setId($id);
-	
+					
 				return $obj;
 			}
 			catch (\Exception $e) {

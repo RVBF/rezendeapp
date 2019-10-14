@@ -1,24 +1,23 @@
-<section>
-   <div class="row">
+<section id="painel_formulario">
+	<div class="row">
 		<div class="col-md-12 col-12 col-sm-12 col-lg-12">
 			<div class="card-panel left-align">
 				<div class="row">
 					<div class="col-12  col-sm-12 col-md-12 col-lg-12">
-						<form class="form-horizontal "  method="post" id="colaborador_form">
+						<form class="form-horizontal "  method="post" id="usuario_form">
 							<input type="hidden" id="id" name ="id" />
 		
 							<div class="row form-row">
 								<div class="col col-md-6 col-12 col-sm-12 col-lg-6">
 									<div class="input-field">
-										<input type="text" class="form-control validate " id ="nome" name="nome"/>
+										<input type="text" class="form-control" id ="nome" name="nome"/>
 										<label for="nome">*Nome: </label>
 									</div>
-									
 								</div>
 
 								<div class="col col-md-6 col-12 col-sm-12 col-lg-6 ">
 									<div class="input-field">
-										<input type="text" class="form-control validate" id="sobrenome" name="sobrenome"/>
+										<input type="text" class="form-control" id="sobrenome" name="sobrenome"/>
 										<label for="sobrenome">*Sobrenome</label>
 									</div>
 								</div>
@@ -27,7 +26,7 @@
 							<div class="row form-row">
 								<div class="col-md-12 col-12 col-sm-12 col-lg-12">
 									<div class="input-field">
-										<input type="email" class="form-control" id="email" name="email"/>
+										<input type="email" class="form-control email_formato campo_obrigatorio" id="email" name="email"/>
 										<label for="email">*E-mail</label>
 									</div>
 								</div>
@@ -36,13 +35,23 @@
 							<div class="row form-row">
 								<div class="col-md-6 col-12 col-sm-12 col-lg-6 ">
 									<div class=" input-field">
-										<select id ="lojas"  name="lojas[]" class="select" multiple><option value="" disabled selected>Lojas</option></select>
+										<select id ="setor"  name="setor" class="select campo_obrigatorio" ><option value="" disabled selected>Setor</option></select>
+										<label for="setor">*Setor</label>
 									</div>
 								</div>
-										
-								<div class="col-md-6 col-12 col-sm-12 col-lg-6">
+
+								<div class="col-md-6 col-12 col-sm-12 col-lg-6 ">
+									<div class=" input-field">
+										<select id ="lojas"  name="lojas[]" class="select campo_obrigatorio" multiple><option value="" disabled selected>Lojas</option></select>
+										<label for="loajs">*Lojas</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="row form row">
+								<div class="col-md-12 col-12 col-sm-12 col-lg-12">
 									<div class="input-field">
-										<input type="text" class="form-control"  id="login"></input>
+										<input type="text" class="form-control"  id="login" name="login"></input>
 										<label for="login">*Login</label>
 									</div>
 								</div>
@@ -74,18 +83,18 @@
 
 							<div class="row form-row">
 								<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end">
-									<a class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">
+									<button type="submit" id="salvar"  class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">
 										<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>
 											Finalizar<br>
 											plano de ação
-									</a>
+									</button>
 								</div>
 							
 								<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-start justify-content-md-start ">
-									<a class="waves-effect waves-light btn white grey-text text-darken-4 button-dto f-12-dto">
+									<button class="waves-effect waves-light btn white grey-text text-darken-4 button-dto f-12-dto colaboradores_link">
 										<i class="mdi mdi-close-circle-outline yellow-text text-accent-4"></i>
 										Cancelar
-									</a>
+									</button>
 								</div>
 							</div>
 						</form>
@@ -95,3 +104,12 @@
 		</div>
 	</div>	
 </section>
+
+
+<script>
+    $(document).ready(function() {
+        var servicoUsuario = new app.ServicoUsuario();
+        var crltUsuario = new app.ControladoraFormUsuario(servicoUsuario);
+        crltUsuario.configurar();
+    });
+</script>

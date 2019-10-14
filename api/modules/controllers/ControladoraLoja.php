@@ -34,7 +34,6 @@ class ControladoraLoja {
 			}
 			
 			$dtr = new DataTablesRequest($this->params);
-			// Debuger::printr($this->params);
 			$contagem = 0;
 			$objetos = [];
 			$erro = null;

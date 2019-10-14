@@ -7,12 +7,13 @@
  {
 	'use strict';
 
-	function Usuario(id = 0, nome = '', sobrenome = '', email = '', login = '', senha = '', lojas = []) {
+	function Usuario(id = 0, nome = '', sobrenome = '', email = '', login = '', senha = '', lojas = [], setor =0) {
 		this.id = id  || 0;
         this.nome = nome || '';
         this.login = login  || 0;
 		this.senha = senha || '';
 		this.lojas =  lojas || [];
+		this.setor =  setor || 0;
 	};
 
 	function ServicoUsuario() { // Model
@@ -23,7 +24,7 @@
 		};
 
 		// Cria um objeto de usuario
-		this.criar = function criar(id = 0, nome = '', sobrenome = '', email = '', login = '', senha = '', lojas = []) {
+		this.criar = function criar(id = 0, nome = '', sobrenome = '', email = '', login = '', senha = '', lojas = [], setor =0) {
 			return {
 				id : id  || 0,
 				nome : nome || '',
@@ -31,7 +32,8 @@
 				email : email || '',
 				login : login  || '',
 				senha : senha  || '',
-				lojas : lojas || []
+				lojas : lojas || [],
+				setor : setor || 0
 			};
 		};
 

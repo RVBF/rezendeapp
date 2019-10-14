@@ -18,13 +18,14 @@ class Colaborador {
     const TAM_TEXT_MIM = 3;
     const TAM_TEXT_MAX = 50;
 
-    function __construct($id = 0, $nome = '', $sobrenome = '', $email = '', $usuario = null, $lojas = []) {
+    function __construct($id = 0, $nome = '', $sobrenome = '', $email = '', $usuario = null,  $setor = null, $lojas = []) {
         $this->id = $id;
         $this->nome =  $nome;
         $this->sobrenome = $sobrenome;
         $this->email = $email;
         $this->usuario = $usuario;
         $this->lojas = $lojas;
+        $this->setor = $setor;
     }
 
     public function getId(){
@@ -65,6 +66,15 @@ class Colaborador {
  
     public function setUsuario($usuario){
         $this->usuario = $usuario;
+    }
+
+
+    public function getSetor(){
+        return $this->setor; 
+    }
+ 
+    public function setSetor($Setor){
+        $this->setor = $setor;
     }
 
     public function getLojas(){

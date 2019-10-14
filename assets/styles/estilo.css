@@ -109,7 +109,6 @@ form .quebra-linha{
     -moz-osx-font-smoothing: grayscale;
 }
 
-
 @media(min-width:100px) and (max-width: 635px) {
     .listagem-padrao-item .opcoes{
         border: 0px;
