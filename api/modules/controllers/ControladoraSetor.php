@@ -153,9 +153,9 @@ class ControladoraSetor {
 				throw new Exception("Erro ao acessar página.");				
 			}	
 
-			if(!$this->servicoLogin->eAdministrador()){
-				throw new Exception("Usuário sem permissão para executar ação.");
-			}
+			// if(!$this->servicoLogin->eAdministrador()){
+			// 	throw new Exception("Usuário sem permissão para executar ação.");
+			// }
 
 			$resposta = [];
 

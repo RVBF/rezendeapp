@@ -158,11 +158,11 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 	}
 
 	private function validarDeleteSetor($id) {
-		$qtdReacionamento = DB::table(ColecaoChecklistEmBDR::TABELA)->where('setor_id', $id)->count();
+		// $qtdReacionamento = DB::table(ColecaoChecklistEmBDR::TABELA)->where('setor_id', $id)->count();
 
-		if($qtdReacionamento > 0){
-			throw new ColecaoException('Essa categoria possue setores relacionados a ela! Exclua todos os setores cadastros e tente novamente.');
-		}
+		// if($qtdReacionamento > 0){
+		// 	throw new ColecaoException('Essa categoria possue setores relacionados a ela! Exclua todos os setores cadastros e tente novamente.');
+		// }
 
 		return true;
 	}
