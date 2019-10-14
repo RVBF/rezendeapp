@@ -21,6 +21,10 @@
 			});
 		};
 
+		_this.getObjetos = function getObjetos(){
+			return _this.objetos;
+		}
+
 		_this.paginaAtual = function paginaAtual(){
 			return parseInt(listagemPadrao.find('#listagem_paginacao').find('.pagina-atual').first().attr('data-dt-idx'));
 		};
@@ -137,7 +141,6 @@
 		};
 
 		_this.renderizarInfo = function renderizarInfo (data) {
-			console.log(data);
 			let inicio = (_this.paginacao.start + 1) , tamanhoPagina = (_this.paginacao.length == undefined) ? parseInt($('#qtd_resultados').val()) : _this.paginacao.length;
 			if(_this.objetos.length == 0){
 				tamanhoPagina = 0;
