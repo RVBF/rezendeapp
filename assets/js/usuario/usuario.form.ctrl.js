@@ -21,27 +21,63 @@
 			var opcoes = {
 				rules: {
 					"nome" : {
+						required : true,
 						rangelength : [3, 50]
 					},
 					"sobrenome" : {
+						required : true,
 						rangelength : [3, 50]
 					},
+					"login" :{
+						required : true
+					},
+					"loja" :{
+						required : true
+					},
+					"setor" :{
+						required : true
+					},
 					"senha": {
+						required : true,
 						rangelength : [ 3, 20 ]
 					},
 
 					"confirmacao_senha": {
+						required : true,
 						equalTo : "#senha"
 					}
 
 				},
 
 				messages: { 
+					"nome": { 
+						required: 'o campo nome é obrigatório.',
+						rangelength	: $.validator.format("O campo nome deve ter entre {3} e {50} caracteres.")
+					},
+					"sobrenome": { 
+						required: 'o campo sobrenome é obrigatório.',
+						rangelength	: $.validator.format("O campo nome deve ter entre {3} e {50} caracteres.")
+					},
+
+					"login": { 
+						required: 'o campo login é obrigatório.'
+					},
+
+					"loja": { 
+						required: 'o campo loja é obrigatório.'
+					},
+
+					"setor": { 
+						required: 'o campo setor é obrigatório.'
+					},
+
 					"senha": {
+						required: 'o campo senha é obrigatório.',
 						rangelength	: $.validator.format("A senha deve ter entre {3} e {50} caracteres.")
 					},
 
 					"confirmacao_senha": {
+						required: 'o campo confirmação de senha é obrigatório.',
 						equalTo	: "O campo senha e confirmação de senha devem ser iguais."
 					}
 				}
@@ -51,11 +87,11 @@
 			opcoes.submitHandler = function submitHandler(form) {
 				var obj = _this.conteudo();
 
-				_this.formulario.desabilitar(true);
+				// _this.formulario.desabilitar(true);
 				
-				var terminado = function() {
-					_this.formulario.desabilitar(false);
-				};
+				// var terminado = function() {
+				// 	_this.formulario.desabilitar(false);
+				// };
 				
 				var jqXHR = _this.alterar ? servicoUsuario.atualizar(obj) : servicoUsuario.adicionar(obj);
 				jqXHR.done(window.sucessoParaFormulario).fail(window.erro);
@@ -79,7 +115,8 @@
 				$('#email').val(),
 				$('#login').val(), 
 				$('#senha').val(), 
-				$('#lojas').val()
+				$('#lojas').formSelect('getSelectedValues'),
+				$('#setor').val()
 			);
 		};
 
@@ -93,13 +130,14 @@
 		{
 			var sucesso = function (resposta) {
 				$("#lojas").empty();
-
+		
 				$.each(resposta.data, function(i ,item) {
 					$("#lojas").append($('<option>', {
 						value: item.id,
 						text: item.razaoSocial  + '/' + item.nomeFantasia
 					}));
 				});
+
 
 				var ids = Array();
 
@@ -108,10 +146,10 @@
 						var atual =  _this.obj.colaborador.lojas[indice];
 						ids.push(atual.id);
 					}
-					$('#lojas').val(ids).trigger('change');
+					$('#lojas').formSelect();
 				}
 				else{
-					$('#lojas').val(ids).trigger('change');
+					$('#lojas').formSelect();
 				}
 			
 			};
@@ -127,6 +165,45 @@
 			jqXHR.done(sucesso).fail(erro);
 		};
 
+		_this.popularSetores  =  function popularSetores(valor = 0)
+		{
+			var sucesso = function (resposta) {
+				$("#setor").empty();
+
+				$.each(resposta.data, function(i ,item) {
+					$("#setor").append($('<option>', {
+						value: item.id,
+						text: item.titulo
+					}));
+				});
+
+
+				var ids = Array();
+
+				if(_this.obj != null || _this.obj != undefined) {
+					for(var indice in _this.obj.colaborador.lojas){
+						var atual =  _this.obj.colaborador.lojas[indice];
+						ids.push(atual.id);
+					}
+					$('#setor').formSelect();
+				}
+				else{
+					$('#setor').formSelect();
+				}
+			
+			};
+
+			var erro = function(resposta) {
+				var mensagem = jqXHR.responseText || 'Erro ao popular select de farmácias.';
+				toastr.error(mensagem);
+				return false;
+			}
+
+			var servicoSetor = new app.ServicoSetor();
+			var  jqXHR = servicoSetor.todos();
+			jqXHR.done(sucesso).fail(erro);
+		};
+
 		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro() {
 			if(_this.obj != null || _this.obj != undefined) {
 				_this.obj = null;
@@ -138,12 +215,13 @@
 				_this.formulario.find('#nome').focus();
 
 				_this.popularLojas();
+				_this.popularSetores();
+
 	
 				_this.configurarBotoes();
 	
 	
 				if(!$('#senha').hasClass('campo_obrigatorio')){
-					$('#login').parent('div').attr('class', 'col-md-4 col-xs-4 co-sm-4 col-12');
 					$('#senha').parent('div').removeClass('d-none');
 					$('#confirmacao_senha').parent('div').removeClass('d-none');
 		
@@ -194,22 +272,10 @@
 			_this.formulario.validate(criarOpcoesValidacao());
         };
 		
-		_this.cancelar = function cancelar(event) {
-			var contexto = _this.formulario.parents('#painel_formulario');
-			contexto.addClass('desabilitado');
-			_this.formulario.find('.msg').empty();
-			_this.formulario.find('.msg').parents('.row').addClass('d-none');
-			contexto.addClass('d-none');
-			contexto.desabilitar(true);
-		};
 
 		// Configura os eventos do formulário
 		_this.configurar = function configurar(status = false) {
 			_this.definirForm(status);
-			$('.select2').select2({
-				theme: 'bootstrap4',
-				width: '100%',
-			});
 		};
 	}; // ControladoraFormUsuario
 

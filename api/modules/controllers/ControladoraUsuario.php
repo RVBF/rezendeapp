@@ -19,6 +19,7 @@ class ControladoraUsuario {
 	private $colecaoLoja;
 	private $servicologin;
 	private $colecaoColaborador;
+	private $colecaoSetor;
 	private $colecaoGrupoDeUsuario;
 
 	function __construct($params, Sessao $sessao) {
@@ -27,6 +28,7 @@ class ControladoraUsuario {
 		$this->colecaoGrupoDeUsuario = Dice::instance()->create('ColecaoGrupoUsuario');
 		$this->colecaoLoja = Dice::instance()->create('ColecaoLoja');
 		$this->colecaoColaborador = Dice::instance()->create('ColecaoColaborador');
+		$this->colecaoSetor = Dice::instance()->create('ColecaoSetor');
 		$this->servicoLogin = new ServicoLogin($sessao);
 		$this->sessao = $sessao;
 	}
@@ -49,7 +51,9 @@ class ControladoraUsuario {
 			$objetos = $this->colecaoUsuario->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');
 	
 			foreach ($objetos as $key => $obj) {
+
 				$colaborador = $this->colecaoColaborador->comUsuarioId($obj->getId());
+
 				if(!isset($colaborador) and !($colaborador instanceof Colaborador)){
 					throw new Exception("Colaborador não encontrada na base de dados.");
 				}
@@ -57,15 +61,22 @@ class ControladoraUsuario {
 				$objetos[$key]->setColaborador($colaborador);
 			}
 
+			
 			$contagem = $this->colecaoUsuario->contagem();
 		}
-		catch (\Exception $e ) {
-			throw new Exception($e->getMessage());
+		catch (\Exception $e )
+		{
+			throw new Exception("Erro ao listar lojas.");
 		}
+		$conteudo = new DataTablesResponse(
+			$contagem,
+			count($objetos), //count($objetos ),
+			$objetos,
+			$dtr->draw,
+			$erro
+		);
 
-		$conteudo = new DataTablesResponse($contagem, $contagem, $objetos, $dtr->draw, $erro);
-
-		return $conteudo;
+		return  RTTI::getAttributes($conteudo, RTTI::allFlags());
     }
     
     function adicionar() {
@@ -80,13 +91,18 @@ class ControladoraUsuario {
 				throw new Exception("Usuário sem permissão para executar ação.");
 			}
 
-			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'nome', 'sobrenome', 'email', 'login','senha', 'lojas'], $this->params);
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'nome', 'sobrenome', 'email', 'login','senha', 'lojas', 'setor'], $this->params);
 			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
 				throw new Exception($msg);
 			}			
 			
+			$setor = $this->colecaoSetor->comId($this->params['setor']);
+	
+			if(!isset($setor) and !($setor instanceof Setor)){
+				throw new Exception("Setor não encontrada na base de dados.");
+			}
 
 			$lojas = $this->colecaoLoja->todosComIds($this->params['lojas']);
 
@@ -109,8 +125,10 @@ class ControladoraUsuario {
 				\ParamUtil::value($this->params, 'sobrenome'), 
 				\ParamUtil::value($this->params, 'email'), 
 				$usuario,
+				$setor,
 				$lojas
 			);
+
 
 			$this->colecaoColaborador->adicionar($colaborador);
 

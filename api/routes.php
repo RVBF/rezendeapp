@@ -213,7 +213,8 @@ $app->get('/usuario', function(Request $req,  Response $res, $args = []) use ($a
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraUsuario($req->getQueryParams(), $sessaoUsuario);
 	$response = $ctrl->todos();
-	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
+	Debuger::printr($res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response))));
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 
 });
 

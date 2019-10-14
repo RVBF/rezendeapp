@@ -19,12 +19,12 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 			try {	
 
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
 				$id = DB::table(self::TABELA)->insertGetId([ 
 					'nome' => $obj->getNome() ,
 					'sobrenome' => $obj->getSobreNome(),
 					'email' => $obj->getEmail(),
-					'usuario_id' => $obj->getUsuario()->getId()
+					'usuario_id' => $obj->getUsuario()->getId(),
+					'setor_id'	=> $obj->getSetor()->getId()
 				]);
 				
 				$atuacoesLojas = [];
@@ -170,10 +170,11 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 
 	function construirObjeto(array $row) {
 		$usuario = ($row['usuario_id'] > 0) ? Dice::instance()->create('ColecaoUsuario')->comId($row['usuario_id']) : null;
+		$setor = ($row['setor_id'] > 0) ? Dice::instance()->create('ColecaoSetor')->comId($row['setor_id']) : null;
+
         $lojas = Dice::instance()->create('ColecaoLoja')->comColaboradorId($row['id']);
 
-		$colaborador = new Colaborador($row['id'], $row['nome'], $row['sobrenome'], $row['email'], $usuario, (is_array($lojas)) ? $lojas : []);
-
+		$colaborador = new Colaborador($row['id'], $row['nome'], $row['sobrenome'], $row['email'], $usuario, $setor, (is_array($lojas)) ? $lojas : []);
 		return $colaborador;
 	}	
 
@@ -213,7 +214,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 	*  @throws ColecaoException
 	*/
 	private function validarFormatoDeEmail($email) {
-		if (preg_match('"/^([[:alnum:]_.-]){3,}@([[:lower:][:digit:]_.-]{3,})(.[[:lower:]]{2,3})(.[[:lower:]]{2})?$/"', $email)){
+		if (preg_match('"/^([[:alnum:]_.-]){3,}@([[:lower:][:digit:]_.-]{3,})(.[[:lower:]]{2,3})(.[[:lower:]]{2})?$/"', $email)) {
 			return true;	
 		}
 		else
