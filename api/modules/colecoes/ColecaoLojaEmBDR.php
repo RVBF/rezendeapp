@@ -4,7 +4,7 @@ use Illuminate\Database\Capsule\Manager as DB;
  *	Coleção de Loja em Banco de Dados Relacional.
  *
  *  @author		Rafael Vinicius Barros Ferreira
- *	@version	0.1
+ *	@version	1.0
  */
 
 class ColecaoLojaEmBDR implements ColecaoLoja

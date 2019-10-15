@@ -4,7 +4,7 @@
  *	Coleção de Permissões administrativa
  *
  *  @author		Rafael Vinicius Barros
- *  @version	0.1
+ *  @version	1.0
  */
 
 interface ColecaoPermissaoAdministrativa {

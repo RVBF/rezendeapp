@@ -67,12 +67,24 @@ select.qtd_resultados_pesquisapadrao {
     word-wrap: break-word;
 }
 
-.listagem-padrao .adicao, .listagem-padrao  .atualizar{
-    margin-top: 0.55em;
-    border-right: 1px #9e9e9e solid !important;
-    padding-right: 0.75rem;
-    margin-right: 0.75rem;
-    margin-left: 0.75rem;
+.listagem-padrao .adicao, .listagem-padrao  .atualizar, .listagem-padrao  .pesquisar{
+    margin-top: 0.95em;
+    border: 1px #9e9e9e solid !important;
+    text-align: center !important;
+    font-size: 12px !important;
+    padding : 0.55em  !important;
+
+
+    /* margin-right: 0.75rem;
+    margin-left: 0.75rem; */
+}
+.listagem-padrao .adicao i, .listagem-padrao  .atualizar i, .listagem-padrao  .pesquisar i{
+    font-size: 14px;
+}
+
+.listagem-padrao .adicao a, .listagem-padrao  .atualizar a, .listagem-padrao  .pesquisar a{
+    height: 100%;
+    width: 100%;
 }
 
 .listagem-padrao .informacao_exibicao{
@@ -82,7 +94,6 @@ select.qtd_resultados_pesquisapadrao {
 .listagem-padrao .paginacao{
     text-align: right;
 }
-
 
 
 .card-panel{
@@ -107,6 +118,10 @@ form .quebra-linha{
     line-height: inherit;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+.col-12, .col-md-12, .col-sm-12, .col-lg-12{
+    margin-bottom: 1em !important;
 }
 
 @media(min-width:100px) and (max-width: 635px) {

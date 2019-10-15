@@ -75,6 +75,42 @@ $app->delete('/setor/{id}', function(Request $req,  Response $res, $args = []) u
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 });
 
+
+
+// Início das rotas para Questionários
+$app->get('/questionario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Acessando listagem de questionarioes");	
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraQuestionario($req->getQueryParams(), $sessaoUsuario);
+	$response = $ctrl->todos();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+});
+
+$app->post('/questionario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Acessando o cadastro de questionario");
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraQuestionario($req->getParsedBody(), $sessaoUsuario);
+	$response = $ctrl->adicionar();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+
+});
+
+$app->put('/questionario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Acessando a atualização de categorias");
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraQuestionario($req->getParsedBody(), $sessaoUsuario);
+	$response = $ctrl->atualizar();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+
+});
+
+$app->delete('/questionario/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraQuestionario($req->getParsedBody(), $sessaoUsuario);
+	$response = $ctrl->remover($args['id']);
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+});
 // Início das rotas para loja
 $app->get('/loja', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 	$this->logger->addInfo("Acessando listagem de lojas");	
@@ -213,8 +249,10 @@ $app->get('/usuario', function(Request $req,  Response $res, $args = []) use ($a
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraUsuario($req->getQueryParams(), $sessaoUsuario);
 	$response = $ctrl->todos();
-	Debuger::printr($res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response))));
-	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(JSON::encode($response)));
+	// Debuger::printr(json_decode(json_encode($response),true));
+	// return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
+
 
 });
 

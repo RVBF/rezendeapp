@@ -87,20 +87,18 @@
 			opcoes.submitHandler = function submitHandler(form) {
 				var obj = _this.conteudo();
 
-				// _this.formulario.desabilitar(true);
+					
+				var terminado = function() {
+					_this.formulario.desabilitar(false);
+				};
 				
-				// var terminado = function() {
-				// 	_this.formulario.desabilitar(false);
-				// };
-				
+				_this.formulario.desabilitar(true);
+			
 				var jqXHR = _this.alterar ? servicoUsuario.atualizar(obj) : servicoUsuario.adicionar(obj);
-				jqXHR.done(window.sucessoParaFormulario).fail(window.erro);
-
-				if(_this.alterar){
-					$('.depende_selecao').each(function(){
-						$(this).prop('disabled', true);
-					});
-				}
+				jqXHR.done(function() {
+					router.navigate('/colaboradores');
+					toastr.success('Colaborador Adicionado com sucesso!')
+				}).fail(window.erro).always(terminado);
 			}; // submitHandler
 
 			return opcoes;

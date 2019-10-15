@@ -3,19 +3,19 @@ use Illuminate\Database\Capsule\Manager as DB;
 use \phputil\RTTI;
 
 /**
- *	Coleção de Setor em Banco de Dados Relacional.
+ *	Coleção de Questionario em Banco de Dados Relacional.
  *
  *  @author		Rafael Vinicius Barros Ferreira
  *	@version	1.0
  */
 
-class ColecaoSetorEmBDR implements ColecaoSetor {
-	const TABELA = 'setor';
+class ColecaoQuestionarioEmBDR implements ColecaoQuestionario {
+	const TABELA = 'questionario';
 
 	function __construct(){}
 
 	function adicionar(&$obj) {
-		if($this->validarSetor($obj)){
+		if($this->validarQuestionario($obj)){
 			try {	
 
 				$id = DB::table(self::TABELA)->insertGetId(['titulo' => $obj->getTitulo(), 'descricao'=> $obj->getDescricao()]);
@@ -26,13 +26,13 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 			}
 			catch (\Exception $e) {
 
-				throw new ColecaoException("Erro ao cadastrar setor.", $e->getCode(), $e);
+				throw new ColecaoException("Erro ao cadastrar Questionario.", $e->getCode(), $e);
 			}
 		}
 	}
 
 	function remover($id) {
-		if($this->validarDeleteSetor($id)){
+		if($this->validarDeleteQuestionario($id)){
 			try {	
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 	
@@ -44,13 +44,13 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 	
 			}
 			catch (\Exception $e) {
-				throw new ColecaoException("Erro ao remover setor.", $e->getCode(), $e);
+				throw new ColecaoException("Erro ao remover Questionario.", $e->getCode(), $e);
 			}
 		}
 	}
 
 	function atualizar(&$obj) {
-		if($this->validarSetor($obj)){
+		if($this->validarQuestionario($obj)){
 			try {
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
@@ -64,7 +64,7 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 			}
 			catch (\Exception $e)
 			{
-				throw new ColecaoException("Erro ao atualizar setor.", $e->getCode(), $e);
+				throw new ColecaoException("Erro ao atualizar Questionario.", $e->getCode(), $e);
 			}
 		}
 		
@@ -72,13 +72,13 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 
 	function comId($id){
 		try {
-			$setor = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
+			$Questionario = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
 
-			return $setor;
+			return $Questionario;
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException("Erro ao buscar setor.", $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar Questionario.", $e->getCode(), $e);
 		}
 	}
 
@@ -116,32 +116,31 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 				$query->groupBy(self::TABELA.'.id');
 			}
 
-			$setors = $query->offset($limite)->limit($pulo)->get();
+			$questionarios = $query->offset($limite)->limit($pulo)->get();
 
-			$setorObjects = [];
-			foreach ($setors as $setor) {
-				$setorObjects[] = RTTI::getAttributes($this->construirObjeto($setor),RTTI::allFlags());
+			$questionarioObjects = [];
+			foreach ($questionarios as $questionario) {
+				$questionarioObjects[] = RTTI::getAttributes($this->construirObjeto($questionario),RTTI::allFlags());
 			}
-
-			return $setorObjects;
+			return $questionarioObjects;
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException("Erro ao listar setor.", $e->getCode(), $e);
+			throw new ColecaoException("Erro ao listar Questionario.", $e->getCode(), $e);
 		}
 	}
 
 	function construirObjeto(array $row) {
-		$setor = new Setor($row['id'],$row['titulo'], $row['descricao']);
+		$Questionario = new Questionario($row['id'],$row['titulo'], $row['descricao']);
 
-		return $setor;
+		return $Questionario;
 	}
 
     function contagem() {
 		return DB::table(self::TABELA)->count();
 	}
 	
-	private function validarSetor(&$obj) {
+	private function validarQuestionario(&$obj) {
 		if(!is_string($obj->getTitulo())) {
 			throw new ColecaoException('Valor inválido para título.');
 		}
@@ -149,19 +148,19 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 		$quantidade = DB::table(self::TABELA)->where('titulo', $obj->getTitulo())->where('id', '<>', $obj->getId())->count();
 
 		if($quantidade > 0){
-			throw new ColecaoException('Já exite um setor cadastrado com esse título');
+			throw new ColecaoException('Já exite um Questionario cadastrado com esse título');
 		}
 
-		if(strlen($obj->getTitulo()) <= Setor::TAM_MIN_TITUlO && strlen($obj->getTitulo()) > Setor::TAM_MAX_TITUlO) throw new ColecaoException('O titulo deve conter no mínimo '.  Setor::TAM_MIN_TITULO. ' e no máximo '. Categoria::TAM_MAX_TITUlO . '.');
+		if(strlen($obj->getTitulo()) <= Questionario::TAM_MIN_TITUlO && strlen($obj->getTitulo()) > Questionario::TAM_MAX_TITUlO) throw new ColecaoException('O titulo deve conter no mínimo '.  Questionario::TAM_MIN_TITULO. ' e no máximo '. Categoria::TAM_MAX_TITUlO . '.');
 
 		return true;
 	}
 
-	private function validarDeleteSetor($id) {
-		// $qtdReacionamento = DB::table(ColecaoChecklistEmBDR::TABELA)->where('setor_id', $id)->count();
+	private function validarDeleteQuestionario($id) {
+		// $qtdReacionamento = DB::table(ColecaoChecklistEmBDR::TABELA)->where('Questionario_id', $id)->count();
 
 		// if($qtdReacionamento > 0){
-		// 	throw new ColecaoException('Essa categoria possue setores relacionados a ela! Exclua todos os setores cadastros e tente novamente.');
+		// 	throw new ColecaoException('Essa categoria possue Questionarioes relacionados a ela! Exclua todos os Questionarioes cadastros e tente novamente.');
 		// }
 
 		return true;

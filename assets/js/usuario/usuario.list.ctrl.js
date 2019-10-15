@@ -34,7 +34,6 @@
 			objeto.order = 'DESC';
 			objeto.cadastrarLink = 'cadastrar_colaborador_link';
 			objeto.columnDefs = function (data){
-				console.log(data.colaborador);
 				var html = '';
 				html += '<div class="col co-lg-2 col-md-2 col-sm-2 col-4 ">';
 				html += '<img src="https://acotelha.com.br/wp-content/uploads/2018/02/AVATAR-PARA-O-SITE-02.png" class="avatar"></img>';
@@ -44,7 +43,7 @@
 				html += '<p class="f-12-dto"><strong>Nome : </strong>'+ data.colaborador.nome + ' ' + data.colaborador.sobrenome + '</p>'
 				html += '<p class="f-12-dto"><strong>Email : </strong>'+ data.colaborador.email + '</p>'
 				
-				html += '<p class="f-12-dto"><strong>Setor : </strong>'+ data.colaborador + '</p>';
+				html += '<p class="f-12-dto"><strong>Setor : </strong>'+ data.colaborador.setor.titulo + '</p>';
 				html += '<p class="f-12-dto"> <strong>Loja</strong>  Loja Conselheiro - Nova Friburgo</p>';
 				html += '<p class="f-12-dto"> <strong>Usuário: </strong>  '+ data.login +  '</p>';
 				html += '</div>';

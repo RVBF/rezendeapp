@@ -178,6 +178,10 @@
 		loader.script('assets/js/categoria/categoria.form.ctrl.js');
 		loader.script('assets/js/categoria/categoria.list.ctrl.js');
 
+		loader.script('assets/js/questionario/questionario.serv.js');
+		loader.script('assets/js/questionario/questionario.form.ctrl.js');
+		loader.script('assets/js/questionario/questionario.list.ctrl.js');
+
 		loader.script('assets/js/setor/setor.serv.js');
 		loader.script('assets/js/setor/setor.form.ctrl.js');
 		loader.script('assets/js/setor/setor.list.ctrl.js');

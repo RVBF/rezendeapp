@@ -32,7 +32,7 @@ class ControladoraLogin {
 	
 			$usuario = $this->servico->login(\ParamUtil::value($this->params, 'login'), \ParamUtil::value($this->params, 'senha'));
 			$colaborador = $this->colecaoColaborador->comUsuarioId($usuario->getId());
-			$conteudo = is_a($usuario, 'Usuario') ? ['id' => $usuario->getId(), 'login'=> $usuario->getLogin(), 'admin' => $usuario->getAdministrador(), 'nome' => $colaborador->getNome() . ' ' . $colaborador->getSobrenome()] : [];
+			$conteudo = is_a($usuario, 'Usuario') ? ['id' => $usuario->getId(), 'login'=> $usuario->getLogin(), 'admin' => $usuario->getAdministrador(), 'nome' => $colaborador->getNome() . ' ' . $colaborador->getSobrenome(), 'setor' => $colaborador->getSetor()->getTitulo()] : [];
 
 			$resposta = ['usuario'=> $conteudo, 'status' => count($conteudo) ? true : false, 'mensagem'=> count($conteudo) ? 'Logado Com sucesso.' : 'Erro ao logar.' ]; 
 		}

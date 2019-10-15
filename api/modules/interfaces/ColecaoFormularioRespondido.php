@@ -4,7 +4,7 @@
  *	Coleção de Formulario Respondido
  *
  *  @author		Rafael Vinicius Barros
- *  @version	0.1
+ *  @version	1.0
  */
 
 interface ColecaoFormularioRespondido extends Colecao {

@@ -4,7 +4,7 @@
  *	Loja
  *
  *  @author Rafael Vinicius Barros Ferreira
- *  @version	0.1
+ *  @version	1.0
  */
 class Loja {
 
