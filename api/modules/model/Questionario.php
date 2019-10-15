@@ -1,23 +1,25 @@
 <?php
 /**
- *	Setor
+ *	Questionario
  *
  *  @author Rafael Vinicius Barros Ferreira
  *  @version	1.0
  */
-class Setor {
+class Questionario {
 
     private $id;
     private $titulo;
     private $descricao;
+    private $tipoQuestionario;
 
     const TAM_MIN_TITUlO = 2;
     const TAM_MAX_TITUlO = 100;
 
-    function __construct($id = 0, $titulo = '', $descricao = '') {
+    function __construct($id = 0, $titulo = '', $descricao = '', $tipoQuestionario = '') {
         $this->id = $id;
         $this->titulo = $titulo;
         $this->descricao = $descricao;
+        $this->tipoQuestionario = $tipoQuestionario;
     }
 
     public function getId(){
@@ -28,20 +30,28 @@ class Setor {
         $this->id = $id;
     }
 
-    public function getDescricao(){
-        return $this->descricao; 
-    }
- 
-    public function setDescricao($descricao){
-        $this->descricao = $descricao;
-    }
-    
     public function getTitulo(){
         return $this->titulo; 
     }
  
     public function setTitulo(titulo $titulo) {
         $this->titulo = $titulo;
+    }
+
+    public function getDescricao(){
+        return $this->descricao; 
+    }
+
+    public function getTipoQuestionario(){
+        return $this->tipoQuestionario;
+    }
+
+    public function setTipoQuestionario($tipoQuestionario){
+        $this->tipoQuestionario = $tipoQuestionario;
+    }
+ 
+    public function setDescricao($descricao){
+        $this->descricao = $descricao;
     }
 }
 ?>

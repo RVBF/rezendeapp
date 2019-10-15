@@ -4,7 +4,7 @@
  *	Coleção de Loja
  *
  *  @author		Rafael Vinicius Barros
- *  @version	0.1
+ *  @version	1.0
  */
 
 interface ColecaoLoja extends Colecao {

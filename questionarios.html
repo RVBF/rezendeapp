@@ -1,0 +1,21 @@
+
+<section class="listagem-padrao" id="questionario">    
+    <div class="row">
+        <div class="col col-sm-12 col-12">
+            <div class="linhas"> </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="info col-md-12 col-12 col-sm-12 col-lg-12"></div>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function() {
+        var servicoQuestionario = new app.ServicoQuestionario();
+        var crltQuestionario = new app.ControladoraListagemQuestionario(servicoQuestionario);
+
+        crltQuestionario.configurar();
+    });
+</script> 
+    

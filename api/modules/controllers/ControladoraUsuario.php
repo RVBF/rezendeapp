@@ -10,7 +10,7 @@ use Illuminate\Database\Capsule\Manager as DB;
  * Controladora de Usuario
  *
  * @author	Rafael Vinicius Barros Ferreira
- * @version	0.1
+ * @version	1.0
  */
 class ControladoraUsuario {
 
@@ -76,7 +76,7 @@ class ControladoraUsuario {
 			$erro
 		);
 
-		return  RTTI::getAttributes($conteudo, RTTI::allFlags());
+		return  $conteudo;
     }
     
     function adicionar() {

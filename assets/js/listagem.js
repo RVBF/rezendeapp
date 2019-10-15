@@ -112,30 +112,46 @@
 		_this.renderizarOpcoesDePesquisa  = function renderizarOpcoesDePesquisa() {
 			var html = '';
 			html += '<div class="row">';
-			html += '<div class="sem-espacamentos">';
-            html += '<a href="#" class="ico-plus-dto adicao ' + opcoes.cadastrarLink + '">';
-            html += '<i class="fas fa-plus orange-text text-accent-3 small"></i>';
-			html += '</a>';
-			html += '<a href="#" class="ico-plus-dto atualizar">';
-            html += '<i class="fas fa-sync orange-text text-accent-3 small"></i>';
-            html += '</a>';
-        	html += '</div>';
-			html += '<div class="col col-md-8 col-lg-10 col-sm-8  col-6 input-field">';
-			html += '<i class="fas fa-search prefix f-12-dto orange-text text-accent-3 small"></i>';
-			html += '<input class="validate f-12-dto" type="search" name="pesquisar_itens" id="pesquisar_itens"/>';
-			html += '<label for="pesquisar_itens">Pesquisar</label>';
-			html += '</div>';
-			html += '<div class="col col-md-2 col-lg-1 col-sm-2  col-3">';
-			html += ' <select name="qtd_resultados" id="qtd_resultados" class="qtd_resultados_pesquisapadrao">';
+				html += '<div class="col col-lg-12 col-md-12 col-12 col-sm-12">';
 
-			for (var indice in opcoes.lengthMenu) {
-				var selected = (indice == 0) ?  ' selected="selected" ' : '';
-				html += '<option value="'+ opcoes.lengthMenu[indice] +'" '+ selected +' >' + opcoes.lengthMenu[indice] + '</option>';
-			}
-	
-			html += '</select>';
+					html += '<div class="col col-lg-3 col-md-3 col-12 col-sm-12  sem-espacamentos">';
+						html += '<div class="col col-lg-4 col-md-4 col-4 col-sm-4 adicao">';
+							html += '<a href="#" class="ico-plus-dto  ' + opcoes.cadastrarLink + '">';
+								html += '<i class="fas fa-plus orange-text text-accent-3"></i>';
+							html += '</a>';
+						html += '</div>';
+						html += '<div class="col col-lg-4 col-md-4 col-4 col-sm-4 atualizar">';
+							html += '<a href="#" class="ico-plus-dto ">';
+								html += '<i class="fas fa-sync orange-text text-accent-3"></i>';
+							html += '</a>';
+						html += '</div>';
+
+						html += '<div class="col col-lg-4 col-md-4 col-4 col-sm-4 pesquisar">';
+							html += '<a href="#" class="ico-plus-dto ">';
+								html += '<i class="fas fa-search prefix f-12-dto orange-text text-accent-3"></i>';
+							html += '</a>';
+						html += '</div>';
+					html += '</div>';
+
+					html += '<div class="col col-md-7 col-lg-7 col-sm-10 col-9 input-field">';
+						html += '<input class="validate f-12-dto" type="search" name="pesquisar_itens" id="pesquisar_itens"/>';
+						html += '<label for="pesquisar_itens">Pesquisar</label>';
+					html += '</div>';
+
+					html += '<div class="col col-md-2 col-lg-2 col-sm-2 col-3 sem-espacamentos">';
+				
+						html += ' <select name="qtd_resultados" id="qtd_resultados" class="qtd_resultados_pesquisapadrao">';
+
+							for (var indice in opcoes.lengthMenu) {
+								var selected = (indice == 0) ?  ' selected="selected" ' : '';
+								html += '<option value="'+ opcoes.lengthMenu[indice] +'" '+ selected +' >' + opcoes.lengthMenu[indice] + '</option>';
+							}
+					
+						html += '</select>';
+					html += '</div>';
+				html += '</div>';
 			html += '</div>';
-			html += '</div>';
+
 
 			listagemPadrao.prepend(html);
 		};

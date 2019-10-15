@@ -6,7 +6,7 @@ use Carbon\Carbon;
  *	Coleção de PlanoAcao em Banco de Dados Relacional.
  *
  *  @author		Rafael Vinicius Barros Ferreira
- *	@version	0.1
+ *	@version	1.0
  */
 
 class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {

@@ -79,16 +79,14 @@
             });
             
             $('body').find('.setor_usuario').each(function() {
-                $(this).empty().html('TI');
+                $(this).empty().html(JSON.parse(sessao.getSessao()).setor);
             });
         }
 
 		_this.configurar = function configurar() {
-
             _this.renderizarOpcoesHTML();  
             _this.renderizarAtividadesUsuario();
             _this.renderizarDadosUsuario();
-
 		};
 	} // ControladoraIndex
 

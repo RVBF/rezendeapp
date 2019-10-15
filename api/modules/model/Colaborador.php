@@ -4,7 +4,7 @@
  *	Colaborador
  *
  *  @author Rafael Vinicius Barros Ferreira
- *  @version	0.1
+ *  @version	1.0
  */
 class Colaborador {
 
@@ -14,6 +14,7 @@ class Colaborador {
     private $email;
     private $usuario;
     private $lojas;
+    private $setor;
 
     const TAM_TEXT_MIM = 3;
     const TAM_TEXT_MAX = 50;

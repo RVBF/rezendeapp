@@ -8,15 +8,15 @@ use Carbon\Carbon;
 use Illuminate\Database\Capsule\Manager as DB;
 
 /**
- * Controladora de Setor
+ * Controladora de Questionario
  *
  * @author	Rafael Vinicius Barros Ferreira
  * @version	1.0
  */
-class ControladoraSetor {
+class ControladoraQuestionario {
 
 	private $params;
-	private $colecaoSetor;
+	private $colecaoQuestionario;
 	private $colecaoCategoria;
 	private $colecaoLoja;
 	private $servicoLogin;
@@ -24,7 +24,7 @@ class ControladoraSetor {
 	function __construct($params,  Sessao $sessao) {
 		$this->servicoLogin = new ServicoLogin($sessao);
 		$this->params = $params;
-		$this->colecaoSetor = Dice::instance()->create('ColecaoSetor');
+		$this->colecaoQuestionario = Dice::instance()->create('ColecaoQuestionario');
 		$this->colecaoCategoria = Dice::instance()->create('ColecaoCategoria');
 		$this->colecaoLoja = Dice::instance()->create('ColecaoLoja');
 
@@ -35,17 +35,18 @@ class ControladoraSetor {
 		{
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
-			}
-
+            }
+            
 			$dtr = new DataTablesRequest($this->params);
 
 			$contagem = 0;
 			$objetos = [];
 			$erro = null;
 
-			$objetos = $this->colecaoSetor->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');
+            $objetos = $this->colecaoQuestionario->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');
+            
 		
-			$contagem = $this->colecaoSetor->contagem();
+			$contagem = $this->colecaoQuestionario->contagem();
 		}
 		catch (\Exception $e )
 		{
@@ -83,12 +84,12 @@ class ControladoraSetor {
 				throw new Exception($msg);
 			}
 
-			$setor = new Setor(
+			$Questionario = new Questionario(
 				0,
 				\ParamUtil::value($this->params, 'titulo'),
 				\ParamUtil::value($this->params, 'descricao')
 			);
-			$resposta = ['setor'=> RTTI::getAttributes($this->colecaoSetor->adicionar($setor), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Setor cadastrado com sucesso.']; 
+			$resposta = ['Questionario'=> RTTI::getAttributes($this->colecaoQuestionario->adicionar($Questionario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Questionario cadastrado com sucesso.']; 
 			
 			DB::commit();
 
@@ -127,13 +128,13 @@ class ControladoraSetor {
 				throw new Exception("Categoria não encontrada na base de dados.");
 			}
 			
-			$setor = new Setor(
+			$Questionario = new Questionario(
 				\ParamUtil::value($this->params, 'id'),
 				\ParamUtil::value($this->params, 'titulo'),
 				\ParamUtil::value($this->params, 'descricao'),
 				$categoria
 			);
-			$resposta = ['setor'=> RTTI::getAttributes($this->colecaoSetor->atualizar($setor), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Setor atualizado com sucesso.']; 
+			$resposta = ['Questionario'=> RTTI::getAttributes($this->colecaoQuestionario->atualizar($Questionario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Questionario atualizado com sucesso.']; 
 			DB::commit();
 		}
 		catch (\Exception $e) {
@@ -159,9 +160,9 @@ class ControladoraSetor {
 
 			$resposta = [];
 
-			$status = $this->colecaoSetor->remover($id);
+			$status = $this->colecaoQuestionario->remover($id);
 			
-			$resposta = ['status' => true, 'mensagem'=> 'Setor removido com sucesso.']; 
+			$resposta = ['status' => true, 'mensagem'=> 'Questionario removido com sucesso.']; 
 			DB::commit();
 
 		}

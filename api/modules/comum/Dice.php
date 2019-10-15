@@ -51,6 +51,7 @@ class Dice {
 		DI::config(DI::let('ColecaoFormularioRespondido')->create('ColecaoFormularioRespondidoEmBDR'));
 		DI::config(DI::let('ColecaoColaborador')->create('ColecaoColaboradorEmBDR'));
 		DI::config(DI::let('ColecaoPermissaoAdministrativa')->create('ColecaoPermissaoAdministrativaEmBDR'));
+		DI::config(DI::let('ColecaoQuestionario')->create('ColecaoQuestionarioEmBDR'));
 	}
 }
 

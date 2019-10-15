@@ -4,7 +4,7 @@
  *	Coleção de Resposta
  *
  *  @author		Rafael Vinicius Barros
- *  @version	0.1
+ *  @version	1.0
  */
 
 interface ColecaoResposta extends Colecao {

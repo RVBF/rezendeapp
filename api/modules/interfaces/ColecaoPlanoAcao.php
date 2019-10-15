@@ -4,7 +4,7 @@
  *	Coleção de Plano De Acao
  *
  *  @author		Rafael Vinicius Barros
- *  @version	0.1
+ *  @version	1.0
  */
 
 interface ColecaoPlanoAcao extends Colecao{
