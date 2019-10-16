@@ -1,0 +1,97 @@
+<section id="painel_formulario">
+   <div class="row">
+		<div class="col-md-12 col-12 col-sm-12 col-lg-12">
+			<div class="card-panel left-align">
+				<div class="row">
+					<div class="col-12  col-sm-12 col-md-12 col-lg-12">
+						<form class="form-horizontal "  method="post" id="questionario_form">
+							<input type="hidden" id="id" name ="id" />
+		
+							<div class="row form-row">
+								<div class="col col-md-12 col-12 col-sm-12 col-lg-12">
+									<div class="input-field">
+										<input type="text" class="form-control validate " id ="titulo" name="titulo"/>
+										<label for="titulo">*Título: </label>
+									</div>
+								</div>
+                            </div>
+                            
+                            <div class="row form-row">
+                                <div class="col-md-12 col-12 col-sm-12 col-lg-6 ">
+                                    <div class=" input-field">
+                                        <select id ="tipo-questionario"  name="tipo-questionario" class="select campo_obrigatorio" ><option value="" disabled selected>Tipo Questionário</option></select>
+                                        <label for="tipo-questionario">*Tipo Questionário</label>
+                                    </div>
+                                </div>
+                            </div>
+                
+
+                            <h4 >Perguntas</h4>
+
+                            <hr class=" divisor-secao" />
+
+                            <div class="perguntas">
+                                <div class="pergunta">
+                                    <input type= "hidden" class="ids"  name="pergunta_1" value ='1'>
+                                                        
+                                    <div class="row form-row">
+                                        <div class="col col-lg-11 col-md-11 col-sm-9 col-12">
+                                            <div class="input-field">
+                                                <input type="text" class="form-control campo_obrigatorio" id="pergunta_1" name="pergunta_1">
+                                                <label for="pergunta_1">Pergunta nº 1:</label>
+                                            </div>
+                                        </div>
+                
+                                        <div class="col col-lg-1 col-md-1 col-sm-1 col-12">
+                                            <div class="bnt_campoextra">
+												<div class="col col-lg-6 col-md-6 col-sm-6 col-3">
+													<button aria-hidden="true" role="presentation" type="button" aria-label="Adicionar pergunta" class="btn bnt_opcoesformulario btn-sm red darken-4 adicionar_pergunta"><i class="fas fa-plus"></i></button>
+												</div>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div>
+    
+                            
+                            <div class="row form-row">
+                                <div class="col col-md-12 col-12 col-sm-12 col-lg-12 ">
+                                    <div class="input-field">
+                                        <textarea class=" materialize-textarea validate" id="descricao" name="descricao" rows="5"></textarea>
+                                        <label for="descricao">*Descrição</label>
+                                    </div>
+                                </div>    
+                            </div>
+
+							<div class="row form-row">
+								<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end">
+									<button type="submit" id="salvar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">
+										<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>
+											Finalizar<br>
+											plano de ação
+									</button>
+								</div>
+							
+								<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-start justify-content-md-start ">
+									<button class="waves-effect waves-light btn white grey-text text-darken-4 button-dto f-12-dto setor_link">
+										<i class="mdi mdi-close-circle-outline yellow-text text-accent-4"></i>
+										Cancelar
+									</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+</section>
+
+
+<script>
+    $(document).ready(function() {
+        var servicoQuestionario = new app.ServicoQuestionario();
+        var crltQuestionario = new app.ControladoraFormQuestionario(servicoQuestionario);
+        crltQuestionario.configurar();
+    });
+</script>

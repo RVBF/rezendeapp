@@ -8,10 +8,9 @@
 
 
 abstract class TipoChecklistEnumerado extends Enumerado {
-    const PADRAO = 'PADRAO';
+    const PADRAO = 'PADRÃO';
     const PA = 'PA';
     const QNP = 'QNP';
-    const CHECKLIST = 'CHECKLIST';
     const GENERICO = 'GENERICO';
 }
 ?>

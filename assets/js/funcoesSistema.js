@@ -140,7 +140,6 @@
 			});
 
 			$(evento.target).find('.setor_link').on('click', function (event) {
-				console.log(':)')
 				event.preventDefault();
 				router.navigate('/setores');
 			});
@@ -153,6 +152,12 @@
 			$(evento.target).find('.questionario_link').on('click', function(event){
 				event.preventDefault();
 				router.navigate('/questionarios')
+			});
+
+			$(evento.target).find('.cadastrar_questionario_link').on('click', function(event){
+				event.preventDefault();
+				router.navigate('/cadastrar-questionario')
+
 			});
 		}
 	};
