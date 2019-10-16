@@ -120,8 +120,18 @@ form .quebra-linha{
     -moz-osx-font-smoothing: grayscale;
 }
 
+.divisor-secao {
+    height: 0;
+    margin: 2rem 0;
+    overflow: hidden;
+    border-top: 1px solid #e9ecef;
+}
+.bnt_campoextra{
+    margin-top: 1.5em;
+}
+
 .col-12, .col-md-12, .col-sm-12, .col-lg-12{
-    margin-bottom: 1em !important;
+    margin-bottom: 1.5em !important;
 }
 
 @media(min-width:100px) and (max-width: 635px) {

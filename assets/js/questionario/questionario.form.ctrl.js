@@ -12,9 +12,8 @@
 		var _this = this;
 
 		_this.alterar;
-		_this.formulario = $('#Questionario_form');
+		_this.formulario = $('#questionario_form');
 		_this.botaoSubmissao = $('#salvar')
-		_this.cancelarModoEdicao = $('#cancelar_edicao')
 
 		// Cria as opções de validação do formulário
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
@@ -68,13 +67,73 @@
 			);
 		};
 
+		_this.popularTiposDeQuestionarios = function popularTiposQuestionarios() {
+			console.log(app);
+			var servicoLoja = new app.TipoQuestionario();
+			var  tiposQuestionarios = servicoLoja.getTipoQuestionario();
+
+			$("#tipo-questionario").empty();
+			
+			$.each(tiposQuestionarios, function(i ,item) {
+				$("#tipo-questionario").append($('<option>', {
+					value:i,
+					text: item
+				}));
+			});
+
+			$("#tipo-questionario").formSelect();
+		};
+
+		_this.adiconarPergunta = function(){
+			var quantidade = $(this).parents('form').find('.perguntas').find('.pergunta').length + 1;
+			var html  = '<div class="pergunta">';
+			html += '<input type= "hidden" class="ids"  name="pergunta_' + quantidade + '" value ="'+ quantidade +'">';
+			html += '<div class="row form-row">';
+			html += '<div class="col col-lg-9 col-md-9 col-sm-9 col-12">';
+			html += ' <div class="input-field">';
+			html += '<input type="text" class="form-control campo_obrigatorio" id="pergunta_' + quantidade + '" name="pergunta_' + quantidade + '">';
+			html += '<label for="pergunta_' + quantidade + '">Pergunta nº '+ quantidade +':</label>';
+			html += '</div>';
+			html += '</div>';
+
+
+			html += '<div class="col col-lg-3 col-md-3 col-sm-3 col-12">';
+			html += '<div class="bnt_campoextra">';
+
+			html += '<div class="col col-lg-6 col-md-6 col-sm-6 col-3">';
+			html += '<button aria-hidden="true" role="presentation" type="button" aria-label="Adicionar pergunta" class="btn bnt_opcoesformulario btn-sm red darken-4 adicionar_pergunta"><i class="fas fa-plus"></i></button>';
+			html += '</div>';
+
+			html += '<div class="col col-lg-6 col-md-6 col-sm-6 col-9">';          
+			html += '<button aria-hidden="true" role="presentation" type="button" aria-label="Remover Pergunta" class="btn bnt_opcoesformulario btn-sm yellow accent-4 remover_pergunta"><i class="fas fa-minus"></i></button>';
+			html += '</div>';
+			
+			html += '</div>';
+			html += '</div>';
+			html += '</div>';
+			html += '</div>';
+
+			_this.formulario.find('.perguntas').append(html);
+			$('.adicionar_pergunta:last').on('click',  _this.adiconarPergunta);
+			$('.remover_pergunta:last').on('click', _this.removerPergunta);
+		};
+
+		_this.removerPergunta = function(){
+			var quantidade = $(this).parents('.perguntas').find('.pergunta').length;
+			
+			if(quantidade > 1) $(this).parents('.pergunta').remove();
+		};
 		_this.configurarBotoes = function configurarBotoes() {
+			$('body').find('.adicionar_pergunta').on('click', _this.adiconarPergunta);
+			$('.remover_pergunta:last').on('click', _this.removerPergunta);
+
+
 			_this.botaoSubmissao.on('click', _this.salvar);
-			_this.cancelarModoEdicao.on('click', _this.cancelar);
 		};
 
 		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro() {
 			_this.formulario.find('#tiulo').focus();
+			_this.popularTiposDeQuestionarios();
 			_this.configurarBotoes();
 		};
 
@@ -114,7 +173,6 @@
 
 	// Registrando
 	app.ControladoraFormQuestionario = ControladoraFormQuestionario;
-
 })(window, app, jQuery, toastr);
 
 

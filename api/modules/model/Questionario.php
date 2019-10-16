@@ -40,6 +40,10 @@ class Questionario {
 
     public function getDescricao(){
         return $this->descricao; 
+    } 
+
+    public function setDescricao($descricao){
+        $this->descricao = $descricao;
     }
 
     public function getTipoQuestionario(){
@@ -48,10 +52,6 @@ class Questionario {
 
     public function setTipoQuestionario($tipoQuestionario){
         $this->tipoQuestionario = $tipoQuestionario;
-    }
- 
-    public function setDescricao($descricao){
-        $this->descricao = $descricao;
     }
 }
 ?>
