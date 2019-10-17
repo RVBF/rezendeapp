@@ -1,5 +1,5 @@
 /**
- *  tarefa.form.ctrl.js
+ *  Checklist.form.ctrl.js
  *
  *  @author  Rafael Vinicius Barros Ferreira
  *	 @version 1.0
@@ -8,14 +8,17 @@
 {
 	'use strict';
 
-	function ControladoraFormTarefa(servicoTarefa, controladoraListagemTarefa) {
+	function ControladoraFormChecklist(servicoChecklist, controladoraListagemChecklist) {
 		var _this = this;
 
 		_this.alterar;
-		_this.formulario = $('#tarefa_form');
+		_this.formulario = $('#checklist_form');
 		_this.botaoSubmissao = $('#salvar')
 		_this.cancelarModoEdicao = $('#cancelar_edicao')
 		_this.idSetor = window.location.href.split('#')[1].substring(1, url.length).split('/')[1];	
+		_this.dataLimite = '';
+		_this.horaLimite = '';
+
 
 		// Cria as opções de validação do formulário
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
@@ -40,7 +43,7 @@
 					_this.formulario.desabilitar(false);
 				};
 				
- 				var jqXHR = _this.alterar ? servicoTarefa.atualizarComSetorId(obj, _this.idSetor) : servicoTarefa.adicionarComSetorId(obj, _this.idSetor);
+ 				var jqXHR = _this.alterar ? servicoChecklist.atualizarComSetorId(obj, _this.idSetor) : servicoChecklist.adicionarComSetorId(obj, _this.idSetor);
 				jqXHR.done(window.sucessoParaFormulario).fail(window.erro).always(terminado);
 
 				if(_this.alterar){
@@ -55,31 +58,72 @@
         
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
-			return servicoTarefa.criar(
+			var dataLimite = moment(_this.dataLimite.getDate()).format('YYYY-MM-DD');
+
+			return servicoChecklist.criar(
 				$('#id').val(),
 				$('#titulo').val(),
 				$('#descricao').val(),
-				$('#data_limite').pickadate('picker').get('select', 'yyyy-mm-dd') + ' ' + $('#hora_limite').pickatime('picker').get('select','HH:i'),
+				dataLimite.toString() + ' ' + $('#hora').val(),
 				$('#setor option:selected').val(),
 				$('#loja option:selected').val()
 			);
+							// $('#data_limite').pickadate('picker').get('select', 'yyyy-mm-dd') + ' ' + $('#hora_limite').pickatime('picker').get('select','HH:i'),
+
 		};
 
 		_this.configurarBotoes = function configurarBotoes() {
+			_this.dataLimite =new Picker($('#data').get()[0], {
+					format : 'DD de MMMM de YYYY',
+					controls: true,
+					inline: true,
+					container: '.date-panel',					
+					text : {
+						title: 'Selecione a data',
+						cancel: 'Cancelar',
+						confirm: 'OK',
+						year: 'Ano',
+						month: 'Mês',
+						day: 'Dia',
+						hour: 'Hora',
+						minute: 'Minuto',
+						second: 'Segundo',
+						millisecond: 'Milissegundos',
+					},
+					headers : true,
+					months : ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+					monthsShort : ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+				});
+
+				_this.horaLimite = new Picker($('#hora').get()[0], {
+					format: 'HH:mm',
+					headers: true,
+					controls: true,
+					inline: true,
+					container: '.time-panel',	
+					text : {
+						title: 'Selecione a hora',
+						cancel: 'Cancelar',
+						confirm: 'OK',
+						hour: 'Hora',
+						minute: 'Minuto',
+						second: 'Segundo',
+						millisecond: 'Milissegundos',
+					},
+				});
+
 			_this.botaoSubmissao.on('click', _this.salvar);
 			_this.cancelarModoEdicao.on('click', _this.cancelar);
 		};
 
 		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro() {
-			_this.formulario.parents('#painel_formulario').removeClass('d-none');
-			_this.formulario.parents('#painel_formulario').removeClass('desabilitado').desabilitar(false);
-
 			_this.formulario.parents('#painel_formulario').promise().done(function() {
 				_this.formulario.find('#titulo').focus();
-				_this.configurarBotoes();
-
-				if(_this.idSetor == undefined) _this.popularSetors();
 				_this.popularLojas();
+				_this.popularTiposDeChecklist();
+				_this.popularColaboradores();
+				_this.popularQuestionario();
+				_this.configurarBotoes();
 			});
 		};
 
@@ -113,16 +157,16 @@
 		_this.popularLojas  =  function popularLojas(valor = 0)
 		{
 			var sucesso = function (resposta) {
-				$("#loja").empty();
+				$("#unidade").empty();
 
 				$.each(resposta.data, function(i ,item) {
-					$("#loja").append($('<option>', {
+					$("#unidade").append($('<option>', {
 						value: item.id,
 						text: item.razaoSocial  + '/' + item.nomeFantasia
 					}));
 				});
 
-				$('#loja').trigger('change');
+				$('#unidade').formSelect();
 			};
 
 			var erro = function(resposta)
@@ -136,6 +180,80 @@
 			var  jqXHR = servicoLoja.todos();
 			jqXHR.done(sucesso).fail(erro);
 		};
+
+		_this.popularColaboradores  =  function popularColaboradores(valor = 0)
+		{
+			var sucesso = function (resposta) {
+				$("#responsavel").empty();
+
+				$.each(resposta.data, function(i ,item) {
+					$("#responsavel").append($('<option>', {
+						value: item.colaborador.id,
+						text: item.colaborador.nome  + ' ' + item.colaborador.sobrenome
+					}));
+				});
+
+				$('#responsavel').formSelect();
+			};
+
+			var erro = function(resposta)
+			{
+				var mensagem = jqXHR.responseText || 'Erro ao popular select de farmácias.';
+				toastr.error(mensagem);
+				return false;
+			}
+
+			var servicoUsuario = new app.ServicoUsuario();
+			var  jqXHR = servicoUsuario.todos();
+			jqXHR.done(sucesso).fail(erro);
+		};
+
+		_this.popularQuestionario  =  function popularQuestionario(valor = 0)
+		{
+			var sucesso = function (resposta) {
+				$("#questionario").empty();
+
+				$.each(resposta.data, function(i ,item) {
+					 let opcoes = {
+						value: item.id,
+						text: item.titulo,
+						selected : (i ==0) ? true : false
+					};
+					$("#questionario").append($('<option>', opcoes));
+				});
+
+				$('#questionario').formSelect();
+			};
+
+			var erro = function(resposta)
+			{
+				var mensagem = jqXHR.responseText || 'Erro ao popular select de farmácias.';
+				toastr.error(mensagem);
+				return false;
+			}
+
+			var servicoQuestionario = new app.ServicoQuestionario();
+			var  jqXHR = servicoQuestionario.todos();
+			jqXHR.done(sucesso).fail(erro);
+		};
+
+		_this.popularTiposDeChecklist = function popularTiposChecklist() {
+			var servicoTipoChecklist = new app.TipoChecklist();
+			var  tiposQuestionarios = servicoTipoChecklist.getTipoChecklist();
+
+			$("#tipo-checklist").empty();
+			
+			$.each(tiposQuestionarios, function(i ,item) {
+				$("#tipo-checklist").append($('<option>', {
+					value:item,
+					text: item
+				}));
+			});
+
+			$("#tipo-checklist").formSelect();
+		};
+		
+
 
 		_this.iniciarFormularioModoEdicao = function iniciarFormularioModoEdicao() {
 			_this.iniciarFormularioModoCadastro();
@@ -189,15 +307,10 @@
 		// Configura os eventos do formulário
 		_this.configurar = function configurar(status = false) {
 			_this.definirForm(status);
-			
-			$('.select2').select2({
-				theme: 'bootstrap4',
-				width: '100%',
-			});
 		};
-	}; // ControladoraFormTarefa
+	}; // ControladoraFormChecklist
 
 	// Registrando
-	app.ControladoraFormTarefa = ControladoraFormTarefa;
+	app.ControladoraFormChecklist = ControladoraFormChecklist;
 
 })(window, app, jQuery, toastr);

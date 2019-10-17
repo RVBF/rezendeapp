@@ -7,10 +7,13 @@
  {
 	'use strict';
 
-	function Questionario(id, titulo, descricao) {
+	function Questionario(id, titulo, descricao, tipoQuestionario, configuracao) {
 		this.id = id  || 0;
 		this.titulo = titulo  || '';
-        this.descricao = descricao  || '';
+		this.descricao = descricao  || '';
+		this.tipoQuestionario = tipoQuestionario || '';
+		this.configuracao = configuracao || '';
+
 	};
 
 	function ServicoQuestionario() { // Model
@@ -21,11 +24,13 @@
 		};
 
 		// Cria um objeto de Setor
-		this.criar = function criar(id, titulo, descricao) {
+		this.criar = function criar(id, titulo, descricao, tipoQuestionario, configuracao) {
  			return {
                 id : id  || 0,
                 titulo : titulo  || '',
-                descricao : descricao  || ''
+				descricao : descricao  || '',
+				tipoQuestionario : tipoQuestionario || '',
+				configuracao : configuracao || ''
 			};
 		};
 

@@ -32,40 +32,6 @@
 				$(this).formSelect();
 			});
 
-			// $(evento.target).find('.data').each(function(){
-            //     $(this).pickadate({
-			// 		// Strings and translations
-			// 		monthsFull: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-			// 		monthsShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-			// 		weekdaysFull: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-			// 		weekdaysShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
-			// 		showMonthsShort: undefined,
-			// 		showWeekdaysFull: undefined,
-			// 		// Buttons
-			// 		today: 'Hoje',
-			// 		clear: 'Limpar',
-			// 		close: 'Fechar',
-
-			// 		// Accessibility labels
-			// 		labelMonthNext: 'Próximo Mês',
-			// 		labelMonthPrev: 'Mês Anterior',
-			// 		labelMonthSelect: 'Selecione o Mês',
-			// 		labelYearSelect: 'Selecione o Ano',
-			// 		min :  moment()
-			// 	});
-			// });
-
-			$(evento.target).find('.hora').each(function(){
-                $(this).pickatime({
-					format: 'HH:i',
-					interval: 10,
-					clear: 'Limpar',
-					formatSubmit: 'HH:i',
-					min: [7,0],
-					max: [19,0],
-					hiddenName: true
-				});
-			});
 			
 			$(evento.target).find('.home').on('click', function(event){
 				event.preventDefault();
@@ -108,9 +74,9 @@
 				router.navigate('/configuracao');
 			});
 
-			$(evento.target).find('.add_checklist_link').on('click', function(event){
+			$(evento.target).find('.cadastrar_checklist_link').on('click', function(event){
 				event.preventDefault();
-				router.navigate('/add-checklist');
+				router.navigate('/cadastrar-checklist')
 			});
 
 			$(evento.target).find('.colaboradores_link').on('click', function(event){
@@ -158,6 +124,11 @@
 				event.preventDefault();
 				router.navigate('/cadastrar-questionario')
 
+			});
+
+			$(evento.target).find('.cadastrar_checklist_link').on('click', function(event){
+				event.preventDefault();
+				router.navigate('/cadastrar-checklist')
 			});
 		}
 	};

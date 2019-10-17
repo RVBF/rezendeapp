@@ -10,16 +10,13 @@ class Pergunta {
 
 	private $id;
     private $pergunta;
-    private $tarefa; 
-    private $resposta;
-    private $formularioRespondido;
+    private $questionario; 
 
 
-    function __construct($id = 0, $pergunta = '', $tarefa = null, $formularioRespondido = null) {
+    function __construct($id = 0, $pergunta = '', $questionario = null) {
 		$this->id = $id;
         $this->pergunta = $pergunta;
-        $this->tarefa = $tarefa;
-        $this->formularioRespondido = $formularioRespondido;
+        $this->questionario = $questionario;
     }
 
     public function getId(){
@@ -38,44 +35,12 @@ class Pergunta {
         $this->pergunta = $pergunta;
     }
 
-    public function getRespondedor(){
-        return $this->respondedor; 
-    }
- 
-    public function setRespondedor($respondedor){
-        $this->respondedor = $respondedor;
+    public function getQuestionario(){
+        return $this->questionario;
     }
 
-    public function getQuestionador(){
-        return $this->questionador; 
-    }
- 
-    public function setQuestionador($questionador){
-        $this->questionador = $questionador;
-    }
-
-    public function getTarefa(){
-        return $this->tarefa;
-    }
-
-    public function setTarefa($tarefa){
-        $this->tarefa = $tarefa;
-    }
-
-    public function setResposta($resposta){
-        $this->resposta = $resposta;
-    }
- 
-    public function getResposta(){
-        return $this->resposta; 
-    }
-
-    public function setFormularioRespondido($formularioRespondido){
-        $this->formularioRespondido = $formularioRespondido;
-    }
- 
-    public function getFormularioRespondido(){
-        return $this->formularioRespondido; 
+    public function setQuestionario($questionario){
+        $this->questionario = $questionario;
     }
 }
 ?>

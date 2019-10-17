@@ -1,0 +1,113 @@
+<section id="painel_formulario">
+    <div class="row">
+         <div class="col-md-12 col-12 col-sm-12 col-lg-12">
+             <div class="card-panel left-align">
+                 <div class="row">
+                     <div class="col-12  col-sm-12 col-md-12 col-lg-12">
+                         <form class="form-horizontal "  method="post" id="checklist_form">
+                             <input type="hidden" id="id" name ="id" />
+         
+                             <div class="row form-row">
+                                 <div class="col col-md-12 col-12 col-sm-12 col-lg-12">
+                                     <div class="input-field">
+                                         <input type="text" class="form-control validate " id ="titulo" name="titulo"/>
+                                         <label for="titulo">*Título: </label>
+                                     </div>
+                                 </div>
+                             </div>
+
+                             <div class="row form-row">
+								<div class="col col-md-6 col-12 col-sm-12 col-lg-6 ">
+									<div class=" input-field">
+										<select id ="tipo-checklist"  name="tipo-checklist" class="select campo_obrigatorio" ><option value="" disabled selected>Tipo Checklist</option></select>
+										<label for="tipo-checklist">*Tipo checklist</label>
+									</div>
+								</div>
+
+								<div class="col col-md-6 col-12 col-sm-12 col-lg-6 ">
+									<div class=" input-field">
+										<select id ="unidade"  name="unidade" class="select campo_obrigatorio"><option value="" disabled selected>Unidade</option></select>
+										<label for="unidade">*Unidade</label>
+									</div>
+								</div>
+                            </div>
+
+                            <div class="row form-row">
+                                <div class="col col-md-6 col-12 col-sm-12 col-lg-6 ">
+                                    <div class=" input-field">
+                                        <select id ="responsavel"  name="responsavel" class="select campo_obrigatorio" ><option value="" disabled selected>Responsável</option></select>
+                                        <label for="responsavel">*Responsável</label>
+                                    </div>
+                                </div>
+
+                                <div class="col col-md-6 col-12 col-sm-12 col-lg-6 ">
+                                    <div class=" input-field">
+                                        <select id ="questionario"  name="questionario[]" class="select campo_obrigatorio" multiple><option value="" disabled selected>Questionario</option></select>
+                                        <label for="questionario">*Questionario</label>
+                                    </div>
+                                </div>
+                            </div>
+                                
+                            
+                            <div class="row form-row">
+                                <div class="col col-md-6 col-12 col-sm-6 col-lg-6">
+                                    <div class="input-field">
+                                        <i class="prefix mdi mdi-calendar"></i>
+                                        <input id="data" type="text" class="validate form-control data-picker">
+                                        <label for="data">Data Limite para Execução</label>
+                                    </div>
+                                    <div class="date-panel"></div>
+                                </div>
+
+                                <div class="col col-md-6 col-12 col-sm-6 col-lg-6">
+                                    <div class="input-field">
+                                        <i class="prefix mdi mdi-av-timer"></i>
+                                        <input id="hora" type="text" class="validate form-control hora-picker">
+                                        <label for="hora">Hora limite para Execução</label>
+                                    </div>
+                                    <div class="time-panel"></div>
+                                </div>
+                            </div>
+                                  
+                             <div class="row form-row">
+                                 <div class="col col-md-12 col-12 col-sm-12 col-lg-12 ">
+                                     <div class="input-field">
+                                         <textarea class=" materialize-textarea validate" id="descricao" name="descricao" rows="5"></textarea>
+                                         <label for="descricao">*Descrição</label>
+                                     </div>
+                                 </div>    
+                                </div>
+ 
+                             <div class="row form-row">
+                                 <div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end">
+                                     <button type="submit" id="salvar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">
+                                         <i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>
+                                             Finalizar<br>
+                                             plano de ação
+                                     </button>
+                                 </div>
+                             
+                                 <div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-start justify-content-md-start ">
+                                     <button class="waves-effect waves-light btn white grey-text text-darken-4 button-dto f-12-dto setor_link">
+                                         <i class="mdi mdi-close-circle-outline yellow-text text-accent-4"></i>
+                                         Cancelar
+                                     </button>
+                                 </div>
+                             </div>
+                         </form>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>	
+ </section>
+ 
+ 
+ <script>
+     $(document).ready(function() {
+         var servicoChecklist = new app.ServicoChecklist();
+         var crltChecklist = new app.ControladoraFormChecklist(servicoChecklist);
+         crltChecklist.configurar();
+     });
+ </script>
+ 

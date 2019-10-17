@@ -74,7 +74,7 @@
 	router.get('/', criarRotaPara('inicio.html'));
 
 	router.get('/checklist', criarRotaPara('checklist.html'));
-	router.get('/add-checklist', criarRotaPara('add-checklist.html'));
+	router.get('/cadastrar-checklist', criarRotaPara('formulario-checklist.html'));
 
 	router.get('/questionarios', criarRotaPara('questionarios.html'));
 	router.get('/cadastrar-questionario', criarRotaPara('formulario-questionario.html'));

@@ -35,7 +35,7 @@
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
 				var obj = _this.conteudo();
-				
+				console.log(obj);
 				var terminado = function() {
 					_this.formulario.desabilitar(false);
 				};
@@ -44,8 +44,8 @@
 			
 				var jqXHR = _this.alterar ? servicoQuestionario.atualizar(obj) : servicoQuestionario.adicionar(obj);
 				jqXHR.done(function() {
-					router.navigate('/Questionarioes');
-					toastr.success('Loja Adicionada com sucesso!')
+					router.navigate('/questionario');
+					toastr.success('Questionário Adicionada com sucesso!')
 				}).fail(window.erro).always(terminado);
 
 				if(_this.alterar){
@@ -60,15 +60,25 @@
         
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
+			var configuracaoes = {perguntas : []};
+
+			if(_this.formulario.find('.pergunta').length > 0){
+				$('.ids').each(function(){
+					var id = $(this).val();
+					configuracaoes.perguntas.push({id: id, pergunta: $('#pergunta_'+ id).val()});
+				});
+			}
+			
 			return servicoQuestionario.criar(
                 $('#id').val(),
                 $('#titulo').val(),
-				$('#descricao').val()
+				$('#descricao').val(),
+				$('#tipo-questionario').val(),
+				configuracaoes
 			);
 		};
 
 		_this.popularTiposDeQuestionarios = function popularTiposQuestionarios() {
-			console.log(app);
 			var servicoLoja = new app.TipoQuestionario();
 			var  tiposQuestionarios = servicoLoja.getTipoQuestionario();
 
@@ -76,7 +86,7 @@
 			
 			$.each(tiposQuestionarios, function(i ,item) {
 				$("#tipo-questionario").append($('<option>', {
-					value:i,
+					value:item,
 					text: item
 				}));
 			});

@@ -99,6 +99,8 @@
 	dependenciasCSS.push({ url : 'vendor/tether/dist/css/tether.min.css' });	
 	dependenciasCSS.push({ url : 'vendor/bootstrap3-dialog/dist/css//bootstrap-dialog.min.css' });
 	dependenciasCSS.push({ url : 'vendor/toastr/toastr.min.css' });
+	dependenciasCSS.push({ url : 'vendor/pickerjs/dist/picker.min.css'});
+
 	// dependenciasCSS.push({ url : 'vendor/datatables.net-dt/css//jquery.dataTables.min.css' });
 	// dependenciasCSS.push({ url : 'vendor/datatables/media/css//dataTables.bootstrap4.css' });
 	// dependenciasCSS.push({ url : 'vendor/datatables.net-responsive-dt/css//responsive.dataTables.min.css' });
@@ -106,9 +108,6 @@
 	// dependenciasCSS.push({ url : 'vendor/datatables.net-responsive-bs4/css//responsive.bootstrap4.css' });
 	// dependenciasCSS.push({ url : 'vendor/datatables.net-select-dt/css//select.dataTables.min.css' });
 
-	// dependenciasCSS.push({ url : 'vendor/pickadate/lib/compressed/themes/default.css' });
-	// dependenciasCSS.push({ url : 'vendor/pickadate/lib/compressed/themes/default.time.css' });
-	// dependenciasCSS.push({ url : 'vendor/pickadate/lib/compressed/themes/default.date.css' });
 	// dependenciasCSS.push({ url : 'vendor/select2-bootstrap-theme/dist/select2-bootstrap.min.css'});	
 	// dependenciasCSS.push({ url : 'vendor/select2-bootstrap4-theme/dist/select2-bootstrap4.min.css'});
 	// dependenciasCSS.push({ url : 'vendor/select2/dist/css//select2.min.css' });
@@ -139,6 +138,9 @@
 
 		loader.script('vendor/jquery-validation/dist/jquery.validate.min.js');
 		loader.script('vendor/grapnel/dist/grapnel.min.js');		
+		loader.script('vendor/pickerjs/dist/picker.min.js');				
+		loader.script('vendor/moment/min/moment.min.js');
+
 
 		// loader.script('vendor/datatables/media/js/jquery.dataTables.js');
 		// loader.script('vendor/datatables/media/js/dataTables.bootstrap4.min.js');
@@ -151,12 +153,10 @@
 		// loader.script('vendor/datatables.net-select/js/dataTables.select.min.js');
 		// loader.script('vendor/datatables.net-select-dt/js/select.dataTables.js');
 	
-		// loader.script('vendor/pickadate/lib/compressed/picker.js');
 		// loader.script('vendor/pickadate/lib/compressed/picker.date.js');
 		// loader.script('vendor/pickadate/lib/compressed/picker.time.js');
 		// loader.script('vendor/select2/dist/js/select2.min.js');
 		// loader.script('vendor/piexifjs/piexif.js');
-		// loader.script('vendor/moment/min/moment.min.js');
 		// loader.script('vendor/downloadjs/download.min.js');
 
 		// Inicialização
@@ -187,10 +187,10 @@
 		loader.script('assets/js/setor/setor.form.ctrl.js');
 		loader.script('assets/js/setor/setor.list.ctrl.js');
 
-		loader.script('assets/js/tarefa/tarefa.serv.js');
-		
-		loader.script('assets/js/tarefa/tarefa.form.ctrl.js');
-		loader.script('assets/js/tarefa/tarefa.list.ctrl.js');
+		loader.script('assets/js/checklist/tipoChecklist.serv.js');
+		loader.script('assets/js/checklist/checklist.serv.js');
+		loader.script('assets/js/checklist/checklist.form.ctrl.js');
+		loader.script('assets/js/checklist/checklist.list.ctrl.js');
 
 		loader.script('assets/js/pergunta/pergunta.serv.js');
 		loader.script('assets/js/pergunta/pergunta.form.ctrl.js');

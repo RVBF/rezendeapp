@@ -2,7 +2,7 @@
 abstract class Enumerado {
     private static $constCacheArray = NULL;
 
-    private static function getConstants() {
+    public static function getConstants() {
         if (self::$constCacheArray == NULL) {
             self::$constCacheArray = [];
         }

@@ -16,11 +16,11 @@
 		this.loja  = loja || 0;
 	};
 
-	function ServicoTarefa() { // Model
+	function ServicoChecklist() { // Model
 		var _this = this;
 		// Rota no servidor
         _this.rota = function rota() {
-			return app.api + '/tarefa';
+			return app.api + '/checklist';
 		};
 
 		// Cria um objeto de Checklist
@@ -97,10 +97,10 @@
 				url: _this.rota(idSetor) + '/' + id
 			});
 		};
-	}; // ServicoTarefa
+	}; // ServicoChecklist
 
 	// Registrando
 	app.Checklist = Checklist;
-	app.ServicoTarefa = ServicoTarefa;
+	app.ServicoChecklist = ServicoChecklist;
 
 })(app, $);

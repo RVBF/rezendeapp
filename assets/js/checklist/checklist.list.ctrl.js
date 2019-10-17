@@ -1,5 +1,5 @@
 /**
- *  tarefa.list.ctrl.js
+ *  Checklist.list.ctrl.js
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */
@@ -7,7 +7,7 @@
 {
 	'use strict';
 
-	function ControladoraListagemTarefa(servicoTarefa)
+	function ControladoraListagemChecklist(servicoChecklist)
 	{
 		var _this = this;
 		var _cont = 0;
@@ -16,16 +16,16 @@
 		_this.botaoEditar = $('#editar');
 		_this.botaoRemover = $('#remover');
 		_this.botaoAtualizar = $('#atualizar');
-		_this.idTabela = $('#tarefa_listagem');
+		_this.idTabela = $('#Checklist_listagem');
 		
 		_this.idSetor = window.location.href.split('#')[1].substring(1, url.length).split('/')[1];	
 
-		var ctrlFormulario = new app.ControladoraFormTarefa(servicoTarefa, _this);
+		var ctrlFormulario = new app.ControladoraFormChecklist(servicoChecklist, _this);
 		
 		//Configura a tabela
 		_this.opcoesDaTabela = function opcoesDaTabela() {
 			var objeto = $.extend(true, {}, app.dtOptions);
-			objeto.ajax = servicoTarefa.rota();
+			objeto.ajax = servicoChecklist.rota();
 			objeto.columnDefs = [ {
 					data: 'id',
 					targets: 0
@@ -104,37 +104,37 @@
 			
 			objeto.fnDrawCallback = function (settings, json) {
 
-				$('#tarefa_listagem tr').on('click','.gerenciar_perguntas', function (event) {
+				$('#Checklist_listagem tr').on('click','.gerenciar_perguntas', function (event) {
 					event.preventDefault();
 
 					var objeto = _tabela.row($(this).parents('tr')).draw().data();
 
-					router.navigate('/tarefa/' + objeto.id + '/pergunta')
+					router.navigate('/Checklist/' + objeto.id + '/pergunta')
 					
 				});
 
-				$('#tarefa_listagem tr').on('click','.gerenciar_respostas', function (event) {
+				$('#Checklist_listagem tr').on('click','.gerenciar_respostas', function (event) {
 					event.preventDefault();
 					var objeto = _tabela.row($(this).parents('tr')).data();
 
 					router.navigate('/resposta/' + objeto.id);
 				});
 
-				$('#tarefa_listagem tr').on('click','.cadastrar_perguntas', function (event) {
+				$('#Checklist_listagem tr').on('click','.cadastrar_perguntas', function (event) {
 					event.preventDefault();
 
 					var objeto = _tabela.row($(this).parents('tr')).data();
 
-					router.navigate('/tarefa/' + objeto.id + '/pergunta/cadastrar-perguntas')
+					router.navigate('/Checklist/' + objeto.id + '/pergunta/cadastrar-perguntas')
 					
 				});
 
-				$('#tarefa_listagem tr').on('click','.responder_perguntas', function (event) {
+				$('#Checklist_listagem tr').on('click','.responder_perguntas', function (event) {
 					event.preventDefault();
 					var objeto = _tabela.row($(this).parents('tr')).data();
-					router.navigate('/tarefa/' + objeto.id + '/pergunta/responder-perguntas')
+					router.navigate('/Checklist/' + objeto.id + '/pergunta/responder-perguntas')
 				});
-				$('#tarefa_listagem .dropdown-toggle').dropdown(); 
+				$('#Checklist_listagem .dropdown-toggle').dropdown(); 
 
 
 				_tabela.on('select',_this.selecionar);
@@ -182,14 +182,14 @@
 
 			BootstrapDialog.show({
 				type	: BootstrapDialog.TYPE_DANGER,
-				title	: 'Deseja remover esta tarefa?',
+				title	: 'Deseja remover esta Checklist?',
 				message	: 'Checklist de id:' + objeto.id + ' e título :' + objeto.titulo,
 				size	: BootstrapDialog.SIZE_LARGE,
 				buttons	: [ {
 						label	: '<u>S</u>im',
 						hotkey	: 'S'.charCodeAt(0),
 						action	: function(dialog){
-							servicoTarefa.remover(objeto.id, objeto.setor.id).done(window.sucessoPadrao).fail(window.erro);
+							servicoChecklist.remover(objeto.id, objeto.setor.id).done(window.sucessoPadrao).fail(window.erro);
 							
 							$('.depende_selecao').each(function(){
 								$(this).prop('disabled', true);
@@ -244,8 +244,8 @@
 			_this.botaoAtualizar.on('click',_this.atualizar);
 			_this.botaoRemover.on('click', _this.remover)
 		};
-	}; // ControladoraListagemTarefa
+	}; // ControladoraListagemChecklist
 
 	// Registrando
-	app.ControladoraListagemTarefa = ControladoraListagemTarefa;
+	app.ControladoraListagemChecklist = ControladoraListagemChecklist;
 })(window, app, jQuery, toastr);

@@ -15,7 +15,9 @@
     "bootstrap": "v4.0.0-alpha.6",
     "jquery-validation": "^1.19.1",
     "font-awesome": "^5.11.2",
-    "bootstrap3-dialog": "bootstrap-dialog#^1.35.4"
+    "bootstrap3-dialog": "bootstrap-dialog#^1.35.4",
+    "pickerjs": "fengyuanchen/pickerjs#^1.2.1",
+    "moment": "^2.24.0"
   },
   "devDependencies": {}
 }

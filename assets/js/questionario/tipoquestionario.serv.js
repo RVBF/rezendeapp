@@ -11,7 +11,7 @@
 		this.padrao = 'Padrão';
 		this.PA = 'PA';
 		this.QNP = 'QNP';
-		this.GENERICO = 'Generico';
+		this.GENERICO = 'Genérico';
 
 
 		this.getTipoQuestionario = function(){

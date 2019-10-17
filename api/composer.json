@@ -26,6 +26,7 @@
 				"modules/controllers/",
 				"modules/interfaces/",
 				"modules/colecoes/",
+				"modules/enumerado/",
 				"modules/servico/"
 			]
 		}
