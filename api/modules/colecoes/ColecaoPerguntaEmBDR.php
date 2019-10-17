@@ -36,16 +36,18 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta {
 	}
 
 	function adicionarTodas(&$objs){
+
 		try {	
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
+			$perguntas = [];
 			foreach ($objs as $key => $obj) {
 				if($this->validarPergunta($obj)){
-					$id = DB::table(self::TABELA)->insertGetId([ 'pergunta' => $obj->getPergunta(), 'tarefa_id' => $obj->getTarefa()->getId()]);
-					$obj->setId($id);
-					$objs[$key] = $obj;
+					$perguntas[] = [ 'pergunta' => $obj->getPergunta(), 'questionario_id' => $obj->getQuestionario()->getId()];
 				}
 			}
+
+			DB::table(self::TABELA)->insert($perguntas);
 
 			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
@@ -229,24 +231,16 @@ class ColecaoPerguntaEmBDR implements ColecaoPergunta {
 
 		if(strlen($obj->getPergunta()) <= 2 && strlen($obj->getTitulo()) > 255) throw new ColecaoException('A pergunta deve conter no mínimo 2 e no máximo 255.');
 		
-		$quantidade = DB::table(self::TABELA)->whereRaw('pergunta like  "%'. $obj->getPergunta() . '%"')->where('tarefa_id', $obj->getTarefa()->getId())->where(self::TABELA . '.id', '<>', $obj->getId())->count();
+		// $quantidade = DB::table(self::TABELA)->whereRaw('pergunta like  "%'. $obj->getPergunta() . '%"')->where('tarefa_id', $obj->getTarefa()->getId())->where(self::TABELA . '.id', '<>', $obj->getId())->count();
 		
-		if($quantidade > 0){
-			throw new ColecaoException('Já exite uma tarefa cadastrada com esse título.');
-		}
+		// if($quantidade > 0){
+		// 	throw new ColecaoException('Já exite uma tarefa cadastrada com esse título.');
+		// }
 
 		return true;
 	}
 
 	private function validarRemocaoPergunta($id){
-		$quantidade = DB::table(ColecaoRespostaEmBDR::TABELA)->where('pergunta_id', $id)->count();
-
-		if($quantidade > 0)throw new ColecaoException('Não foi possível excluir a pergunta por que ela possui respostas relacionadas a ela. Exclua todas as respostas relacionadas e tente novamente.');
-
-		$quantidade = DB::table(ColecaoFormularioRespondidoEmBDR::TABELA)->where('TABELA_RELACIONAL', $id)->count();
-
-		if($quantidade > 0)throw new ColecaoException('Não é possível excluir uma pergunta já respondida.');
-
 		return true;
 	}
 }

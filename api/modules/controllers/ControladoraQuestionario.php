@@ -17,7 +17,7 @@ class ControladoraQuestionario {
 
 	private $params;
 	private $colecaoQuestionario;
-	private $colecaoCategoria;
+	private $colecaoPergunta;
 	private $colecaoLoja;
 	private $servicoLogin;
 	
@@ -25,7 +25,7 @@ class ControladoraQuestionario {
 		$this->servicoLogin = new ServicoLogin($sessao);
 		$this->params = $params;
 		$this->colecaoQuestionario = Dice::instance()->create('ColecaoQuestionario');
-		$this->colecaoCategoria = Dice::instance()->create('ColecaoCategoria');
+		$this->colecaoPergunta = Dice::instance()->create('ColecaoPergunta');
 		$this->colecaoLoja = Dice::instance()->create('ColecaoLoja');
 
 	}
@@ -75,7 +75,7 @@ class ControladoraQuestionario {
 			// 	throw new Exception("Usuário sem permissão para executar ação.");
 			// }
 
-			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo','descricao','categoria'], $this->params);
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo','descricao','configuracao'], $this->params);
 			$resposta = [];
 
 			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
@@ -84,13 +84,30 @@ class ControladoraQuestionario {
 				throw new Exception($msg);
 			}
 
-			$Questionario = new Questionario(
+			$questionario = new Questionario(
 				0,
 				\ParamUtil::value($this->params, 'titulo'),
-				\ParamUtil::value($this->params, 'descricao')
+				\ParamUtil::value($this->params, 'descricao'),
+				\ParamUtil::value($this->params, 'tipoQuestionario')
 			);
-			$resposta = ['Questionario'=> RTTI::getAttributes($this->colecaoQuestionario->adicionar($Questionario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Questionario cadastrado com sucesso.']; 
-			
+
+			$this->colecaoQuestionario->adicionar($questionario);
+
+			$perguntas = $this->params['configuracao']['perguntas'];
+			$perguntasObjects = [];
+		
+			foreach($perguntas as $configuracao) {
+				$perguntasObjects[] = $pergunta = new Pergunta(
+					0,
+					$configuracao['pergunta'],
+					$questionario
+				);
+			}
+
+			$this->colecaoPergunta->adicionarTodas($perguntasObjects);
+
+			$resposta = ['status' => true, 'mensagem'=> 'Questionario cadastrado com sucesso.']; 
+
 			DB::commit();
 
 		}
