@@ -36,15 +36,18 @@
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
 				var obj = _this.conteudo();
-
-				_this.formulario.desabilitar(true);
 				
 				var terminado = function() {
 					_this.formulario.desabilitar(false);
 				};
 				
- 				var jqXHR = _this.alterar ? servicoChecklist.atualizarComSetorId(obj, _this.idSetor) : servicoChecklist.adicionarComSetorId(obj, _this.idSetor);
-				jqXHR.done(window.sucessoParaFormulario).fail(window.erro).always(terminado);
+				_this.formulario.desabilitar(true);
+			
+				var jqXHR = _this.alterar ? servicoChecklist.atualizar(obj) : servicoChecklist.adicionar(obj);
+				jqXHR.done(function() {
+					router.navigate('/configuracao');
+					toastr.success('Checklist Adicionado com sucesso!')
+				}).fail(window.erro).always(terminado);
 
 				if(_this.alterar){
 					$('.depende_selecao').each(function(){
@@ -64,12 +67,13 @@
 				$('#id').val(),
 				$('#titulo').val(),
 				$('#descricao').val(),
+				$('#tipo-checklist').val(),
 				dataLimite.toString() + ' ' + $('#hora').val(),
+				$('#responsavel option:selected').val(),
 				$('#setor option:selected').val(),
-				$('#loja option:selected').val()
+				$('#unidade option:selected').val(),
+				$('#questionarios').formSelect('getSelectedValues')
 			);
-							// $('#data_limite').pickadate('picker').get('select', 'yyyy-mm-dd') + ' ' + $('#hora_limite').pickatime('picker').get('select','HH:i'),
-
 		};
 
 		_this.configurarBotoes = function configurarBotoes() {
@@ -122,12 +126,13 @@
 				_this.popularLojas();
 				_this.popularTiposDeChecklist();
 				_this.popularColaboradores();
-				_this.popularQuestionario();
+				_this.popularQuestionarios();
+				_this.popularSetores();
 				_this.configurarBotoes();
 			});
 		};
 
-		_this.popularSetors  =  function popularSetors(valor = 0)
+		_this.popularSetores  =  function popularSetores(valor = 0)
 		{
 			var sucesso = function (resposta) {
 				$("#setor").empty();
@@ -139,7 +144,7 @@
 					}));
 				});
 
-				$('#setor').trigger('change');
+				$('#setor').formSelect();
 			};
 
 			var erro = function(resposta)
@@ -208,10 +213,10 @@
 			jqXHR.done(sucesso).fail(erro);
 		};
 
-		_this.popularQuestionario  =  function popularQuestionario(valor = 0)
+		_this.popularQuestionarios  =  function popularQuestionarios(valor = 0)
 		{
 			var sucesso = function (resposta) {
-				$("#questionario").empty();
+				$("#questionarios").empty();
 
 				$.each(resposta.data, function(i ,item) {
 					 let opcoes = {
@@ -219,10 +224,10 @@
 						text: item.titulo,
 						selected : (i ==0) ? true : false
 					};
-					$("#questionario").append($('<option>', opcoes));
+					$("#questionarios").append($('<option>', opcoes));
 				});
 
-				$('#questionario').formSelect();
+				$('#questionarios').formSelect();
 			};
 
 			var erro = function(resposta)

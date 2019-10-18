@@ -17,7 +17,6 @@ class ControladoraQuestionario {
 
 	private $params;
 	private $colecaoQuestionario;
-	private $colecaoPergunta;
 	private $colecaoLoja;
 	private $servicoLogin;
 	
@@ -25,7 +24,6 @@ class ControladoraQuestionario {
 		$this->servicoLogin = new ServicoLogin($sessao);
 		$this->params = $params;
 		$this->colecaoQuestionario = Dice::instance()->create('ColecaoQuestionario');
-		$this->colecaoPergunta = Dice::instance()->create('ColecaoPergunta');
 		$this->colecaoLoja = Dice::instance()->create('ColecaoLoja');
 
 	}
@@ -83,28 +81,17 @@ class ControladoraQuestionario {
 
 				throw new Exception($msg);
 			}
+			$formulario = json_encode($this->params['configuracao']);
 
 			$questionario = new Questionario(
 				0,
 				\ParamUtil::value($this->params, 'titulo'),
 				\ParamUtil::value($this->params, 'descricao'),
-				\ParamUtil::value($this->params, 'tipoQuestionario')
+				\ParamUtil::value($this->params, 'tipoQuestionario'),
+				$formulario
 			);
 
 			$this->colecaoQuestionario->adicionar($questionario);
-
-			$perguntas = $this->params['configuracao']['perguntas'];
-			$perguntasObjects = [];
-		
-			foreach($perguntas as $configuracao) {
-				$perguntasObjects[] = $pergunta = new Pergunta(
-					0,
-					$configuracao['pergunta'],
-					$questionario
-				);
-			}
-
-			$this->colecaoPergunta->adicionarTodas($perguntasObjects);
 
 			$resposta = ['status' => true, 'mensagem'=> 'Questionario cadastrado com sucesso.']; 
 

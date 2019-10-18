@@ -18,7 +18,7 @@ class ColecaoQuestionarioEmBDR implements ColecaoQuestionario {
 		if($this->validarQuestionario($obj)){
 			try {	
 
-				$id = DB::table(self::TABELA)->insertGetId(['titulo' => $obj->getTitulo(), 'descricao'=> $obj->getDescricao(), 'tipoQuestionario' => $obj->getTipoQuestionario()]);
+				$id = DB::table(self::TABELA)->insertGetId(['titulo' => $obj->getTitulo(), 'descricao'=> $obj->getDescricao(), 'tipoQuestionario' => $obj->getTipoQuestionario(), 'formulario' => $obj->getFormulario()]);
 
 				$obj->setId($id);
 			}
@@ -128,7 +128,7 @@ class ColecaoQuestionarioEmBDR implements ColecaoQuestionario {
 	}
 
 	function construirObjeto(array $row) {
-		$Questionario = new Questionario($row['id'],$row['titulo'], $row['descricao'], $row['tipoQuestionario']);
+		$Questionario = new Questionario($row['id'],$row['titulo'], $row['descricao'], $row['tipoQuestionario'], $row['formulario']);
 
 		return $Questionario;
 	}

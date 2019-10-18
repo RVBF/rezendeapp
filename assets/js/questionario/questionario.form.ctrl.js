@@ -35,7 +35,6 @@
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
 				var obj = _this.conteudo();
-				console.log(obj);
 				var terminado = function() {
 					_this.formulario.desabilitar(false);
 				};
@@ -44,8 +43,8 @@
 			
 				var jqXHR = _this.alterar ? servicoQuestionario.atualizar(obj) : servicoQuestionario.adicionar(obj);
 				jqXHR.done(function() {
-					router.navigate('/questionario');
-					toastr.success('Questionário Adicionada com sucesso!')
+					router.navigate('/questionarios');
+					toastr.success('Questionário Adicionado com sucesso!')
 				}).fail(window.erro).always(terminado);
 
 				if(_this.alterar){

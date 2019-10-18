@@ -3,14 +3,14 @@ use Illuminate\Database\Capsule\Manager as DB;
 use Carbon\Carbon;
 
 /**
- *	Coleção de Checklist em Banco de Dados Relacional.
+ *	Coleção de Questionamento em Banco de Dados Relacional.
  *
  *  @author		Rafael Vinicius Barros Ferreira
  *	@version	1.0
  */
 
-class ColecaoChecklistEmBDR implements ColecaoChecklist {
-	const TABELA = 'checklist';
+class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
+	const TABELA = 'questionamento';
 
 	function __construct(){}
 
@@ -21,7 +21,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 				
 				$id = DB::table(self::TABELA)->insertGetId([ 
 					'titulo' => $obj->getTitulo(),
-					'tipoChecklist' => $obj->getTipoChecklist(),
+					'tipoQuestionamento' => $obj->getTipoQuestionamento(),
 					'descricao' => $obj->getDescricao(),
 					'data_limite' => $obj->getDataLimite()->toDateTimeString(),
 					'questionador_id' => $obj->getQuestionador()->getId(),
@@ -42,7 +42,34 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 				throw new ColecaoException("Erro ao adicionar tarefa ", $e->getCode(), $e);
 			}
 		}
-	}
+    }
+    
+    function adicionarTodos($objetos = []){
+        try {	
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+            
+            $inserts = [];
+            
+            foreach($objetos as $obj) {
+                $inserts[] = [ 
+                    'status' => $obj->getStatus(),
+                    'formulariopergunta' => $obj->getFormularioPergunta(),
+                    'formularioresposta' => $obj->getFormularioResposta(),
+                    'checklist_id' => $obj->getCheckList(),
+                ];
+            }
+
+            DB::table(self::TABELA)->insert($inserts);
+            
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+            return true;
+        }
+        catch (\Exception $e) {
+            Debuger::printr( $e->getMessage());
+            throw new ColecaoException("Erro ao adicionar tarefa ", $e->getCode(), $e);
+        }
+    }
 
 	function removerComSetorId($id, $idSetor) {
 		if($this->validarRemocaoTarefa($id)){
@@ -230,7 +257,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 		$loja = ($row['loja_id'] > 0) ? Dice::instance()->create('ColecaoLoja')->comId($row['loja_id']) : '';
 		$questionador = ($row['questionador_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comUsuarioId($row['questionador_id']) : '';
 		$perguntas = Dice::instance()->create('ColecaoPergunta')->comTarefaId($row['id']);
-		$tarefa = new Checklist($row['id'],$row['titulo'], $row['descricao'], $row['data_limite'], $row['data_cadastro'], $setor, $loja, $questionador, $perguntas,($row['encerrada']) ? true : false);
+		$tarefa = new Questionamento($row['id'],$row['titulo'], $row['descricao'], $row['data_limite'], $row['data_cadastro'], $setor, $loja, $questionador, $perguntas,($row['encerrada']) ? true : false);
 		return $tarefa;
 	}	
 
@@ -254,7 +281,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 
 		if($quantidade == 0)throw new ColecaoException('Setor não foi encontrado na base de dados.');
 
-		if(strlen($obj->getTitulo()) <= Checklist::TAM_TITULO_MIM && strlen($obj->getTitulo()) > Checklist::TAM_TITULO_MAX) throw new ColecaoException('O título deve conter no mínimo '. Checklist::TAM_TITULO_MIM . ' e no máximo '. Checklist::TAM_TITULO_MAX . '.');
+		if(strlen($obj->getTitulo()) <= Questionamento::TAM_TITULO_MIM && strlen($obj->getTitulo()) > Questionamento::TAM_TITULO_MAX) throw new ColecaoException('O título deve conter no mínimo '. Questionamento::TAM_TITULO_MIM . ' e no máximo '. Questionamento::TAM_TITULO_MAX . '.');
 		
 		if(strlen($obj->getdescricao()) > 255 and $obj->getdescricao() <> '') throw new ColecaoException('A descrição  deve conter no máximo '. 255 . ' caracteres.');
 

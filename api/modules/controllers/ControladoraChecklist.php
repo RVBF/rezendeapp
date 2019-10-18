@@ -23,6 +23,8 @@ class ControladoraChecklist {
 	private $colecaoUsuario;
 	private $colecaoColaborador;
 	private $colecaoLoja;
+	private $colecaoQuestionario;
+	private $colecaoQuestionamento;
 
 	function __construct($params,  Sessao $sessao) {
 		$this->params = $params;
@@ -32,6 +34,8 @@ class ControladoraChecklist {
 		$this->colecaoUsuario = Dice::instance()->create('ColecaoUsuario');
 		$this->colecaoColaborador = Dice::instance()->create('ColecaoColaborador');
 		$this->colecaoLoja = Dice::instance()->create('ColecaoLoja');
+		$this->colecaoQuestionario = Dice::instance()->create('ColecaoQuestionario');
+		$this->colecaoQuestionamento = Dice::instance()->create('ColecaoQuestionamento');
 	}
 
 	function todos() {
@@ -74,18 +78,18 @@ class ControladoraChecklist {
 	
 	function adicionar($setorId = 0) {
 		DB::beginTransaction();
-
 		try {
+			$resposta = [];
 
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
 
-			if(!$this->servicoLogin->eAdministrador()){
-				throw new Exception("Usuário sem permissão para executar ação.");
-			}
+			// if(!$this->servicoLogin->eAdministrador()){
+			// 	throw new Exception("Usuário sem permissão para executar ação.");
+			// }
 
-			$inexistentes = \ArrayUtil::nonExistingKeys(['titulo', 'descricao', 'dataLimite', 'setor', 'loja'], $this->params);
+			$inexistentes = \ArrayUtil::nonExistingKeys(['titulo', 'descricao', 'dataLimite', 'setor', 'loja', 'questionarios'], $this->params);
 
 			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
@@ -93,10 +97,10 @@ class ControladoraChecklist {
 				throw new Exception($msg);
 			}
 	
-			$setor = $this->colecaoSetor->comId(($setorId> 0) ? $setorId : \ParamUtil::value($this->params, 'setor'));
+			$setor = $this->colecaoSetor->comId(($setorId > 0) ? $setorId : \ParamUtil::value($this->params, 'setor'));
 
 			if(!isset($setor) and !($setor instanceof Setor)){
-				throw new Exception("Setor não encontrada na base de dados.");
+				throw new Exception("Setor não encontrado na base de dados.");
 			}
 
 				
@@ -105,24 +109,74 @@ class ControladoraChecklist {
 			if(!isset($loja) and !($loja instanceof Loja)){
 				throw new Exception("Loja não encontrada na base de dados.");
 			}
+
+			// $questionario = $this->colecaoQuestionario->comId((\ParamUtil::value($this->params, 'questionario')> 0) ? \ParamUtil::value($this->params, 'questionario') : \ParamUtil::value($this->params, 'questionario'));
+
+			// if(!isset($questionario) and !($questionario instanceof Questionario)){
+			// 	throw new Exception("Questionário não encontrado na base de dados.");
+			// }
+
+
+			$responsavel = $this->colecaoColaborador->comId((\ParamUtil::value($this->params, 'responsavel')> 0) ? \ParamUtil::value($this->params, 'responsavel') : \ParamUtil::value($this->params, 'responsavel'));
+
+			if(!isset($responsavel) and !($responsavel instanceof Colaborador)){
+				throw new Exception("Responśavel não encontrado na base de dados.");
+			}
+
+			$questionador = $this->colecaoColaborador->comId((\ParamUtil::value($this->params, 'questionario')> 0) ? \ParamUtil::value($this->params, 'responsavel') : \ParamUtil::value($this->params, 'responsavel'));
+
+			if(!isset($responsavel) and !($responsavel instanceof Colaborador)){
+				throw new Exception("Responśavel não encontrado na base de dados.");
+			}
+
+
 			$dataLimite = new Carbon(\ParamUtil::value($this->params, 'dataLimite'), 'America/Sao_Paulo');
 
-			$tarefa = new Checklist(
+			$checklist = new Checklist(
 				0,
+				StatusChecklistEnumerado::AGUARDANDO_EXECUCAO,
 				\ParamUtil::value($this->params, 'titulo'),
 				\ParamUtil::value($this->params, 'descricao'),
 				$dataLimite,
 				'',
+				\ParamUtil::value($this->params, 'tipoChecklist'),
 				$setor,
 				$loja,
-				$this->colecaoUsuario->comId($this->servicoLogin->getIdUsuario())
+				$questionador,
+				$responsavel
+			);			
 
-			);
-	
-			$resposta = [];
+			$this->colecaoChecklist->adicionar($checklist);
 
-			$tarefa = $this->colecaoChecklist->adicionar($tarefa);
-			$resposta = ['categoria'=> RTTI::getAttributes( $tarefa, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria cadastrada com sucesso.']; 
+			$questionarios =$this->params['questionarios'];
+
+			$questionamentos = [];
+			foreach($questionarios as $questionarioId){
+				$questionario = $this->colecaoQuestionario->comId($questionarioId);
+
+				if(!isset($questionario) and !($questionario instanceof Colaborador)){
+					throw new Exception('O Questionário selecionado de id nº ' . $questionarioId . ' não foi encontrado na base de dados.');
+				}
+
+				$formulario = json_decode($questionario->getFormulario());
+
+				foreach ($formulario->perguntas as $pergunta) {
+					$questionamentos[] = new Questionamento(
+						0,
+						TipoQuestionamentoEnumerado::NAO_RESPONDIDO,
+						json_encode($pergunta),
+						'',
+						$checklist->getId(),
+						null,
+						[]
+					);
+				}
+			}
+
+			$this->colecaoQuestionamento->adicionarTodos($questionamentos);
+
+			$resposta = ['status' => true, 'mensagem'=> 'Checklist cadastrado  com sucesso.']; 
+			
 			DB::commit();
 
 		}

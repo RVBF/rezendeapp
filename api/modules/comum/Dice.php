@@ -43,8 +43,6 @@ class Dice {
 		DI::config(DI::let('ColecaoSetor')->create('ColecaoSetorEmBDR'));
 		DI::config(DI::let('ColecaoLoja')->create('ColecaoLojaEmBDR'));
 		DI::config(DI::let('ColecaoChecklist')->create('ColecaoChecklistEmBDR'));
-		DI::config(DI::let('ColecaoPergunta')->create('ColecaoPerguntaEmBDR'));
-		DI::config(DI::let('ColecaoResposta')->create('ColecaoRespostaEmBDR'));
 		DI::config(DI::let('ColecaoAnexo')->create('ColecaoAnexoEmBDR'));
 		DI::config(DI::let('ColecaoUsuario')->create('ColecaoUsuarioEmBDR'));
 		DI::config(DI::let('ColecaoGrupoUsuario')->create('ColecaoGrupoUsuarioEmBDR'));
@@ -52,6 +50,7 @@ class Dice {
 		DI::config(DI::let('ColecaoColaborador')->create('ColecaoColaboradorEmBDR'));
 		DI::config(DI::let('ColecaoPermissaoAdministrativa')->create('ColecaoPermissaoAdministrativaEmBDR'));
 		DI::config(DI::let('ColecaoQuestionario')->create('ColecaoQuestionarioEmBDR'));
+		DI::config(DI::let('ColecaoQuestionamento')->create('ColecaoQuestionamentoEmBDR'));	
 	}
 }
 

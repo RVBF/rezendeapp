@@ -8,12 +8,19 @@
                              <input type="hidden" id="id" name ="id" />
          
                              <div class="row form-row">
-                                 <div class="col col-md-12 col-12 col-sm-12 col-lg-12">
-                                     <div class="input-field">
-                                         <input type="text" class="form-control validate " id ="titulo" name="titulo"/>
-                                         <label for="titulo">*Título: </label>
-                                     </div>
-                                 </div>
+                                <div class="col col-md-6 col-12 col-sm-12 col-lg-6">
+                                    <div class="input-field">
+                                        <input type="text" class="form-control validate " id ="titulo" name="titulo"/>
+                                        <label for="titulo">*Título: </label>
+                                    </div>
+                                </div>
+
+                                <div class="col col-md-6 col-12 col-sm-12 col-lg-6 ">
+                                        <div class=" input-field">
+                                            <select id ="setor"  name="setor" class="select campo_obrigatorio"><option value="" disabled selected>setor</option></select>
+                                            <label for="setor">*Setor</label>
+                                        </div>
+                                    </div>
                              </div>
 
                              <div class="row form-row">
@@ -42,8 +49,8 @@
 
                                 <div class="col col-md-6 col-12 col-sm-12 col-lg-6 ">
                                     <div class=" input-field">
-                                        <select id ="questionario"  name="questionario[]" class="select campo_obrigatorio" multiple><option value="" disabled selected>Questionario</option></select>
-                                        <label for="questionario">*Questionario</label>
+                                        <select id ="questionarios"  name="questionarios[]" class="select campo_obrigatorio" multiple><option value="" disabled selected>Questionarios</option></select>
+                                        <label for="questionarios">*Questionarios</label>
                                     </div>
                                 </div>
                             </div>
