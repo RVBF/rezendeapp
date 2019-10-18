@@ -7,13 +7,16 @@
  {
 	'use strict';
 
-	function Checklist(id, titulo, descricao, dataLimite, setor, loja) {
+	function Checklist(id, titulo, descricao, tipoChecklist, dataLimite, responsavel, setor, loja, questionarios) {
 		this.id = id  || 0;
 		this.titulo = titulo  || '';
 		this.descricao = descricao  || '';
+		this.tipoChecklist = tipoChecklist || '';
 		this.dataLimite = dataLimite || '';
+		this.responsavel = responsavel  || 0;
 		this.setor = setor  || 0;
 		this.loja  = loja || 0;
+		this.questionarios  = questionarios || 0;
 	};
 
 	function ServicoChecklist() { // Model
@@ -24,15 +27,17 @@
 		};
 
 		// Cria um objeto de Checklist
-		this.criar = function criar(id, titulo, descricao, dataLimite, setor, loja) {
-		 
+		this.criar = function criar(id, titulo, descricao, tipoChecklist, dataLimite, responsavel, setor, loja, questionarios) {
 			return {
 				id : id  || 0,
 				titulo : titulo  || '',
 				descricao : descricao || '',
+				tipoChecklist : tipoChecklist || '',
 				dataLimite : dataLimite || '',
+				responsavel : responsavel || 0,
 				setor : setor || 0,
-				loja : loja || 0
+				loja : loja || 0,
+				questionarios : questionarios || 0
 
 			};
 		};
@@ -52,7 +57,7 @@
 			});
 		};
 
-		_this.adcionar = function adcionar(obj) {
+		_this.adicionar = function adicionar(obj) {
 			return $.ajax({
 				type: "POST",
 				url: _this.rota(),

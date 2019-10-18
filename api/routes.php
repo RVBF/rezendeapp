@@ -167,8 +167,6 @@ $app->put('/checklist', function(Request $req,  Response $res, $args = []) use (
 $app->post('/checklist', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 	$this->logger->addInfo("Acessando o cadastro de tarefa");
 	$sessaoUsuario = new Sessao($session);
-	Debuger::printr($req->getParsedBody());
-
 	$ctrl = new ControladoraChecklist($req->getParsedBody(), $sessaoUsuario);
 	$response = $ctrl->adicionar();
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));

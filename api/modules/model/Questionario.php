@@ -11,17 +11,17 @@ class Questionario {
     private $titulo;
     private $descricao;
     private $tipoQuestionario;
-    private $perguntas;
+    private $formulario;
 
     const TAM_MIN_TITUlO = 2;
     const TAM_MAX_TITUlO = 100;
 
-    function __construct($id = 0, $titulo = '', $descricao = '', $tipoQuestionario = '', $perguntas = []) {
+    function __construct($id = 0, $titulo = '', $descricao = '', $tipoQuestionario = '', $formulario = []) {
         $this->id = $id;
         $this->titulo = $titulo;
         $this->descricao = $descricao;
         $this->tipoQuestionario = $tipoQuestionario;
-        $this->perguntas = $perguntas;
+        $this->formulario = $formulario;
     }
 
     public function getId(){
@@ -56,12 +56,12 @@ class Questionario {
         $this->tipoQuestionario = $tipoQuestionario;
     }
 
-    public function getPerguntas(){
-        return $this->perguntas;
+    public function getFormulario(){
+        return $this->formulario;
     }
 
-    public function setPerguntas($perguntas){
-        $this->perguntas = $perguntas;
+    public function setFormulario($formulario){
+        $this->formulario = $formulario;
     }
 }
 ?>
