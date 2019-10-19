@@ -148,7 +148,12 @@
 		download(elemento.attr('href'), elemento.attr('nomeArquivo'), elemento.attr('tipo'));
 	});
 
-	$(document).ready(function() {			
+	$(document).ready(function() {	
+		moment.locale('pt-BR');
+		console.log(moment().format('LLLL')); // 'Freitag, 24. Juni 2016 01:42'
+
+	
+
 		// $('.toltip').tooltip(); 
 		if(window.location.href == 'http://rezendeconstrucao.com.br/rezendeapp/' || window.location.href == 'http://rezendeapp.local/'){ 
 			router.navigate('/');

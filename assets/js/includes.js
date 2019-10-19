@@ -140,6 +140,8 @@
 		loader.script('vendor/grapnel/dist/grapnel.min.js');		
 		loader.script('vendor/pickerjs/dist/picker.min.js');				
 		loader.script('vendor/moment/min/moment.min.js');
+		loader.script('vendor/moment/locale/pt-br.js');
+
 
 
 		// loader.script('vendor/datatables/media/js/jquery.dataTables.js');
@@ -191,6 +193,8 @@
 		loader.script('assets/js/checklist/checklist.serv.js');
 		loader.script('assets/js/checklist/checklist.form.ctrl.js');
 		loader.script('assets/js/checklist/checklist.list.ctrl.js');
+		loader.script('assets/js/checklist/checklistatividades.list.ctrl.js');
+
 
 
 		loader.script('assets/js/loja/loja.serv.js');

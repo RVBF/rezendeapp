@@ -52,12 +52,17 @@
 		
 		_this.requisitarRegistros = function requisitarRegistros() {
 			var parametrosRequisicao =  function parametrosRequisicao() {
-				_this.paginacao = {
-					start : _this.inicioDaPagina(),
-					length : parseInt($('#qtd_resultados').val())
-				};
+				if(!opcoes.listagemTemporal) {
+					_this.paginacao = {
+						start : _this.inicioDaPagina(),
+						length : parseInt($('#qtd_resultados').val())
+					};
+					return _this.paginacao;
 
-				return _this.paginacao;
+				}
+				else{
+					return {'listagemTemporal': true, 'dataAtual' : moment().format('YYYY-MM-DD HH:MM:ss'), 'pageLength' : opcoes.pageLength }
+				}
 			};
 
 			return $.ajax({
@@ -76,7 +81,7 @@
 			if(typeof opcoes.columnDefs == 'function'){
 				if(data.length > 0){
 					for( let indice in data) {
-						html += '<div class="row listagem-padrao-item valign-wrapper">';
+						html += '<div class="row listagem-padrao-item '+ opcoes.classesDesignerTabela +'">';
 						html += opcoes.columnDefs(data[indice]);
 						html += '</div>';
 					};
@@ -95,6 +100,24 @@
 				ultimaResposta = resposta;
 				listagemPadrao.find('.linhas').empty().append(_this.renderizarRows(resposta.data));
 				listagemPadrao.find('.info').empty().append(_this.renderizarInfo(resposta));
+
+				if(typeof opcoes.rowsCallback == 'function') opcoes.rowsCallback(resposta);
+			};
+
+			var erro = function(resposta) {
+				var mensagem = jqXHR.responseText || 'Erro ao popular select de farmácias.';
+				toastr.error(mensagem);
+				return false;
+			};
+
+			var  jqXHR = _this.requisitarRegistros();
+			jqXHR.done(sucesso).fail(erro);	
+		};
+
+		_this.renderizarRegistrosTabelaTemporal = function renderizarRegistrosTabelaTemporal () {
+			var sucesso = function (resposta) {
+				ultimaResposta = resposta;
+				listagemPadrao.find('.linhas').empty().append(_this.renderizarRows(resposta.data));
 
 				if(typeof opcoes.rowsCallback == 'function') opcoes.rowsCallback(resposta);
 			};
@@ -180,6 +203,10 @@
 			return html;
 		};
 
+		_this.renderizarTabelaTemporal= function  renderizarTabelaTemporal() {
+			_this.renderizarRegistrosTabelaTemporal();
+		};
+
 		_this.renderizarTabela  = function  renderizarTabela() {
 			_this.renderizarOpcoesDePesquisa();
 			_this.renderizarRegistros();
@@ -242,6 +269,11 @@
 			_this.definirEventosTabela();
 		};
 
+		_this.configurarListagemTemporal = function configurar() {
+			_this.renderizarTabelaTemporal();
+			_this.definirEventosTabela();
+		};
+
 	}; // ListagemPadrao	
 
 	// Registrando
@@ -252,6 +284,14 @@
 			var listagemPadrao = new ListagemPadrao($(this[0]), opcoes);
 			$(this[0]).data('instanciaTabela', listagemPadrao);
 			listagemPadrao.configurar();
+
+			return listagemPadrao;
+		},
+
+		listagemTemporal: function (opcoes) {
+			var listagemPadrao = new ListagemPadrao($(this[0]), opcoes);
+			$(this[0]).data('instanciaTabela', listagemPadrao);
+			listagemPadrao.configurarListagemTemporal();
 
 			return listagemPadrao;
 		}

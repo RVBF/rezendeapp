@@ -5,8 +5,7 @@ var app = {
 
 (function(app, document, $, toastr,  window, BootstrapDialog) {
   'use strict';
-
-	// Opções para mensagens
+  // Opções para mensagens
 	toastr.options.closeButton = false;
 	toastr.options.debug = false;
 	toastr.options.newestOnTop = true;
