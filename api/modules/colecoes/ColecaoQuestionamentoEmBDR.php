@@ -237,14 +237,14 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 	
 	function todosComId($ids = []) {
 		try {	
-			$tarefas = DB::table(self::TABELA)->whereIn('id', $ids)->get();
-			$tarefasObjects = [];
+			$questionamento = DB::table(self::TABELA)->whereIn('id', $ids)->get();
+			$questionamentoObjects = [];
 
-			foreach ($tarefas as $tarefa) {
-				$tarefasObjects[] =  $this->construirObjeto($tarefa);
+			foreach ($questionamento as $questionamento) {
+				$questionamentoObjects[] =  $this->construirObjeto($questionamento);
 			}
 
-			return $tarefasObjects;
+			return $questionamentoObjects;
 		}
 		catch (\Exception $e)
 		{
