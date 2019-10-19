@@ -249,11 +249,7 @@ $app->get('/usuario', function(Request $req,  Response $res, $args = []) use ($a
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraUsuario($req->getQueryParams(), $sessaoUsuario);
 	$response = $ctrl->todos();
-	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(JSON::encode($response)));
-	// Debuger::printr(json_decode(json_encode($response),true));
-	// return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
-
-
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
 });
 
 $app->post('/usuario', function(Request $req,  Response $res, $args = []) use ($app, $session) {

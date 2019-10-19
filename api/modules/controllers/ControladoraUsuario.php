@@ -31,6 +31,7 @@ class ControladoraUsuario {
 		$this->colecaoSetor = Dice::instance()->create('ColecaoSetor');
 		$this->servicoLogin = new ServicoLogin($sessao);
 		$this->sessao = $sessao;
+
 	}
 
 	function todos() {
@@ -39,9 +40,9 @@ class ControladoraUsuario {
 				throw new Exception("Erro ao acessar página.");				
 			}
 
-			if(!$this->servicoLogin->eAdministrador()){
-				throw new Exception("Usuário sem permissão para executar ação.");
-			}
+			// if(!$this->servicoLogin->eAdministrador()){
+			// 	throw new Exception("Usuário sem permissão para executar ação.");
+			// }
 
 			$dtr = new DataTablesRequest($this->params);
 			$contagem = 0;
@@ -49,7 +50,7 @@ class ControladoraUsuario {
 			$erro = null;	
 
 			$objetos = $this->colecaoUsuario->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');
-	
+			
 			foreach ($objetos as $key => $obj) {
 
 				$colaborador = $this->colecaoColaborador->comUsuarioId($obj->getId());

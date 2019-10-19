@@ -22,6 +22,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 				
 				$id = DB::table(self::TABELA)->insertGetId([ 
 					'titulo' => $obj->getTitulo(),
+					'status' => $obj->getStatus(),
 					'tipoChecklist' => $obj->getTipoChecklist(),
 					'descricao' => $obj->getDescricao(),
 					'data_limite' => $obj->getDataLimite()->toDateTimeString(),
@@ -142,7 +143,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 		try {	
 
 			$query = DB::table(self::TABELA)->select(self::TABELA . '.*')->whereIn('loja_id', $idsLojas);
-				
+
 			if($search != '') {
 				$buscaCompleta = $search;
 				$palavras = explode(' ', $buscaCompleta);
@@ -187,14 +188,14 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			}
 			
 
-			$tarefas = $query->offset($limite)->limit($pulo)->get();
-
-			$tarefasObjects = [];
-			foreach ($tarefas as $key => $tarefa) {
-				$tarefasObjects[] =  $this->construirObjeto($tarefa);
+			$checklists = $query->offset($limite)->limit($pulo)->get();
+			$checklistsObjects = [];
+			foreach ($checklists as $key => $checklist) {
+				$checklistsObjects[] =  $this->construirObjeto($checklist);
 			}
 
-			return $tarefasObjects;
+			
+			return $checklistsObjects;
 		}
 		catch (\Exception $e)
 		{			
@@ -219,6 +220,21 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 		}
 	}
 	
+	function listagemTemporalcomLojasIds($dataAtual, $pageLength = 10,$search = '', $idsLojas = []){
+		try {	
+			$tarefas = DB::table(self::TABELA)->limit($pageLength)->get();
+			$tarefasObjects = [];
+
+			foreach ($tarefas as $key => $tarefa) {
+				$tarefasObjects[] =  $this->construirObjeto($tarefa);
+			}
+
+			return $tarefasObjects;
+		}
+		catch (\Exception $e) {
+			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
+		}
+	}
 	function todosComId($ids = []) {
 		try {	
 			$tarefas = DB::table(self::TABELA)->whereIn('id', $ids)->get();
@@ -240,9 +256,22 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 		$setor = ($row['setor_id'] > 0) ? Dice::instance()->create('ColecaoSetor')->comId($row['setor_id']) : '';
 		$loja = ($row['loja_id'] > 0) ? Dice::instance()->create('ColecaoLoja')->comId($row['loja_id']) : '';
 		$questionador = ($row['questionador_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comUsuarioId($row['questionador_id']) : '';
-		$perguntas = Dice::instance()->create('ColecaoPergunta')->comTarefaId($row['id']);
-		$tarefa = new Checklist($row['id'],$row['titulo'], $row['descricao'], $row['data_limite'], $row['data_cadastro'], $setor, $loja, $questionador, $perguntas,($row['encerrada']) ? true : false);
-		return $tarefa;
+		$responsavel = ($row['responsavel_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comUsuarioId($row['responsavel_id']) : '';
+		
+		$checklist = new Checklist(
+			$row['id'],
+			$row['status'], 
+			$row['titulo'],
+			$row['descricao'], 
+			$row['data_limite'], 
+			$row['data_cadastro'], 			
+			$row['tipoChecklist'], 			
+			$setor,
+			$loja,
+			$questionador, 
+			$responsavel
+		);
+		return $checklist;
 	}	
 
     function contagem($idsLojas = []) {

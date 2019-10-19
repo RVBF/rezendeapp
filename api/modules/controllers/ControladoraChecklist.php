@@ -44,11 +44,6 @@ class ControladoraChecklist {
 				throw new Exception("Erro ao acessar página.");				
 			}
 
-			$dtr = new DataTablesRequest($this->params);
-			$contagem = 0;
-			$objetos = [];
-			$erro = null;
-
 			$colaborador = $this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario());
 
 			$idsLojas = [];
@@ -57,21 +52,44 @@ class ControladoraChecklist {
 					$idsLojas[] = $loja->getId();
 				}
 			}
-			$objetos = $this->colecaoChecklist->todosComLojaIds($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $idsLojas);
 
-			$contagem = $this->colecaoChecklist->contagem($idsLojas);
+			if(!isset($this->params['listagemTemporal'])){
+				$dtr = new DataTablesRequest($this->params);
+				$contagem = 0;
+				$objetos = [];
+				$erro = null;
+	
+				$objetos = $this->colecaoChecklist->todosComLojaIds($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $idsLojas);
+	
+				$contagem = $this->colecaoChecklist->contagem($idsLojas);
+	
+				$conteudo = new DataTablesResponse(
+					$contagem,
+					is_array($objetos) ? count($objetos) : 0, //count($objetos ),
+					$objetos,
+					$dtr->draw,
+					$erro
+				);
+			}
+			else{
+				$objetos = $this->colecaoChecklist->listagemTemporalcomLojasIds($this->params['dataAtual'], $this->params['pageLength'], (isset($this->params['search'])) ? $this->params['search'] : '', $idsLojas);
+	
+				$contagem = $this->colecaoChecklist->contagem($idsLojas);
+				
+				$conteudo = new DataTablesResponse(
+					$contagem,
+					is_array($objetos) ? count($objetos) : 0, //count($objetos ),
+					$objetos,
+					0,
+					null
+				);
+			}
 		}
 		catch (\Exception $e ) {
 			throw new Exception("Erro ao listar tarefas");
 		}
 
-		$conteudo = new DataTablesResponse(
-			$contagem,
-			is_array($objetos) ? count($objetos) : 0, //count($objetos ),
-			$objetos,
-			$dtr->draw,
-			$erro
-		);
+		
 		
 		return $conteudo;
 	}
