@@ -11,6 +11,7 @@ use Carbon\Carbon;
 
 class ColecaoChecklistEmBDR implements ColecaoChecklist {
 	const TABELA = 'checklist';
+	const TABELA_RELACIONAL = 'checklist_has_questionario';
 
 	function __construct(){}
 
@@ -30,10 +31,20 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 					'loja_id' => $obj->getLoja()->getId(),
 					'questionador_id' =>$obj->getQuestionador()->getId()
 				]);
+
+				$obj->setId($id);
+				$questionariosInserts = [];
+				foreach ($obj->getQuestionarios() as $questionario) {
+					$questionariosInserts[] = [
+						'checklist_id' => $obj->getId(),
+						'questionario_id' => $questionario->getId(),
+					];
+				}
+
+				DB::table(self::TABELA_RELACIONAL)->insert($questionariosInserts);
 				
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 	
-				$obj->setId($id);
 	
 				return $obj;
 			}

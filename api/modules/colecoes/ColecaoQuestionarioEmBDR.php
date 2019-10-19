@@ -127,6 +127,23 @@ class ColecaoQuestionarioEmBDR implements ColecaoQuestionario {
 		}
 	}
 
+	function todosComId($ids = []) {
+		try {	
+			$tarefas = DB::table(self::TABELA)->whereIn('id', $ids)->get();
+			$tarefasObjects = [];
+
+			foreach ($tarefas as $tarefa) {
+				$tarefasObjects[] =  $this->construirObjeto($tarefa);
+			}
+
+			return $tarefasObjects;
+		}
+		catch (\Exception $e)
+		{
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		}
+	}
+
 	function construirObjeto(array $row) {
 		$Questionario = new Questionario($row['id'],$row['titulo'], $row['descricao'], $row['tipoQuestionario'], $row['formulario']);
 

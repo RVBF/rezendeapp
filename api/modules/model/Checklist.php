@@ -19,6 +19,7 @@ class Checklist {
     private $loja;
     private $questionador;
     private $responsavel;
+    private $questionarios;
 
     const TAM_TITULO_MIM = 2;
     const TAM_TITULO_MAX = 100;
@@ -34,7 +35,8 @@ class Checklist {
         $setor = null,
         $loja = null,
         $questionador = null,
-        $responsavel = null
+        $responsavel = null,
+        $questionarios = []
     ) {
         $this->id = $id;
         $this->status  = $status;
@@ -47,6 +49,7 @@ class Checklist {
         $this->loja = $loja;
         $this->questionador = $questionador;
         $this->responsavel = $responsavel;
+        $this->questionarios = $questionarios;
     }
 
     public function getId(){
@@ -136,6 +139,14 @@ class Checklist {
  
     public function setResponsavel($responsavel){
         $this->responsavel = $responsavel;
+    }
+
+    public function getQuestionarios(){
+        return $this->questionarios;
+    }
+
+    public function  setQuestionarios($questionarios){
+        $this->questionarios  = $questionarios;
     }
 }
 ?>

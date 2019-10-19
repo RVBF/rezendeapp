@@ -9,5 +9,6 @@
 
 interface ColecaoQuestionario extends Colecao{
     function todos($limite = 0, $pulo = 0, $search = '');
+    function todosComId($ids = []);
 }
 ?>

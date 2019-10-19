@@ -110,11 +110,11 @@ class ControladoraChecklist {
 				throw new Exception("Loja não encontrada na base de dados.");
 			}
 
-			// $questionario = $this->colecaoQuestionario->comId((\ParamUtil::value($this->params, 'questionario')> 0) ? \ParamUtil::value($this->params, 'questionario') : \ParamUtil::value($this->params, 'questionario'));
+			 $questionarios = $this->colecaoQuestionario->todosComId($this->params['questionarios']);
 
-			// if(!isset($questionario) and !($questionario instanceof Questionario)){
-			// 	throw new Exception("Questionário não encontrado na base de dados.");
-			// }
+			if(!isset($questionarios) and count($questionarios) == count($this->params['questionarios'])){
+				throw new Exception("Alguma opção de questionário seleciona não foi encontrado na base de dados.");
+			}
 
 
 			$responsavel = $this->colecaoColaborador->comId((\ParamUtil::value($this->params, 'responsavel')> 0) ? \ParamUtil::value($this->params, 'responsavel') : \ParamUtil::value($this->params, 'responsavel'));
@@ -143,7 +143,8 @@ class ControladoraChecklist {
 				$setor,
 				$loja,
 				$questionador,
-				$responsavel
+				$responsavel,
+				$questionarios
 			);			
 
 			$this->colecaoChecklist->adicionar($checklist);
