@@ -18,7 +18,17 @@
 				paginaAnterior.removeClass('pagina-atual');
 				atual.addClass('pagina-atual');
 				_this.atualizarTabela();
-			});
+			}); 
+
+			if(opcoes.listagemTemporal){
+				listagemPadrao.find('.timeline').scroll(function() {
+					
+					if (listagemPadrao.find('.timeline').scrollTop() == parseInt(listagemPadrao.find('.timeline').find('.linhas').height() - listagemPadrao.find('.timeline').height())) {
+						_this.renderizarRegistrosTabelaTemporal();
+
+					}
+				});
+			}
 		};
 
 		_this.getObjetos = function getObjetos(){
@@ -61,7 +71,11 @@
 
 				}
 				else{
-					return {'listagemTemporal': true, 'dataAtual' : moment().format('YYYY-MM-DD HH:MM:ss'), 'pageLength' : opcoes.pageLength }
+					return {
+						'listagemTemporal': true,
+						'pageLength' : opcoes.pageLength, 
+						'homePage' :(listagemPadrao.find('.listagem-padrao-item').length == 0) ? 0: listagemPadrao.find('.listagem-padrao-item').length+1 
+					}
 				}
 			};
 
@@ -76,8 +90,14 @@
 		_this.renderizarRows = function renderizarRows(data){
 			_this.objetos = data;
 			var html = '';
-			html += '<div class="card-panel left-align">';
 
+			if(opcoes.hasHeader && listagemPadrao.find('.listagem-padrao-item').length == 0){
+				html += '<div class="row agenda-dto tabela_titulo">';
+				html += '<div class="col col-lg-12 col-md-12 col-sm-12">';
+				html += '<h6 class="center-align">' + opcoes.header + '</h6>';
+				html += '</div>';
+				html += '</div>';
+			}
 			if(typeof opcoes.columnDefs == 'function'){
 				if(data.length > 0){
 					for( let indice in data) {
@@ -91,10 +111,9 @@
 				}
 			}
 
-			html += '</div>';
-
 			return html;
 		};
+
 		_this.renderizarRegistros = function () {
 			var sucesso = function (resposta) {
 				ultimaResposta = resposta;
@@ -115,11 +134,13 @@
 		};
 
 		_this.renderizarRegistrosTabelaTemporal = function renderizarRegistrosTabelaTemporal () {
+			
 			var sucesso = function (resposta) {
 				ultimaResposta = resposta;
-				listagemPadrao.find('.linhas').empty().append(_this.renderizarRows(resposta.data));
+				listagemPadrao.find('.linhas').append(_this.renderizarRows(resposta.data));
 
 				if(typeof opcoes.rowsCallback == 'function') opcoes.rowsCallback(resposta);
+				// $('#loading').hide();
 			};
 
 			var erro = function(resposta) {
@@ -128,8 +149,10 @@
 				return false;
 			};
 
+
 			var  jqXHR = _this.requisitarRegistros();
 			jqXHR.done(sucesso).fail(erro);	
+		
 		};
 
 		_this.renderizarOpcoesDePesquisa  = function renderizarOpcoesDePesquisa() {

@@ -25,9 +25,11 @@
 
             objeto.listagemTemporal = true;
 			objeto.carregando = true;
-			objeto.pageLength = 100;
+			objeto.pageLength = 5;
 			objeto.searching= true;
 			objeto.searchDelay = 600;	
+			objeto.header = 'MINHAS ATIVIDADES';
+			objeto.hasHeader = true;
             objeto.cadastrarLink = 'cadastrar_setor_link';
             objeto.classesDesignerTabela = 'agenda-dto valign-wrapper';
 			objeto.columnDefs = function (data){

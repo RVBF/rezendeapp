@@ -12,6 +12,6 @@ interface ColecaoChecklist extends Colecao{
 	function todosComLojaIds($limite = 0, $pulo = 0, $search = '', $idsLojas = []);
 	function contagem($idsLojas = []);
 
-	function listagemTemporalcomLojasIds($dataAtual, $pageLength = 10, $search = '', $idsLojas = []);
+	function listagemTemporalcomLojasIds($pageHome = 0,$pageLength = 10, $search = '', $idsLojas = []);
 }
 ?>
