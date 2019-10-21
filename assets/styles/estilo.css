@@ -1,3 +1,17 @@
+.tabela_titulo {
+    top: 0;
+    position: sticky;
+    opacity: unset;
+    background-color: white;
+    z-index: 10000;
+}
+
+.sidenav{
+    z-index: 100910 !important;
+}
+ .sidenav-overlay{
+    z-index: 10090 !important;
+}
 .container {
     padding: 0px;
 }
@@ -38,7 +52,7 @@
     font-weight: 700;
 }
 .listagem-padrao-item .card-panel{
-    padding: 15px;
+    padding: 15px !important;
 }
 
 .listagem-padrao-item .opcoes{
@@ -96,9 +110,21 @@ select.qtd_resultados_pesquisapadrao {
 }
 
 
-.card-panel{
-    padding: 1em;
+.listagem-padrao .card-panel{
+    padding: 1em !important;
 }
+
+.listagem-padrao .timeline{
+    overflow-x: none;
+
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+    overflow-y:scroll; 
+    height: 30em;
+    padding-top: 0 !important;
+    margin-top: 0 !important;    
+}
+
 
 form .quebra-linha{
     word-wrap: break-word;

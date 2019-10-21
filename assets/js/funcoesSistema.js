@@ -149,10 +149,7 @@
 	});
 
 	$(document).ready(function() {	
-		moment.locale('pt-BR');
-		console.log(moment().format('LLLL')); // 'Freitag, 24. Juni 2016 01:42'
-
-	
+		moment.locale('pt-BR');	
 
 		// $('.toltip').tooltip(); 
 		if(window.location.href == 'http://rezendeconstrucao.com.br/rezendeapp/' || window.location.href == 'http://rezendeapp.local/'){ 

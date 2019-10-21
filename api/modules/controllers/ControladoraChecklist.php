@@ -72,7 +72,7 @@ class ControladoraChecklist {
 				);
 			}
 			else{
-				$objetos = $this->colecaoChecklist->listagemTemporalcomLojasIds($this->params['dataAtual'], $this->params['pageLength'], (isset($this->params['search'])) ? $this->params['search'] : '', $idsLojas);
+				$objetos = $this->colecaoChecklist->listagemTemporalcomLojasIds($this->params['homePage'], $this->params['pageLength'], (isset($this->params['search'])) ? $this->params['search'] : '', $idsLojas);
 	
 				$contagem = $this->colecaoChecklist->contagem($idsLojas);
 				

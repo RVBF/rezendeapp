@@ -141,9 +141,6 @@
 		loader.script('vendor/pickerjs/dist/picker.min.js');				
 		loader.script('vendor/moment/min/moment.min.js');
 		loader.script('vendor/moment/locale/pt-br.js');
-
-
-
 		// loader.script('vendor/datatables/media/js/jquery.dataTables.js');
 		// loader.script('vendor/datatables/media/js/dataTables.bootstrap4.min.js');
 		// loader.script('vendor/datatables/media/js/dataTables.bootstrap.js');
