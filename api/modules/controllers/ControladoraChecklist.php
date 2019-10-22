@@ -47,7 +47,7 @@ class ControladoraChecklist {
 			$colaborador = $this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario());
 
 			$idsLojas = [];
-			if($colaborador instanceof COlaborador) {
+			if($colaborador instanceof Colaborador) {
 				foreach ($colaborador->getLojas() as $loja) {
 					$idsLojas[] = $loja->getId();
 				}
@@ -60,9 +60,7 @@ class ControladoraChecklist {
 				$erro = null;
 	
 				$objetos = $this->colecaoChecklist->todosComLojaIds($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $idsLojas);
-	
 				$contagem = $this->colecaoChecklist->contagem($idsLojas);
-	
 				$conteudo = new DataTablesResponse(
 					$contagem,
 					is_array($objetos) ? count($objetos) : 0, //count($objetos ),
@@ -86,7 +84,7 @@ class ControladoraChecklist {
 			}
 		}
 		catch (\Exception $e ) {
-			throw new Exception("Erro ao listar tarefas");
+			throw new Exception("Erro ao listar checklist");
 		}
 
 		

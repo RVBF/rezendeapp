@@ -139,10 +139,9 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 		}
 	}
 
-	function todosComLojaIds($limite = 0, $pulo = 0, $search = '', $idsLojas = []){
+	function todosComLojaIds($limite = 0, $pulo = 10, $search = '', $idsLojas = []){
 		try {	
-
-			$query = DB::table(self::TABELA)->select(self::TABELA . '.*')->whereIn('loja_id', $idsLojas);
+			$query = DB::table(self::TABELA)->select(self::TABELA . '.*');
 
 			if($search != '') {
 				$buscaCompleta = $search;
@@ -189,12 +188,13 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			
 
 			$checklists = $query->offset($limite)->limit($pulo)->get();
+			
 			$checklistsObjects = [];
+
 			foreach ($checklists as $key => $checklist) {
 				$checklistsObjects[] =  $this->construirObjeto($checklist);
 			}
 
-			
 			return $checklistsObjects;
 		}
 		catch (\Exception $e)
