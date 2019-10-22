@@ -115,9 +115,6 @@ select.qtd_resultados_pesquisapadrao {
 }
 
 .listagem-padrao .timeline{
-    overflow-x: none;
-
-    overflow: scroll;
     -webkit-overflow-scrolling: touch;
     overflow-y:scroll; 
     height: 30em;

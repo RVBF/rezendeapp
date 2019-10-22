@@ -1,87 +1,21 @@
 
-<nav class="orange accent-4" role="navigation">
-	<div class="nav-wrapper container">
-		<span class="center local-dto">Checklist</span>
-		<a href=" #" class="left m16-dto gome"><i class="material-icons">navigate_before</i></a>
-		<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>
-	</div>
-</nav>
-
-<section id="listagem_checklist">
-	<div class="row">
-
-		<div class="col s12">
-
-			<div class="card-panel left-align">
-
-			<div class="row agenda-dto valign-wrapper">
-				<div class="col xl1 m2 s3">
-					<p class="dia">Ter</p>
-					<p class="data">01/05</p>
-				</div>
-				<div class="col xl11 m10 s9">
-					<p><i class="mdi mdi-map-marker-radius orange-text text-accent-4"></i> <strong>Matriz</strong> Centro - Nova Friburgo</p>
-					<p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">Checklist de Organização</strong></p>
-					<p class="exc"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>260 dias de atraso</strong></p>
-				</div>
+<section class="listagem-padrao" id="checklist">    
+		<div class="row">
+			<div class="col col-sm-12 col-12 card-panel left-align">
+				<div class="linhas"> </div>
 			</div>
-
-			<div class="row agenda-dto valign-wrapper vermelho">
-				<div class="col xl1 m2 s3">
-					<p class="dia">Ter</p>
-					<p class="data">01/05</p>
-				</div>
-				<div class="col xl11 m10 s9">
-					<p><i class="mdi mdi-map-marker-radius orange-text text-accent-4"></i> <strong>Matriz</strong> Centro - Nova Friburgo</p>
-					<p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">Checklist de Organização</strong></p>
-					<p class="exc"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>26 dias</strong></p>
-				</div>
-			</div>
-
-			<div class="row agenda-dto valign-wrapper">
-				<div class="col xl1 m2 s3">
-					<p class="dia">Ter</p>
-					<p class="data">01/05</p>
-				</div>
-				<div class="col xl11 m10 s9">
-					<p><i class="mdi mdi-map-marker-radius orange-text text-accent-4"></i> <strong>Matriz</strong> Centro - Nova Friburgo</p>
-					<p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">Checklist de Organização</strong></p>
-					<p class="exc"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>260 dias de atraso</strong></p>
-				</div>
-			</div>
-
-			<div class="row agenda-dto">
-				<br>
-				<h6 class="center-align">EXECUTADOS</h6>
-			</div>
-
-			<div class="row agenda-dto valign-wrapper cinza">
-				<div class="col xl1 m2 s3">
-					<p class="dia">Ter</p>
-					<p class="data">01/05</p>
-				</div>
-				<div class="col xl11 m10 s9">
-					<p><i class="mdi mdi-map-marker-radius orange-text text-accent-4"></i> <strong>Matriz</strong> Centro - Nova Friburgo</p>
-					<p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">Checklist de Organização</strong></p>
-					<p class="exc"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>Feito</strong></p>
-				</div>
-			</div>
-
-			<div class="row agenda-dto valign-wrapper cinza">
-				<div class="col xl1 m2 s3">
-					<p class="dia">Ter</p>
-					<p class="data">01/05</p>
-				</div>
-				<div class="col xl11 m10 s9">
-					<p><i class="mdi mdi-map-marker-radius orange-text text-accent-4"></i> <strong>Matriz</strong> Centro - Nova Friburgo</p>
-					<p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">Checklist de Organização</strong></p>
-					<p class="exc"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>Feito</strong></p>
-				</div>
-			</div>
-
-			</div>
-
 		</div>
+		<div class="row">
+			<div class="info col-md-12 col-12 col-sm-12 col-lg-12"></div>
+		</div>
+	</section>
+	
+<script>
+	$(document).ready(function() {
+		var servicoChecklist = new app.ServicoChecklist();
+		var crltChecklist = new app.ControladoraListagemChecklist(servicoChecklist);
 
-	</div>
-</section>
+		crltChecklist.configurar();
+	});
+</script> 
+	
