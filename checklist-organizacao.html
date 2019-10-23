@@ -26,230 +26,114 @@
 
 
 <section id="checklist_organizacao">
-	<div class="row mb-0-dto">
-		<div class="input-field col s6 m6 mb-0-dto">
-			<select>
-			<option value="" disabled selected>Unidade</option>
-			<option value="1">Opção 1</option>
-			<option value="2">Opção 2</option>
-			<option value="3">Opção 3</option>
-			</select>
-		</div>
-		
-		<div class="input-field col s6 m6">
-			<select>
-			<option value="" disabled selected>Tipo</option>
-			<option value="1">Opção 1</option>
-			<option value="2">Opção 2</option>
-			<option value="3">Opção 3</option>
-			</select>
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="ooo">
-
-			<div class="card-panel left-align">
-
-			<div class="row mb-0-dto">
-				<p class="mb-0-dto"><strong class="fw-700-dto">01</strong> - Luzes queimadas na loja?</p>
-			</div>
-			<div class="row mb-0-dto">
-				<div class="col s4 center-align p-0-dto">
-					<input class="cb-dto" type="radio" id="a1" name="a" value="bom">
-					<label class="label-dto" for="a1">
-					<i class="mdi mdi-emoticon-happy-outline large orange-text text-accent-4"></i>
-					</label>
+	<div class="card-panel left-align">
+		<div class="col col-sm-12 col-md-12 col-lg-12 col-12">
+			<form class="form-horizontal "  method="post" id="executar_form">
+				<div class="row form-row">
+					<div class="col col-sm-6 col-md-6 col-lg-6 col-12">
+						<div class="input-field">
+							<select class="select">
+							<option value="" disabled selected>Unidade</option>
+							<option value="1">Opção 1</option>
+							<option value="2">Opção 2</option>
+							<option value="3">Opção 3</option>
+							</select>
+						</div>
+					</div>
+					
+					<div class="col col-sm-6 col-md-6 col-lg-6 col-12">
+							<div class="input-field">
+							<select class="select">
+							<option value="" disabled selected>Tipo</option>
+							<option value="1">Opção 1</option>
+							<option value="2">Opção 2</option>
+							<option value="3">Opção 3</option>
+							</select>
+						</div>
+					</div>
 				</div>
-				<div class="col s4 center-align p-0-dto">
-					<input class="cb-dto" type="radio" id="a2" name="a" value="regular">
-					<label class="label-dto" for="a2">
-					<i class="mdi mdi-emoticon-neutral-outline large orange-text text-accent-4"></i>
-					</label>
-				</div>
-				<div class="col s4 center-align p-0-dto">
-					<input class="cb-dto" type="radio" id="a3" name="a" value="ruim">
-					<label class="label-dto" for="a3">
-					<i class="mdi mdi-emoticon-sad-outline large orange-text text-accent-4"></i>
-					</label>
-				</div>
-			</div>
+			
+				<div class="row form-row ">
+					<div class="col col-sm-12 col-md-12 col-lg-12 col-12">
+						<p class=""><strong class="fw-700-dto">01</strong> - Luzes queimadas na loja?</p>
+					</div>
 
-			</div>
+					<div class="col col-sm-4 col-md-4 col-lg-4 col-4">
+						<input class="cb-dto" type="radio" id="a1" name="a" value="bom">
+						<label class="label-dto" for="a1">
+						<i class="mdi mdi-emoticon-happy-outline large orange-text text-accent-4"></i>
+						</label>
+					</div>
 
+					<div class="col col-sm-4 col-md-4 col-lg-4 col-4">
+						<input class="cb-dto" type="radio" id="a2" name="a" value="regular">
+						<label class="label-dto" for="a2">
+						<i class="mdi mdi-emoticon-neutral-outline large orange-text text-accent-4"></i>
+						</label>
+					</div>
+
+					<div class="col col-sm-4 col-md-4 col-lg-4 col-4">
+							<input class="cb-dto" type="radio" id="a3" name="a" value="ruim">
+						<label class="label-dto" for="a3">
+						<i class="mdi mdi-emoticon-sad-outline large orange-text text-accent-4"></i>
+						</label>
+					</div>
+				</div>
+
+				<div class="row form-row ">
+					<div class="opc row center-align" style="display: none">
+						<div class="col s2 igs">
+						<a class="orange accent-4 subicon-dto">
+							<i class="mdi mdi-information-outline white-text"></i>
+						</a>
+						</div>
+						<div class="col s2 igs">
+						<a class="orange accent-4 subicon-dto">
+							<i class="mdi mdi-microphone white-text"></i>
+						</a>
+						</div>
+						<div class="col s2 igs">
+						<a class="orange accent-4 subicon-dto">
+							<i class="mdi mdi-camera-outline white-text"></i>
+						</a>
+						</div>
+						<div class="col s2 igs">
+						<a class="orange accent-4 subicon-dto">
+							<i class="mdi mdi-lead-pencil white-text"></i>
+						</a>
+						</div>
+						<div class="col s2 igs">
+						<a href="pa-cadastro.html" class="orange accent-4 subicon-dto">
+							<span class="white-text">P.A.</span>
+						</a>
+						</div>
+						<div class="col s2 igs">
+						<a class="orange accent-4 subicon-dto">
+							<span class="white-text">Pend</span>
+						</a>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="row form-row">
+					<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end">
+						<button type="submit" id="salvar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">
+							<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>
+								Finalizar<br>
+								plano de ação
+						</button>
+					</div>
+				
+					<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-start justify-content-md-start ">
+						<button class="waves-effect waves-light btn white grey-text text-darken-4 button-dto f-12-dto setor_link">
+							<i class="mdi mdi-close-circle-outline yellow-text text-accent-4"></i>
+							Cancelar
+						</button>
+					</div>
+				</div>
+			</form>
 		</div>
-
-		<div class="opc row center-align" style="display: none">
-			<div class="col s2 igs">
-			<a class="orange accent-4 subicon-dto">
-				<i class="mdi mdi-information-outline white-text"></i>
-			</a>
-			</div>
-			<div class="col s2 igs">
-			<a class="orange accent-4 subicon-dto">
-				<i class="mdi mdi-microphone white-text"></i>
-			</a>
-			</div>
-			<div class="col s2 igs">
-			<a class="orange accent-4 subicon-dto">
-				<i class="mdi mdi-camera-outline white-text"></i>
-			</a>
-			</div>
-			<div class="col s2 igs">
-			<a class="orange accent-4 subicon-dto">
-				<i class="mdi mdi-lead-pencil white-text"></i>
-			</a>
-			</div>
-			<div class="col s2 igs">
-			<a href="pa-cadastro.html" class="orange accent-4 subicon-dto">
-				<span class="white-text">P.A.</span>
-			</a>
-			</div>
-			<div class="col s2 igs">
-			<a class="orange accent-4 subicon-dto">
-				<span class="white-text">Pend</span>
-			</a>
-			</div>
-		</div>
-
-		<div class="ooo">
-
-			<div class="card-panel left-align">
-
-			<div class="row mb-0-dto">
-				<p class="mb-0-dto"><strong class="fw-700-dto">01</strong> - Luzes queimadas na loja?</p>
-			</div>
-			<div class="row mb-0-dto">
-				<div class="col s4 center-align p-0-dto">
-					<input class="cb-dto" type="radio" id="b1" name="b" value="bom">
-					<label class="label-dto" for="b1">
-					<i class="mdi mdi-emoticon-happy-outline large orange-text text-accent-4"></i>
-					</label>
-				</div>
-				<div class="col s4 center-align p-0-dto">
-					<input class="cb-dto" type="radio" id="b2" name="b" value="regular">
-					<label class="label-dto" for="b2">
-					<i class="mdi mdi-emoticon-neutral-outline large orange-text text-accent-4"></i>
-					</label>
-				</div>
-				<div class="col s4 center-align p-0-dto">
-					<input class="cb-dto" type="radio" id="b3" name="b" value="ruim">
-					<label class="label-dto" for="b3">
-					<i class="mdi mdi-emoticon-sad-outline large orange-text text-accent-4"></i>
-					</label>
-				</div>
-			</div>
-
-			</div>
-
-		</div>
-
-		<div class="opc row center-align" style="display: none">
-			<div class="col s2 igs">
-			<a class="orange accent-4 subicon-dto">
-				<i class="mdi mdi-information-outline white-text"></i>
-			</a>
-			</div>
-			<div class="col s2 igs">
-			<a class="orange accent-4 subicon-dto">
-				<i class="mdi mdi-microphone white-text"></i>
-			</a>
-			</div>
-			<div class="col s2 igs">
-			<a class="orange accent-4 subicon-dto">
-				<i class="mdi mdi-camera-outline white-text"></i>
-			</a>
-			</div>
-			<div class="col s2 igs">
-			<a class="orange accent-4 subicon-dto">
-				<i class="mdi mdi-lead-pencil white-text"></i>
-			</a>
-			</div>
-			<div class="col s2 igs">
-			<a href="pa-cadastro.html" class="orange accent-4 subicon-dto">
-				<span class="white-text">P.A.</span>
-			</a>
-			</div>
-			<div class="col s2 igs">
-			<a class="orange accent-4 subicon-dto">
-				<span class="white-text">Pend</span>
-			</a>
-			</div>
-		</div>
-
-		<div class="ooo">
-
-			<div class="card-panel left-align">
-
-			<div class="row mb-0-dto">
-				<p class="mb-0-dto"><strong class="fw-700-dto">01</strong> - Luzes queimadas na loja?</p>
-			</div>
-			<div class="row mb-0-dto">
-				<div class="col s4 center-align p-0-dto">
-					<input class="cb-dto" type="radio" id="c1" name="c" value="bom">
-					<label class="label-dto" for="c1">
-					<i class="mdi mdi-emoticon-happy-outline large orange-text text-accent-4"></i>
-					</label>
-				</div>
-				<div class="col s4 center-align p-0-dto">
-					<input class="cb-dto" type="radio" id="c2" name="c" value="regular">
-					<label class="label-dto" for="c2">
-					<i class="mdi mdi-emoticon-neutral-outline large orange-text text-accent-4"></i>
-					</label>
-				</div>
-				<div class="col s4 center-align p-0-dto">
-					<input class="cb-dto" type="radio" id="c3" name="c" value="ruim">
-					<label class="label-dto" for="c3">
-					<i class="mdi mdi-emoticon-sad-outline large orange-text text-accent-4"></i>
-					</label>
-				</div>
-			</div>
-
-			</div>
-
-		</div>
-
-		<div class="opc row center-align" style="display: none">
-			<div class="col s2 igs">
-			<a class="orange accent-4 subicon-dto">
-				<i class="mdi mdi-information-outline white-text"></i>
-			</a>
-			</div>
-			<div class="col s2 igs">
-			<a class="orange accent-4 subicon-dto">
-				<i class="mdi mdi-microphone white-text"></i>
-			</a>
-			</div>
-			<div class="col s2 igs">
-			<a class="orange accent-4 subicon-dto">
-				<i class="mdi mdi-camera-outline white-text"></i>
-			</a>
-			</div>
-			<div class="col s2 igs">
-			<a class="orange accent-4 subicon-dto">
-				<i class="mdi mdi-lead-pencil white-text"></i>
-			</a>
-			</div>
-			<div class="col s2 igs">
-			<a href="pa-cadastro.html" class="orange accent-4 subicon-dto">
-				<span class="white-text">P.A.</span>
-			</a>
-			</div>
-			<div class="col s2 igs">
-			<a class="orange accent-4 subicon-dto">
-				<span class="white-text">Pend</span>
-			</a>
-			</div>
-		</div>
-
-	</div>
-	<div class="row">
-		<div class="col center-align w-100">
-			<a class="waves-effect waves-light btn white grey-text text-darken-4 button-dto">
-			<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4"></i>
-			Finalizar <br>
-			plano de ação
-			</a>
-		</div>
-	</div>
+	</div>		
 </section>
+admin

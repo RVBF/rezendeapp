@@ -114,10 +114,16 @@ select.qtd_resultados_pesquisapadrao {
     padding: 1em !important;
 }
 
+.fadeIn {
+    -webkit-animation: fadeIn 3s ease-in-out;
+    -moz-animation: fadeIn 3s ease-in-out;
+    -o-animation: fadeIn 3s ease-in-out;
+    animation: fadeIn 3s ease-in-out;
+}
+
 .listagem-padrao .timeline{
-    -webkit-overflow-scrolling: touch;
-    overflow-y:scroll; 
-    height: 30em;
+    overflow-y: auto;
+    height: 45em;
     padding-top: 0 !important;
     margin-top: 0 !important;    
 }
@@ -174,6 +180,21 @@ form .quebra-linha{
     
     .listagem-padrao .paginacao{
         text-align: center !important;
+    }
+    .listagem-padrao .linhas{
+        font-size: 12px;
+    }
+    .listagem-padrao .dia, .listagem-padrao .data{
+        font-size: 20px;
+    }
+
+    #menu_principal a, #configuracoes a{
+        font-size: 12px;
+        word-wrap: break-word;
+    }
+
+    .card-panel{
+        padding: 2px 1px 2px 1px;
     }
 }
 

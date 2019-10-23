@@ -25,7 +25,7 @@
 
             objeto.listagemTemporal = true;
 			objeto.carregando = true;
-			objeto.pageLength = 5;
+			objeto.pageLength = 10;
 			objeto.searching= true;
 			objeto.searchDelay = 600;	
 			objeto.header = 'MINHAS ATIVIDADES';

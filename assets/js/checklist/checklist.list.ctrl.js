@@ -40,14 +40,16 @@
 					html += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12">';
 						html += '<div class="row agenda-dto">'
 
-							html += '<div class="col col-12 col-lg-4 col-md-4 col-sm-6">';
+							html += '<div class="col col-12 col-lg-3 col-md-3 col-sm-4">';
 								html += '<p class="dia '+((diferencaDias > 0) ? 'teal-text text-darken-1': ' red-text text-accent-4 ') +'">'+ dataLimite.format('ddd') + '</p>';
 								html += '<p class="data">'+ dataLimite.format('DD/MM/YYYY')+ '</p>';
 							html += '</div>';
-							html += '<div class="col col-12 col-lg-8 col-md-8 col-sm-6">';
+							html += '<div class="col col-12 col-lg-9 col-md-9 col-sm-8">';
 								html += '<p><i class="mdi mdi-map-marker-radius orange-text text-accent-4"></i> <strong>' + data.loja.razaoSocial + '</strong> ' + data.loja.nomeFantasia + '</p>';
-								html += '<p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.titulo + '</strong></p>';
+								html += '<a href="#" class="inteligencia_link"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.titulo + '</strong></p></a>';
+								// html += '<a href="#" class="inteligencia_link"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.titulo + '</strong></p></a>';								
 								html += '<p class="'+((diferencaDias > 0) ? 'teal-text text-darken-1': ' red-text text-accent-4 ')+'"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>'+textoDiasRestantes+'</strong></p>';
+								html += '<p><strong>Descrição : </strong> ' + data.descricao+ '</p>';
 							html += '</div>';
 						html += '</div>';
 					html += '</div>';
