@@ -20,6 +20,10 @@
 				_this.atualizarTabela();
 			}); 
 
+			listagemPadrao.on('change', '.qtd_resultados_pesquisapadrao',function () {;
+				_this.atualizarTabela();
+			}); 
+
 			if(opcoes.listagemTemporal){
 
 					listagemPadrao.find('.timeline').scroll(function() {
@@ -37,7 +41,7 @@
 		};
 
 		_this.getObjetos = function getObjetos(){
-			return _this.objetos;
+			return _this.objetos.objetos[0];
 		}
 
 		_this.paginaAtual = function paginaAtual(){

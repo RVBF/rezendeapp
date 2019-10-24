@@ -17,13 +17,13 @@ class Questionamento {
     private $anexos;
 
     function __construct(
-        $id,
-        $status,
-        $formularioPergunta,
-        $formularioResposta,
-        $checklist,
-        $planoAcao,
-        $anexos
+        $id = 0,
+        $status =  '',
+        $formularioPergunta = '',
+        $formularioResposta = '',
+        $checklist = null,
+        $planoAcao = null,
+        $anexos = []
     ) {
     
         $this->id = $id;

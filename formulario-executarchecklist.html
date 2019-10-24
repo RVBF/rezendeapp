@@ -1,0 +1,113 @@
+<div id="modal1" class="modal">
+	<div class="modal-content">
+		<div class="center-align">
+				<h6 class="orange-text text-accent-4 fw-700-dto">RESULTADO</h6>
+		</div>
+		<p>A pontuação obtida na avalização da categoria <span id="nome-categoria">Lorem Impsun</span> foi inferior ao mínimo estipulado pela Administração. <br>
+			<strong class="fw-700-dto">Por favor, estipule um plano de ação para melhorar o resultado</strong>
+		</p>
+		<div class="center-align">
+			<button class="modal-close waves-effect btn btn-large yellow accent-4 grey-text text-darken-4 w-80">Ok</button>
+		</div>
+	</div>
+</div>
+
+<section id="checklist_execucao">
+	<div class="col col-sm-12 col-md-12 col-lg-12 col-12">
+		<form class="form-horizontal "  method="post" id="executarchecklist_form">
+			<div class="row form-row perguntas">
+				<div class="col col-sm-12 col-md-12 col-lg-12 col-12">
+					<div class="card-panel left-align">
+						<div class="questionamento">
+							<div class="row form-row -item mb-0-dto">
+								<div class="col col-sm-12 col-md-12 col-lg-12 col-12 mb-0-dto">
+									<p class="mb-0-dto">
+										<strong class="fw-700-dto">01</strong> - Luzes queimadas na loja?
+									</p>
+								</div>
+
+								<div class="col col-sm-2 col-md-2 col-lg-2 col-4 d-flex justify-content-center">
+									<input class="cb-dto" type="radio" id="a1" name="a" value="bom">
+									<i class="mdi mdi-emoticon-happy-outline large orange-text text-accent-4"></i>
+								</div>
+
+								<div class="col col-sm-2 col-md-2 col-lg-2 col-4 d-flex justify-content-center">
+									<input class="cb-dto" type="radio" id="a2" name="a" value="regular">
+									<i class="mdi mdi-emoticon-neutral-outline large orange-text text-accent-4"></i>
+								</div>
+
+								<div class="col col-sm-2 col-md-2 col-lg-2 col-4 d-flex justify-content-center">
+									<input class="cb-dto" type="radio" id="a3" name="a" value="ruim">
+									<i class="mdi mdi-emoticon-sad-outline large orange-text text-accent-4"></i>
+								</div>
+							</div>
+
+							<div class="row form-row ">
+								<div class="opc row center-align" style="display: none">
+									<div class="col s2 igs">
+									<a class="orange accent-4 subicon-dto">
+										<i class="mdi mdi-information-outline white-text"></i>
+									</a>
+									</div>
+									<div class="col s2 igs">
+									<a class="orange accent-4 subicon-dto">
+										<i class="mdi mdi-microphone white-text"></i>
+									</a>
+									</div>
+									<div class="col s2 igs">
+									<a class="orange accent-4 subicon-dto">
+										<i class="mdi mdi-camera-outline white-text"></i>
+									</a>
+									</div>
+									<div class="col s2 igs">
+									<a class="orange accent-4 subicon-dto">
+										<i class="mdi mdi-lead-pencil white-text"></i>
+									</a>
+									</div>
+									<div class="col s2 igs">
+									<a href="pa-cadastro.html" class="orange accent-4 subicon-dto">
+										<span class="white-text">P.A.</span>
+									</a>
+									</div>
+									<div class="col s2 igs">
+									<a class="orange accent-4 subicon-dto">
+										<span class="white-text">Pend</span>
+									</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>	
+				</div>
+			</div>
+
+			<div class="row form-row">
+				<div class="col col-md-12 col-12 col-sm-12 col-lg-12 d-flex justify-content-sm-end justify-content-md-end justify-content-center ">
+					<button type="submit" id="salvar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">
+						<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>
+						Salvar e Sair
+					</button>
+
+					<button type="submit" id="salvar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">
+						<i class="mdi mdi-skip-next red-text text-darken-4 "></i>
+						Próximo
+					</button>
+
+					<button class="waves-effect waves-light btn white grey-text text-darken-4 button-dto f-12-dto checklist_link">
+						<i class="mdi mdi-close-circle-outline yellow-text text-accent-4"></i>
+						Cancelar
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</section>
+
+<script>
+	$(document).ready(function() {
+		var servicoChecklist = new app.ServicoChecklist();
+		var crltChecklistExecucao = new app.ControladoraFormChecklistExecucao(servicoChecklist);
+		crltChecklistExecucao.configurar();
+	});
+</script>
+	

@@ -155,6 +155,14 @@ $app->get('/checklist', function(Request $req,  Response $res, $args = []) use (
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
 });
 
+$app->get('/checklist/questionamentos/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Acessando listagem de tarefa");	
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraChecklist($req->getQueryParams(), $sessaoUsuario);
+	$response = $ctrl->getQuestionamentos($args['id']);
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+});
+
 $app->put('/checklist', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 	$this->logger->addInfo("Acessando a atualização de tarefas");
 	$sessaoUsuario = new Sessao($session);

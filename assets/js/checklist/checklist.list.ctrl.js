@@ -46,7 +46,7 @@
 							html += '</div>';
 							html += '<div class="col col-12 col-lg-9 col-md-9 col-sm-8">';
 								html += '<p><i class="mdi mdi-map-marker-radius orange-text text-accent-4"></i> <strong>' + data.loja.razaoSocial + '</strong> ' + data.loja.nomeFantasia + '</p>';
-								html += '<a href="#" class="inteligencia_link"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.titulo + '</strong></p></a>';
+								html += '<a href="#" class="executar_checklist"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.titulo + '</strong></p></a>';
 								// html += '<a href="#" class="inteligencia_link"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.titulo + '</strong></p></a>';								
 								html += '<p class="'+((diferencaDias > 0) ? 'teal-text text-darken-1': ' red-text text-accent-4 ')+'"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>'+textoDiasRestantes+'</strong></p>';
 								html += '<p><strong>Descrição : </strong> ' + data.descricao+ '</p>';
@@ -61,11 +61,18 @@
 
 			objeto.rowsCallback = function(resposta){
 				$('.remover_setor_link').on('click', _this.remover);
+				$('.executar_checklist').on('click', _this.executar);
 			};
 
 			return objeto;
 		};
 
+		_this.executar = function executar (event) {
+			event.preventDefault();
+			var objeto = _tabela.getObjetos()[$(this).parents('.listagem-padrao-item').index()];
+
+			router.navigate('/executar-checklist/'+ objeto.id);
+		};
 
 		_this.atualizar = function atualizar(){
 			_tabela.atualizarTabela();
