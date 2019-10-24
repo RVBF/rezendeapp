@@ -249,7 +249,7 @@ input:not([type]):focus:not([readonly]), input[type=text]:not(.browser-default):
   margin-top: 0;
 }
 .mb-0-dto{
-  margin-bottom: 0;
+  margin-bottom: 0 !important;
 }
 .p-0-dto{
   padding: 0!important;

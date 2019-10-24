@@ -188,6 +188,7 @@
 
 		loader.script('assets/js/checklist/tipoChecklist.serv.js');
 		loader.script('assets/js/checklist/checklist.serv.js');
+		loader.script('assets/js/checklist/checklistExecucao.form.ctrl.js');
 		loader.script('assets/js/checklist/checklist.form.ctrl.js');
 		loader.script('assets/js/checklist/checklist.list.ctrl.js');
 		loader.script('assets/js/checklist/checklistatividades.list.ctrl.js');

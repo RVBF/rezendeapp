@@ -298,5 +298,22 @@ class ControladoraChecklist {
 
 		return $resposta;
 	}
+
+	function getQuestionamentos($id){
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
+			
+			if (! is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
+
+			$questionamentos = $this->colecaoQuestionamento->comChecklistId($id);
+			$resposta = ['conteudo'=> RTTI::getAttributes($questionamentos, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'ok.']; 
+		}
+		catch (\Exception $e) {
+			DB::rollback();
+			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()]; 
+		}
+
+		return $resposta;
+	}
 }
 ?>

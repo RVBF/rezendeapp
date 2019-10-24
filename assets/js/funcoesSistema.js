@@ -49,14 +49,9 @@
 				router.navigate('/plano-acao');
 			});
 
-			$(evento.target).find('.checklist_organizacao_link').on('click', function(event){
-				event.preventDefault();
-				router.navigate('/checklist-organizacao');
-			});
-
 			$(evento.target).find('.inteligencia_link').on('click', function(event){
 				event.preventDefault();
-				router.navigate('/checklist-organizacao');
+				router.navigate('/executar-checklist');
 			});
 
 			$(evento.target).find('.notificacao_link').on('click', function(event){

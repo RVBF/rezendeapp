@@ -81,7 +81,6 @@
 
 	router.get('/colaboradores', criarRotaPara('colaboradores.html'));
 	router.get('/cadastrar-colaborador', criarRotaPara('formulario-colaborador.html'));	
-	
 	router.get('/lojas', criarRotaPara('loja.html'));
 	router.get('/cadastrar-loja', criarRotaPara('formulario-loja.html'));
 	router.get('/editar-loja/:id', criarRotaPara('formulario-loja.html'));
@@ -91,7 +90,7 @@
 	router.get('/editar-setor/:id', criarRotaPara('formulario-setor.html'));
 	
 	router.get('/plano-acao', criarRotaPara('pa-listagem.html'));
-	router.get('/checklist-organizacao', criarRotaPara('checklist-organizacao.html'));
+	router.get('/executar-checklist/:id', criarRotaPara('formulario-executarchecklist.html'));
 	router.get('/inteligencia', criarRotaPara('inteligencia.html'));
 	router.get('/notificacao', criarRotaPara('notificacoes.html'));
 	router.get('/rd', criarRotaPara('rd.html'));
@@ -105,7 +104,12 @@
 			carregarPagina('404.html');
 		}
 	});
-
+	
+	router.on('navigate', function(event){
+		// GET /foo/bar
+		console.log('URL changed to %s', this.path());
+		// => URL changed to /foo/bar
+	});
 	// Registra como global
 	window.router = router;
 	app.verficarLogin = verficarLogin;

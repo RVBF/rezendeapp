@@ -163,6 +163,14 @@ form .quebra-linha{
     margin-bottom: 1.5em !important;
 }
 
+.questionamento-item .col{   
+    margin-bottom: 0px !important;
+}
+
+button{
+    margin-right: 1em;
+}
+
 @media(min-width:100px) and (max-width: 635px) {
     .listagem-padrao-item .opcoes{
         border: 0px;
@@ -195,6 +203,10 @@ form .quebra-linha{
 
     .card-panel{
         padding: 2px 1px 2px 1px;
+    }
+
+    #checklist_execucao .card-panel{
+        padding: 1em;
     }
 }
 

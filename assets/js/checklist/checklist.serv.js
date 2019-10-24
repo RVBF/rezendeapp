@@ -102,6 +102,13 @@
 				url: _this.rota(idSetor) + '/' + id
 			});
 		};
+
+		_this.questionamentosComID = function questionamentosComID(id){
+			return $.ajax({
+				type: "GET",
+				url: _this.rota() + '/questionamentos/' + id
+			});
+		};
 	}; // ServicoChecklist
 
 	// Registrando

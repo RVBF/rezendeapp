@@ -1,6 +1,8 @@
 <?php
 use Illuminate\Database\Capsule\Manager as DB;
 use Carbon\Carbon;
+use \phputil\RTTI;
+
 
 /**
  *	Coleção de Questionamento em Banco de Dados Relacional.
@@ -141,12 +143,18 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 		}
 	}
 
-
-	function comPerguntaId($id){
+	function comChecklistId($id){
 		try {	
-			$tarefa = $this->construirObjeto(DB::table(self::TABELA)->select(self::TABELA. '.*')->join(ColecaoPerguntaEmBDR::TABELA, ColecaoPerguntaEmBDR::TABELA . '.tarefa_id', '=', self::TABELA . '.id')->where(ColecaoPerguntaEmBDR::TABELA . '.id', $id)->first());
 
-			return $tarefa;
+			$questionamentos = DB::table(self::TABELA)->where('checklist_id', $id)->get();
+			$questionamentosObjects = [];
+
+			foreach ($questionamentos as $key => $questionamento) {
+				$questionamentosObjects[] =  RTTI::getAttributes($this->construirObjeto($questionamento), RTTI::allFlags());
+			}
+
+
+			return $questionamentosObjects;
 		}
 		catch (\Exception $e)
 		{
@@ -253,12 +261,20 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 	}
 
 	function construirObjeto(array $row) {
-		$setor = ($row['setor_id'] > 0) ? Dice::instance()->create('ColecaoSetor')->comId($row['setor_id']) : '';
-		$loja = ($row['loja_id'] > 0) ? Dice::instance()->create('ColecaoLoja')->comId($row['loja_id']) : '';
-		$questionador = ($row['questionador_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comUsuarioId($row['questionador_id']) : '';
-		$perguntas = Dice::instance()->create('ColecaoPergunta')->comTarefaId($row['id']);
-		$tarefa = new Questionamento($row['id'],$row['titulo'], $row['descricao'], $row['data_limite'], $row['data_cadastro'], $setor, $loja, $questionador, $perguntas,($row['encerrada']) ? true : false);
-		return $tarefa;
+		$checklist = ($row['checklist_id'] > 0) ? Dice::instance()->create('ColecaoChecklist')->comId($row['checklist_id']) : null;
+		$planoacao = ($row['planoacao_id'] > 0) ? Dice::instance()->create('ColecaoLoja')->comId($row['planoacao_id']) : null;
+
+		$questionamento =  new Questionamento(
+			$row['id'],
+			$row['status'],
+			json_decode($row['formulariopergunta']),
+			json_decode($row['formulariopergunta']),
+			$checklist,
+			$planoacao ,
+			[]
+		);
+
+		return $questionamento;
 	}	
 
     function contagem($idsLojas = []) {
