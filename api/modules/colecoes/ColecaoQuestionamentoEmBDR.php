@@ -150,7 +150,8 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 			$questionamentosObjects = [];
 
 			foreach ($questionamentos as $key => $questionamento) {
-				$questionamentosObjects[] =  RTTI::getAttributes($this->construirObjeto($questionamento), RTTI::allFlags());
+
+				$questionamentosObjects[] = $this->construirObjeto($questionamento);
 			}
 
 
@@ -262,7 +263,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 
 	function construirObjeto(array $row) {
 		$checklist = ($row['checklist_id'] > 0) ? Dice::instance()->create('ColecaoChecklist')->comId($row['checklist_id']) : null;
-		$planoacao = ($row['planoacao_id'] > 0) ? Dice::instance()->create('ColecaoLoja')->comId($row['planoacao_id']) : null;
+		$planoacao = null;
 
 		$questionamento =  new Questionamento(
 			$row['id'],
@@ -270,11 +271,10 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 			json_decode($row['formulariopergunta']),
 			json_decode($row['formulariopergunta']),
 			$checklist,
-			$planoacao ,
-			[]
+			$planoacao
 		);
 
-		return $questionamento;
+		return RTTI::getAttributes($questionamento, RTTI::allFlags());
 	}	
 
     function contagem($idsLojas = []) {

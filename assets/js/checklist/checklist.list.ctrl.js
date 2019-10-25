@@ -78,7 +78,6 @@
 			_tabela.atualizarTabela();
 		};
 
-
 		_this.remover = function remover(event){
 			var objeto = _tabela.getObjetos()[$(this).parents('.listagem-padrao-item').index()];
 			BootstrapDialog.show({

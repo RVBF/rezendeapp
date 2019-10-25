@@ -18,15 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
 // }
 
 $(document).ready(function(){
-  $('select').formSelect();
-  // $('.modal').modal();
-  $('input[type=radio]').change(function(e){
-    if(this.value !== "bom"){
-      mostrar(this);
-      $('#nome-categoria').html('Lorem Impsun');
-      //  $('.modal').modal('open');
-    }else {
-      sumir(this);
-    }
-  });
+  // $('select').formSelect();
+  
 });
