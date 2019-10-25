@@ -14,7 +14,9 @@
 		_this.alterar;
 		_this.formulario = $('#executarchecklist_form');
         _this.botaoSubmissao = $('#salvar');
-        _this.idChecklist = window.location.href.split('#')[1].substring(1, url.length).split('/')[1];	
+		_this.idChecklist = window.location.href.split('#')[1].substring(1, url.length).split('/')[1];
+		_this.questionamentos = null;
+		_this.indiceQuestionamentos =0;
 
 		// Cria as opções de validação do formulário
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
@@ -77,17 +79,121 @@
 		};
 
 		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro() {
-			_this.formulario.parents('#checklist_execucao').promise().done(function() {
-                _this.buscarQuestionamentos();
-				_this.configurarBotoes();
-			});
+			_this.buscarQuestionamentos();
+			_this.configurarBotoes();
 		};
+
+		_this.popularQuestao = function popularQuestao() {
+			var objetoAtual = _this.questionamentos[_this.indiceQuestionamentos];
+			let html = '';
+			html += '<div class="row form-row questionamento">'
+				html +='<div class="col col-sm-12 col-md-12 col-lg-12 col-12 mb-0-dto">';
+
+					html +='<div class="card-panel left-align pergunta">';
+						html += '<input type= "hidden" class="id"  name="questionamento_' + objetoAtual.id + '" value ="'+ objetoAtual.id  +'">';
+
+						html += '<div class="row form-row mb-0-dto">'
+							html +='<div class="col col-sm-12 col-md-12 col-lg-12 col-12 mb-0-dto">';
+								html +='<p class="mb-0-dto">';
+								html +='<strong class="fw-700-dto">'+(_this.indiceQuestionamentos+1)+'</strong> - ' + objetoAtual.formularioPergunta.pergunta;
+								html +='</p>';
+							html +='</div>';
+						html +='</div>';
+
+						html += '<div class="row form-row mb-0-dto">'
+							html +='<div class="col col-sm-4 col-md-4 col-lg-2 col-4 d-flex justify-content-center">';
+								html +='<input class="cb-dto opcao" type="radio" id="bom" name="opcao" value="bom">';
+								html +='<label class="label-dto" for="bom">';
+								html +='<i class="mdi mdi-emoticon-happy-outline large orange-text text-accent-4"></i>';
+								html +'</label>'
+							html +='</div>';
+
+							html +='<div class="col col-sm-4 col-md-4 col-lg-2 col-4 d-flex justify-content-center">';
+								html +='<input class="cb-dto regular opcao" type="radio" id="regular" name="opcao" value="regular">';
+								html +='<label class="label-dto" for="regular">';
+								html +='<i class="mdi mdi-emoticon-neutral-outline large orange-text text-accent-4"></i>';
+								html +'</label>'
+
+							html +='</div>';
+
+							html +='<div class="col col-sm-4 col-md-4 col-lg-2 col-4 d-flex justify-content-center">';
+								html +='<input class="cb-dto opcao" type="radio" id="ruim" name="opcao" value="ruim">';
+								html +='<label class="label-dto" for="ruim">';
+								html +='<i class="mdi mdi-emoticon-sad-outline large orange-text text-accent-4"></i>';
+								html +'</label>'
+							html +='</div>';
+						html +='</div>';
+
+					html +='</div>';
+
+					html += '<div class="opcoes_questionamento col col-sm-12 col-md-12 col-lg-12 col-12 center-align" style="display: none">';
+						html += '<div class="row form-row ">'
+							html += '<div class="col col-2 col-sm-2 col-lg-2 col-md-2 igs">';
+									html += '<div class="element orange accent-4 subicon-dto">';
+									html += '<i class="mdi mdi-information-outline white-text"></i></i><span class="name toltip" title="Nenhum arquivo selecionado.">Nenhum arquivo...</span>';
+									html += '<input type="file" name="pergunta_foto" id="pergunta_foto" accept="image/*">';
+									html += '</div>';
+			
+								// html += '<a class="orange accent-4 subicon-dto">';
+								// html += '<i class="mdi mdi-information-outline white-text"></i>';
+								// html += '</a>';
+							html += '</div>';
+							
+							html += '<div class="col col-2 col-sm-2 col-lg-2 col-md-2 igs">';
+									html += '<a class="orange accent-4 subicon-dto">';
+									html += '<i class="mdi mdi-microphone white-text"></i>';
+									html += '</a>';
+							html += '</div>';
+							
+							html += '<div class="col col-2 col-sm-2 col-lg-2 col-md-2 igs">';
+									html += '<a class="orange accent-4 subicon-dto">';
+									html += '<i class="mdi mdi-camera-outline white-text"></i>';
+									html += '</a>';
+							html += '</div>';
+
+							html += '<div class="col col-2 col-sm-2 col-lg-2 col-md-2 igs">';
+								html += '<a class="orange accent-4 subicon-dto">';
+								html += '<i class="mdi mdi-lead-pencil white-text"></i>';
+								html += '</a>';
+							html += '</div>';
+							
+							html += '<div class="col col-2 col-sm-2 col-lg-2 col-md-2 igs">';
+								html += '<a href="pa-cadastro.html" class="orange accent-4 subicon-dto">';
+								html += '<span class="white-text">P.A.</span>';
+								html += '</a>';
+							html += '</div>';
+
+							html += '<div class="col col-2 col-sm-2 col-lg-2 col-md-2 igs">';
+								html += '<a class="orange accent-4 subicon-dto">';
+								html += '<span class="white-text">Pend</span>';
+								html += '</a>';
+							html += '</div>';
+						html += '</div>';
+					html += '</div>';
+			html += '</div>';
+			
+					
+			_this.formulario.find('.perguntas').empty().append(html);
+
+
+			_this.formulario.find('input[type="radio"]').on('change',function(e){
+				if(this.value != "bom"){
+					_this.formulario.find('.opcoes_questionamento').show(100);
+					$('.modal').find('#nome-categoria').html(objetoAtual.checklist.titulo);
+					$('.modal').modal();
+				}else {
+					_this.formulario.find('.opcoes_questionamento').hide(100);
+				}
+			});
+		}
 
 		_this.buscarQuestionamentos  =  function buscarQuestionamentos(valor = 0)
 		{
-            console.log(_this.idChecklist);
 			var sucesso = function (resposta) {
-                console.log(resposta);
+				_this.questionamentos = resposta.conteudo;
+
+				_this.popularQuestao();
+
 			};
 
 			var erro = function(resposta)

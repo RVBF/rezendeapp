@@ -163,13 +163,30 @@ form .quebra-linha{
     margin-bottom: 1.5em !important;
 }
 
-.questionamento-item .col{   
-    margin-bottom: 0px !important;
-}
-
 button{
     margin-right: 1em;
 }
+
+
+.element {
+    display: inline-flex;
+    align-items: center;
+  }
+ 
+.element i {
+    margin: 10px;
+    cursor: pointer;
+    font-size: 30px;
+}
+
+.element  i:hover {
+    opacity: 0.6;
+}
+
+.element  input {
+    display: none;
+}
+
 
 @media(min-width:100px) and (max-width: 635px) {
     .listagem-padrao-item .opcoes{

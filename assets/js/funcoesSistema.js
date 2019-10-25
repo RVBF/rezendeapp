@@ -146,7 +146,7 @@
 	$(document).ready(function() {	
 		moment.locale('pt-BR');	
 
-		// $('.toltip').tooltip(); 
+		$('.toltip').tooltip(); 
 		if(window.location.href == 'http://rezendeconstrucao.com.br/rezendeapp/' || window.location.href == 'http://rezendeapp.local/'){ 
 			router.navigate('/');
 		}

@@ -160,7 +160,7 @@ $app->get('/checklist/questionamentos/{id}', function(Request $req,  Response $r
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraChecklist($req->getQueryParams(), $sessaoUsuario);
 	$response = $ctrl->getQuestionamentos($args['id']);
-	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+	return $res->withJson($response);
 });
 
 $app->put('/checklist', function(Request $req,  Response $res, $args = []) use ($app, $session) {
