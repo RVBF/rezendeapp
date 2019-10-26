@@ -168,12 +168,19 @@ button{
 }
 
 
+.pergunta i{
+    font-size:6em;
+}
+
 .element {
     display: inline-flex;
     align-items: center;
-  }
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+}
  
-.element i {
+.element i span{
     margin: 10px;
     cursor: pointer;
     font-size: 30px;
@@ -186,7 +193,22 @@ button{
 .element  input {
     display: none;
 }
+.opcoes_questionamento{
+    padding: 0px !important;
+}
+.opcoes_questionamento .active{
+    background-color: #757575  !important;
+    border: :  #757575 solid !important;
+}
 
+.opcoes_questionamento .list-group{
+    display: contents;
+    -webkit-box-orient: horizontal;
+}
+
+.opcoes_questionamento .col{
+    margin-bottom: 1em;
+}
 
 @media(min-width:100px) and (max-width: 635px) {
     .listagem-padrao-item .opcoes{
