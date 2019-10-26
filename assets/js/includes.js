@@ -101,6 +101,7 @@
 	dependenciasCSS.push({ url : 'vendor/toastr/toastr.min.css' });
 	dependenciasCSS.push({ url : 'vendor/pickerjs/dist/picker.min.css'});
 
+
 	// dependenciasCSS.push({ url : 'vendor/datatables.net-dt/css//jquery.dataTables.min.css' });
 	// dependenciasCSS.push({ url : 'vendor/datatables/media/css//dataTables.bootstrap4.css' });
 	// dependenciasCSS.push({ url : 'vendor/datatables.net-responsive-dt/css//responsive.dataTables.min.css' });
@@ -128,7 +129,7 @@
 	var dependenciasJavaScript = [];
 
 	dependenciasJavaScript.push({url : 'vendor/jquery/dist/jquery.min.js', async : true, onLoad : function(dependenciasJavaScript){
-		// loader.script('vendor/popper.js/dist/umd/popper.min.js');
+		loader.script('vendor/popper.js/dist/umd/popper.min.js');
 		loader.script('vendor/tether/dist/js/tether.min.js');
 		loader.script('vendor/bootstrap/dist/js/bootstrap.min.js');	
 		loader.script('vendor/toastr/toastr.min.js');
@@ -141,6 +142,7 @@
 		loader.script('vendor/pickerjs/dist/picker.min.js');				
 		loader.script('vendor/moment/min/moment.min.js');
 		loader.script('vendor/moment/locale/pt-br.js');
+		
 		// loader.script('vendor/datatables/media/js/jquery.dataTables.js');
 		// loader.script('vendor/datatables/media/js/dataTables.bootstrap4.min.js');
 		// loader.script('vendor/datatables/media/js/dataTables.bootstrap.js');
