@@ -4,8 +4,7 @@
  *  @author  Rafael Vinicius Barros Ferreira
  *	 @version 1.0
  */
-(function(window, app, $, toastr)
-{
+(function(window, app, $, toastr) {
 	'use strict';
 
 	function ControladoraFormChecklistExecucao(servicoChecklist) {
@@ -75,7 +74,6 @@
 				$('#questionarios').formSelect('getSelectedValues')
 			);
 		};
-
 
 		_this.popularColaboradores  =  function popularColaboradores(valor = 0)
 		{
@@ -156,7 +154,7 @@
 		_this.popularQuestao = function popularQuestao() {
 			var objetoAtual = _this.questionamentos[_this.indiceQuestionamentos];
 			let html = '';
-			html += '<div class="row form-row questionamento">'
+			html += '<div class="row form-row questionamento mb-0-dto">'
 				html +='<div class="col col-sm-12 col-md-12 col-lg-12 col-12 mb-0-dto">';
 
 				html +='<div class="card-panel left-align pergunta">';
@@ -172,14 +170,14 @@
 
 					html += '<div class="row form-row mb-0-dto">'
 						html +='<div class="col col-sm-4 col-md-4 col-lg-2 col-4 d-flex justify-content-center justify-content-md-start">';
-							html +='<input class="cb-dto opcao" type="radio" id="bom" name="opcao" value="bom">';
+							html +='<input class=" form-control cb-dto opcao" type="radio" id="bom" name="opcao" value="bom">';
 							html +='<label class="label-dto" for="bom">';
 							html +='<i class="mdi mdi-emoticon-happy-outline large orange-text text-accent-4"></i>';
 							html +'</label>'
 						html +='</div>';
 
 						html +='<div class="col col-sm-4 col-md-4 col-lg-2 col-4 d-flex justify-content-center justify-content-md-start">';
-							html +='<input class="cb-dto regular opcao" type="radio" id="regular" name="opcao" value="regular">';
+							html +='<input class=" form-control cb-dto regular opcao" type="radio" id="regular" name="opcao" value="regular">';
 							html +='<label class="label-dto" for="regular">';
 							html +='<i class="mdi mdi-emoticon-neutral-outline large orange-text text-accent-4"></i>';
 							html +'</label>'
@@ -187,7 +185,7 @@
 						html +='</div>';
 
 						html +='<div class="col col-sm-4 col-md-4 col-lg-2 col-4 d-flex justify-content-center justify-content-md-start">';
-							html +='<input class="cb-dto opcao" type="radio" id="ruim" name="opcao" value="ruim">';
+							html +='<input class=" form-control cb-dto opcao" type="radio" id="ruim" name="opcao" value="ruim">';
 							html +='<label class="label-dto" for="ruim">';
 							html +='<i class="mdi mdi-emoticon-sad-outline large orange-text text-accent-4"></i>';
 							html +'</label>'
@@ -199,40 +197,40 @@
 				html += '<div class="opcoes_questionamento col col-sm-12 col-md-12 col-lg-12 col-12 center-align" style="display: none">';
 					html += '<div class="row form-row ">'
 						html += '<div class="list-group">';
-								html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2 igs">';
+								html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2">';
 										html += '<a class="list-group-item list-group-item-action orange accent-4 subicon-dto element">';
 										html += '<i class="mdi mdi-information-outline white-text"></i>';
 										html += '</a>';
 								html += '</div>';
 								
-								html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2 igs">';
-										html += '<a class="list-group-item list-group-item-action orange accent-4 subicon-dto element">';
-										html += '<i class="mdi mdi-microphone white-text"><span class="name tooltip" title="Nenhum arquivo selecionado.">Nenhum arquivo...</span></i>';
-										html += '<input type="file" name="pergunta_audio" id="pergunta_audio" accept="image/*">';
+								html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2">';
+										html += '<a class="list-group-item list-group-item-action orange accent-4 subicon-dto element" data-toggle="tooltip" title="Nenhum arquivo selecionado.">';
+										html += '<i class="mdi mdi-microphone white-text"></i>';
+										html += '<input class="d-none form-control" type="file" name="pergunta_audio" id="pergunta_audio" accept="image/*">';
 										html += '</a>';
 								html += '</div>';
 								
-								html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2 igs">';
-										html += '<a class="list-group-item list-group-item-action orange accent-4 subicon-dto element">';
+								html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2">';
+										html += '<a class="list-group-item list-group-item-action orange accent-4 subicon-dto element" data-toggle="tooltip" title="Nenhum arquivo selecionado.">';
 										html += '<i class="mdi mdi-camera-outline white-text"></i>';
-										html += '<input type="file" name="pergunta_camera" id="pergunta_camera" accept="image/*">';
+										html += '<input class="d-none form-control" type="file" ref="file"  name="pergunta_camera" id="pergunta_camera" accept="image/*">';
 										html += '</a>';
 								html += '</div>';
 						
-								html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2 igs">';
-									html += '<a class=" list-group-item list-group-item-action  orange accent-4 subicon-dto element active">';
+								html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2">';
+									html += '<a class="list-group-item list-group-item-action  orange accent-4 subicon-dto element active" data-target="#comentarios">';
 									html += '<i class="mdi mdi-lead-pencil white-text"></i>';
 									html += '</a>';
 								html += '</div>';
 								
-								html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2 igs">';
-									html += '<a href="#" class=" list-group-item list-group-item-action  orange accent-4 subicon-dto">';
+								html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2">';
+									html += '<a class=" list-group-item list-group-item-action  orange accent-4 subicon-dto element" data-target="#secao_PA">';
 									html += '<span class="white-text">P.A.</span>';
 									html += '</a>';
 								html += '</div>';
 
-								html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2 igs">';
-									html += '<a href="#" class=" list-group-item list-group-item-action  orange accent-4 subicon-dto">';
+								html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2">';
+									html += '<a class=" list-group-item list-group-item-action  orange accent-4 subicon-dto element" data-target="#secao_pendencia">';
 									html += '<span class="white-text">PEND</span>';
 									html += '</a>';
 								html += '</div>';
@@ -289,9 +287,24 @@
 					};
 				});
 
-	
-				_this.formulario.find('i').on('click', function () {
-					$(this).parents('.element').find("input[type='file']").trigger('click');
+				_this.formulario.find('.opcoes_questionamento').on('click', 'a', function (event) {
+					let elemento = $(this);
+					let destino = $(elemento.attr('data-target'));	
+					let elementoAtivo = elemento.parents('.opcoes_questionamento').find('.active');
+					let destinoAnterior = $(elementoAtivo.attr('data-target'));	
+
+ 					if(destino.hasClass('d-none') && destino.hasClass('desabilitado')){
+						destino.removeClass('d-none');
+						destino.removeClass('desabilitado');
+						elemento.addClass('active');
+						elementoAtivo.removeClass('active');
+						destinoAnterior.addClass('d-none');
+						destinoAnterior.addClass('desabilitado');
+					}
+				});
+
+				_this.formulario.find('i').on('click', function (event) {
+					$(this).next("input[type='file']").trigger('click');
 				});
 		
 				_this.formulario.find('input[type="file"]').on('change', function() {
@@ -308,7 +321,6 @@
 
 					if(elemento.hasClass('exige_planoacao')){
 						var id = parseInt(elemento.attr('name').split('_')[1]);
-						console.log(id);
 						var html = '<div class="vertical-divider"></div><div class="col-xs-6  col-sm-6 col-md-6 col-6 plano_acao">';
 						html += '<label for="descricao_planoacao_pergunta_' + id + '">Descrição</label>';
 						html += '<textarea class="form-control" rows="3" name="descricao_planoacao_pergunta_' + id + '" id="descricao_planoacao_pergunta_' + id + '" ></textarea>';
@@ -325,14 +337,20 @@
 						$('.modal').modal();
 					}else {
 						_this.formulario.find('.opcoes_questionamento').hide(100);
+
+						_this.formulario.find('.opcao-selecionada').each(function(i, atual) {
+							if(!$(atual).hasClass('d-none') && !$(atual).hasClass('desabilitado')){
+								$(atual).addClass('d-none');
+								$(atual).addClass('desabilitado');
+							}
+						});
 					}
 				});
 
 			});
 		};
 
-		_this.buscarQuestionamentos  =  function buscarQuestionamentos(valor = 0)
-		{
+		_this.buscarQuestionamentos  =  function buscarQuestionamentos(valor = 0)	{
 			var sucesso = function (resposta) {
 				_this.questionamentos = resposta.conteudo;
 
