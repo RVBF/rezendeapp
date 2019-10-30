@@ -21,16 +21,24 @@
 
 		// Cria as opções de validação do formulário
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
-			var opcoes = {
-				rules: {
-					"titulo": { rangelength : [ 2, 100 ] },
-					'descricao':{ rangelength : [10,255] }
-				},
-
-				messages: {
-					"titulo": { rangelength : $.validator.format("O campo nome deve ter no mínimo  {2} e no máximo {100} caracteres.") },
-					"descricao": { rangelength : $.validator.format("O campo nome deve ter no mínimo  {0} e no máximo {255} caracteres.") }
+			let opcoes;
+			opcoes.rules = {
+				'opcao': { require : true }
+			}
+			if(	_this.formulario.find('input[type="radio"]').val() != 'bom'){
+				opcoes.rules = {
+					'opcao': { require : true },
+					'nao-conformidade':{ rangelength : [1,255] },
+					'descricao-pa':{ require : true, rangelength : [1,255] },
+					'data_limitepa': { require : true, date : true },
+					'hora_limitepa':{ require : true, date : true },
+					'responsavel' : { require: true }
 				}
+			}
+
+			opcoes.messages = {
+				"opcao": { require : "Selecione uma opção!"} ,
+				"nao-conformidade": { require : "Descreva a não conformidade!"} ,
 			};
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
@@ -307,13 +315,13 @@
 					$(this).next("input[type='file']").trigger('click');
 				});
 		
-				_this.formulario.find('input[type="file"]').on('change', function() {
-					var val = $(this).val().split('\\');
-					val = val[val.length -1];
+				// _this.formulario.find('input[type="file"]').on('change', function() {
+				// 	var val = $(this).val().split('\\');
+				// 	val = val[val.length -1];
 
-					$(this).siblings('span').attr('data-original-title', val)
-					$(this).siblings('span').html(val.substring( 0, 12) + '...');
-				});
+				// 	$(this).siblings('span').attr('data-original-title', val)
+				// 	$(this).siblings('span').html(val.substring( 0, 12) + '...');
+				// });
 
 
 				_this.formulario.find('.seleciona_resposta').on('click', function() {
@@ -335,9 +343,15 @@
 						_this.formulario.find('.opcoes_questionamento').show(100);
 						$('.modal').find('#nome-categoria').html(objetoAtual.checklist.titulo);
 						$('.modal').modal();
+
+						let destino = $(_this.formulario.find('.opcoes_questionamento').find('.active').attr('data-target'));	
+
+						if(destino.hasClass('d-none') && destino.hasClass('desabilitado')){
+							destino.removeClass('d-none');
+							destino.removeClass('desabilitado');
+						}
 					}else {
 						_this.formulario.find('.opcoes_questionamento').hide(100);
-
 						_this.formulario.find('.opcao-selecionada').each(function(i, atual) {
 							if(!$(atual).hasClass('d-none') && !$(atual).hasClass('desabilitado')){
 								$(atual).addClass('d-none');
@@ -368,7 +382,6 @@
 			var  jqXHR = servicoChecklist.questionamentosComID(_this.idChecklist);
 			jqXHR.done(sucesso).fail(erro);
 		};
-
 
 		_this.iniciarFormularioModoEdicao = function iniciarFormularioModoEdicao() {
 			_this.iniciarFormularioModoCadastro();
@@ -407,7 +420,11 @@
 
 		_this.salvar = function salvar() {
 			_this.formulario.validate(criarOpcoesValidacao());
-        };
+		};
+		
+		_this.proximo = function proximo(){
+			_this.formulario.validate(criarOpcoesValidacao());
+		}
 
 		// Configura os eventos do formulário
 		_this.configurar = function configurar(status = false) {
