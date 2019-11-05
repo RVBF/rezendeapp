@@ -24,7 +24,7 @@
 
 <section id="checklist_execucao">
 	<div class="col col-sm-12 col-md-12 col-lg-12 col-12">
-		<form class="form-horizontal "  method="post" id="executarchecklist_form">
+		<form class="form-horizontal "  method="post" id="executarquestionamento_form">
 			<section class="perguntas"></section>
 			
 			<section id="info" class="opcao-selecionada d-none desabilitado"></section>
@@ -57,8 +57,8 @@
 							<div class="row form-row">
 								<div class="col col-sm-12 col-md-12 col-12 col-lg-12">
 									<div class="input-field ">
-										<textarea id="nao-conformidade" class="materialize-textarea"></textarea>
-										<label for="nao-conformidade">Descreva a Não Conformidade</label>
+										<textarea id="nao-conformidade-pa" class="materialize-textarea"></textarea>
+										<label for="nao-conformidade-pa">Descreva a Não Conformidade</label>
 									</div>
 								</div>
 							</div>
@@ -80,7 +80,7 @@
 										<input id="data_limitepa" type="text" class="validate form-control data-picker">
 										<label for="data_limitepa">Data Limite para Execução</label>
 									</div>
-									<div class="date-panel"></div>
+									<div class="date-panel-pa"></div>
 								</div>
 
 								<div class="col col-md-6 col-12 col-sm-6 col-lg-6">
@@ -89,15 +89,15 @@
 										<input id="hora_limitepa" type="text" class="validate form-control hora-picker">
 										<label for="hora_limitepa">Hora limite para Execução</label>
 									</div>
-									<div class="time-panel"></div>
+									<div class="time-panel-pa"></div>
 								</div>
 							</div>
 
 							<div class="row form-row">
 								<div class="col col-md-12 col-12 col-sm-12 col-lg-12 ">
 									<div class=" input-field">
-										<select id ="responsavel"  name="responsavel" class="select campo_obrigatorio" ><option value="" disabled selected>Responsável</option></select>
-										<label for="responsavel">*Responsável</label>
+										<select id ="responsavelpa"  name="responsavelpa" class="select campo_obrigatorio" ><option value="" disabled selected>Responsável</option></select>
+										<label for="responsavelpa">*Responsável</label>
 									</div>
 								</div>
 							</div>
@@ -135,27 +135,27 @@
 									<div class="col col-md-6 col-12 col-sm-6 col-lg-6">
 										<div class="input-field">
 											<i class="prefix mdi mdi-calendar"></i>
-											<input id="data" type="text" class="validate form-control data-picker">
-											<label for="data">Data Limite para Execução</label>
+											<input id="data_limitepe" type="text" class="validate form-control data-picker">
+											<label for="data_limitepe">Data Limite para Execução</label>
 										</div>
-										<div class="date-panel"></div>
+										<div class="date-panel-pe"></div>
 									</div>
 	
 									<div class="col col-md-6 col-12 col-sm-6 col-lg-6">
 										<div class="input-field">
 											<i class="prefix mdi mdi-av-timer"></i>
-											<input id="hora" type="text" class="validate form-control hora-picker">
-											<label for="hora">Hora limite para Execução</label>
+											<input id="hora_limitepe" type="text" class="validate form-control hora-picker">
+											<label for="hora_limitepe">Hora limite para Execução</label>
 										</div>
-										<div class="time-panel"></div>
+										<div class="time-panel-pe"></div>
 									</div>
 								</div>
 	
 								<div class="row form-row">
 									<div class="col col-md-12 col-12 col-sm-12 col-lg-12 ">
 										<div class=" input-field">
-											<select id ="responsavel"  name="responsavel" class="select campo_obrigatorio" ><option value="" disabled selected>Responsável</option></select>
-											<label for="responsavel">*Responsável</label>
+											<select id ="responsavelpe"  name="responsavelpe" class="select campo_obrigatorio" ><option value="" disabled selected>Responsável</option></select>
+											<label for="responsavelpe">*Responsável</label>
 										</div>
 									</div>
 								</div>
@@ -171,7 +171,7 @@
 						Salvar e Sair
 					</button>
 
-					<button type="submit" id="salvar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">
+					<button type="submit" id="proximo" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">
 						<i class="mdi mdi-skip-next red-text text-darken-4 "></i>
 						Próximo
 					</button>
@@ -188,9 +188,9 @@
 
 <script>
 	$(document).ready(function() {
-		var servicoChecklist = new app.ServicoChecklist();
-		var crltChecklistExecucao = new app.ControladoraFormChecklistExecucao(servicoChecklist);
-		crltChecklistExecucao.configurar();
+		var servicoQuestionamento = new app.ServicoQuestionamento();
+		var crltQuestionamentoExecucao = new app.ControladoraFormQuestionamentoExecucao(servicoQuestionamento);
+		crltQuestionamentoExecucao.configurar();
 	});
 </script>
 	

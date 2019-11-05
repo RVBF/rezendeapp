@@ -13,20 +13,31 @@ class PlanoAcao {
     private $dataLimite;
     private $solucao;
     private $resposta;
+    private $responsavel;
     private $dataCadastro;
     private $dataExecucao;
+    private $historico;
 
-    function __construct($id, $descricao, $dataLimite, $solucao, $pergunta, $tarefa, $categoria, $dataCadastro, $dataExecucao) {
-        $id = $id;
-        $descricao = $descricao;
-        $dataLimite = $dataLimite;
-        $solucao = $solucao;
-        $pergunta = $pergunta;
-        $tarefa = $tarefa;
-        $categoria = $categoria;
-        $dataCadastro = $dataCadastro;
-        $dataExecucao = $dataExecucao;
-    }
+    function __construct(
+        $id,
+        $descricao,
+        $dataLimite,
+        $solucao,
+        $resposta = '',
+        $responsavel,
+        $dataCadastro = '',
+        $dataExecucao = '',
+        $historico = []
+    
+     ) {
+        $this->id = $id;
+        $this->descricao = $descricao;
+        $this->dataLimite = $dataLimite;
+        $this->solucao = $solucao;
+        $this->resposta = $resposta;
+        $this->dataCadastro = $dataCadastro;
+        $this->dataExecucao = $dataExecucao;
+    } 
 
     public function getId(){
        return $this->id; 
@@ -42,6 +53,14 @@ class PlanoAcao {
  
     public function setDescricao($descricao){
         $this->descricao = $descricao;
+    }
+
+    public function getDataLimite(){
+        return $this->dataLimite;
+    }
+    
+    public function setDataLimite($dataLimite){
+        $this->dataLimite = $dataLimite;
     }
 
     public function getSolucao(){
