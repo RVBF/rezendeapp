@@ -146,6 +146,43 @@ $app->delete('/loja/{id}', function(Request $req,  Response $res, $args = []) us
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 });
 
+// Início das rotas para questionamento
+$app->get('/questionamento', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Acessando listagem de lojas");	
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraQuestionamento($req->getQueryParams(), $sessaoUsuario);
+	$response = $ctrl->todos();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
+});
+
+$app->post('/questionamento', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Acessando o cadastro de loja");
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraQuestionamento($req->getParsedBody(), $sessaoUsuario);
+	$response = $ctrl->executar();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+
+});
+
+$app->put('/questionamento', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Acessando a atualização de categorias");
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraQuestionamento($req->getParsedBody(), $sessaoUsuario);
+	$response = $ctrl->atualizar();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+
+});
+
+$app->delete('/questionamentos/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraQuestionamento($req->getParsedBody(), $sessaoUsuario);
+	$response = $ctrl->remover($args['id']);
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+});
+
+// fim das rotas para questionamentos
+
 // Início das rotas para tarefa
 $app->get('/checklist', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 	$this->logger->addInfo("Acessando listagem de tarefa");	
@@ -416,6 +453,8 @@ $app->get('/index/tem-permissao', function(Request $req,  Response $res, $args =
 	else $resposta['mensagem'] = 'Usuario não possui permissão para acessar funcionalidade';
 	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($resposta)));
 });
+
+
 
 
 

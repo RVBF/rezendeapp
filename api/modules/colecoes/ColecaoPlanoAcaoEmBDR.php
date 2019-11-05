@@ -10,34 +10,30 @@ use Carbon\Carbon;
  */
 
 class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
-	const TABELA = 'plano_acao';
+	const TABELA = 'planoacao';
 
 	function __construct(){}
 
 	function adicionar(&$obj) {
-		if($this->validarPA($obj)){
-			try {	
-				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-	
-				$id = DB::table(self::TABELA)->insertGetId([ 'titulo' => $obj->getTitulo(),
-						'descricao' => $obj->getDescricao(),
-						'data_limite' => $obj->getDataLimite()->toDateTimeString(),
-						'setor_id' => $obj->getSetor()->getId(),
-						'loja_id' => $obj->getLoja()->getId(),
-						'questionador_id' =>$obj->getQuestionador()->getId()
-					]
-				);
-				
-				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-	
-				$obj->setId($id);
-	
-				return $obj;
-			}
-			catch (\Exception $e)
-			{
-				throw new ColecaoException("Erro ao adicionar tarefa ", $e->getCode(), $e);
-			}
+		Debuger::printr($obj);
+
+		try {	
+			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+			$id = DB::table(self::TABELA)->insertGetId([
+				'status' => StatusPaEnumerado::AGUARDANDO_RESPONSAVEL,
+				'descricaonaoconformidade' => $obj->getDescricao(),
+				'descricaosolucao' => $obj->getSolucao(),
+				'datalimite' => $obj->getDataLimite()->toDateTimeString(),
+				]
+			);
+			$obj->setId($id);		
+			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+		}
+		catch (\Exception $e) {
+
+			throw new ColecaoException("Erro ao adicionar tarefa ", $e->getCode(), $e);
 		}
 	}
 
@@ -188,7 +184,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 		}
 	}
 
-	function todos($limite = 0, $pulo = 0) {
+	function todos($limite = 0, $pulo = 0, $search = '') {
 		try {	
 			$tarefas = DB::table(self::TABELA)->offset($limite)->limit($pulo)->get();
 			$tarefasObjects = [];
@@ -234,46 +230,6 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
     function contagem($idsLojas = []) {
 		if(is_array($idsLojas))
 		return (count() > 0) ?  DB::table(self::TABELA)->whereIn('loja_id', $idsLojas)->count() : DB::table(self::TABELA)->count();
-	}
-
-	private function validarTarefa(&$obj) {
-		if(!is_string($obj->getTitulo())) throw new ColecaoException('Valor inválido para titulo.');
-		
-		if(!is_string($obj->getDescricao())) throw new ColecaoException('Valor inválido para a descrição.');
-
-		if($obj->getQuestionador() instanceof Usuario){
-			$quantidade = DB::table(ColecaoUsuarioEmBDR::TABELA)->where('id', $obj->getQuestionador()->getId())->count();
-
-			if($quantidade == 0) throw new ColecaoException('O usuário questionador não foi encontrado na base de dados.');
-		}
-		
-
-		$quantidade = DB::table(ColecaoSetorEmBDR::TABELA)->where('id', $obj->getSetor()->getId())->count();
-
-		if($quantidade == 0)throw new ColecaoException('Setor não foi encontrado na base de dados.');
-
-		if(strlen($obj->getTitulo()) <= Checklist::TAM_TITULO_MIM && strlen($obj->getTitulo()) > Checklist::TAM_TITULO_MAX) throw new ColecaoException('O título deve conter no mínimo '. Checklist::TAM_TITULO_MIM . ' e no máximo '. Checklist::TAM_TITULO_MAX . '.');
-		
-		if(strlen($obj->getdescricao()) > 255 and $obj->getdescricao() <> '') throw new ColecaoException('A descrição  deve conter no máximo '. 255 . ' caracteres.');
-
-		$quantidade = DB::table(self::TABELA)->whereRaw('titulo like  "%'. $obj->getTitulo() . '%"')->where('setor_id', $obj->getSetor()->getId())->where(self::TABELA . '.id', '<>', $obj->getId())->count();
-		
-		if($quantidade > 0){
-			throw new ColecaoException('Já exite uma tarefa cadastrada com esse título.');
-		}
-
-		if($obj->getDataLimite() instanceof Carbon){
-			if($obj->getDataLimite() < Carbon::now() and $obj->getId() == 0) throw new Exception("A data Limite deve ser maior que a atual.");
-		}
-		
-		return true;
-	}
-
-	private function validarRemocaoTarefa($id){
-		$quantidade = DB::table(ColecaoPerguntaEmBDR::TABELA)->where('tarefa_id', $id)->count();
-
-		if($quantidade > 0)throw new ColecaoException('Não foi possível excluir a tarefa por que ela possui perguntas relacionadas a ela. Exclua todas as perguntas relacionadas e tente novamente.');
-		return true;
 	}
 }
 

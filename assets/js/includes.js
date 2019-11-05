@@ -188,9 +188,16 @@
 		loader.script('assets/js/setor/setor.form.ctrl.js');
 		loader.script('assets/js/setor/setor.list.ctrl.js');
 
+		loader.script('assets/js/plano-acao/planoacao.serv.js')
+		loader.script('assets/js/pendencia/pendencia.serv.js')
+
+
+		loader.script('assets/js/questionamento/questionamento.serv.js');
+		loader.script('assets/js/questionamento/questionamento.form.ctrl.js');
+
+
 		loader.script('assets/js/checklist/tipoChecklist.serv.js');
 		loader.script('assets/js/checklist/checklist.serv.js');
-		loader.script('assets/js/checklist/checklistExecucao.form.ctrl.js');
 		loader.script('assets/js/checklist/checklist.form.ctrl.js');
 		loader.script('assets/js/checklist/checklist.list.ctrl.js');
 		loader.script('assets/js/checklist/checklistatividades.list.ctrl.js');
@@ -201,7 +208,7 @@
 
 		loader.script('assets/js/grupo de usuario/grupousuario.serv.js');
 		loader.script('assets/js/grupo de usuario/grupousuario.form.ctrl.js');
-		loader.script('assets/js/grupo de usuario/grupousuario.list.ctrl.js');
+		loader.script('assets/js/grupo de usuario/grupousuario.list.ctrl.js');[]
 
 		loader.script('assets/js/usuario/usuario.serv.js');
 		loader.script('assets/js/usuario/usuario.form.ctrl.js');

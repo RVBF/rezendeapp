@@ -1,5 +1,5 @@
 /**
- *  checklistExecucao.form.ctrl.js
+ *  questionamento.form.ctrl.js
  *
  *  @author  Rafael Vinicius Barros Ferreira
  *	 @version 1.0
@@ -7,53 +7,43 @@
 (function(window, app, $, toastr) {
 	'use strict';
 
-	function ControladoraFormChecklistExecucao(servicoChecklist) {
+	function ControladoraFormQuestionamentoExecucao(servicoQuestionamento) {
 		var _this = this;
 
 		_this.alterar;
-		_this.formulario = $('#executarchecklist_form');
+		_this.formulario = $('#executarquestionamento_form');
         _this.botaoSubmissao = $('#salvar');
 		_this.idChecklist = window.location.href.split('#')[1].substring(1, url.length).split('/')[1];
 		_this.questionamentos = null;
-		_this.indiceQuestionamentos =0;
-		_this.dataLimite = '';
-		_this.horaLimite = '';
+		_this.objetoAtual = null;
+		_this.dataLimitePa = '';
+		_this.horaLimitePa = '';
+		_this.dataLimitePe = '';
+		_this.horaLimitePe = '';
+		_this.contador =0;
+		_this.servicoPlanoAcao = new app.ServicoPlanoAcao();
+		_this.servicoPendencia = new app.ServicoPendencia();
+
 
 		// Cria as opções de validação do formulário
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
-			let opcoes;
-			opcoes.rules = {
-				'opcao': { require : true }
-			}
-			if(	_this.formulario.find('input[type="radio"]').val() != 'bom'){
-				opcoes.rules = {
-					'opcao': { require : true },
-					'nao-conformidade':{ rangelength : [1,255] },
-					'descricao-pa':{ require : true, rangelength : [1,255] },
-					'data_limitepa': { require : true, date : true },
-					'hora_limitepa':{ require : true, date : true },
-					'responsavel' : { require: true }
-				}
-			}
-
-			opcoes.messages = {
-				"opcao": { require : "Selecione uma opção!"} ,
-				"nao-conformidade": { require : "Descreva a não conformidade!"} ,
+			var opcoes = {
 			};
+
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
 				var obj = _this.conteudo();
-				
+				console.log(obj);
 				var terminado = function() {
 					_this.formulario.desabilitar(false);
 				};
 				
-				_this.formulario.desabilitar(true);
+				// _this.formulario.desabilitar(true);
 			
-				var jqXHR = _this.alterar ? servicoChecklist.atualizar(obj) : servicoChecklist.adicionar(obj);
+				var jqXHR = _this.alterar ? servicoQuestionamento.atualizar(obj) : servicoQuestionamento.adicionar(obj);
 				jqXHR.done(function() {
-					router.navigate('/configuracao');
-					toastr.success('Checklist Adicionado com sucesso!')
+					// router.navigate('/configuracao');
+					// toastr.success('QUestionamento Adicionado com sucesso!')
 				}).fail(window.erro).always(terminado);
 
 				if(_this.alterar){
@@ -68,34 +58,51 @@
         
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
-			var dataLimite = moment(_this.dataLimite.getDate()).format('YYYY-MM-DD');
+			var dataLimitePa = moment(_this.dataLimitePa.getDate()).format('YYYY-MM-DD');
+			var dataLimitePe = moment(_this.dataLimitePe.getDate()).format('YYYY-MM-DD');
+			console.log($('#hora_limitepa').val());
 
-			return servicoChecklist.criar(
-				$('#id').val(),
-				$('#titulo').val(),
-				$('#descricao').val(),
-				$('#tipo-checklist').val(),
-				dataLimite.toString() + ' ' + $('#hora').val(),
-				$('#responsavel option:selected').val(),
-				$('#setor option:selected').val(),
-				$('#unidade option:selected').val(),
-				$('#questionarios').formSelect('getSelectedValues')
+			return servicoQuestionamento.criar(
+				_this.objetoAtual.id,
+				_this.objetoAtual.status,
+				_this.objetoAtual.formularioPergunta,
+				{
+					"opcao" : $("[name='opcao']:checked").val(),
+				},
+				_this.objetoAtual.checklist,
+				_this.servicoPlanoAcao.criar(
+					'',
+					$('#nao-conformidade-pa').val(),
+					dataLimitePa.toString() + ' ' + $('#hora_limitepa').val(),
+					$('#descricao-pa').val(),
+					$('#responsavelpa').val(),
+					'',
+				),
+				_this.servicoPendencia.criar(
+					'',
+					$('#descricao-pendencia').val(),
+					dataLimitePe.toString() + ' ' + $('#hora_limitepe').val(),
+					$('#descricao-solucao').val(),
+					$('#responsavelpe').val()
+				)
 			);
 		};
 
-		_this.popularColaboradores  =  function popularColaboradores(valor = 0)
-		{
+		_this.popularColaboradores  =  function popularColaboradores(valor = 0) {
 			var sucesso = function (resposta) {
-				$("#responsavel").empty();
+				$("#responsavelpe").empty();
 
 				$.each(resposta.data, function(i ,item) {
-					$("#responsavel").append($('<option>', {
+					$("#responsavelpe").append($('<option>', {
+						value: item.colaborador.id,
+						text: item.colaborador.nome  + ' ' + item.colaborador.sobrenome
+					}));
+
+					$("#responsavelpa").append($('<option>', {
 						value: item.colaborador.id,
 						text: item.colaborador.nome  + ' ' + item.colaborador.sobrenome
 					}));
 				});
-
-				$('#responsavel').formSelect();
 			};
 
 			var erro = function(resposta)
@@ -111,11 +118,11 @@
 		};
 
 		_this.configurarEventos = function configurarEventos() {
-			_this.dataLimite =new Picker($('#data').get()[0], {
+			_this.dataLimitePa = new Picker($('#data_limitepa').get()[0], {
 				format : 'DD de MMMM de YYYY',
 				controls: true,
 				inline: true,
-				container: '.date-panel',					
+				container: '.date-panel-pa',					
 				text : {
 					title: 'Selecione a data',
 					cancel: 'Cancelar',
@@ -133,12 +140,51 @@
 				monthsShort : ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
 			});
 
-			_this.horaLimite = new Picker($('#hora').get()[0], {
+			_this.horaLimitePa = new Picker($('#hora_limitepa').get()[0], {
 				format: 'HH:mm',
 				headers: true,
 				controls: true,
 				inline: true,
-				container: '.time-panel',	
+				container: '.time-panel-pa',	
+				text : {
+					title: 'Selecione a hora',
+					cancel: 'Cancelar',
+					confirm: 'OK',
+					hour: 'Hora',
+					minute: 'Minuto',
+					second: 'Segundo',
+					millisecond: 'Milissegundos',
+				},
+			});
+
+			_this.dataLimitePe = new Picker($('#data_limitepe').get()[0], {
+				format : 'DD de MMMM de YYYY',
+				controls: true,
+				inline: true,
+				container: '.date-panel-pe',					
+				text : {
+					title: 'Selecione a data',
+					cancel: 'Cancelar',
+					confirm: 'OK',
+					year: 'Ano',
+					month: 'Mês',
+					day: 'Dia',
+					hour: 'Hora',
+					minute: 'Minuto',
+					second: 'Segundo',
+					millisecond: 'Milissegundos',
+				},
+				headers : true,
+				months : ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+				monthsShort : ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+			});
+
+			_this.horaLimitePe = new Picker($('#hora_limitepe').get()[0], {
+				format: 'HH:mm',
+				headers: true,
+				controls: true,
+				inline: true,
+				container: '.time-panel-pe',	
 				text : {
 					title: 'Selecione a hora',
 					cancel: 'Cancelar',
@@ -151,6 +197,7 @@
 			});
 
 			_this.botaoSubmissao.on('click', _this.salvar);
+			_this.formulario.find('#proximo').on('click', _this.proximo);
 		};
 
 		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro() {
@@ -160,32 +207,33 @@
 		};
 
 		_this.popularQuestao = function popularQuestao() {
-			var objetoAtual = _this.questionamentos[_this.indiceQuestionamentos];
+			_this.objetoAtual = _this.questionamentos.shift();
+			_this.contador +=1;
 			let html = '';
 			html += '<div class="row form-row questionamento mb-0-dto">'
 				html +='<div class="col col-sm-12 col-md-12 col-lg-12 col-12 mb-0-dto">';
 
 				html +='<div class="card-panel left-align pergunta">';
-					html += '<input type= "hidden" class="id"  name="questionamento_' + objetoAtual.id + '" value ="'+ objetoAtual.id  +'">';
+					html += '<input type= "hidden" class="id"  name="questionamento_' + _this.objetoAtual.id + '" value ="'+ _this.objetoAtual.id  +'">';
 
 					html += '<div class="row form-row mb-0-dto">'
 						html +='<div class="col col-sm-12 col-md-12 col-lg-12 col-12 mb-0-dto">';
 							html +='<p class="mb-0-dto">';
-							html +='<strong class="fw-700-dto">'+(_this.indiceQuestionamentos+1)+'</strong> - ' + objetoAtual.formularioPergunta.pergunta;
+							html +='<strong class="fw-700-dto">'+_this.contador+'</strong> - ' + _this.objetoAtual.formularioPergunta.pergunta;
 							html +='</p>';
 						html +='</div>';
 					html +='</div>';
 
 					html += '<div class="row form-row mb-0-dto">'
 						html +='<div class="col col-sm-4 col-md-4 col-lg-2 col-4 d-flex justify-content-center justify-content-md-start">';
-							html +='<input class=" form-control cb-dto opcao" type="radio" id="bom" name="opcao" value="bom">';
+							html +='<input class=" form-control cb-dto opcao" type="radio" id="bom" name="opcao" value="Bom">';
 							html +='<label class="label-dto" for="bom">';
 							html +='<i class="mdi mdi-emoticon-happy-outline large orange-text text-accent-4"></i>';
 							html +'</label>'
 						html +='</div>';
 
 						html +='<div class="col col-sm-4 col-md-4 col-lg-2 col-4 d-flex justify-content-center justify-content-md-start">';
-							html +='<input class=" form-control cb-dto regular opcao" type="radio" id="regular" name="opcao" value="regular">';
+							html +='<input class=" form-control cb-dto opcao" type="radio" id="regular" name="opcao" value="Regular">';
 							html +='<label class="label-dto" for="regular">';
 							html +='<i class="mdi mdi-emoticon-neutral-outline large orange-text text-accent-4"></i>';
 							html +'</label>'
@@ -193,7 +241,7 @@
 						html +='</div>';
 
 						html +='<div class="col col-sm-4 col-md-4 col-lg-2 col-4 d-flex justify-content-center justify-content-md-start">';
-							html +='<input class=" form-control cb-dto opcao" type="radio" id="ruim" name="opcao" value="ruim">';
+							html +='<input class=" form-control cb-dto opcao" type="radio" id="ruim" name="opcao" value="Ruim">';
 							html +='<label class="label-dto" for="ruim">';
 							html +='<i class="mdi mdi-emoticon-sad-outline large orange-text text-accent-4"></i>';
 							html +'</label>'
@@ -304,10 +352,15 @@
  					if(destino.hasClass('d-none') && destino.hasClass('desabilitado')){
 						destino.removeClass('d-none');
 						destino.removeClass('desabilitado');
+						destino.desabilitar(false);
+						destino.find('.select').formSelect();
+
 						elemento.addClass('active');
 						elementoAtivo.removeClass('active');
 						destinoAnterior.addClass('d-none');
 						destinoAnterior.addClass('desabilitado');
+						destinoAnterior.desabilitar(true);
+
 					}
 				});
 
@@ -339,9 +392,9 @@
 				});
 
 				_this.formulario.find('input[type="radio"]').on('change',function(e){
-					if(this.value != "bom"){
+					if(this.value != "Bom"){
 						_this.formulario.find('.opcoes_questionamento').show(100);
-						$('.modal').find('#nome-categoria').html(objetoAtual.checklist.titulo);
+						$('.modal').find('#nome-categoria').html(_this.objetoAtual.checklist.titulo);
 						$('.modal').modal();
 
 						let destino = $(_this.formulario.find('.opcoes_questionamento').find('.active').attr('data-target'));	
@@ -378,7 +431,7 @@
 				toastr.error(mensagem);
 				return false;
 			}
-
+			var servicoChecklist = new app.ServicoChecklist();
 			var  jqXHR = servicoChecklist.questionamentosComID(_this.idChecklist);
 			jqXHR.done(sucesso).fail(erro);
 		};
@@ -401,21 +454,7 @@
 
 		// Desenha o objeto no formulário
 		_this.desenhar = function desenhar(obj) {
-			var dataPicker = $('#data_limite').pickadate('picker');
-			var horaPicker = $('#hora_limite').pickatime('picker');
-
-			var data  = obj.dataLimite.split('/');
-			var hora = obj.dataLimite.split(' ')[1].split(':');
-
-			_this.formulario.find('#id').val(obj.id);
-			_this.formulario.find('#titulo').val(obj.titulo);
-			_this.formulario.find('#descricao').val(obj.descricao);
-			_this.formulario.find('#setor').val(obj.setor.id);
-			_this.formulario.find('#loja').val(obj.loja.id);
-
-
-			dataPicker.set('select', new Date(data[0], data[1], data[2]))
-			horaPicker.set('select', hora[0] + ':' + hora[1], { format: 'hh:i' })
+		
 		};
 
 		_this.salvar = function salvar() {
@@ -423,6 +462,7 @@
 		};
 		
 		_this.proximo = function proximo(){
+			console.log('netrei');
 			_this.formulario.validate(criarOpcoesValidacao());
 		}
 
@@ -430,9 +470,9 @@
 		_this.configurar = function configurar(status = false) {
             _this.definirForm(status);
 		};
-	}; // ControladoraFormChecklistExecucao
+	}; // ControladoraFormQuestionamentoExecucao
 
 	// Registrando
-	app.ControladoraFormChecklistExecucao = ControladoraFormChecklistExecucao;
+	app.ControladoraFormQuestionamentoExecucao = ControladoraFormQuestionamentoExecucao;
 
 })(window, app, jQuery, toastr);
