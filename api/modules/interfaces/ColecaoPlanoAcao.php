@@ -8,6 +8,7 @@
  */
 
 interface ColecaoPlanoAcao extends Colecao{
-	function todos($limite = 0, $pulo = 0, $search = '');
+	function todosComResponsavelId($limite = 0, $pulo = 0, $search = '', $responsavelId = 0);
+	function contagem($responsavelId = 0);
 }
 ?>

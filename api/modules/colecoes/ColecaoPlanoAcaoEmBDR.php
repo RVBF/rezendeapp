@@ -119,10 +119,10 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 		}
 	}
 
-	function todosComLojaIds($limite = 0, $pulo = 0, $search = '', $idsLojas = []){
+	function todosComResponsavelId($limite = 0, $pulo = 0, $search = '', $responsavelId = 0){
 		try {	
 
-			$query = DB::table(self::TABELA)->select(self::TABELA . '.*')->whereIn('loja_id', $idsLojas);
+			$query = DB::table(self::TABELA)->select(self::TABELA . '.*')->where('responsavel_id', $responsavelId);
 				
 			if($search != '') {
 				$buscaCompleta = $search;
@@ -167,15 +167,15 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 				$query->groupBy(self::TABELA.'.id');
 			}
 			
+			$planosAcao = $query->offset($limite)->limit($pulo)->get();
 
-			$tarefas = $query->offset($limite)->limit($pulo)->get();
+			$planosAcaoObjects = [];
 
-			$tarefasObjects = [];
-			foreach ($tarefas as $key => $tarefa) {
-				$tarefasObjects[] =  $this->construirObjeto($tarefa);
+			foreach ($planosAcao as $key => $planosAcao) {	
+				$planosAcaoObjects[] =  $this->construirObjeto($planosAcao);
 			}
 
-			return $tarefasObjects;
+			return $planosAcaoObjects;
 		}
 		catch (\Exception $e)
 		{			
@@ -218,24 +218,26 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 	}
 
 	function construirObjeto(array $row) {
-		$respponsavel = ($row['colaborador_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comId($row['colaborador_id']) : '';
-       
-        $pendencia = new PlanoAcao(
-            $row['id'],
-            $row['descricaonaoconformidade'],
-            $row['datalimite'],
-            $row['descricaosolucao'],
+		$responsavel = ($row['responsavel_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comId($row['responsavel_id']) : '';
+
+        $planoDeAcao = new PlanoAcao(
+			$row['id'],
+			$row['status'],
+			$row['descricaonaoconformidade'],
+			$row['datalimite'],
+			$row['descricaosolucao'],
 			'',
 			$responsavel,
 			$row['datacadastro'],
-            $row['dataExecucao']
-        );
-		return $pendencia;
+			$row['dataexecucao'],
+			[]
+		);
+
+		return $planoDeAcao;
 	}	
 
-    function contagem($idsLojas = []) {
-		if(is_array($idsLojas))
-		return (count() > 0) ?  DB::table(self::TABELA)->whereIn('loja_id', $idsLojas)->count() : DB::table(self::TABELA)->count();
+    function contagem($responsavelId = 0) {
+		return ($responsavelId  > 0) ?  DB::table(self::TABELA)->where('responsavel_id', $responsavelId)->count() : DB::table(self::TABELA)->count();
 	}
 }
 
