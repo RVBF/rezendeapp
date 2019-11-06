@@ -3,35 +3,38 @@ use Illuminate\Database\Capsule\Manager as DB;
 use Carbon\Carbon;
 
 /**
- *	Coleção de PlanoAcao em Banco de Dados Relacional.
+ *	Coleção de Pendencia em Banco de Dados Relacional.
  *
  *  @author		Rafael Vinicius Barros Ferreira
  *	@version	1.0
  */
 
-class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
-	const TABELA = 'planoacao';
+class ColecaoPendenciaEmBDR implements ColecaoPendencia {
+	const TABELA = 'pendencia';
 
 	function __construct(){}
 
 	function adicionar(&$obj) {
 		try {	
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-	
+            
 
 			$id = DB::table(self::TABELA)->insertGetId([
-					'status' => StatusPaEnumerado::AGUARDANDO_RESPONSAVEL,
-					'descricaonaoconformidade' => $obj->getDescricao(),
+					'status' => StatusPendenciaEnumerado::AGUARDANDO_EXECUCAO,
+					'descricao' => $obj->getDescricao(),
 					'descricaosolucao' => $obj->getSolucao(),
 					'datalimite' => $obj->getDataLimite()->toDateTimeString(),
 					'responsavel_id' => $obj->getResponsavel()->getId()
 				]
-			);
+            );
+            
+
 			$obj->setId($id);		
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
 		}
 		catch (\Exception $e) {
+            Debuger::printr($e->getMessage());
 			throw new ColecaoException("Erro ao adicionar tarefa ", $e->getCode(), $e);
 		}
 	}
@@ -220,22 +223,21 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 	function construirObjeto(array $row) {
 		$respponsavel = ($row['colaborador_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comId($row['colaborador_id']) : '';
        
-        $pendencia = new PlanoAcao(
+        $pendencia = new Pendencia(
             $row['id'],
-            $row['descricaonaoconformidade'],
-            $row['datalimite'],
+            $row['descricao'],
             $row['descricaosolucao'],
-			'',
-			$responsavel,
-			$row['datacadastro'],
-            $row['dataExecucao']
+            $row['datalimite'],
+            $row['datacadastro'],
+            $responsavel
         );
 		return $pendencia;
 	}	
 
     function contagem($idsLojas = []) {
 		if(is_array($idsLojas))
-		return (count() > 0) ?  DB::table(self::TABELA)->whereIn('loja_id', $idsLojas)->count() : DB::table(self::TABELA)->count();
+        return (count() > 0) ?  DB::table(self::TABELA)->whereIn('loja_id',
+         $idsLojas)->count() : DB::table(self::TABELA)->count();
 	}
 }
 

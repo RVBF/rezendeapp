@@ -103,7 +103,7 @@
 			});
 		};
 
-		_this.questionamentosComID = function questionamentosComID(id){
+		_this.getQuestionamentosParaExecucao = function getQuestionamentosParaExecucao(id){
 			return $.ajax({
 				type: "GET",
 				url: _this.rota() + '/questionamentos/' + id

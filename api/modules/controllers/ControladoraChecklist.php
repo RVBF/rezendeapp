@@ -299,13 +299,13 @@ class ControladoraChecklist {
 		return $resposta;
 	}
 
-	function getQuestionamentos($id){
+	function getQuestionamentosParaExecucao($checklistId){
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
 			
-			if (! is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
+			if (! is_numeric($checklistId)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
 
-			$questionamentos = $this->colecaoQuestionamento->comChecklistId($id);
+			$questionamentos = $this->colecaoQuestionamento->questionamentosParaExecucao($checklistId);
 			$resposta = ['conteudo'=> $questionamentos, 'status' => true, 'mensagem'=> 'ok.']; 
 		}
 		catch (\Exception $e) {

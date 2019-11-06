@@ -196,7 +196,7 @@ $app->get('/checklist/questionamentos/{id}', function(Request $req,  Response $r
 	$this->logger->addInfo("Acessando listagem de tarefa");	
 	$sessaoUsuario = new Sessao($session);
 	$ctrl = new ControladoraChecklist($req->getQueryParams(), $sessaoUsuario);
-	$response = $ctrl->getQuestionamentos($args['id']);
+	$response = $ctrl->getQuestionamentosParaExecucao($args['id']);
 	return $res->withJson($response);
 });
 

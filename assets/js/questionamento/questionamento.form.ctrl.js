@@ -33,7 +33,6 @@
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
 				var obj = _this.conteudo();
-				console.log(obj);
 				var terminado = function() {
 					_this.formulario.desabilitar(false);
 				};
@@ -41,9 +40,24 @@
 				// _this.formulario.desabilitar(true);
 			
 				var jqXHR = _this.alterar ? servicoQuestionamento.atualizar(obj) : servicoQuestionamento.adicionar(obj);
-				jqXHR.done(function() {
-					// router.navigate('/configuracao');
-					// toastr.success('QUestionamento Adicionado com sucesso!')
+				jqXHR.done(function(resposta) {
+					if(resposta.status && _this.questionamentos.length > 0){
+
+						_this.formulario.find('.perguntas').empty().promise().done(function () {
+
+							_this.popularQuestao();
+
+							_this.configurarEventos();
+						});
+					}
+					else{
+						router.navigate('/checklist');
+						toastr.success('Todas as questões do checklist foram respondidas com sucesso!')
+
+					}
+					
+					toastr.success('O questionamento de id '+ _this.objetoAtual.id+ ' foi executado com suscesso!')
+
 				}).fail(window.erro).always(terminado);
 
 				if(_this.alterar){
@@ -60,7 +74,6 @@
 		_this.conteudo = function conteudo() {
 			var dataLimitePa = moment(_this.dataLimitePa.getDate()).format('YYYY-MM-DD');
 			var dataLimitePe = moment(_this.dataLimitePe.getDate()).format('YYYY-MM-DD');
-			console.log($('#hora_limitepa').val());
 
 			return servicoQuestionamento.criar(
 				_this.objetoAtual.id,
@@ -196,7 +209,7 @@
 				},
 			});
 
-			_this.botaoSubmissao.on('click', _this.salvar);
+			// _this.botaoSubmissao.on('click', _this.salvar);
 			_this.formulario.find('#proximo').on('click', _this.proximo);
 		};
 
@@ -300,6 +313,12 @@
 			
 					
 			_this.formulario.find('.perguntas').empty().append(html).promise().done(function () {
+				if(_this.questionamentos.length == 1){
+					$('#botoes_execucao').append('<button type="submit" id="salvar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Salvar e Sair</button>');
+					$('#botoes_execucao').find('#salvar').remove();
+					_this.formulario.find('#salvar').on('click', _this.salvar);
+
+				}
 				_this.formulario.find('input[type="file"]').change(function(evt){
 					var elemento = $(this);
 					var file = evt.target.files[0];
@@ -419,6 +438,7 @@
 
 		_this.buscarQuestionamentos  =  function buscarQuestionamentos(valor = 0)	{
 			var sucesso = function (resposta) {
+				console.log(resposta);
 				_this.questionamentos = resposta.conteudo;
 
 				_this.popularQuestao();
@@ -432,7 +452,7 @@
 				return false;
 			}
 			var servicoChecklist = new app.ServicoChecklist();
-			var  jqXHR = servicoChecklist.questionamentosComID(_this.idChecklist);
+			var  jqXHR = servicoChecklist.getQuestionamentosParaExecucao(_this.idChecklist);
 			jqXHR.done(sucesso).fail(erro);
 		};
 

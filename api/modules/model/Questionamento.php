@@ -14,6 +14,7 @@ class Questionamento {
     private $formularioResposta;
     private $checklist;
     private $planoAcao;
+    private $pendencia;
     private $anexos;
 
     function __construct(
@@ -23,6 +24,7 @@ class Questionamento {
         $formularioResposta = '',
         $checklist = null,
         $planoAcao = null,
+        $pendencia = null,
         $anexos = []
     ) {
     
@@ -32,6 +34,7 @@ class Questionamento {
         $this->formularioResposta = $formularioResposta;
         $this->checklist = $checklist;
         $this->planoAcao = $planoAcao;
+        $this->pendencia = $pendencia;
         $this->anexos = $anexos;
     }
 
@@ -43,13 +46,12 @@ class Questionamento {
         $this->id = $id;
     }
 
-    public function setStatus($status){
-
-        $status  = $this->status;
-    }
-
     public function getStatus(){
         return $this->status;
+    }
+
+    public function setStatus($status){
+        $this->status = $status;
     }
 
     public function getFormularioPergunta(){
@@ -83,6 +85,14 @@ class Questionamento {
  
     public function setPlanoAcao($planoAcao){
         $this->planoAcao = $planoAcao;
+    }
+    
+    public function getPendencia(){
+        return $this->pendencia;
+    }
+
+    public function setPendencia($pendencia){
+        $this->pendencia  = $pendencia;
     }
 
     public function getAnexos(){

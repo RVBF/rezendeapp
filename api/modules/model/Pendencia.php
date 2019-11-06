@@ -1,47 +1,38 @@
 <?php
 
 /**
- *	PlanoAcao
+ *	Pendencia
  *
  *  @author Rafael Vinicius Barros Ferreira
  *  @version	1.0
  */
-class PlanoAcao {
+class Pendencia {
 
-    private $id;
-    private $status;
+	private $id;
     private $descricao;
     private $dataLimite;
     private $solucao;
-    private $resposta;
     private $responsavel;
     private $dataCadastro;
     private $dataExecucao;
-    private $historico;
 
     function __construct(
         $id,
-        $status,
         $descricao,
         $dataLimite,
         $solucao,
         $resposta = '',
         $responsavel,
         $dataCadastro = '',
-        $dataExecucao = '',
-        $historico = []
-    
+        $dataExecucao = ''
      ) {
         $this->id = $id;
-        $this->status = $status;
         $this->descricao = $descricao;
         $this->dataLimite = $dataLimite;
         $this->solucao = $solucao;
         $this->responsavel  = $responsavel;
-        $this->resposta = $resposta;
         $this->dataCadastro = $dataCadastro;
         $this->dataExecucao = $dataExecucao;
-        $this->historico = $historico;
 
     } 
 
@@ -51,14 +42,6 @@ class PlanoAcao {
 
     public function setId($id){
         $this->id = $id;
-    }
-
-    public function getStatus(){
-        return $this->status;
-    }
-
-    public function setStatus($status){
-        $this->status = $status;
     }
 
     public function getDescricao(){
@@ -85,14 +68,6 @@ class PlanoAcao {
         $this->solucao = $solucao;
     }
 
-    public function getResposta(){
-        return $this->resposta; 
-    }
-    
-    public function setResposta($resposta){
-        $this->resposta = $resposta;
-    }
-
     public function setResponsavel($responsavel){
         $this->responsavel = $responsavel;
     }
@@ -115,14 +90,6 @@ class PlanoAcao {
 
     public function setdataExecucao($dataExecucao){
         $this->dataExecucao = $dataExecucao;
-    }
-
-    public function setHistorico($historico = []){
-        $this->historico = $historico;
-    }
-
-    public function getHistorico(){
-        return $this->historico;
     }
 }
 ?>
