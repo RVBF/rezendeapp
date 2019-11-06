@@ -20,7 +20,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 		if($this->validarTarefa($obj)){
 			try {	
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-				
+
 				$id = DB::table(self::TABELA)->insertGetId([ 
 					'titulo' => $obj->getTitulo(),
 					'tipoQuestionamento' => $obj->getTipoQuestionamento(),
@@ -44,7 +44,30 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 				throw new ColecaoException("Erro ao adicionar tarefa ", $e->getCode(), $e);
 			}
 		}
-    }
+	}
+	
+	function executar(&$obj){
+		try {
+			
+			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+			$filds = [ 'status' => $obj->getStatus(),
+				'formularioresposta' => $obj->getFormularioResposta(),
+				'planoacao_id' => ($obj->getPlanoAcao() instanceof PlanoAcao)  ? $obj->getPlanoAcao()->getId() : 0,
+				'pendencia_id' => ($obj->getPendencia() instanceof PlanoAcao)  ? $obj->getPendencia()->getId() : 0
+			];
+			
+			DB::table(self::TABELA)->where('id', $obj->getId())->update($filds);
+
+			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+			return $obj;
+		}
+		catch (\Exception $e)
+		{
+			throw new ColecaoException("Erro ao atualizar tarefa.", $e->getCode(), $e);
+		}
+	}
     
     function adicionarTodos($objetos = []){
         try {	
@@ -143,15 +166,14 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 		}
 	}
 
-	function comChecklistId($id){
+	function questionamentosParaExecucao($checklistId){
 		try {	
 
-			$questionamentos = DB::table(self::TABELA)->where('checklist_id', $id)->get();
+			$questionamentos = DB::table(self::TABELA)->where('checklist_id', $checklistId)->where('status', TipoQuestionamentoEnumerado::NAO_RESPONDIDO)->get();
 			$questionamentosObjects = [];
 
 			foreach ($questionamentos as $key => $questionamento) {
-
-				$questionamentosObjects[] = $this->construirObjeto($questionamento);
+				$questionamentosObjects[] = RTTI::getAttributes($this->construirObjeto($questionamento),  RTTI::allFlags());
 			}
 
 
@@ -263,18 +285,21 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 
 	function construirObjeto(array $row) {
 		$checklist = ($row['checklist_id'] > 0) ? Dice::instance()->create('ColecaoChecklist')->comId($row['checklist_id']) : null;
+		$planoAcao = ($row['planoacao_id'] > 0) ? Dice::instance()->create('ColecaoPlanoAcao')->comId($row['planoacao_id']) : null;
+		$pendencia = ($row['pendencia_id'] > 0) ? Dice::instance()->create('ColecaoPlanoAcao')->comId($row['pendencia_id']) : null;
+
+
 		$planoacao = null;
 
 		$questionamento =  new Questionamento(
 			$row['id'],
 			$row['status'],
 			json_decode($row['formulariopergunta']),
-			json_decode($row['formulariopergunta']),
+			json_decode($row['formularioresposta']),
 			$checklist,
 			$planoacao
 		);
-
-		return RTTI::getAttributes($questionamento, RTTI::allFlags());
+		return $questionamento;
 	}	
 
     function contagem($idsLojas = []) {

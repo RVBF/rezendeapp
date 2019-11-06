@@ -50,8 +50,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 				return $obj;
 			}
 			catch (\Exception $e) {
-				Debuger::printr( $e->getMessage());
-				throw new ColecaoException("Erro ao adicionar tarefa ", $e->getCode(), $e);
+				throw new ColecaoException("Erro ao adicionar Checklist ", $e->getCode(), $e);
 			}
 		}
 	}

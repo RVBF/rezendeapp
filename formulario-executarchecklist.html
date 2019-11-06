@@ -165,17 +165,11 @@
 			</section>
 
 			<div class="row form-row">
-				<div class="col col-md-12 col-12 col-sm-12 col-lg-12 d-flex justify-content-sm-end justify-content-md-end justify-content-center ">
-					<button type="submit" id="salvar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">
-						<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>
-						Salvar e Sair
-					</button>
-
+				<div class="col col-md-12 col-12 col-sm-12 col-lg-12 d-flex justify-content-sm-end justify-content-md-end justify-content-center" id="botoes_execucao">
 					<button type="submit" id="proximo" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">
 						<i class="mdi mdi-skip-next red-text text-darken-4 "></i>
 						Próximo
 					</button>
-
 					<button class="waves-effect waves-light btn white grey-text text-darken-4 button-dto f-12-dto checklist_link">
 						<i class="mdi mdi-close-circle-outline yellow-text text-accent-4"></i>
 						Cancelar
@@ -188,6 +182,7 @@
 
 <script>
 	$(document).ready(function() {
+		console.log(app);
 		var servicoQuestionamento = new app.ServicoQuestionamento();
 		var crltQuestionamentoExecucao = new app.ControladoraFormQuestionamentoExecucao(servicoQuestionamento);
 		crltQuestionamentoExecucao.configurar();

@@ -15,12 +15,15 @@
 
 
 		this.getTipoQuestionario = function(){
-            return { 
-                1 : this.padrao,
-                2 : this.PA,
-                3 : this.QNP,
-                4 : this.GENERICO 
+			return { 
+                1 : this.padrao
             };
+            // return { 
+            //     1 : this.padrao,
+            //     2 : this.PA,
+            //     3 : this.QNP,
+            //     4 : this.GENERICO 
+            // };
 		}
 	};
 
