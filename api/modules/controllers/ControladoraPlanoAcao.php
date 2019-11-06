@@ -23,6 +23,7 @@ class ControladoraPlanoAcao {
 	private $colecaoUsuario;
 	private $colecaoColaborador;
 	private $colecaoLoja;
+	private $colecaoPlanoAcao;
 
 	function __construct($params,  Sessao $sessao) {
 		$this->params = $params;
@@ -32,6 +33,7 @@ class ControladoraPlanoAcao {
 		$this->colecaoUsuario = Dice::instance()->create('ColecaoUsuario');
 		$this->colecaoColaborador = Dice::instance()->create('ColecaoColaborador');
 		$this->colecaoLoja = Dice::instance()->create('ColecaoLoja');
+		$this->colecaoPlanoAcao  = Dice::instance()->create('ColecaoPlanoAcao');
 	}
 
 	function todos() {
@@ -46,16 +48,8 @@ class ControladoraPlanoAcao {
 			$erro = null;
 
 			$colaborador = $this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario());
-
-			$idsLojas = [];
-
-			foreach ($colaborador->getLojas() as $loja) {
-				$idsLojas[] = $loja->getId();
-			}
-
-			$objetos = $this->colecaoChecklist->todosComLojaIds($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $idsLojas);
-
-			$contagem = $this->colecaoChecklist->contagem($idsLojas);
+			$objetos = $this->colecaoPlanoAcao->todosComResponsavelId($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $colaborador->getUsuario()->getId());
+			$contagem = $this->colecaoPlanoAcao->contagem($colaborador->getUsuario()->getId());
 		}
 		catch (\Exception $e ) {
 			throw new Exception("Erro ao listar tarefas");
