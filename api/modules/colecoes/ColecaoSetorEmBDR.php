@@ -120,7 +120,7 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 
 			$setorObjects = [];
 			foreach ($setors as $setor) {
-				$setorObjects[] = RTTI::getAttributes($this->construirObjeto($setor),RTTI::allFlags());
+				$setorObjects[] = $this->construirObjeto($setor);
 			}
 
 			return $setorObjects;

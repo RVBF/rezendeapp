@@ -78,7 +78,6 @@ use \phputil\JSON;
 
 // Fim das rotas para Setor
 
-
 // Início das rotas para Questionários
 	$app->get('/questionario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 		$this->logger->addInfo("Acessando listagem de questionarioes");	
@@ -114,7 +113,6 @@ use \phputil\JSON;
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 	});
 // Fim das rotas para Questionários
-
 
 // Início das rotas para loja
 	$app->get('/loja', function(Request $req,  Response $res, $args = []) use ($app, $session) {
@@ -152,7 +150,6 @@ use \phputil\JSON;
 	});
 // Fim das rotas para loja
 
-
 // Início das rotas para questionamento
 	$app->get('/questionamento', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 		$this->logger->addInfo("Acessando listagem de lojas");	
@@ -187,15 +184,15 @@ use \phputil\JSON;
 		$response = $ctrl->remover($args['id']);
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 	});
-	// fim das rotas para questionamentos
+// fim das rotas para questionamentos
 
-	// Início das rotas para checklist
+// Início das rotas para checklist
 	$app->get('/checklist', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 		$this->logger->addInfo("Acessando listagem de tarefa");	
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraChecklist($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->todos();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 	});
 
 	$app->get('/checklist/questionamentos/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
@@ -234,40 +231,40 @@ use \phputil\JSON;
 // Fim das rotas para checklist
 
 // Início das rotas para plano-acao
-$app->get('/plano-acao', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-	$this->logger->addInfo("Acessando listagem de plano-acao");
-	$sessaoUsuario = new Sessao($session);
-	$ctrl = new ControladoraPlanoAcao($req->getQueryParams(), $sessaoUsuario);
-	$response = $ctrl->todos();
-	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
+	$app->get('/plano-acao', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando listagem de plano-acao");
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraPlanoAcao($req->getQueryParams(), $sessaoUsuario);
+		$response = $ctrl->todos();
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
 
-});
+	});
 
-$app->post('/plano-acao', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-	$this->logger->addInfo("Acessando o cadastro de plano-acao");
-	$sessaoUsuario = new Sessao($session);
-	$ctrl = new ControladoraPlanoAcao($req->getParsedBody(), $sessaoUsuario);
-	$response = $ctrl->adicionar();
-	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
-});
+	$app->post('/plano-acao', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando o cadastro de plano-acao");
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraPlanoAcao($req->getParsedBody(), $sessaoUsuario);
+		$response = $ctrl->adicionar();
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+	});
 
-$app->put('/plano-acao', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-	$this->logger->addInfo("Acessando a atualização de plano-acao");
-	$sessaoUsuario = new Sessao($session);
-	$ctrl = new ControladoraPlanoAcao($req->getParsedBody(), $sessaoUsuario);
-	$response = $ctrl->atualizar();
-	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+	$app->put('/plano-acao', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando a atualização de plano-acao");
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraPlanoAcao($req->getParsedBody(), $sessaoUsuario);
+		$response = $ctrl->atualizar();
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 
-});
+	});
 
-$app->delete('/plano-acao/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-	$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
-	$sessaoUsuario = new Sessao($session);
-	$ctrl = new ControladoraPlanoAcao($req->getParsedBody(), $sessaoUsuario);
-	$response = $ctrl->remover($args['id']);
-	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+	$app->delete('/plano-acao/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraPlanoAcao($req->getParsedBody(), $sessaoUsuario);
+		$response = $ctrl->remover($args['id']);
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 
-});
+	});
 // Fim das rotas para plano-acao
 
 // Início das rotas para usuario
@@ -369,7 +366,6 @@ $app->delete('/plano-acao/{id}', function(Request $req,  Response $res, $args = 
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
 	});
 // Fim das rotas para grupos de usuário
-
 
 // Início para permissoes
 	$app->post('/permissoes', function(Request $req,  Response $res, $args = []) use ($app, $session) {

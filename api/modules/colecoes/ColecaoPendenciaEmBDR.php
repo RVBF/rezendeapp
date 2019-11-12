@@ -34,7 +34,6 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 
 		}
 		catch (\Exception $e) {
-            Debuger::printr($e->getMessage());
 			throw new ColecaoException("Erro ao adicionar tarefa ", $e->getCode(), $e);
 		}
 	}

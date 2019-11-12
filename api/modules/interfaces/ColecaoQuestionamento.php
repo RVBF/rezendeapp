@@ -10,5 +10,7 @@
 interface ColecaoQuestionamento extends Colecao{
     function adicionarTodos($objetos = []);
     function questionamentosParaExecucao($checklistId);
+    function questionamentosComStatus($status = []);
+    function questionamentosComChecklistId($checklistId = 0);
 }
 ?>

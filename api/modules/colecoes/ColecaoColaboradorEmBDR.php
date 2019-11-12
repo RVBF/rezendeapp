@@ -1,5 +1,7 @@
 <?php
 use Illuminate\Database\Capsule\Manager as DB;
+use \phputil\RTTI;
+
 /**
  *	Coleção de Colaborador em Banco de Dados Relacional.
  *

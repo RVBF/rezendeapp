@@ -1,6 +1,8 @@
 <?php
 use Illuminate\Database\Capsule\Manager as DB;
 use Carbon\Carbon;
+use \phputil\RTTI;
+
 
 /**
  *	Coleção de Checklist em Banco de Dados Relacional.
@@ -191,7 +193,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			$checklistsObjects = [];
 
 			foreach ($checklists as $key => $checklist) {
-				$checklistsObjects[] =  $this->construirObjeto($checklist);
+				$checklistsObjects[] = $this->construirObjeto($checklist);
 			}
 
 			return $checklistsObjects;
@@ -204,14 +206,14 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 
 	function todos($limite = 0, $pulo = 0) {
 		try {	
-			$tarefas = DB::table(self::TABELA)->offset($limite)->limit($pulo)->get();
-			$tarefasObjects = [];
+			$checklist = DB::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+			$checklistObjects = [];
 
-			foreach ($tarefas as $key => $tarefa) {
-				$tarefasObjects[] =  $this->construirObjeto($tarefa);
+			foreach ($checklist as $key => $checklist) {
+				$checklistObjects[] =  RTTI::getAttributes($this->construirObjeto($checklist),  RTTI::allFlags());
 			}
 
-			return $tarefasObjects;
+			return $checklistObjects;
 		}
 		catch (\Exception $e)
 		{
@@ -221,14 +223,14 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 	
 	function listagemTemporalcomLojasIds($pageHome = 0, $pageLength = 10,$search = '', $idsLojas = []){
 		try {	
-			$tarefas = DB::table(self::TABELA)->orderBy('data_limite', 'ASC')->offset($pageHome)->limit($pageLength)->get();
-			$tarefasObjects = [];
-
-			foreach ($tarefas as $key => $tarefa) {
-				$tarefasObjects[] =  $this->construirObjeto($tarefa);
+			$checklists = DB::table(self::TABELA)->orderBy('data_limite', 'ASC')->offset($pageHome)->limit($pageLength)->get();
+			$checklistsObjects = [];
+			foreach ($checklists as $key => $checklist) {
+				$checklistsObjects[] =  RTTI::getAttributes($this->construirObjeto($checklist),  RTTI::allFlags());
 			}
 
-			return $tarefasObjects;
+
+			return $checklistsObjects;
 		}
 		catch (\Exception $e) {
 			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
@@ -256,7 +258,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 		$loja = ($row['loja_id'] > 0) ? Dice::instance()->create('ColecaoLoja')->comId($row['loja_id']) : '';
 		$questionador = ($row['questionador_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comUsuarioId($row['questionador_id']) : '';
 		$responsavel = ($row['responsavel_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comUsuarioId($row['responsavel_id']) : '';
-		
+		$questionamentos = ($row['id'] > 0) ? Dice::instance()->create('ColecaoQuestionamento')->questionamentosComChecklistId($row['id']) : '';
 		$checklist = new Checklist(
 			$row['id'],
 			$row['status'], 
@@ -268,7 +270,8 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			$setor,
 			$loja,
 			$questionador, 
-			$responsavel
+			$responsavel,
+			$questionamentos
 		);
 		return $checklist;
 	}	
