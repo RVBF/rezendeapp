@@ -155,6 +155,12 @@ form .quebra-linha{
     overflow: hidden;
     border-top: 1px solid #e9ecef;
 }
+
+.info_checklist{
+    margin-right: 1em;
+    margin-bottom: 1em;
+}
+
 .bnt_campoextra{
     margin-top: 1.5em;
 }

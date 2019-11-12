@@ -32,6 +32,38 @@
 			objeto.searchDelay = 600;	
 			objeto.cadastrarLink = 'cadastrar_checklist_link';
 			objeto.columnDefs = function (data){
+				var estaRespondido = function estaRespondido() {
+					var i = 0;
+					for (var indice in data.questionamentos) {
+						var elemento = data.questionamentos[indice];
+						if(elemento.status == 'Não Respondido' || elemento.status == 'Respondido Com Pendências')i++;
+					}
+
+					return ( i == data.questionamentos.length ) ? true : false;
+				};
+				
+				var temPaPendente = function temPaPendente() {
+					var i = 0;
+					for (var indice in data.questionamentos) {
+						var elemento = data.questionamentos[indice];
+						
+						if(elemento.planoAcao == null) i++;
+					}
+
+					return (i>0) ? true :false;
+				};
+
+
+				var temPendenciaPendente = function temPendenciaPendente() {
+					var i = 0;
+					for (var indice in data.questionamentos) {
+						var elemento = data.questionamentos[indice];
+						
+						if(elemento.pendencia == null) i++;
+					}
+
+					return (i>0) ? true :false;
+				};
 
 				var html = '';
 				var dataLimite = moment(data.dataLimite);
@@ -39,14 +71,21 @@
 				var textoDiasRestantes = (diferencaDias > 0) ? Math.abs(diferencaDias) +' dias para que o cheklist seja executado!' : Math.abs(diferencaDias) +' dias de atraso!';
 					html += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12">';
 						html += '<div class="row agenda-dto">'
-
 							html += '<div class="col col-12 col-lg-3 col-md-3 col-sm-4">';
 								html += '<p class="dia '+((diferencaDias > 0) ? 'teal-text text-darken-1': ' red-text text-accent-4 ') +'">'+ dataLimite.format('ddd') + '</p>';
 								html += '<p class="data">'+ dataLimite.format('DD/MM/YYYY')+ '</p>';
 							html += '</div>';
 							html += '<div class="col col-12 col-lg-9 col-md-9 col-sm-8">';
+								if(data.status == 'Em Progresso' ) html += '<span class="info_checklist yellow darken-2 btn-small">'+ data.status +'</span>';
+								else if(data.status == 'Executado' ) html += '<span class="info_checklist green darken-1 btn-small">'+ data.status +'</span>';
+								else if(data.status == 'Aguardando Execução') html += '<span class="info_checklist red accent-4 btn-small">'+ data.status +'</span>';
+
+								html += (!temPaPendente) ? '<span class="info_checklist orange darken-4 btn-small">PA Pendente</span>' : '';
+								html += (!temPendenciaPendente) ? '<span class="info_checklist grey darken-1 btn-small">PA Pendente</span>' : '';
+								
 								html += '<p><i class="mdi mdi-map-marker-radius orange-text text-accent-4"></i> <strong>' + data.loja.razaoSocial + '</strong> ' + data.loja.nomeFantasia + '</p>';
-								html += '<a href="#" class="executar_checklist"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.titulo + '</strong></p></a>';
+								if(estaRespondido())html += '<a href="#" class="executar_checklist"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.titulo + '</strong></p></a>';
+								else html += '<a href="#" class="ver_questionamentos_respondidos"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.titulo + '</strong></p></a>';
 								// html += '<a href="#" class="inteligencia_link"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.titulo + '</strong></p></a>';								
 								html += '<p class="'+((diferencaDias > 0) ? 'teal-text text-darken-1': ' red-text text-accent-4 ')+'"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>'+textoDiasRestantes+'</strong></p>';
 								html += '<p><strong>Descrição : </strong> ' + data.descricao+ '</p>';

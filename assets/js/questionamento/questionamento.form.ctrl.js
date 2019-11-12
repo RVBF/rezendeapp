@@ -42,13 +42,14 @@
 				var jqXHR = _this.alterar ? servicoQuestionamento.atualizar(obj) : servicoQuestionamento.adicionar(obj);
 				jqXHR.done(function(resposta) {
 					if(resposta.status && _this.questionamentos.length > 0){
+						_this.configurarEventos();
 
-						_this.formulario.find('.perguntas').empty().promise().done(function () {
+						// _this.formulario.find('.perguntas').empty().promise().done(function () {
 
-							_this.popularQuestao();
+						// 	_this.popularQuestao();
 
-							_this.configurarEventos();
-						});
+						// 	_this.configurarEventos();
+						// });
 					}
 					else{
 						router.navigate('/checklist');

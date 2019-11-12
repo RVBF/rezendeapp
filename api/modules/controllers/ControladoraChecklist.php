@@ -64,32 +64,34 @@ class ControladoraChecklist {
 				$conteudo = new DataTablesResponse(
 					$contagem,
 					is_array($objetos) ? count($objetos) : 0, //count($objetos ),
-					$objetos,
+					RTTI::getAttributes($objetos,   RTTI::allFlags()),
 					$dtr->draw,
 					$erro
 				);
+				Uti::objetosParaArray($objetos);
+
 			}
 			else{
 				$objetos = $this->colecaoChecklist->listagemTemporalcomLojasIds($this->params['homePage'], $this->params['pageLength'], (isset($this->params['search'])) ? $this->params['search'] : '', $idsLojas);
-	
 				$contagem = $this->colecaoChecklist->contagem($idsLojas);
-				
 				$conteudo = new DataTablesResponse(
 					$contagem,
 					is_array($objetos) ? count($objetos) : 0, //count($objetos ),
-					$objetos,
+					$objeto,
 					0,
 					null
 				);
 			}
 		}
 		catch (\Exception $e ) {
+			Util::printr($e->getMessage());
+
 			throw new Exception("Erro ao listar checklist");
 		}
 
 		
 		
-		return $conteudo;
+		return RTTI::getAttributes($conteudo,  RTTI::allFlags());
 	}
 	
 	function adicionar($setorId = 0) {

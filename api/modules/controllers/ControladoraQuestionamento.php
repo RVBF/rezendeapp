@@ -62,7 +62,7 @@ class ControladoraQuestionamento {
 			$erro
 		);
 
-		return $conteudo;
+		return RTTI::getAttributes($conteudo,  RTTI::allFlags());
 	}
 
     function executar(){
@@ -155,7 +155,6 @@ class ControladoraQuestionamento {
 			if(!isset($questionamento) and !($questionamento instanceof Questionamento)){
 				throw new Exception("Questionamento não encontrado na base de dados.");
 			}	
-
 
 			$questionamento->setFormularioResposta(json_encode($this->params['formularioResposta']));
 			$questionamento->setStatus(($pendencia instanceof Pendencia or $planoDeAcao instanceof PlanoAcao) ? TipoQuestionamentoEnumerado::RESPONDIDO_COM_PENDENCIAS : TipoQuestionamentoEnumerado::RESPONDIDO);

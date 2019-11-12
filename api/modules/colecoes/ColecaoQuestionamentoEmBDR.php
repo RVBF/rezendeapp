@@ -40,7 +40,6 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 				return $obj;
 			}
 			catch (\Exception $e) {
-				Debuger::printr( $e->getMessage());
 				throw new ColecaoException("Erro ao adicionar tarefa ", $e->getCode(), $e);
 			}
 		}
@@ -91,7 +90,6 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
             return true;
         }
         catch (\Exception $e) {
-            Debuger::printr( $e->getMessage());
             throw new ColecaoException("Erro ao adicionar tarefa ", $e->getCode(), $e);
         }
     }
@@ -185,6 +183,38 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 		}
 	}
 
+	function questionamentosComChecklistId($checklistId = 0){
+		try {
+			$questionamentos = DB::table(self::TABELA)->where('checklist_id', $checklistId)->get();
+
+			$questionamentoObjects = [];
+			foreach ($questionamentos as $key => $questionamento) {
+				$questionamentosObjects[] = RTTI::getAttributes($this->construirObjeto($questionamento),  RTTI::allFlags());
+			}
+
+			return $questionamentosObjects;
+		} 		
+		catch (\Exception $e) {
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		}
+	}
+
+	function questionamentosComStatus($status = []){
+		try {
+			$questionamentos = DB::table(self::TABELA)->whereIn('status', $status)->get();
+			$questionamentoObjects = [];
+			foreach ($questionamentos as $key => $questionamento) {
+				$questionamentosObjects[] = RTTI::getAttributes($this->construirObjeto($questionamento),  RTTI::allFlags());
+			}
+
+			return $questionamentosObjects;
+		} 		
+		catch (\Exception $e)
+		{
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		}
+	}
+
 	function todosComLojaIds($limite = 0, $pulo = 0, $search = '', $idsLojas = []){
 		try {	
 
@@ -234,14 +264,14 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 			}
 			
 
-			$tarefas = $query->offset($limite)->limit($pulo)->get();
+			$questionamentos = $query->offset($limite)->limit($pulo)->get();
 
-			$tarefasObjects = [];
-			foreach ($tarefas as $key => $tarefa) {
-				$tarefasObjects[] =  $this->construirObjeto($tarefa);
+			$questionamentosObjects = [];
+			foreach ($questionamentos as $key => $tarefa) {
+				$questionamentosObjects[] =  RTTI::getAttributes($this->construirObjeto($tarefa),  RTTI::allFlags());
 			}
 
-			return $tarefasObjects;
+			return $questionamentosObjects;
 		}
 		catch (\Exception $e)
 		{			
@@ -255,7 +285,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 			$tarefasObjects = [];
 
 			foreach ($tarefas as $key => $tarefa) {
-				$tarefasObjects[] =  $this->construirObjeto($tarefa);
+				$tarefasObjects[] =  RTTI::getAttributes($this->construirObjeto($tarefa),  RTTI::allFlags());
 			}
 
 			return $tarefasObjects;
@@ -284,10 +314,9 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 	}
 
 	function construirObjeto(array $row) {
-		$checklist = ($row['checklist_id'] > 0) ? Dice::instance()->create('ColecaoChecklist')->comId($row['checklist_id']) : null;
+		// $checklist = ($row['checklist_id'] > 0) ? Dice::instance()->create('ColecaoChecklist')->comId($row['checklist_id']) : null;
 		$planoAcao = ($row['planoacao_id'] > 0) ? Dice::instance()->create('ColecaoPlanoAcao')->comId($row['planoacao_id']) : null;
 		$pendencia = ($row['pendencia_id'] > 0) ? Dice::instance()->create('ColecaoPlanoAcao')->comId($row['pendencia_id']) : null;
-
 
 		$planoacao = null;
 
@@ -296,14 +325,15 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 			$row['status'],
 			json_decode($row['formulariopergunta']),
 			json_decode($row['formularioresposta']),
-			$checklist,
+			$row['checklist_id'],
 			$planoacao
 		);
 		return $questionamento;
 	}	
 
-    function contagem($idsLojas = []) {
-		return (count($idsLojas) > 0) ?  DB::table(self::TABELA)->whereIn('loja_id', $idsLojas)->count() : DB::table(self::TABELA)->count();
+    function contagem($idsLojas = [], $status = '') {
+		if($status = '') return (count($idsLojas) > 0) ?  DB::table(self::TABELA)->whereIn('loja_id', $idsLojas)->count() : DB::table(self::TABELA)->count();
+		else return (count($idsLojas) > 0) ?  DB::table(self::TABELA)->whereIn('loja_id', $idsLojas)->where('status')->count() : DB::table(self::TABELA)->count();
 	}
 
 	private function validarTarefa(&$obj) {
