@@ -9,7 +9,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraCategoria($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->todos();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
 
@@ -120,7 +120,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraLoja($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->todos();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 
 	$app->post('/loja', function(Request $req,  Response $res, $args = []) use ($app, $session) {
@@ -156,7 +156,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraQuestionamento($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->todos();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 
 	$app->post('/questionamento', function(Request $req,  Response $res, $args = []) use ($app, $session) {
@@ -192,7 +192,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraChecklist($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->todos();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 
 	$app->get('/checklist/questionamentos/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
@@ -200,7 +200,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraChecklist($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->getQuestionamentosParaExecucao($args['id']);
-		return $res->withJson($response);
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 
 	$app->put('/checklist', function(Request $req,  Response $res, $args = []) use ($app, $session) {
@@ -236,7 +236,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraPlanoAcao($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->todos();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
 
@@ -273,7 +273,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraUsuario($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->todos();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 
 	$app->post('/usuario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
@@ -336,7 +336,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraGrupoUsuario($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->todos();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_decode(stripslashes(JSON::encode($response))));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
 

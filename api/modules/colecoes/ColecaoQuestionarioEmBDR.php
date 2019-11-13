@@ -1,6 +1,5 @@
 <?php
 use Illuminate\Database\Capsule\Manager as DB;
-use \phputil\RTTI;
 
 /**
  *	Coleção de Questionario em Banco de Dados Relacional.
@@ -117,7 +116,7 @@ class ColecaoQuestionarioEmBDR implements ColecaoQuestionario {
 
 			$questionarioObjects = [];
 			foreach ($questionarios as $questionario) {
-				$questionarioObjects[] = RTTI::getAttributes($this->construirObjeto($questionario),RTTI::allFlags());
+				$questionarioObjects[] = $this->construirObjeto($questionario);
 			}
 			return $questionarioObjects;
 		}
@@ -147,7 +146,7 @@ class ColecaoQuestionarioEmBDR implements ColecaoQuestionario {
 	function construirObjeto(array $row) {
 		$Questionario = new Questionario($row['id'],$row['titulo'], $row['descricao'], $row['tipoQuestionario'], $row['formulario']);
 
-		return $Questionario;
+		return $Questionario->toArray();
 	}
 
     function contagem() {

@@ -6,6 +6,7 @@
 		var _this = this;
 		var listagemPadrao = elemento;
 		var ultimaResposta = null;
+		_this.recordsTotal = null;
 		_this.paginacao = {};
 		_this.objetos = {'objetos' :[]};
 
@@ -30,9 +31,12 @@
 						var scroll = $(this);
 						if (listagemPadrao.find('.timeline').scrollTop() >= parseInt(listagemPadrao.find('.timeline').find('.linhas').height() - listagemPadrao.find('.timeline').height())) {
 							// setTimeout(function () {
-								listagemPadrao.find('.timeline').find('.linhas').fadeOut();
-
+							if(_this.recordsTotal != null && $('.listagem-padrao-item').length <_this.recordsTotal){
+								  listagemPadrao.find('.timeline').find('.linhas').fadeOut();
+								// if($('.listagem-padrao-item').length ==)
 								_this.renderizarRegistrosTabelaTemporal();
+							}
+							else if(_this.recordsTotal == null) _this.renderizarRegistrosTabelaTemporal();
 
 							// }, 300)
 						}
@@ -158,12 +162,23 @@
 		_this.renderizarRegistrosTabelaTemporal = function renderizarRegistrosTabelaTemporal () {
 			
 			var sucesso = function (resposta) {
-				ultimaResposta = resposta;
-				listagemPadrao.find('.linhas').append(_this.renderizarRows(resposta.data));
+				console.log(resposta);
+				if(resposta.recordsFiltered > 0){
+					ultimaResposta = resposta;
+					listagemPadrao.find('.linhas').append(_this.renderizarRows(resposta.data));
 
-				if(typeof opcoes.rowsCallback == 'function') opcoes.rowsCallback(resposta);
-				if(opcoes.listagemTemporal)  listagemPadrao.find('.timeline').find('.linhas').fadeIn();
-				// $('#loading').hide();
+					if(typeof opcoes.rowsCallback == 'function') opcoes.rowsCallback(resposta);
+					if(opcoes.listagemTemporal)  listagemPadrao.find('.timeline').find('.linhas').fadeIn();
+				}
+				else if(_this.recordsTotal == null) {
+					_this.recordsTotal = resposta.recordsTotal;
+					ultimaResposta = resposta;
+					listagemPadrao.find('.linhas').append(_this.renderizarRows(resposta.data));
+
+					if(typeof opcoes.rowsCallback == 'function') opcoes.rowsCallback(resposta);
+					if(opcoes.listagemTemporal)  listagemPadrao.find('.timeline').find('.linhas').fadeIn();
+
+				}
 			};
 
 			var erro = function(resposta) {

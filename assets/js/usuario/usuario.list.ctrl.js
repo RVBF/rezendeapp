@@ -40,10 +40,10 @@
 				html += '</div>';
 				
 				html += '<div class="col co-lg-6 col-md-6 col-sm-6 col-8">'
-				html += '<p class="f-12-dto"><strong>Nome : </strong>'+ data.colaborador.nome + ' ' + data.colaborador.sobrenome + '</p>'
-				html += '<p class="f-12-dto"><strong>Email : </strong>'+ data.colaborador.email + '</p>'
+				html += '<p class="f-12-dto"><strong>Nome : </strong>'+ data.nome + ' ' + data.sobrenome + '</p>'
+				html += '<p class="f-12-dto"><strong>Email : </strong>'+ data.email + '</p>'
 				
-				html += '<p class="f-12-dto"><strong>Setor : </strong>'+ data.colaborador.setor.titulo + '</p>';
+				html += '<p class="f-12-dto"><strong>Setor : </strong>'+ data.setor.titulo + '</p>';
 				html += '<p class="f-12-dto"> <strong>Loja</strong>  Loja Conselheiro - Nova Friburgo</p>';
 				html += '<p class="f-12-dto"> <strong>Usuário: </strong>  '+ data.login +  '</p>';
 				html += '</div>';

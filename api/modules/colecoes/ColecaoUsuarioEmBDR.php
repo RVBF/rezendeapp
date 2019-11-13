@@ -164,7 +164,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario {
 		$usuario = new Usuario($row['id'], $row['login'], isset($row['senha']) ? $row['senha'] : '');
 		$usuario->setAdministrador($row['administrador']);
 
-		return $usuario;
+		return $usuario->toArray();
 	}
 	
 	function comGrupoId($id){

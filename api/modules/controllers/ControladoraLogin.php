@@ -31,9 +31,11 @@ class ControladoraLogin {
 			}
 	
 			$usuario = $this->servico->login(\ParamUtil::value($this->params, 'login'), \ParamUtil::value($this->params, 'senha'));
-			$colaborador = $this->colecaoColaborador->comUsuarioId($usuario->getId());
-			$conteudo = is_a($usuario, 'Usuario') ? ['id' => $usuario->getId(), 'login'=> $usuario->getLogin(), 'admin' => $usuario->getAdministrador(), 'nome' => $colaborador->getNome() . ' ' . $colaborador->getSobrenome(), 'setor' => $colaborador->getSetor()->getTitulo()] : [];
-
+			$colaborador = new Colaborador();
+			$colaborador->fromArray($this->colecaoColaborador->comUsuarioId($usuario->getId()));
+			$setor = new Setor();
+			$setor->fromArray($colaborador->getSetor());
+			$conteudo = is_a($usuario, 'Usuario') ? ['id' => $usuario->getId(), 'login'=> $usuario->getLogin(), 'admin' => $usuario->getAdministrador(), 'nome' => $colaborador->getNome() . ' ' . $colaborador->getSobrenome(), 'setor' => $colaborador->getSetor()] : [];
 			$resposta = ['usuario'=> $conteudo, 'status' => count($conteudo) ? true : false, 'mensagem'=> count($conteudo) ? 'Logado Com sucesso.' : 'Erro ao logar.' ]; 
 		}
 		catch (\Exception $e) {

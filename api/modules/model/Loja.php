@@ -1,5 +1,7 @@
 <?php
-
+use phputil\traits\ToArray;
+use phputil\traits\GetterSetterWithBuilder;
+use phputil\traits\FromArray;
 /**
  *	Loja
  *
@@ -7,6 +9,10 @@
  *  @version	1.0
  */
 class Loja {
+    use GetterSetterWithBuilder;
+    use ToArray;
+    use FromArray;
+
 
 	private $id;
     private $razaoSocial;
@@ -18,30 +24,6 @@ class Loja {
     function __construct($id = 0, $razaoSocial = '', $nomeFantasia = '') {
         $this->id = $id;
         $this->razaoSocial = $razaoSocial;
-        $this->nomeFantasia = $nomeFantasia;
-    }
-
-    public function getId(){
-       return $this->id; 
-    }
-
-    public function setId($id){
-        $this->id = $id;
-    }
-
-    public function getRazaoSocial(){
-        return $this->razaoSocial; 
-    }
- 
-    public function setRazaoSocial($razaoSocial){
-        $this->razaoSocial = $razaoSocial;
-    }
-
-    public function getNomeFantasia(){
-        return $this->nomeFantasia; 
-    }
- 
-    public function setNomeFantasia($nomeFantasia){
         $this->nomeFantasia = $nomeFantasia;
     }
 }

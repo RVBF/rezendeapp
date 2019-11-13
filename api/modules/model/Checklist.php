@@ -1,5 +1,7 @@
 <?php
-
+use phputil\traits\ToArray;
+use phputil\traits\GetterSetterWithBuilder;
+use phputil\traits\FromArray;
 /**
  *	Checklist
  *
@@ -7,6 +9,10 @@
  *  @version	1.0
  */
 class Checklist {
+    use GetterSetterWithBuilder;
+    use ToArray;
+    use FromArray;
+
 
     private $id;
     private $status;
@@ -19,6 +25,7 @@ class Checklist {
     private $loja;
     private $questionador;
     private $responsavel;
+    private $questionarios;
     private $questionamentos;
 
     const TAM_TITULO_MIM = 2;
@@ -36,6 +43,7 @@ class Checklist {
         $loja = null,
         $questionador = null,
         $responsavel = null,
+        $questionarios = [],
         $questionamentos = []
     ) {
         $this->id = $id;
@@ -49,104 +57,8 @@ class Checklist {
         $this->loja = $loja;
         $this->questionador = $questionador;
         $this->responsavel = $responsavel;
+        $this->questionarios = $questionarios;
         $this->questionamentos = $questionamentos;
-    }
-
-    public function getId(){
-       return $this->id; 
-    }
-
-    public function setId($id){
-        $this->id = $id;
-    }
-
-    public function setStatus($status){
-
-        $status  = $this->status;
-    }
-
-    public function getStatus(){
-        return $this->status;
-    }
-
-    public function getTitulo(){
-        return $this->titulo; 
-    }
- 
-    public function setTitulo($titulo){
-        $this->titulo = $titulo;
-    }
-
-    public function getDescricao(){
-        return $this->descricao; 
-    }
- 
-    public function setDescricao($descricao){
-        $this->descricao = $descricao;
-    }
-
-    public function getDataLimite(){
-        return $this->dataLimite; 
-    }
-
-    public function setDataLimite($dataLimite){
-        $this->dataLimite = $dataLimite;
-    }
-
-    public function getDataCadastro(){
-        return $this->dataCadastro; 
-    }
- 
-    public function setDataCadastro($dataCadastro){
-        $this->dataCadastro = $dataCadastro;
-    }
-    
-    public function getTipoChecklist(){
-        return $this->tipoChecklist; 
-    }
- 
-    public function setTipoChecklist($tipoChecklist){
-        $this->tipoChecklist = $tipoChecklist;
-    }
-
-    public function getSetor(){
-        return $this->setor; 
-    }
- 
-    public function setSetor($setor){
-        $this->setor = $setor;
-    }
-
-    public function getLoja(){
-        return $this->loja; 
-    }
- 
-    public function setLoja($loja){
-        $this->loja = $loja;
-    }
-
-    public function getQuestionador(){
-        return $this->questionador; 
-    }
- 
-    public function setQuestionador($questionador){
-        $this->questionador = $questionador;
-    }
-
-    public function getResponsavel(){
-        return $this->responsavel; 
-    }
- 
-    public function setResponsavel($responsavel){
-        $this->responsavel = $responsavel;
-    }
-
-    public function getQuestionamentos(){
-        return $this->questionamentos;
-    }
-
-    public function  setQuestionamentos($questionamentos){
-        $this->questionamentos  = $questionamentos;
     }
 }
 ?>

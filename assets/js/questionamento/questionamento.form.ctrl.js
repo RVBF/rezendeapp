@@ -52,7 +52,7 @@
 						// });
 					}
 					else{
-						router.navigate('/checklist');
+						// router.navigate('/checklist');
 						toastr.success('Todas as questões do checklist foram respondidas com sucesso!')
 
 					}
@@ -108,13 +108,13 @@
 
 				$.each(resposta.data, function(i ,item) {
 					$("#responsavelpe").append($('<option>', {
-						value: item.colaborador.id,
-						text: item.colaborador.nome  + ' ' + item.colaborador.sobrenome
+						value: item.id,
+						text: item.nome  + ' ' + item.sobrenome
 					}));
 
 					$("#responsavelpa").append($('<option>', {
-						value: item.colaborador.id,
-						text: item.colaborador.nome  + ' ' + item.colaborador.sobrenome
+						value: item.id,
+						text: item.nome  + ' ' + item.sobrenome
 					}));
 				});
 			};

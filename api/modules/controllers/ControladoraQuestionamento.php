@@ -24,6 +24,7 @@ class ControladoraQuestionamento {
 	private $servicoLogin;
 	private $colecaoColaborador;
 	private $colecaoPendencia;
+	private $colecaoChecklist;
 	
 	function __construct($params,  Sessao $sessao) {
 		$this->params = $params;
@@ -31,6 +32,7 @@ class ControladoraQuestionamento {
 		$this->colecaoPlanoAcao = Dice::instance()->create('ColecaoPlanoAcao');
 		$this->colecaoColaborador = Dice::instance()->create('ColecaoColaborador');
 		$this->colecaoPendencia  = Dice::instance()->create('ColecaoPendencia');
+		$this->colecaoChecklist = Dice::instance()->create('ColecaoChecklist');
 		$this->servicoLogin = new ServicoLogin($sessao);
 
 	}
@@ -46,7 +48,6 @@ class ControladoraQuestionamento {
 			$objetos = [];
 			$erro = null;
 			$objetos = $this->colecaoQuestionamento->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');
-
 			$contagem = $this->colecaoQuestionamento->contagem();
 		}
 		catch (\Exception $e )
@@ -115,11 +116,11 @@ class ControladoraQuestionamento {
 							'',
 							$responsavel
 						);
+
+						$this->colecaoPlanoAcao->adicionar($planoDeAcao);
+
 					}
-
-					$this->colecaoPlanoAcao->adicionar($planoDeAcao);
 				}
-
 
 				if(isset($this->params['pendencia'])){
 					if(
@@ -129,7 +130,7 @@ class ControladoraQuestionamento {
 						$this->params['pendencia']['responsavel'] > 0
 					){
 
-						$responsavel = $this->colecaoColaborador->comId($this->params['pendencia']['responsavel']);
+						$responsavel = new Colaborador(); $responsavel->fromArray($this->colecaoColaborador->comId($this->params['pendencia']['responsavel']));
 
 						if(!isset($responsavel) and !($responsavel instanceof Colaborador)){
 							throw new Exception("Colaborador não encontrado na base de dados.");
@@ -151,7 +152,7 @@ class ControladoraQuestionamento {
 				}
 			}
 
-			$questionamento = $this->colecaoQuestionamento->comId($this->params['id']);
+			$questionamento = new Questionamento(); $questionamento->fromArray($this->colecaoQuestionamento->comId($this->params['id']));
 			if(!isset($questionamento) and !($questionamento instanceof Questionamento)){
 				throw new Exception("Questionamento não encontrado na base de dados.");
 			}	
@@ -162,12 +163,22 @@ class ControladoraQuestionamento {
 			$questionamento->setPlanoAcao($planoDeAcao);
 
 			$this->colecaoQuestionamento->executar($questionamento);
+			
+			$checklist = new Checklist(); $checklist->fromArray($this->colecaoChecklist->comId($questionamento->getChecklist()));
+			$qtdQuestionamentosRepondido = $this->colecaoQuestionamento->contagem($checklist->getId(), [TipoQuestionamentoEnumerado::RESPONDIDO]);
+			$qtdQuestionamentosRepondidoPE = $this->colecaoQuestionamento->contagem($checklist->getId(), [TipoQuestionamentoEnumerado::NAO_RESPONDIDO]);
+			$qtdQuestionamentos = $this->colecaoQuestionamento->contagem($checklist->getId());
 
+			if($qtdQuestionamentos == $qtdQuestionamentosRepondido) $checklist->setStatus(StatusChecklistEnumerado::EXECUTADO);
+			else if($qtdQuestionamentosRepondidoPE > 0) $checklist->setStatus(StatusChecklistEnumerado::EM_PROGRESSO);
+
+			$this->colecaoChecklist->atualizar($checklist);
 			$resposta = ['status' => true, 'mensagem'=> 'Questionamento executado com sucesso.']; 
 			DB::commit();
 
 		}
 		catch (\Exception $e) {
+			
 			DB::rollback();
 
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 

@@ -1,5 +1,7 @@
 <?php
-
+use phputil\traits\ToArray;
+use phputil\traits\GetterSetterWithBuilder;
+use phputil\traits\FromArray;
 /**
  *	Usuario
  *
@@ -7,6 +9,10 @@
  *  @version	1.0
  */
 class Usuario {
+    use GetterSetterWithBuilder;
+    use ToArray;
+    use FromArray;
+
 	private $id;
 	private $login;
     private $senha;
@@ -27,53 +33,6 @@ class Usuario {
         $this->login = $login;
         $this->senha = $senha;
         $this->gruposUsuarios = $gruposUsuario;
-    }
-
-    public function getId() {
-       return $this->id; 
-    }
-
-    public function setId($id) {
-        $this->id = $id;
-    }
-
-    public function getLogin() {
-        return $this->login; 
-    }
- 
-    public function setLogin($login) {
-        $this->login = $login;
-    }
-
-    public function getSenha() {
-        return $this->senha; 
-    }
- 
-    public function setSenha($senha) {
-        $this->senha = $senha;
-    }
-    
-    public function getAdministrador() {
-        return $this->administrador; 
-    }
- 
-    public function setAdministrador($administrador) {
-        $this->administrador = $administrador;
-    }
-
-    public function getGruposUsuario() {
-        return $this->gruposUsuario; 
-    }
- 
-    public function setGruposUsuario($gruposUsuario) {
-        $this->gruposUsuario = $gruposUsuario;
-    }
-    public function getColaborador() {
-        return $this->colaborador; 
-    }
- 
-    public function setColaborador($colaborador) {
-        $this->colaborador = $colaborador;
     }
 }
 ?>

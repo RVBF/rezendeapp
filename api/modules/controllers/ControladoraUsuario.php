@@ -52,14 +52,13 @@ class ControladoraUsuario {
 			$objetos = $this->colecaoUsuario->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');
 			
 			foreach ($objetos as $key => $obj) {
-
-				$colaborador = $this->colecaoColaborador->comUsuarioId($obj->getId());
+				$colaborador = $this->colecaoColaborador->comUsuarioId($obj['id']);
 
 				if(!isset($colaborador) and !($colaborador instanceof Colaborador)){
 					throw new Exception("Colaborador não encontrada na base de dados.");
 				}
 
-				$objetos[$key]->setColaborador($colaborador);
+				$objetos[$key] = $colaborador;
 			}
 
 			
@@ -77,7 +76,7 @@ class ControladoraUsuario {
 			$erro
 		);
 
-		return  $conteudo;
+		return  RTTI::getAttributes($conteudo, RTTI::allFlags());
     }
     
     function adicionar() {

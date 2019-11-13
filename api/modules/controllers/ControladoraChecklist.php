@@ -47,10 +47,9 @@ class ControladoraChecklist {
 			$colaborador = $this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario());
 
 			$idsLojas = [];
-			if($colaborador instanceof Colaborador) {
-				foreach ($colaborador->getLojas() as $loja) {
-					$idsLojas[] = $loja->getId();
-				}
+
+			foreach ($colaborador['lojas'] as $loja) {
+				$idsLojas[] = $loja['id'];
 			}
 
 			if(!isset($this->params['listagemTemporal'])){
@@ -58,34 +57,32 @@ class ControladoraChecklist {
 				$contagem = 0;
 				$objetos = [];
 				$erro = null;
-	
+
 				$objetos = $this->colecaoChecklist->todosComLojaIds($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $idsLojas);
 				$contagem = $this->colecaoChecklist->contagem($idsLojas);
 				$conteudo = new DataTablesResponse(
 					$contagem,
 					is_array($objetos) ? count($objetos) : 0, //count($objetos ),
-					RTTI::getAttributes($objetos,   RTTI::allFlags()),
+					$objetos,
 					$dtr->draw,
 					$erro
 				);
-				Uti::objetosParaArray($objetos);
 
 			}
 			else{
+
 				$objetos = $this->colecaoChecklist->listagemTemporalcomLojasIds($this->params['homePage'], $this->params['pageLength'], (isset($this->params['search'])) ? $this->params['search'] : '', $idsLojas);
 				$contagem = $this->colecaoChecklist->contagem($idsLojas);
 				$conteudo = new DataTablesResponse(
 					$contagem,
 					is_array($objetos) ? count($objetos) : 0, //count($objetos ),
-					$objeto,
+					$objetos,
 					0,
 					null
 				);
 			}
 		}
 		catch (\Exception $e ) {
-			Util::printr($e->getMessage());
-
 			throw new Exception("Erro ao listar checklist");
 		}
 
@@ -94,7 +91,7 @@ class ControladoraChecklist {
 		return RTTI::getAttributes($conteudo,  RTTI::allFlags());
 	}
 	
-	function adicionar($setorId = 0) {
+	function adicionar() {
 		DB::beginTransaction();
 		try {
 			$resposta = [];
@@ -114,34 +111,33 @@ class ControladoraChecklist {
 	
 				throw new Exception($msg);
 			}
-	
-			$setor = $this->colecaoSetor->comId(($setorId > 0) ? $setorId : \ParamUtil::value($this->params, 'setor'));
+			
+			$setor = new Setor(); $setor->fromArray($this->colecaoSetor->comId(($this->params['setor'] > 0) ? $this->params['setor'] : \ParamUtil::value($this->params, 'setor')));
 
 			if(!isset($setor) and !($setor instanceof Setor)){
 				throw new Exception("Setor não encontrado na base de dados.");
 			}
 
 				
-			$loja = $this->colecaoLoja->comId((\ParamUtil::value($this->params, 'loja')> 0) ? \ParamUtil::value($this->params, 'loja') : \ParamUtil::value($this->params, 'loja'));
+			$loja = new Loja(); $loja->fromArray($this->colecaoLoja->comId((\ParamUtil::value($this->params, 'loja')> 0) ? \ParamUtil::value($this->params, 'loja') : \ParamUtil::value($this->params, 'loja')));
 
 			if(!isset($loja) and !($loja instanceof Loja)){
 				throw new Exception("Loja não encontrada na base de dados.");
 			}
 
-			 $questionarios = $this->colecaoQuestionario->todosComId($this->params['questionarios']);
+			$questionarios = $this->colecaoQuestionario->todosComId($this->params['questionarios']);
 
 			if(!isset($questionarios) and count($questionarios) == count($this->params['questionarios'])){
 				throw new Exception("Alguma opção de questionário seleciona não foi encontrado na base de dados.");
 			}
 
-
-			$responsavel = $this->colecaoColaborador->comId((\ParamUtil::value($this->params, 'responsavel')> 0) ? \ParamUtil::value($this->params, 'responsavel') : \ParamUtil::value($this->params, 'responsavel'));
+			$responsavel = new Colaborador(); $responsavel->fromArray($this->colecaoColaborador->comId((\ParamUtil::value($this->params, 'responsavel')> 0) ? \ParamUtil::value($this->params, 'responsavel') : \ParamUtil::value($this->params, 'responsavel')));
 
 			if(!isset($responsavel) and !($responsavel instanceof Colaborador)){
 				throw new Exception("Responśavel não encontrado na base de dados.");
 			}
 
-			$questionador = $this->colecaoColaborador->comId((\ParamUtil::value($this->params, 'questionario')> 0) ? \ParamUtil::value($this->params, 'responsavel') : \ParamUtil::value($this->params, 'responsavel'));
+			$questionador = new Colaborador(); $questionador->fromArray($this->colecaoColaborador->comId((\ParamUtil::value($this->params, 'questionario')> 0) ? \ParamUtil::value($this->params, 'responsavel') : \ParamUtil::value($this->params, 'responsavel')));
 
 			if(!isset($responsavel) and !($responsavel instanceof Colaborador)){
 				throw new Exception("Responśavel não encontrado na base de dados.");
@@ -171,9 +167,9 @@ class ControladoraChecklist {
 
 			$questionamentos = [];
 			foreach($questionarios as $questionarioId){
-				$questionario = $this->colecaoQuestionario->comId($questionarioId);
+				$questionario = new Questionario(); $questionario->fromArray($this->colecaoQuestionario->comId($questionarioId));
 
-				if(!isset($questionario) and !($questionario instanceof Colaborador)){
+				if(!isset($questionario) and !($questionario instanceof Questionario)){
 					throw new Exception('O Questionário selecionado de id nº ' . $questionarioId . ' não foi encontrado na base de dados.');
 				}
 
@@ -303,11 +299,13 @@ class ControladoraChecklist {
 
 	function getQuestionamentosParaExecucao($checklistId){
 		try {
+
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
 			
 			if (! is_numeric($checklistId)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
 
 			$questionamentos = $this->colecaoQuestionamento->questionamentosParaExecucao($checklistId);
+
 			$resposta = ['conteudo'=> $questionamentos, 'status' => true, 'mensagem'=> 'ok.']; 
 		}
 		catch (\Exception $e) {

@@ -22,24 +22,6 @@ class Util {
 			echo("<script>console.log('PHP: ".$data."');</script>");
 		}
 	}
-	static function objetosParaArray($objects = []) {
-
-		foreach($objects as $objeto) {
-			self::toArray($objeto);
-		}
-	}
-
-	// static function toArray($object) {
-		
-	// 	$reflectionClass = new ReflectionClass(get_class($object));
-	// 	$array = array();
-	// 	foreach ($reflectionClass->getProperties() as $property) {
-	// 		$property->setAccessible(true);
-	// 		$array[$property->getName()] = $property->getValue($object);
-	// 		$property->setAccessible(false);
-	// 	}
-	// 	return $array;
-	// }
 }
 
 ?>

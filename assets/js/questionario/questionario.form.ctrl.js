@@ -64,7 +64,7 @@
 			if(_this.formulario.find('.pergunta').length > 0){
 				$('.ids').each(function(){
 					var id = $(this).val();
-					configuracaoes.perguntas.push({id: id, pergunta: $('#pergunta_'+ id).val()});
+					configuracaoes.perguntas.push({id: id, pergunta: $('#pergunta_'+ id).val(), comentario : $('#comentario-pergunta').val()});
 				});
 			}
 			

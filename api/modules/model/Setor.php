@@ -1,4 +1,8 @@
 <?php
+
+use phputil\traits\ToArray;
+use phputil\traits\GetterSetterWithBuilder;
+use phputil\traits\FromArray;
 /**
  *	Setor
  *
@@ -6,6 +10,9 @@
  *  @version	1.0
  */
 class Setor {
+    use GetterSetterWithBuilder;
+    use ToArray;
+    use FromArray;
 
     private $id;
     private $titulo;
@@ -18,30 +25,6 @@ class Setor {
         $this->id = $id;
         $this->titulo = $titulo;
         $this->descricao = $descricao;
-    }
-
-    public function getId(){
-       return $this->id; 
-    }
-
-    public function setId($id){
-        $this->id = $id;
-    }
-
-    public function getDescricao(){
-        return $this->descricao; 
-    }
- 
-    public function setDescricao($descricao){
-        $this->descricao = $descricao;
-    }
-    
-    public function getTitulo(){
-        return $this->titulo; 
-    }
- 
-    public function setTitulo(titulo $titulo) {
-        $this->titulo = $titulo;
     }
 }
 ?>

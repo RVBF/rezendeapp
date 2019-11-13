@@ -38,7 +38,6 @@ class ControladoraLoja {
 			$objetos = [];
 			$erro = null;
 			$objetos = $this->colecaoLoja->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');
-
 			$contagem = $this->colecaoLoja->contagem();
 		}
 		catch (\Exception $e )
@@ -54,7 +53,7 @@ class ControladoraLoja {
 			$erro
 		);
 
-		return $conteudo;
+		return RTTI::getAttributes($conteudo, RTTI::allFlags() );
 	}
 
 	function adicionar() {
