@@ -1,7 +1,6 @@
 <?php
 use Illuminate\Database\Capsule\Manager as DB;
 use Carbon\Carbon;
-use \phputil\RTTI;
 
 
 /**
@@ -37,10 +36,11 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 
 				$obj->setId($id);
 				$questionariosInserts = [];
+
 				foreach ($obj->getQuestionarios() as $questionario) {
 					$questionariosInserts[] = [
 						'checklist_id' => $obj->getId(),
-						'questionario_id' => $questionario->getId(),
+						'questionario_id' => $questionario['id'],
 					];
 				}
 
@@ -89,19 +89,24 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 	}
 
 	function atualizar(&$obj) {
-		if($this->validarTarefa($obj)) {
+		// if($this->validarTarefa($obj)) {
 			try {
 				
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-				$filds = [ 'titulo' => $obj->getTitulo(),
+				$filds = [ 
+					'titulo' => $obj->getTitulo(),
+					'status' => $obj->getStatus(),
+					'tipoChecklist' => $obj->getTipoChecklist(),
 					'descricao' => $obj->getDescricao(),
-					'data_limite' => ($obj->getDataLimite() instanceof Carbon)  ? $obj->getDataLimite()->toDateTimeString() : $obj->getDataLimite(),
-					'encerrada' => $obj->getEncerrada(),
-					'setor_id' => $obj->getSetor()->getId(),
-					'loja_id' => $obj->getLoja()->getId()
+					'data_limite' => ($obj->getDataLimite() instanceof Carbon) ? $obj->getDataLimite()->toDateTimeString(): $obj->getDataLimite(),
+					'questionador_id' => ($obj->getQuestionador() instanceof Colaborador) ? $obj->getQuestionador()->getId() : $obj->getQuestionador()['id'],
+					'responsavel_id' => ($obj->getResponsavel() instanceof Colaborador) ? $obj->getResponsavel()->getId() : $obj->getResponsavel()['id'],
+					'setor_id' => ($obj->getSetor() instanceof Setor) ? $obj->getSetor()->getId() : $obj->getSetor()['id'],
+					'loja_id' => ($obj->getLoja() instanceof Loja) ? $obj->$obj->getLoja()->getId() : $obj->getLoja()['id'],
+					'questionador_id' => ($obj->getQuestionador() instanceof Colaborador) ?  $obj->getQuestionador()->getId() : $obj->getQuestionador()['id']
 				];
-				
+
 				DB::table(self::TABELA)->where('id', $obj->getId())->update($filds);
 
 				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
@@ -110,9 +115,10 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			}
 			catch (\Exception $e)
 			{
+				Util::printr($e->getMessage());
 				throw new ColecaoException("Erro ao atualizar tarefa.", $e->getCode(), $e);
 			}
-		}
+		// }
 	}
 
 	function comId($id){
@@ -210,7 +216,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			$checklistObjects = [];
 
 			foreach ($checklist as $key => $checklist) {
-				$checklistObjects[] =  RTTI::getAttributes($this->construirObjeto($checklist),  RTTI::allFlags());
+				$checklistObjects[] =  $this->construirObjeto($checklist);
 			}
 
 			return $checklistObjects;
@@ -224,11 +230,11 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 	function listagemTemporalcomLojasIds($pageHome = 0, $pageLength = 10,$search = '', $idsLojas = []){
 		try {	
 			$checklists = DB::table(self::TABELA)->orderBy('data_limite', 'ASC')->offset($pageHome)->limit($pageLength)->get();
+
 			$checklistsObjects = [];
 			foreach ($checklists as $key => $checklist) {
-				$checklistsObjects[] =  RTTI::getAttributes($this->construirObjeto($checklist),  RTTI::allFlags());
+				$checklistsObjects[] =  $this->construirObjeto($checklist);
 			}
-
 
 			return $checklistsObjects;
 		}
@@ -258,7 +264,9 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 		$loja = ($row['loja_id'] > 0) ? Dice::instance()->create('ColecaoLoja')->comId($row['loja_id']) : '';
 		$questionador = ($row['questionador_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comUsuarioId($row['questionador_id']) : '';
 		$responsavel = ($row['responsavel_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comUsuarioId($row['responsavel_id']) : '';
+
 		$questionamentos = ($row['id'] > 0) ? Dice::instance()->create('ColecaoQuestionamento')->questionamentosComChecklistId($row['id']) : '';
+
 		$checklist = new Checklist(
 			$row['id'],
 			$row['status'], 
@@ -271,9 +279,10 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			$loja,
 			$questionador, 
 			$responsavel,
+			null,
 			$questionamentos
 		);
-		return $checklist;
+		return $checklist->toArray();
 	}	
 
     function contagem($idsLojas = []) {
@@ -281,34 +290,34 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 	}
 
 	private function validarTarefa(&$obj) {
-		if(!is_string($obj->getTitulo())) throw new ColecaoException('Valor inválido para titulo.');
+		// if(!is_string($obj->getTitulo())) throw new ColecaoException('Valor inválido para titulo.');
 		
-		if(!is_string($obj->getDescricao())) throw new ColecaoException('Valor inválido para a descrição.');
+		// if(!is_string($obj->getDescricao())) throw new ColecaoException('Valor inválido para a descrição.');
 
-		if($obj->getQuestionador() instanceof Usuario){
-			$quantidade = DB::table(ColecaoUsuarioEmBDR::TABELA)->where('id', $obj->getQuestionador()->getId())->count();
+		// if($obj->getQuestionador() instanceof Usuario){
+		// 	$quantidade = DB::table(ColecaoUsuarioEmBDR::TABELA)->where('id', $obj->getQuestionador()->getId())->count();
 
-			if($quantidade == 0) throw new ColecaoException('O usuário questionador não foi encontrado na base de dados.');
-		}
+		// 	if($quantidade == 0) throw new ColecaoException('O usuário questionador não foi encontrado na base de dados.');
+		// }
 		
 
-		$quantidade = DB::table(ColecaoSetorEmBDR::TABELA)->where('id', $obj->getSetor()->getId())->count();
+		// $quantidade = DB::table(ColecaoSetorEmBDR::TABELA)->where('id', $obj->getSetor()->getId())->count();
 
-		if($quantidade == 0)throw new ColecaoException('Setor não foi encontrado na base de dados.');
+		// if($quantidade == 0)throw new ColecaoException('Setor não foi encontrado na base de dados.');
 
-		if(strlen($obj->getTitulo()) <= Checklist::TAM_TITULO_MIM && strlen($obj->getTitulo()) > Checklist::TAM_TITULO_MAX) throw new ColecaoException('O título deve conter no mínimo '. Checklist::TAM_TITULO_MIM . ' e no máximo '. Checklist::TAM_TITULO_MAX . '.');
+		// if(strlen($obj->getTitulo()) <= Checklist::TAM_TITULO_MIM && strlen($obj->getTitulo()) > Checklist::TAM_TITULO_MAX) throw new ColecaoException('O título deve conter no mínimo '. Checklist::TAM_TITULO_MIM . ' e no máximo '. Checklist::TAM_TITULO_MAX . '.');
 		
-		if(strlen($obj->getdescricao()) > 255 and $obj->getdescricao() <> '') throw new ColecaoException('A descrição  deve conter no máximo '. 255 . ' caracteres.');
+		// if(strlen($obj->getdescricao()) > 255 and $obj->getdescricao() <> '') throw new ColecaoException('A descrição  deve conter no máximo '. 255 . ' caracteres.');
 
-		$quantidade = DB::table(self::TABELA)->whereRaw('titulo like  "%'. $obj->getTitulo() . '%"')->where('setor_id', $obj->getSetor()->getId())->where(self::TABELA . '.id', '<>', $obj->getId())->count();
+		// $quantidade = DB::table(self::TABELA)->whereRaw('titulo like  "%'. $obj->getTitulo() . '%"')->where('setor_id', $obj->getSetor()->getId())->where(self::TABELA . '.id', '<>', $obj->getId())->count();
 		
-		if($quantidade > 0){
-			throw new ColecaoException('Já exite uma tarefa cadastrada com esse título.');
-		}
+		// if($quantidade > 0){
+		// 	throw new ColecaoException('Já exite uma tarefa cadastrada com esse título.');
+		// }
 
-		if($obj->getDataLimite() instanceof Carbon){
-			if($obj->getDataLimite() < Carbon::now() and $obj->getId() == 0) throw new Exception("A data Limite deve ser maior que a atual.");
-		}
+		// if($obj->getDataLimite() instanceof Carbon){
+		// 	if($obj->getDataLimite() < Carbon::now() and $obj->getId() == 0) throw new Exception("A data Limite deve ser maior que a atual.");
+		// }
 		
 		return true;
 	}

@@ -43,26 +43,22 @@
 				};
 				
 				var temPaPendente = function temPaPendente() {
-					var i = 0;
 					for (var indice in data.questionamentos) {
 						var elemento = data.questionamentos[indice];
-						
-						if(elemento.planoAcao == null) i++;
+					
+						if(elemento.planoAcao != null) return true;
 					}
-
-					return (i>0) ? true :false;
+					return false;
 				};
 
 
 				var temPendenciaPendente = function temPendenciaPendente() {
-					var i = 0;
 					for (var indice in data.questionamentos) {
 						var elemento = data.questionamentos[indice];
-						
-						if(elemento.pendencia == null) i++;
-					}
 
-					return (i>0) ? true :false;
+						if(elemento.pendencia != null) return true;
+					}
+					return false;
 				};
 
 				var html = '';
@@ -80,11 +76,11 @@
 								else if(data.status == 'Executado' ) html += '<span class="info_checklist green darken-1 btn-small">'+ data.status +'</span>';
 								else if(data.status == 'Aguardando Execução') html += '<span class="info_checklist red accent-4 btn-small">'+ data.status +'</span>';
 
-								html += (!temPaPendente) ? '<span class="info_checklist orange darken-4 btn-small">PA Pendente</span>' : '';
-								html += (!temPendenciaPendente) ? '<span class="info_checklist grey darken-1 btn-small">PA Pendente</span>' : '';
+								html += (temPaPendente()) ? '<span class="info_checklist orange darken-4 btn-small">PA Pendente</span>' : '';
+								html += (temPendenciaPendente()) ? '<span class="info_checklist grey darken-1 btn-small">PA Pendente</span>' : '';
 								
 								html += '<p><i class="mdi mdi-map-marker-radius orange-text text-accent-4"></i> <strong>' + data.loja.razaoSocial + '</strong> ' + data.loja.nomeFantasia + '</p>';
-								if(estaRespondido())html += '<a href="#" class="executar_checklist"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.titulo + '</strong></p></a>';
+								if(!estaRespondido())html += '<a href="#" class="executar_checklist"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.titulo + '</strong></p></a>';
 								else html += '<a href="#" class="ver_questionamentos_respondidos"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.titulo + '</strong></p></a>';
 								// html += '<a href="#" class="inteligencia_link"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.titulo + '</strong></p></a>';								
 								html += '<p class="'+((diferencaDias > 0) ? 'teal-text text-darken-1': ' red-text text-accent-4 ')+'"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>'+textoDiasRestantes+'</strong></p>';

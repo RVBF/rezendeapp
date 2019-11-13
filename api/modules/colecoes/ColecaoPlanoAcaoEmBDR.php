@@ -24,7 +24,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 					'descricaonaoconformidade' => $obj->getDescricao(),
 					'descricaosolucao' => $obj->getSolucao(),
 					'datalimite' => $obj->getDataLimite()->toDateTimeString(),
-					'responsavel_id' => $obj->getResponsavel()->getId()
+					'responsavel_id' => ($obj->getResponsavel() instanceof Colaborador) ? $obj->getResponsavel()->getId() : $obj->getResponsavel()['id']
 				]
 			);
 			$obj->setId($id);		
@@ -32,6 +32,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 
 		}
 		catch (\Exception $e) {
+			Util::printr($e->getMessage());
 			throw new ColecaoException("Erro ao adicionar tarefa ", $e->getCode(), $e);
 		}
 	}
@@ -96,9 +97,9 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 
 	function comId($id){
 		try {	
-			$tarefa = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
+			$planosAcao = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
 
-			return $tarefa;
+			return $planosAcao;
 		}
 		catch (\Exception $e)
 		{
@@ -232,8 +233,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 			$row['dataexecucao'],
 			[]
 		);
-
-		return $planoDeAcao;
+		return $planoDeAcao->toArray();
 	}	
 
     function contagem($responsavelId = 0) {

@@ -1,6 +1,5 @@
 <?php
 use Illuminate\Database\Capsule\Manager as DB;
-use \phputil\RTTI;
 
 /**
  *	Coleção de Loja em Banco de Dados Relacional.
@@ -68,7 +67,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 		try {	
 			$loja = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
 
-			return RTTI::getAttributes($loja, RTTI::allFlags());
+			return $loja;
 		}
 		catch (\Exception $e)
 		{
@@ -143,7 +142,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 			$lojas = $query->offset($limite)->limit($pulo)->get();
 			$lojasObjects = [];
 			foreach ($lojas as $loja) {
-				$lojasObjects[] =  RTTI::getAttributes($this->construirObjeto($loja), RTTI::allFlags());
+				$lojasObjects[] =  $this->construirObjeto($loja);
 			}
 
 			return $lojasObjects;
@@ -171,8 +170,9 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 	}
 
 	function construirObjeto(array $row) {
+
 		$loja = new Loja($row['id'],$row['razaoSocial'], $row['nomeFantasia']);
-		return $loja;
+		return $loja->toArray();
 	}	
 
     function contagem() {

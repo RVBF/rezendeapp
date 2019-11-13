@@ -173,11 +173,10 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 	function construirObjeto(array $row) {
 		$usuario = ($row['usuario_id'] > 0) ? Dice::instance()->create('ColecaoUsuario')->comId($row['usuario_id']) : null;
 		$setor = ($row['setor_id'] > 0) ? Dice::instance()->create('ColecaoSetor')->comId($row['setor_id']) : null;
-
-        $lojas = Dice::instance()->create('ColecaoLoja')->comColaboradorId($row['id']);
+		$lojas = Dice::instance()->create('ColecaoLoja')->comColaboradorId($row['id']);
 
 		$colaborador = new Colaborador($row['id'], $row['nome'], $row['sobrenome'], $row['email'], $usuario, $setor, (is_array($lojas)) ? $lojas : []);
-		return $colaborador;
+		return $colaborador->toArray();
 	}	
 
     function contagem() {

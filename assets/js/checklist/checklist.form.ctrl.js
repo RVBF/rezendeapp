@@ -45,7 +45,7 @@
 			
 				var jqXHR = _this.alterar ? servicoChecklist.atualizar(obj) : servicoChecklist.adicionar(obj);
 				jqXHR.done(function() {
-					router.navigate('/configuracao');
+					router.navigate('/checklist');
 					toastr.success('Checklist Adicionado com sucesso!')
 				}).fail(window.erro).always(terminado);
 
@@ -193,8 +193,8 @@
 
 				$.each(resposta.data, function(i ,item) {
 					$("#responsavel").append($('<option>', {
-						value: item.colaborador.id,
-						text: item.colaborador.nome  + ' ' + item.colaborador.sobrenome
+						value: item.id,
+						text: item.nome  + ' ' + item.sobrenome
 					}));
 				});
 

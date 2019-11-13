@@ -134,7 +134,7 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 	function construirObjeto(array $row) {
 		$setor = new Setor($row['id'],$row['titulo'], $row['descricao']);
 
-		return $setor;
+		return $setor->toArray();
 	}
 
     function contagem() {

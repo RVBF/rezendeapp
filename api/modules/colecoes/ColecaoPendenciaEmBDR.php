@@ -17,8 +17,6 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 	function adicionar(&$obj) {
 		try {	
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-            
-
 			$id = DB::table(self::TABELA)->insertGetId([
 					'status' => StatusPendenciaEnumerado::AGUARDANDO_EXECUCAO,
 					'descricao' => $obj->getDescricao(),
@@ -27,13 +25,14 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 					'responsavel_id' => $obj->getResponsavel()->getId()
 				]
             );
-            
 
 			$obj->setId($id);		
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
 		}
 		catch (\Exception $e) {
+						Util::printr($e->getMessage());
+
 			throw new ColecaoException("Erro ao adicionar tarefa ", $e->getCode(), $e);
 		}
 	}
@@ -220,8 +219,8 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 	}
 
 	function construirObjeto(array $row) {
-		$respponsavel = ($row['colaborador_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comId($row['colaborador_id']) : '';
-       
+		$responsavel = ($row['colaborador_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comId($row['colaborador_id']) : '';
+		Util::printr($responsavel);
         $pendencia = new Pendencia(
             $row['id'],
             $row['descricao'],
