@@ -115,7 +115,6 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			}
 			catch (\Exception $e)
 			{
-				Util::printr($e->getMessage());
 				throw new ColecaoException("Erro ao atualizar tarefa.", $e->getCode(), $e);
 			}
 		// }
@@ -148,7 +147,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 
 	function todosComLojaIds($limite = 0, $pulo = 10, $search = '', $idsLojas = []){
 		try {	
-			$query = DB::table(self::TABELA)->select(self::TABELA . '.*');
+			$query = DB::table(self::TABELA)->selectRaw(self::TABELA . '.*, COUNT('.self::TABELA.'.id) as qtd');
 
 			if($search != '') {
 				$buscaCompleta = $search;
@@ -193,9 +192,12 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 				$query->groupBy(self::TABELA.'.id');
 			}
 			
+			$checklists = $query->groupBy('id','status', 'titulo','descricao', 'data_limite', 'tipoChecklist', 'data_cadastro', 'encerrado', 'questionador_id', 'responsavel_id', 'setor_id', 'checklist_id', 'loja_id')
+								->orderByRaw(self::TABELA . '.status = "' . StatusChecklistEnumerado::EXECUTADO . '" ASC , '. self::TABELA.'.data_limite ASC')
+								->offset($limite)
+								->limit($pulo)
+								->get();
 
-			$checklists = $query->offset($limite)->limit($pulo)->get();
-			
 			$checklistsObjects = [];
 
 			foreach ($checklists as $key => $checklist) {
@@ -206,6 +208,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 		}
 		catch (\Exception $e)
 		{			
+			Util::printr($e->getMessage());
 			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
 		}
 	}

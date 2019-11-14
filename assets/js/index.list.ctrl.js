@@ -64,7 +64,6 @@
         _this.renderizarAtividadesUsuario = function renderizarAtividadesUsuario(){
             
             var sucesso = function (resposta) {
-                console.log(resposta);
             };
 
             var  jqXHR = servicoIndex.carregarListagemDeAtividades();

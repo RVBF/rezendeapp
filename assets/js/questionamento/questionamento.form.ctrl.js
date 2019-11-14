@@ -12,7 +12,6 @@
 
 		_this.alterar;
 		_this.formulario = $('#executarquestionamento_form');
-        _this.botaoSubmissao = $('#salvar');
 		_this.idChecklist = window.location.href.split('#')[1].substring(1, url.length).split('/')[1];
 		_this.questionamentos = null;
 		_this.objetoAtual = null;
@@ -42,24 +41,19 @@
 				var jqXHR = _this.alterar ? servicoQuestionamento.atualizar(obj) : servicoQuestionamento.adicionar(obj);
 				jqXHR.done(function(resposta) {
 					if(resposta.status && _this.questionamentos.length > 0){
-						_this.configurarEventos();
-
-						// _this.formulario.find('.perguntas').empty().promise().done(function () {
-
-						// 	_this.popularQuestao();
-
-						// 	_this.configurarEventos();
-						// });
-					}
-					else{
-						// router.navigate('/checklist');
-						toastr.success('Todas as questões do checklist foram respondidas com sucesso!')
-
+						_this.formulario.find('.perguntas').empty().promise().done(function () {
+							_this.configurar();
+						});
+					}else{
+						if(_this.questionamentos.length == 0) router.navigate('/checklist');
 					}
 					
 					toastr.success('O questionamento de id '+ _this.objetoAtual.id+ ' foi executado com suscesso!')
 
-				}).fail(window.erro).always(terminado);
+				}).fail().always(function () {
+					_this.configurar();
+
+				});
 
 				if(_this.alterar){
 					$('.depende_selecao').each(function(){
@@ -210,8 +204,6 @@
 				},
 			});
 
-			// _this.botaoSubmissao.on('click', _this.salvar);
-			_this.formulario.find('#proximo').on('click', _this.proximo);
 		};
 
 		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro() {
@@ -222,7 +214,6 @@
 
 		_this.popularQuestao = function popularQuestao() {
 			_this.objetoAtual = _this.questionamentos.shift();
-			_this.contador +=1;
 			let html = '';
 			html += '<div class="row form-row questionamento mb-0-dto">'
 				html +='<div class="col col-sm-12 col-md-12 col-lg-12 col-12 mb-0-dto">';
@@ -233,7 +224,7 @@
 					html += '<div class="row form-row mb-0-dto">'
 						html +='<div class="col col-sm-12 col-md-12 col-lg-12 col-12 mb-0-dto">';
 							html +='<p class="mb-0-dto">';
-							html +='<strong class="fw-700-dto">'+_this.contador+'</strong> - ' + _this.objetoAtual.formularioPergunta.pergunta;
+							html +=  _this.objetoAtual.formularioPergunta.pergunta;
 							html +='</p>';
 						html +='</div>';
 					html +='</div>';
@@ -434,12 +425,44 @@
 					}
 				});
 
+				if(_this.questionamentos != null){
+					if(_this.questionamentos.length == 0){
+						var html = '<button type="submit" id="terminar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">';
+						html += '<i class="mdi mdi-checkbox-marked-circle-outline teal-text text-accent-4"></i>';
+						html += 'Terminar';
+						html += '</button>';
+	
+						$('#botoes_execucao').find('#proximo').remove().promise().done(function(){
+							if(_this.formulario.find('#terminar').length ==0){
+								$('#botoes_execucao').prepend(html).promise().done(function () {
+									_this.formulario.find('#terminar').on('click', _this.salvar);
+								});
+							}
+						});
+					}
+					else{
+						if(_this.formulario.find('#proximo').length == 0){
+							var html = '<button type="submit" id="proximo" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">';
+							html += '<i class="mdi mdi-skip-next red-text text-darken-4 "></i>';
+							html += 'Próximo';
+							html += '</button>';
+							$('#botoes_execucao').prepend(html).promise().done(function () {
+								_this.formulario.find('#proximo').on('click', _this.proximo);
+							});
+						}
+						else{
+							_this.formulario.find('#proximo').on('click', _this.proximo);
+
+						}
+
+					}
+				}
+
 			});
 		};
 
 		_this.buscarQuestionamentos  =  function buscarQuestionamentos(valor = 0)	{
 			var sucesso = function (resposta) {
-				console.log(resposta);
 				_this.questionamentos = resposta.conteudo;
 
 				_this.popularQuestao();
@@ -483,7 +506,6 @@
 		};
 		
 		_this.proximo = function proximo(){
-			console.log('netrei');
 			_this.formulario.validate(criarOpcoesValidacao());
 		}
 

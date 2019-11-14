@@ -162,7 +162,6 @@
 		_this.renderizarRegistrosTabelaTemporal = function renderizarRegistrosTabelaTemporal () {
 			
 			var sucesso = function (resposta) {
-				console.log(resposta);
 				if(resposta.recordsFiltered > 0){
 					ultimaResposta = resposta;
 					listagemPadrao.find('.linhas').append(_this.renderizarRows(resposta.data));

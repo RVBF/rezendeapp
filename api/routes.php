@@ -18,7 +18,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraCategoria($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->adicionar();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 
 	$app->put('/categorias', function(Request $req,  Response $res, $args = []) use ($app, $session) {
@@ -26,7 +26,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraCategoria($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->atualizar();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
 
@@ -35,7 +35,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraCategoria($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->remover($args['id']);
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
 // Fim das rotas para categorias
@@ -47,7 +47,7 @@ use \phputil\JSON;
 		$ctrl = new ControladoraSetor($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->todos();
 
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 
 	$app->post('/setor', function(Request $req,  Response $res, $args = []) use ($app, $session) {
@@ -55,7 +55,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraSetor($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->adicionar();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
 
@@ -64,7 +64,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraSetor($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->atualizar();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
 
@@ -73,7 +73,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraSetor($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->remover($args['id']);
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 
 // Fim das rotas para Setor
@@ -84,7 +84,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraQuestionario($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->todos();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 
 	$app->post('/questionario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
@@ -92,7 +92,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraQuestionario($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->adicionar();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
 
@@ -101,7 +101,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraQuestionario($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->atualizar();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
 
@@ -110,7 +110,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraQuestionario($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->remover($args['id']);
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 // Fim das rotas para Questionários
 
@@ -128,7 +128,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraLoja($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->adicionar();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
 
@@ -137,7 +137,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraLoja($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->atualizar();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
 
@@ -146,7 +146,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraLoja($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->remover($args['id']);
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 // Fim das rotas para loja
 
@@ -164,7 +164,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraQuestionamento($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->executar();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
 
@@ -173,7 +173,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraQuestionamento($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->atualizar();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
 
@@ -182,7 +182,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraQuestionamento($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->remover($args['id']);
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 // fim das rotas para questionamentos
 
@@ -208,7 +208,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraChecklist($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->atualizar();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
 
@@ -217,7 +217,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraChecklist($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->adicionar();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
 
@@ -226,7 +226,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraChecklist($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->remover($args['id']);
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(json_encode($response));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 // Fim das rotas para checklist
 
@@ -245,7 +245,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraPlanoAcao($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->adicionar();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 
 	$app->put('/plano-acao', function(Request $req,  Response $res, $args = []) use ($app, $session) {
@@ -253,7 +253,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraPlanoAcao($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->atualizar();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
 
@@ -262,7 +262,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraPlanoAcao($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->remover($args['id']);
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
 // Fim das rotas para plano-acao
@@ -281,7 +281,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraUsuario($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->adicionar();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
 
@@ -290,7 +290,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraUsuario($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->atualizar();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
 
@@ -299,7 +299,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraUsuario($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->remover($args['id']);
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 // Fim das rotas para usuario
 
@@ -309,14 +309,14 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraLogin($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->logar();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 
 	$app->post('/logout', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraLogin($req->getParsedBody(), $sessaoUsuario);
 		$resposta = $ctrl->sair();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($resposta)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($resposta);
 	});
 // Fim das rotas para login
 
@@ -325,8 +325,8 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraSessao($req->getParsedBody(), $sessaoUsuario);
 		$resposta = $ctrl->estaAtiva();
-		if($resposta['status']) return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($resposta)));
-		else return $res->withStatus(401)->withJson(JSON::decode(json_encode($resposta)));
+		if($resposta['status']) return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($resposta);
+		else return $res->withStatus(401)->withJson($resposta);
 	});
 // Fim das rotas para sessão
 
@@ -345,7 +345,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraGrupoUsuario($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->adicionar();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
 
@@ -354,7 +354,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraGrupoUsuario($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->atualizar();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
 
@@ -363,7 +363,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraGrupoUsuario($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->remover($args['id']);
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 // Fim das rotas para grupos de usuário
 
@@ -373,7 +373,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraPermissaoAdministrativa($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->configurar();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 
 	$app->get('/permissoes', function(Request $req,  Response $res, $args = []) use ($app, $session) {
@@ -381,7 +381,7 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraPermissaoAdministrativa($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->todosComPermissao();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($response)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 
 	$app->get('/index/tem-permissao', function(Request $req,  Response $res, $args = []) use ($app, $session) {
@@ -408,7 +408,7 @@ use \phputil\JSON;
 		
 		if($resposta['status']) $resposta['mensagem'] = 'Usuario autorizado.';
 		else $resposta['mensagem'] = 'Usuario não possui permissão para acessar funcionalidade';
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($resposta)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($resposta);
 	});
 
 	$app->get('/index/atividades-usuario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
@@ -417,7 +417,7 @@ use \phputil\JSON;
 		$ctrl = new ControladoraUsuario($req->getParsedBody(), $sessaoUsuario);
 		$resposta = $ctrl->comId($sessaoUsuario->idUsuario());
 		
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson(JSON::decode(json_encode($resposta)));
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($resposta);
 	});
 // Início para permissoes
 

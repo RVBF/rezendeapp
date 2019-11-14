@@ -90,6 +90,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 			}
 			catch (\Exception $e)
 			{
+
 				throw new ColecaoException("Erro ao atualizar tarefa.", $e->getCode(), $e);
 			}
 		}

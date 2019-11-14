@@ -45,7 +45,7 @@
 			
 				var jqXHR = _this.alterar ? servicoChecklist.atualizar(obj) : servicoChecklist.adicionar(obj);
 				jqXHR.done(function() {
-					router.navigate('/checklist');
+					// router.navigate('/checklist');
 					toastr.success('Checklist Adicionado com sucesso!')
 				}).fail(window.erro).always(terminado);
 
@@ -77,7 +77,7 @@
 		};
 
 		_this.configurarBotoes = function configurarBotoes() {
-			_this.dataLimite =new Picker($('#data').get()[0], {
+				_this.dataLimite =new Picker($('#data').get()[0], {
 					format : 'DD de MMMM de YYYY',
 					controls: true,
 					inline: true,
@@ -219,6 +219,7 @@
 				$("#questionarios").empty();
 
 				$.each(resposta.data, function(i ,item) {
+					console.log(item)
 					 let opcoes = {
 						value: item.id,
 						text: item.titulo,

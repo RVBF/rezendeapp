@@ -90,6 +90,7 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 			}
 			catch (\Exception $e)
 			{
+
 				throw new ColecaoException("Erro ao atualizar tarefa.", $e->getCode(), $e);
 			}
 		}

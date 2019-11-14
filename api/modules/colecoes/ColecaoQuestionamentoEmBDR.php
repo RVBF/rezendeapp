@@ -52,7 +52,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 
 			$filds = [ 'status' => $obj->getStatus(),
 				'formularioresposta' => $obj->getFormularioResposta(),
-				'planoacao_id' => ($obj->getPlanoAcao() instanceof PlanoAcao)  ? $obj->getPlanoAcao()->getId() : 0,
+				'planoacao_id' => ($obj->getPlanoAcao() instanceof PlanoAcao)  ? $obj->getPlanoAcao()->getId() :  0,
 				'pendencia_id' => ($obj->getPendencia() instanceof PlanoAcao)  ? $obj->getPendencia()->getId() : 0
 			];
 			
@@ -64,7 +64,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException("Erro ao atualizar tarefa.", $e->getCode(), $e);
+			throw new ColecaoException("Erro ao executar questionamento.", $e->getCode(), $e);
 		}
 	}
     
@@ -72,16 +72,15 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
         try {	
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
             $inserts = [];
-            
+
             foreach($objetos as $obj) {
                 $inserts[] = [ 
                     'status' => $obj->getStatus(),
                     'formulariopergunta' => $obj->getFormularioPergunta(),
                     'formularioresposta' => $obj->getFormularioResposta(),
-                    'checklist_id' => $obj->getCheckList(),
+                    'checklist_id' => ($obj->getChecklist() instanceof Checklist) ? $obj->getChecklist()->getId() : 0,
                 ];
 			}
-
 
             DB::table(self::TABELA)->insert($inserts);
             
@@ -326,13 +325,14 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 			json_decode($row['formulariopergunta']),
 			json_decode($row['formularioresposta']),
 			$row['checklist_id'],
-			$planoAcao
+			$planoAcao,
+			$pendencia
 		);
 		return $questionamento->toArray();
 	}	
 
     function contagem($checklistId = 0, $status = []) {
-		return  DB::table(self::TABELA)->where('checklist_id', $checklistId)->whereIn('status',$status)->count();
+		return (count($status) > 0) ? DB::table(self::TABELA)->where('checklist_id', $checklistId)->whereIn('status',$status)->count() : DB::table(self::TABELA)->where('checklist_id', $checklistId)->count();
 	}
 
 	private function validarTarefa(&$obj) {
