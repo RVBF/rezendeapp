@@ -42,7 +42,6 @@ class ControladoraQuestionario {
 			$erro = null;
 
             $objetos = $this->colecaoQuestionario->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');
-            
 		
 			$contagem = $this->colecaoQuestionario->contagem();
 		}

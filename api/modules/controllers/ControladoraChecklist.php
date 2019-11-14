@@ -84,9 +84,7 @@ class ControladoraChecklist {
 		}
 		catch (\Exception $e ) {
 			throw new Exception("Erro ao listar checklist");
-		}
-
-		
+		}	
 		
 		return RTTI::getAttributes($conteudo,  RTTI::allFlags());
 	}
@@ -181,7 +179,7 @@ class ControladoraChecklist {
 						TipoQuestionamentoEnumerado::NAO_RESPONDIDO,
 						json_encode($pergunta),
 						'',
-						$checklist->getId(),
+						$checklist,
 						null,
 						[]
 					);

@@ -107,7 +107,7 @@
 	
 	router.on('navigate', function(event){
 		// GET /foo/bar
-		console.log('URL changed to %s', this.path());
+		// console.log('URL changed to %s', this.path());
 		// => URL changed to /foo/bar
 	});
 	// Registra como global

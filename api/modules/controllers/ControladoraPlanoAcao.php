@@ -49,6 +49,8 @@ class ControladoraPlanoAcao {
 
 			$colaborador = $this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario());
 			$objetos = $this->colecaoPlanoAcao->todosComResponsavelId($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $colaborador->getUsuario()->getId());
+			Util::printr($objetos);
+
 			$contagem = $this->colecaoPlanoAcao->contagem($colaborador->getUsuario()->getId());
 		}
 		catch (\Exception $e ) {

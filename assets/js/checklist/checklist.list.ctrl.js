@@ -36,8 +36,9 @@
 					var i = 0;
 					for (var indice in data.questionamentos) {
 						var elemento = data.questionamentos[indice];
-						if(elemento.status == 'Não Respondido' || elemento.status == 'Respondido Com Pendências')i++;
+						if(elemento.status == 'Respondido' || elemento.status == 'Respondido Com Pendências')i++;
 					}
+
 
 					return ( i == data.questionamentos.length ) ? true : false;
 				};
@@ -55,18 +56,20 @@
 				var temPendenciaPendente = function temPendenciaPendente() {
 					for (var indice in data.questionamentos) {
 						var elemento = data.questionamentos[indice];
-
 						if(elemento.pendencia != null) return true;
 					}
 					return false;
 				};
-
+				
 				var html = '';
+
+				var tipoClasse = !(data.status == 'Executado') ? ' agenda-dto ' : ' agenda-dto cinza ';
 				var dataLimite = moment(data.dataLimite);
 				var diferencaDias = dataLimite.diff(moment(),'days');
 				var textoDiasRestantes = (diferencaDias > 0) ? Math.abs(diferencaDias) +' dias para que o cheklist seja executado!' : Math.abs(diferencaDias) +' dias de atraso!';
-					html += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12">';
-						html += '<div class="row agenda-dto">'
+				if(data.status == 'Executado')	 textoDiasRestantes = 'Encerrado!';
+				html += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12">';
+						html += '<div class="row '+ tipoClasse + '">';
 							html += '<div class="col col-12 col-lg-3 col-md-3 col-sm-4">';
 								html += '<p class="dia '+((diferencaDias > 0) ? 'teal-text text-darken-1': ' red-text text-accent-4 ') +'">'+ dataLimite.format('ddd') + '</p>';
 								html += '<p class="data">'+ dataLimite.format('DD/MM/YYYY')+ '</p>';
@@ -77,7 +80,7 @@
 								else if(data.status == 'Aguardando Execução') html += '<span class="info_checklist red accent-4 btn-small">'+ data.status +'</span>';
 
 								html += (temPaPendente()) ? '<span class="info_checklist orange darken-4 btn-small">PA Pendente</span>' : '';
-								html += (temPendenciaPendente()) ? '<span class="info_checklist grey darken-1 btn-small">PA Pendente</span>' : '';
+								html += (temPendenciaPendente()) ? '<span class="info_checklist grey darken-1 btn-small">Pendência Pendente</span>' : '';
 								
 								html += '<p><i class="mdi mdi-map-marker-radius orange-text text-accent-4"></i> <strong>' + data.loja.razaoSocial + '</strong> ' + data.loja.nomeFantasia + '</p>';
 								if(!estaRespondido())html += '<a href="#" class="executar_checklist"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.titulo + '</strong></p></a>';
