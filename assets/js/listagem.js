@@ -333,7 +333,6 @@
 			_this.renderizarTabelaTemporal();
 			_this.definirEventosTabela();
 		};
-
 	}; // ListagemPadrao	
 
 	// Registrando

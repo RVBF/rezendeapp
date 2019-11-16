@@ -314,7 +314,7 @@ BEGIN
 		
         
         insert into `checklist`(status, titulo, tipoChecklist, descricao, data_limite, questionador_id, responsavel_id,setor_id, checklist_id,loja_id)
-        values('Aguardando Execução', concat('checklist', x), 'Aguardando Execução','criacaoTeste', ADDDATE(now(), INTERVAL (x *2) DAY), _IDQuestionador, _IDReponsavel, _IDsetor, 0,_IDLoja);
+        values('Aguardando Execução', concat('checklist', x), 'Checklist Padrão','criacaoTeste', ADDDATE(now(), INTERVAL (x *2) DAY), _IDQuestionador, _IDReponsavel, _IDsetor, 0,_IDLoja);
 		SET ultimoID = (SELECT LAST_INSERT_ID());
 		INSERT INTO `checklist_has_questionario`(checklist_id, questionario_id) VALUES (ultimoID, 1);
 		INSERT INTO `checklist_has_questionario`(checklist_id, questionario_id) VALUES (ultimoID, 2);
