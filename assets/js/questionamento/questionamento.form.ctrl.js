@@ -36,23 +36,28 @@
 					_this.formulario.desabilitar(false);
 				};
 				
-				// _this.formulario.desabilitar(true);
+				_this.formulario.desabilitar(true);
 			
 				var jqXHR = _this.alterar ? servicoQuestionamento.atualizar(obj) : servicoQuestionamento.adicionar(obj);
 				jqXHR.done(function(resposta) {
 					if(resposta.status && _this.questionamentos.length > 0){
 						_this.formulario.find('.perguntas').empty().promise().done(function () {
 							_this.configurar();
+							toastr.success('O questionamento de id '+ _this.objetoAtual.id+ ' foi executado com suscesso!');
 						});
 					}else{
-						if(_this.questionamentos.length == 0) router.navigate('/checklist');
+						_this.formulario.desabilitar(false).promise().done(function (){
+							_this.formulario.find('#msg').empty().removeClass('d-none').append(resposta.mensagem);
+							toastr.error(resposta.mensagem);
+							_this.configurar();
+							if(_this.questionamentos.length == 0) router.navigate('/checklist');
+						});
 					}
 					
-					toastr.success('O questionamento de id '+ _this.objetoAtual.id+ ' foi executado com suscesso!')
-
-				}).fail().always(function () {
-					_this.configurar();
-
+				}).fail(window.erro).always(function () {
+					_this.formulario.desabilitar(false).promise().done(function (){
+						_this.configurar();
+					});
 				});
 
 				if(_this.alterar){
@@ -210,6 +215,7 @@
 			_this.popularColaboradores();
 			_this.buscarQuestionamentos();
 			_this.configurarEventos();
+			_this.formulario.find('.msg').addClass('d-none');
 		};
 
 		_this.popularQuestao = function popularQuestao() {

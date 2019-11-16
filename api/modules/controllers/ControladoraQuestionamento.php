@@ -120,6 +120,9 @@ class ControladoraQuestionamento {
 						$this->colecaoPlanoAcao->adicionar($planoDeAcao);
 
 					}
+					else{
+						throw new Exception("É necessário cadastrar um plano de ação para questionamentos com resposta inferior a" . OpcoesRespostaEnumerada::BOM);
+					}
 				}
 
 				if(isset($this->params['pendencia'])){
@@ -148,7 +151,6 @@ class ControladoraQuestionamento {
 
 						$this->colecaoPendencia->adicionar($pendencia);
 					}
-	
 				}
 			}
 
