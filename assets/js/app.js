@@ -74,9 +74,11 @@ var app = {
 
 
 	$.fn.extend({
-		desabilitar: function (status) {
+		desabilitar: function (status, sucesso = null) {
 			$(this).find("*").each(function(){
 				$(this).prop('disabled', status);
+			}).promise().done(function () {
+				if(typeof sucesso == 'function')sucesso();
 			});
 		}
 	});

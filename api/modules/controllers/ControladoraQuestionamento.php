@@ -99,14 +99,15 @@ class ControladoraQuestionamento {
 						strlen($this->params['planoAcao']['solucao']) > 0 and
 						$this->params['planoAcao']['responsavel'] > 0
 					){
+
 						$responsavel = $this->colecaoColaborador->comId($this->params['planoAcao']['responsavel']);
 
 						if(!isset($responsavel) and !($responsavel instanceof Colaborador)){
 							throw new Exception("Colaborador não encontrado na base de dados.");
-						}
+						}	
 
 						$dataLimitePA = new Carbon($this->params['planoAcao']['dataLimite'], 'America/Sao_Paulo');
-	
+
 						$planoDeAcao = new PlanoAcao(
 							0,
 							StatusPaEnumerado::AGUARDANDO_RESPONSAVEL,

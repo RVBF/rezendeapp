@@ -34,31 +34,33 @@
 				var obj = _this.conteudo();
 				var terminado = function() {
 					_this.formulario.desabilitar(false);
+					if($("[name='opcao']:checked").val() != 'Bom'){
+						$('.opcao-selecionada').each(function(i, item){
+							var elemento = $(item);
+							if(elemento.hasClass('d-none') && elemento.hasClass('desabilitado')) elemento.desabilitar(true);
+						});
+					}
 				};
-				
+
 				_this.formulario.desabilitar(true);
-			
+
 				var jqXHR = _this.alterar ? servicoQuestionamento.atualizar(obj) : servicoQuestionamento.adicionar(obj);
 				jqXHR.done(function(resposta) {
 					if(resposta.status && _this.questionamentos.length > 0){
 						_this.formulario.find('.perguntas').empty().promise().done(function () {
-							_this.configurar();
+							_this.buscarQuestionamentos();
+
 							toastr.success('O questionamento de id '+ _this.objetoAtual.id+ ' foi executado com suscesso!');
 						});
 					}else{
-						_this.formulario.desabilitar(false).promise().done(function (){
-							_this.formulario.find('#msg').empty().removeClass('d-none').append(resposta.mensagem);
-							toastr.error(resposta.mensagem);
-							_this.configurar();
-							if(_this.questionamentos.length == 0) router.navigate('/checklist');
-						});
+						_this.formulario.find('#msg').empty().removeClass('d-none').append(resposta.mensagem);
+						toastr.error(resposta.mensagem);
+						if(_this.questionamentos.length == 0 & resposta.status) {
+							router.navigate('/checklist');
+							toastr.success(resposta.mensagem);
+						}
 					}
-					
-				}).fail(window.erro).always(function () {
-					_this.formulario.desabilitar(false).promise().done(function (){
-						_this.configurar();
-					});
-				});
+				}).always(terminado).fail(window.erro);
 
 				if(_this.alterar){
 					$('.depende_selecao').each(function(){
@@ -104,6 +106,7 @@
 		_this.popularColaboradores  =  function popularColaboradores(valor = 0) {
 			var sucesso = function (resposta) {
 				$("#responsavelpe").empty();
+				$('#responsavelpa').empty();
 
 				$.each(resposta.data, function(i ,item) {
 					$("#responsavelpe").append($('<option>', {
@@ -211,6 +214,36 @@
 
 		};
 
+		_this.resetarForm = function resetarForm() {
+			_this.formulario[0].reset();
+			if(!_this.formulario.find('#comentarios').hasClass('d-none') && !_this.formulario.find('#comentarios').hasClass('desabilitado') ){
+				_this.formulario.find('#comentarios').addClass('d-none');
+				_this.formulario.find('#comentarios').addClass('desabilitado');
+			}
+			if(!_this.formulario.find('#info').hasClass('d-none') && !_this.formulario.find('#info').hasClass('desabilitado') ){
+				_this.formulario.find('#info').addClass('d-none');
+				_this.formulario.find('#info').addClass('desabilitado');
+			}
+			if(!_this.formulario.find('#secao_PA').hasClass('d-none') && !_this.formulario.find('#secao_PA').hasClass('desabilitado') ){
+				_this.formulario.find('#secao_PA').addClass('d-none');
+				_this.formulario.find('#secao_PA').addClass('desabilitado');
+			}
+
+			if(!_this.formulario.find('#secao_pendencia').hasClass('d-none') && !_this.formulario.find('#secao_pendencia').hasClass('desabilitado') ){
+				_this.formulario.find('#secao_pendencia').addClass('d-none');
+				_this.formulario.find('#secao_pendencia').addClass('desabilitado');
+			}
+
+			_this.formulario.find('#msg').addClass('d-none');
+
+			_this.formulario.find('#msg').addClass('desabilitado');
+
+			$('.opcao-selecionada').each(function(i, item){
+				var elemento = $(item);
+				if(elemento.hasClass('d-none') && elemento.hasClass('desabilitado')) elemento.desabilitar(true);
+			});
+		};
+		
 		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro() {
 			_this.popularColaboradores();
 			_this.buscarQuestionamentos();
@@ -312,8 +345,8 @@
 					
 			_this.formulario.find('.perguntas').empty().append(html).promise().done(function () {
 				if(_this.questionamentos.length == 1){
-					$('#botoes_execucao').append('<button type="submit" id="salvar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Salvar e Sair</button>');
-					$('#botoes_execucao').find('#salvar').remove();
+					$('body #botoes_execucao').append('<button type="submit" id="salvar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Salvar e Sair</button>');
+					$('body #botoes_execucao').find('#salvar').remove();
 					_this.formulario.find('#salvar').on('click', _this.salvar);
 
 				}
@@ -408,7 +441,7 @@
 					}
 				});
 
-				_this.formulario.find('input[type="radio"]').on('change',function(e){
+				_this.formulario.find('input[name="opcao"]').on('change',function(e){
 					if(this.value != "Bom"){
 						_this.formulario.find('.opcoes_questionamento').show(100);
 						$('.modal').find('#nome-categoria').html(_this.objetoAtual.checklist.titulo);
@@ -419,6 +452,7 @@
 						if(destino.hasClass('d-none') && destino.hasClass('desabilitado')){
 							destino.removeClass('d-none');
 							destino.removeClass('desabilitado');
+							destino.desabilitar(false);
 						}
 					}else {
 						_this.formulario.find('.opcoes_questionamento').hide(100);
@@ -438,26 +472,27 @@
 						html += 'Terminar';
 						html += '</button>';
 	
-						$('#botoes_execucao').find('#proximo').remove().promise().done(function(){
-							if(_this.formulario.find('#terminar').length ==0){
-								$('#botoes_execucao').prepend(html).promise().done(function () {
-									_this.formulario.find('#terminar').on('click', _this.salvar);
+						$('body #botoes_execucao').find('#proximo').remove().promise().done(function(){
+							
+							if($('body #terminar').length ==0){
+								$('body #botoes_execucao').prepend(html).promise().done(function () {
+									$('body #terminar').on('click', _this.salvar);
 								});
 							}
 						});
 					}
 					else{
-						if(_this.formulario.find('#proximo').length == 0){
+						if($('body #proximo').length == 0){
 							var html = '<button type="submit" id="proximo" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">';
 							html += '<i class="mdi mdi-skip-next red-text text-darken-4 "></i>';
 							html += 'Próximo';
 							html += '</button>';
-							$('#botoes_execucao').prepend(html).promise().done(function () {
-								_this.formulario.find('#proximo').on('click', _this.proximo);
+							$('body #botoes_execucao').prepend(html).promise().done(function () {
+								$('body #proximo').on('click', _this.proximo);
 							});
 						}
 						else{
-							_this.formulario.find('#proximo').on('click', _this.proximo);
+							$('body #proximo').on('click', _this.proximo);
 
 						}
 
@@ -469,6 +504,7 @@
 
 		_this.buscarQuestionamentos  =  function buscarQuestionamentos(valor = 0)	{
 			var sucesso = function (resposta) {
+				_this.resetarForm();
 				_this.questionamentos = resposta.conteudo;
 
 				_this.popularQuestao();
@@ -517,7 +553,7 @@
 
 		// Configura os eventos do formulário
 		_this.configurar = function configurar(status = false) {
-            _this.definirForm(status);
+			_this.definirForm(status);
 		};
 	}; // ControladoraFormQuestionamentoExecucao
 

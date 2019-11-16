@@ -166,7 +166,7 @@ form .quebra-linha{
 }
 
 .col-12, .col-md-12, .col-sm-12, .col-lg-12{
-    margin-bottom: 1.5em !important;
+    margin-bottom: 1.5em;
 }
 
 button{
