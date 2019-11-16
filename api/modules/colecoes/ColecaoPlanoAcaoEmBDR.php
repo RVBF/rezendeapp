@@ -187,14 +187,14 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 
 	function todos($limite = 0, $pulo = 0, $search = '') {
 		try {	
-			$tarefas = DB::table(self::TABELA)->offset($limite)->limit($pulo)->get();
-			$tarefasObjects = [];
-
-			foreach ($tarefas as $key => $tarefa) {
-				$tarefasObjects[] =  $this->construirObjeto($tarefa);
+			$plasnosDeAcao = DB::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+			$plasnosDeAcaoObjects = [];
+			Util::printr($plasnosDeAcao);
+			foreach ($plasnosDeAcao as $key => $planoDeACao) {
+				$plasnosDeAcaoObjects[] =  $this->construirObjeto($planoDeACao);
 			}
 
-			return $tarefasObjects;
+			return $plasnosDeAcaoObjects;
 		}
 		catch (\Exception $e)
 		{

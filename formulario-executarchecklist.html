@@ -22,11 +22,12 @@
 	</div>
 </div>
 
-<section id="msg" class="card-panel left-align text-danger msg d-none"></section>
 
 <section id="checklist_execucao">
 	<div class="col col-sm-12 col-md-12 col-lg-12 col-12">
 		<form class="form-horizontal "  method="post" id="executarquestionamento_form">
+			<section id="msg" class="card-panel left-align text-danger msg d-none  desabilitado"></section>
+
 			<section class="perguntas"></section>
 			
 			<section id="info" class="opcao-selecionada d-none desabilitado"></section>
@@ -168,7 +169,7 @@
 
 			<div class="row form-row">
 				<div class="col col-md-12 col-12 col-sm-12 col-lg-12 d-flex justify-content-sm-end justify-content-md-end justify-content-center" id="botoes_execucao">
-					<button class="waves-effect waves-light btn white grey-text text-darken-4 button-dto f-12-dto checklist_link">
+					<button id="cancelar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto f-12-dto checklist_link">
 						<i class="mdi mdi-close-circle-outline yellow-text text-accent-4"></i>
 						Cancelar
 					</button>

@@ -47,11 +47,11 @@ class ControladoraPlanoAcao {
 			$objetos = [];
 			$erro = null;
 
-			$colaborador = $this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario());
-			$objetos = $this->colecaoPlanoAcao->todosComResponsavelId($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $colaborador->getUsuario()->getId());
-			Util::printr($objetos);
+			$colaborador = new Colaborador();  $colaborador->fromArray($this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario()));
 
-			$contagem = $this->colecaoPlanoAcao->contagem($colaborador->getUsuario()->getId());
+			$objetos = $this->colecaoPlanoAcao->todosComResponsavelId($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $colaborador->getUsuario()['id']);
+
+			$contagem = $this->colecaoPlanoAcao->contagem($colaborador->getUsuario()['id']);
 		}
 		catch (\Exception $e ) {
 			throw new Exception("Erro ao listar tarefas");
@@ -65,7 +65,7 @@ class ControladoraPlanoAcao {
 			$erro
 		);
 		
-		return $conteudo;
+		return RTTI::getAttributes($conteudo,  RTTI::allFlags());
 	}
 	
 	function adicionar($setorId = 0) {

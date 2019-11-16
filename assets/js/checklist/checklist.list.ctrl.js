@@ -67,7 +67,9 @@
 				var dataLimite = moment(data.dataLimite);
 				var diferencaDias = dataLimite.diff(moment(),'days');
 				var textoDiasRestantes = (diferencaDias > 0) ? Math.abs(diferencaDias) +' dias para que o cheklist seja executado!' : Math.abs(diferencaDias) +' dias de atraso!';
-				if(data.status == 'Executado')	 textoDiasRestantes = 'Encerrado!';
+				if(data.status == 'Executado'){
+					textoDiasRestantes = 'Encerrado!';
+				}
 				html += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12">';
 						html += '<div class="row '+ tipoClasse + '">';
 							html += '<div class="col col-12 col-lg-3 col-md-3 col-sm-4">';
@@ -100,6 +102,25 @@
 			objeto.rowsCallback = function(resposta){
 				$('.remover_setor_link').on('click', _this.remover);
 				$('.executar_checklist').on('click', _this.executar);
+
+				$('.info_checklist').each(function (i, item) {
+					if($(item).html() == 'Executado'){
+						var htmlExecutado = ''
+						htmlExecutado += '<div class="row listagem-padrao-item">'
+						htmlExecutado += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12 mb-0-dto">';
+
+						htmlExecutado += '<div id="executados" class="row agenda-dto">';
+						htmlExecutado += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12 mb-0-dto">';
+						htmlExecutado += '<h6 class="center-align">EXECUTADOS</h6>';
+						htmlExecutado += '</div>';
+						htmlExecutado += '</div>';
+						htmlExecutado += '</div>';
+						htmlExecutado += '</div>';
+						$(item).parents('.listagem-padrao-item').before(htmlExecutado)
+						return false;
+
+					}
+				}); 
 			};
 
 			return objeto;
