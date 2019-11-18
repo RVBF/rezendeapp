@@ -70,9 +70,7 @@ class ControladoraQuestionamento {
 		DB::beginTransaction();
 
 		try {
-			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
-			}
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");		
 			
 			// if(!$this->servicoLogin->eAdministrador()){
 			// 	throw new Exception("Usuário sem permissão para executar ação.");
@@ -178,7 +176,6 @@ class ControladoraQuestionamento {
 			$this->colecaoChecklist->atualizar($checklist);
 			$resposta = ['status' => true, 'mensagem'=> 'Questionamento executado com sucesso.']; 
 			DB::commit();
-
 		}
 		catch (\Exception $e) {
 			

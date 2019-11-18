@@ -24,8 +24,9 @@ class ControladoraPlanoAcao {
 	private $colecaoColaborador;
 	private $colecaoLoja;
 	private $colecaoPlanoAcao;
+	private $sistemaLog;
 
-	function __construct($params,  Sessao $sessao) {
+	function __construct($params,  Sessao $sessao, &$sistemaLog = null) {
 		$this->params = $params;
 		$this->servicoLogin = new ServicoLogin($sessao);
 		$this->colecaoChecklist = Dice::instance()->create('ColecaoChecklist');
@@ -34,6 +35,7 @@ class ControladoraPlanoAcao {
 		$this->colecaoColaborador = Dice::instance()->create('ColecaoColaborador');
 		$this->colecaoLoja = Dice::instance()->create('ColecaoLoja');
 		$this->colecaoPlanoAcao  = Dice::instance()->create('ColecaoPlanoAcao');
+		$this->sistemaLog = $sistemaLog;
 	}
 
 	function todos() {
@@ -139,55 +141,44 @@ class ControladoraPlanoAcao {
 				throw new Exception("Erro ao acessar página.");				
 			}
 
-			if(!$this->servicoLogin->eAdministrador()){
-				throw new Exception("Usuário sem permissão para executar ação.");
-			}
+			// if(!$this->servicoLogin->eAdministrador()){
+			// 	throw new Exception("Usuário sem permissão para executar ação.");
+			// }
 
-			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo', 'descricao', 'dataLimite', 'setor', 'loja'], $this->params);
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'descricao', 'dataLimite', 'solucao', 'responsavel', 'unidade'], $this->params);
 		
-			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
-				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
-	
-				throw new Exception($msg);
-			}
-
-			$setor = $this->colecaoSetor->comId(\ParamUtil::value($this->params, 'setor'));
-
-			if(!isset($setor) and !(setor instanceof Setor)){
-				throw new Exception("Setor não encontrada na base de dados.");
-			}
-
+			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) throw new Exception('Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes));
 				
-			$loja = $this->colecaoLoja->comId((\ParamUtil::value($this->params, 'loja')> 0) ? \ParamUtil::value($this->params, 'loja') : \ParamUtil::value($this->params, 'loja'));
+			$loja = new Loja();  $loja->fromArray($this->colecaoLoja->comId(ParamUtil::value($this->params, 'unidade')));
 
-			if(!isset($loja) and !($loja instanceof Loja)){
-				throw new Exception("Loja não encontrada na base de dados.");
-			}
+			if(!isset($loja) and !($loja instanceof Loja)) throw new Exception("Loja não encontrada na base de dados.");
+
+
+			$responsavel = new Colaborador();  $responsavel->fromArray($this->colecaoColaborador->comId(ParamUtil::value($this->params, 'responsavel')));
+
+			if(!isset($responsavel) and !($responsavel instanceof Responsavel)) throw new Exception("Responsável não encontrada na base de dados.");
 
 			$dataLimite = new Carbon();                  // equivalent to Carbon::now()
 			$dataLimite = new Carbon(\ParamUtil::value($this->params, 'dataLimite'), 'America/Sao_Paulo');
 
-			$tarefa = $this->colecaoChecklist->comId(\ParamUtil::value($this->params, 'id'));
-
-			if($tarefa->getEncerrada()) throw new Exception("Não é possível editar uma tarefa já encerrada.");
-
-			$tarefa->setTitulo(\ParamUtil::value($this->params, 'titulo'));
-			$tarefa->setDescricao(\ParamUtil::value($this->params, 'descricao'));
-			$tarefa->setDataLimite($dataLimite);
-			$tarefa->setSetor($setor);
-			$tarefa->setLoja($loja);
-	
+			$planoAcao = new PlanoAcao(); $planoAcao->fromArray($this->colecaoPlanoAcao->comId(\ParamUtil::value($this->params, 'id')));
+			
+			$planoAcao->setDescricao(\ParamUtil::value($this->params, 'descricao'));
+			$planoAcao->setSolucao(\ParamUtil::value($this->params, 'solucao'));
+			$planoAcao->setDataLimite($dataLimite);
+			$planoAcao->setUnidade($loja);
+			$planoAcao->setResponsavel($responsavel);
 			$resposta = [];
-					
-			$tarefa = $this->colecaoChecklist->atualizar($tarefa);
+						
+			$this->colecaoPlanoAcao->atualizar($planoAcao);
 
-			$resposta = ['categoria'=> RTTI::getAttributes( $tarefa, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria cadastrada com sucesso.']; 
+			$resposta = ['status' => true, 'mensagem'=> 'Plano de ação atualizado com sucesso.']; 
 			
 			DB::commit();
-
 		}
 		catch (\Exception $e) {
 			DB::rollback();
+			$this->sistemaLog->addInfo($e->getMessage());
 
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
@@ -219,6 +210,23 @@ class ControladoraPlanoAcao {
 			DB::rollback();
 
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+		}
+
+		return $resposta;
+	}
+
+	function comId($id) {
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
+			
+			if (! is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
+
+			$planoAcao = $this->colecaoPlanoAcao->comId($id);
+
+			$resposta = ['conteudo'=> $planoAcao, 'status' => true, 'mensagem'=> 'Plano de ação encontrado com sucesso.']; 
+		}
+		catch (\Exception $e) {
+			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()]; 
 		}
 
 		return $resposta;

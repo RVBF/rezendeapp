@@ -240,6 +240,15 @@ use \phputil\JSON;
 
 	});
 
+	$app->get('/plano-acao/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando listagem de plano-acao");
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraPlanoAcao($req->getQueryParams(), $sessaoUsuario, $this->logger);
+		$response = $ctrl->comId($args['id']);
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+
+	});
+
 	$app->post('/plano-acao', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 		$this->logger->addInfo("Acessando o cadastro de plano-acao");
 		$sessaoUsuario = new Sessao($session);
@@ -251,7 +260,7 @@ use \phputil\JSON;
 	$app->put('/plano-acao', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 		$this->logger->addInfo("Acessando a atualização de plano-acao");
 		$sessaoUsuario = new Sessao($session);
-		$ctrl = new ControladoraPlanoAcao($req->getParsedBody(), $sessaoUsuario);
+		$ctrl = new ControladoraPlanoAcao($req->getParsedBody(), $sessaoUsuario, $this->logger);
 		$response = $ctrl->atualizar();
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
@@ -302,7 +311,6 @@ use \phputil\JSON;
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 // Fim das rotas para usuario
-
 
 // Início das rotas para login
 	$app->post('/login', function(Request $req,  Response $res, $args = []) use ($app, $session) {

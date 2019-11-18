@@ -1,0 +1,90 @@
+
+<section id="painel_formulario">
+    <section id="painel_formulario">
+        
+        <div class="col-12  col-sm-12 col-md-12 col-lg-12">
+            <section id="msg" class="card-panel left-align text-danger msg d-none  desabilitado"></section>
+
+            <div class="card-panel left-align">
+                <form class="form-horizontal"  method="post" id="planoacao_form">
+                    <span class="card-title"></span>
+                    
+                    <div class="divisor-secao"></div>
+                    <input type="hidden" id="id" name ="id" />
+
+                    <div class="row form-row">
+                        <div class="col col-sm-12 col-md-12 col-12 col-lg-12">
+                            <div class="input-field ">
+                                <textarea id="nao-conformidade-pa" class=" campo_obrigatorio materialize-textarea"></textarea>
+                                <label for="nao-conformidade-pa">Descreva a Não Conformidade</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row form-row">
+                        <div class="col col-sm-12 col-md-12 col-12 col-lg-12">
+                            <div class="input-field ">
+                                <i class="prefix mdi mdi-plus-circle-outline"></i>
+                                <textarea id="descricao-pa" class=" campo_obrigatorio materialize-textarea validate"></textarea>
+                                <label for="descricao-pa">Descreva o P.A</label>												
+                            </div>
+                        </div>
+                    </div>
+                        
+                    <div class="row form-row">
+                        <div class="col col-md-6 col-12 col-sm-6 col-lg-6">
+                            <div class="input-field">
+                                <i class="prefix mdi mdi-calendar"></i>
+                                <input id="data_limitepa" type="text" class=" campo_obrigatorio validate form-control data-picker">
+                                <label for="data_limitepa">Data Limite para Execução</label>
+                            </div>
+                            <div class="date-panel-pa"></div>
+                        </div>
+
+                        <div class="col col-md-6 col-12 col-sm-6 col-lg-6">
+                            <div class="input-field">
+                                <i class="prefix mdi mdi-av-timer"></i>
+                                <input id="hora_limitepa" type="text" class="campo_obrigatorio validate form-control hora-picker">
+                                <label for="hora_limitepa">Hora limite para Execução</label>
+                            </div>
+                            <div class="time-panel-pa"></div>
+                        </div>
+                    </div>
+
+                    <div class="row form-row">
+                        <div class="col col-md-6 col-12 col-sm-12 col-lg-6 ">
+                            <div class=" input-field">
+                                <select id ="responsavelpa"  name="responsavelpa" class="campo_obrigatorio select campo_obrigatorio" ><option value="" disabled selected>Responsável</option></select>
+                                <label for="responsavelpa">*Responsável</label>
+                            </div>
+                        </div>
+
+                        <div class="col col-md-6 col-12 col-sm-12 col-lg-6 ">
+                            <div class=" input-field">
+                                <select id ="unidade"  name="unidade" class="select campo_obrigatorio"><option value="" disabled selected>Unidade</option></select>
+                                <label for="unidade">*Unidade</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row form-row" id="botoes">
+                        <div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-start justify-content-md-start ">
+                            <button class="waves-effect waves-light btn white grey-text text-darken-4 button-dto f-12-dto pa_link">
+                                <i class="mdi mdi-close-circle-outline yellow-text text-accent-4"></i>
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</section>  			
+
+<script>
+    $(document).ready(function() {
+        var servicoPlanoDeAcao = new app.ServicoPlanoAcao();
+        var crltPlanoDeAcao = new app.ControladoraFormPlanoAcao(servicoPlanoDeAcao);
+        crltPlanoDeAcao.configurar();
+    });
+</script>

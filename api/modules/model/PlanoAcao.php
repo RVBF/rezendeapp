@@ -21,18 +21,20 @@ class PlanoAcao {
     private $solucao;
     private $resposta;
     private $responsavel;
+    private $unidade;
     private $dataCadastro;
     private $dataExecucao;
     private $historico;
 
     function __construct(
-        $id,
-        $status,
-        $descricao,
-        $dataLimite,
-        $solucao,
+        $id = 0,
+        $status = '',
+        $descricao= '',
+        $dataLimite= '',
+        $solucao= '',
         $resposta = '',
-        $responsavel,
+        $responsavel = null,
+        $unidade = null,
         $dataCadastro = '',
         $dataExecucao = '',
         $historico = []
@@ -44,6 +46,7 @@ class PlanoAcao {
         $this->dataLimite = $dataLimite;
         $this->solucao = $solucao;
         $this->responsavel  = $responsavel;
+        $this->unidade = $unidade;
         $this->resposta = $resposta;
         $this->dataCadastro = $dataCadastro;
         $this->dataExecucao = $dataExecucao;

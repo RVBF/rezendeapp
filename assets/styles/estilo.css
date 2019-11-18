@@ -27,6 +27,11 @@
     margin-top: 3rem;
 }
 
+.listagem-padrao .visualizacao {
+    border-top: 1px solid #e0e0e0 !important;
+    padding-top: 1em;
+}
+
 .listagem-padrao-item{
     border-bottom: 1px solid #bfbfbf;
     padding-bottom: 10px;

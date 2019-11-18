@@ -20,7 +20,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 	
 
 			$id = DB::table(self::TABELA)->insertGetId([
-					'status' => StatusPaEnumerado::AGUARDANDO_RESPONSAVEL,
+					'status' => $obj->getStatus(),
 					'descricaonaoconformidade' => $obj->getDescricao(),
 					'descricaosolucao' => $obj->getSolucao(),
 					'datalimite' => $obj->getDataLimite()->toDateTimeString(),
@@ -69,19 +69,21 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 	}
 
 	function atualizar(&$obj) {
-		if($this->validarPA($obj)) {
+		// if($this->validarPA($obj)) {
 			try {
 				
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-				$filds = [ 'titulo' => $obj->getTitulo(),
-					'descricao' => $obj->getDescricao(),
-					'data_limite' => ($obj->getDataLimite() instanceof Carbon)  ? $obj->getDataLimite()->toDateTimeString() : $obj->getDataLimite(),
-					'encerrada' => $obj->getEncerrada(),
-					'setor_id' => $obj->getSetor()->getId(),
-					'loja_id' => $obj->getLoja()->getId()
+				$filds = [
+					'status' => $obj->getStatus(),
+					'descricaonaoconformidade' => $obj->getDescricao(),
+					'descricaosolucao' => $obj->getSolucao(),
+					'datalimite' => $obj->getDataLimite()->toDateTimeString(),
+					'datacadastro' => ($obj->getDataCadastro() == '') ? NULL : $obj->getDataCadastro(),
+					'dataexecucao' => ($obj->getDataExecucao() == '') ? NULL : $obj->getDataExecucao(),
+					'responsavel_id' => ($obj->getResponsavel() instanceof Colaborador) ? $obj->getResponsavel()->getId() : $obj->getResponsavel()['id']
 				];
-				
+				// Util::printr($filds);
+
 				DB::table(self::TABELA)->where('id', $obj->getId())->update($filds);
 
 				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
@@ -93,7 +95,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 
 				throw new ColecaoException("Erro ao atualizar tarefa.", $e->getCode(), $e);
 			}
-		}
+		// }
 	}
 
 	function comId($id){
@@ -189,7 +191,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 		try {	
 			$plasnosDeAcao = DB::table(self::TABELA)->offset($limite)->limit($pulo)->get();
 			$plasnosDeAcaoObjects = [];
-			Util::printr($plasnosDeAcao);
+
 			foreach ($plasnosDeAcao as $key => $planoDeACao) {
 				$plasnosDeAcaoObjects[] =  $this->construirObjeto($planoDeACao);
 			}
@@ -222,7 +224,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 	function construirObjeto(array $row) {
 		$responsavel = ($row['responsavel_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comId($row['responsavel_id']) : '';
 
-        $planoDeAcao = new PlanoAcao(
+		$planoDeAcao = new PlanoAcao(
 			$row['id'],
 			$row['status'],
 			$row['descricaonaoconformidade'],
@@ -230,6 +232,8 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 			$row['descricaosolucao'],
 			'',
 			$responsavel,
+			null,
+			'',
 			$row['datacadastro'],
 			$row['dataexecucao'],
 			[]

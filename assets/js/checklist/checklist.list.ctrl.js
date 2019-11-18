@@ -93,9 +93,7 @@
 							html += '</div>';
 						html += '</div>';
 					html += '</div>';
-					
-						
-							
+												
 					return html;
 				};
 
