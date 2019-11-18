@@ -12,9 +12,10 @@
         dataLimite,
 		solucao,
 		responsavel,
+		unidade,
         resposta,
         dataCadastro,
-		dataExecucao,
+		dataExecucao
     ){
         this.id = id || 0;
         this.descricao = descricao || '';
@@ -22,6 +23,7 @@
         this.solucao = solucao || '';
 		this.resposta = resposta || '';
 		this.responsavel = responsavel || 0;
+		this.unidade = unidade || 0
         this.dataCadastro = dataCadastro || '';
         this.dataExecucao = dataExecucao || '';
     };
@@ -40,6 +42,7 @@
             dataLimite,
 			solucao,
 			responsavel,
+			unidade,
             resposta,
             dataCadastro,
             dataExecucao
@@ -50,6 +53,7 @@
                 dataLimite : dataLimite || '',
 				solucao : solucao || '',
 				responsavel : responsavel || '',
+				unidade : unidade || '',
                 resposta : resposta || '',
                 dataCadastro : dataCadastro || '',
                 dataExecucao : dataExecucao || ''
