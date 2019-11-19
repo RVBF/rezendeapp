@@ -105,6 +105,14 @@
 				url: _this.rota() + '/plano-acao' + id
 			});
 		};
+
+		_this.confirmarResponsabilidade = function(id){
+			return $.ajax({
+				type: "POST",
+				url: _this.rota() + '/confirmar-responsabilidade',
+				data: { 'id' : id}
+			});
+		};
 	}; // ServicoPlanoAcao
 
 	// Registrando

@@ -27,7 +27,7 @@
     margin-top: 3rem;
 }
 
-.listagem-padrao .visualizacao {
+.listagem-padrao .opc_tabela {
     border-top: 1px solid #e0e0e0 !important;
     padding-top: 1em;
 }
@@ -220,10 +220,15 @@ button{
     margin-bottom: 1em;
 }
 
+.listagem-padrao .opc_tabela a{
+    margin-bottom: 0px;
+}
+
 @media(min-width:100px) and (max-width: 635px) {
     .listagem-padrao-item .opcoes{
         border: 0px;
     }
+
 }
 
 @media(min-width:100px) and (max-width: 575px) {
@@ -250,12 +255,16 @@ button{
         word-wrap: break-word;
     }
 
-    .card-panel{
-        padding: 2px 1px 2px 1px;
+    .card-panel {
+        padding: 10px 15px 10px 15px;
     }
 
     #checklist_execucao .card-panel{
         padding: 1em;
+    }
+
+    .listagem-padrao .opc_tabela a{
+        margin-bottom: 1em;
     }
 }
 

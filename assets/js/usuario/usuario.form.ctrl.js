@@ -95,9 +95,16 @@
 				_this.formulario.desabilitar(true);
 			
 				var jqXHR = _this.alterar ? servicoUsuario.atualizar(obj) : servicoUsuario.adicionar(obj);
-				jqXHR.done(function() {
-					router.navigate('/colaboradores');
-					toastr.success('Colaborador Adicionado com sucesso!')
+				jqXHR.done(function(resposta) {
+					if(resposta.status){
+						router.navigate('/colaboradores');
+						toastr.success('Colaborador Adicionado com sucesso!');
+					}
+					else{
+						$('body #msg').empty().removeClass('d-none').append(resposta.mensagem);
+						toastr.error(resposta.mensagem);
+					}
+
 				}).fail(window.erro).always(terminado);
 			}; // submitHandler
 

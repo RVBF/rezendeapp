@@ -32,6 +32,7 @@
 			objeto.searchDelay = 600;	
 			objeto.cadastrarLink = 'cadastrar_planoacao_link';
 			objeto.columnDefs = function (data){
+				console.log(data);
 				var html = '';
 				var dataLimite = moment(data.dataLimite);
 				var diferencaDias = dataLimite.diff(moment(),'days');
@@ -58,14 +59,39 @@
 						html += '<p><strong>Descrição da solução : </strong> ' + data.solucao + '</p>';
 					html += '</div>';
 
-					html += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12 mb-0-dto visualizacao">';
-					html += '<p class="mb-0-dto">';
-					html += '<a href="#" class="detalhes-dto visualizar_pa">';
-					html += '<i class="mdi mdi-eye-outline orange-text text-accent-4"></i>';
-					html += 'VER DETALHES';
-					html += '</a>';
-					html += '</p>';
-				html += '</div>';
+					html += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12 mb-0-dto opc_tabela">';
+							html += '<div class="row">'
+								html += '<div class="col col-12 col-lg-4 col-md-4 col-sm-4 mb-0-dto">';
+
+									html += '<p class="mb-0-dto">';
+									html += '<a href="#" class="detalhes-dto visualizar_pa">';
+									html += '<i class="mdi mdi-eye-outline orange-text text-accent-4"></i>';
+									html += 'VER DETALHES';
+									html += '</a>';
+									html += '</p>';
+								html += '</div>';
+								if(!data.responsabilidade){
+									html += '<div class="col col-12 col-lg-4 col-md-4 col-sm-4 mb-0-dto">';
+										html += '<p class="mb-0-dto">';
+										html += '<a href="#" class="detalhes-dto confirmar_responsabilidade">';
+										html += '<i class="far fa-check-square orange-text text-accent-4"></i>';
+										html += 'Confirmar responsabilidade';
+										html += '</a>';
+										html += '</p>';
+									html += '</div>';
+
+									html += '<div class="col col-12 col-lg-4 col-md-4 col-sm-4 mb-0-dto">';
+										html += '<p class="mb-0-dto">';
+										html += '<a href="#" class="detalhes-dto devolver_responsabilidade">';
+										html += '<i class="far fa-window-close orange-text text-accent-4"></i>';
+										html += 'Devolver responsabilidade';
+										html += '</a>';
+										html += '</p>';
+									html += '</div>';
+								}
+							html += '</div>';
+
+					html += '</div>';
 				html += '</div>';
 
 				
@@ -77,6 +103,8 @@
 				$('.remover_setor_link').on('click', _this.remover);
 				$('.executar_PlanoAcao').on('click', _this.executar);
 				$('.visualizar_pa').on('click', _this.visualizar);
+				$('.confirmar_responsabilidade').on('click', _this.confirmarResponsabilidade);
+				$('.devolver_responsabilidade').on('click', _this.devolverResponsabilidade);
 			};
 
 			return objeto;
@@ -88,6 +116,23 @@
 
 			router.navigate('/executar-PlanoAcao/'+ objeto.id);
 		};
+
+
+		_this.confirmarResponsabilidade = function confirmarResponsabilidade(event) {
+			event.preventDefault();
+			var objeto = _tabela.getObjetos()[$(this).parents('.listagem-padrao-item').index()];
+
+			servicoPlanoAcao.confirmarResponsabilidade(objeto.id).done(function (resposta) {
+				if(resposta.status){
+					_this.atualizar();
+					toastr.success(resposta.mensagem);
+
+				}
+				else{
+					toastr.error(resposta.mensagem);
+				}
+			});
+		}
 
 		_this.visualizar = function visualizar(event) {
 			event.preventDefault();

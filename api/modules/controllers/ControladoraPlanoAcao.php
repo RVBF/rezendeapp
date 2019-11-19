@@ -24,9 +24,8 @@ class ControladoraPlanoAcao {
 	private $colecaoColaborador;
 	private $colecaoLoja;
 	private $colecaoPlanoAcao;
-	private $sistemaLog;
 
-	function __construct($params,  Sessao $sessao, &$sistemaLog = null) {
+	function __construct($params,  Sessao $sessao) {
 		$this->params = $params;
 		$this->servicoLogin = new ServicoLogin($sessao);
 		$this->colecaoChecklist = Dice::instance()->create('ColecaoChecklist');
@@ -35,7 +34,6 @@ class ControladoraPlanoAcao {
 		$this->colecaoColaborador = Dice::instance()->create('ColecaoColaborador');
 		$this->colecaoLoja = Dice::instance()->create('ColecaoLoja');
 		$this->colecaoPlanoAcao  = Dice::instance()->create('ColecaoPlanoAcao');
-		$this->sistemaLog = $sistemaLog;
 	}
 
 	function todos() {
@@ -50,10 +48,11 @@ class ControladoraPlanoAcao {
 			$erro = null;
 
 			$colaborador = new Colaborador();  $colaborador->fromArray($this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario()));
+			// Util::printr($colaborador);
 
-			$objetos = $this->colecaoPlanoAcao->todosComResponsavelId($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $colaborador->getUsuario()['id']);
+			$objetos = $this->colecaoPlanoAcao->todosComResponsavelId($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $colaborador->getId());
 
-			$contagem = $this->colecaoPlanoAcao->contagem($colaborador->getUsuario()['id']);
+			$contagem = $this->colecaoPlanoAcao->contagem($colaborador->getId());
 		}
 		catch (\Exception $e ) {
 			throw new Exception("Erro ao listar tarefas");
@@ -178,7 +177,6 @@ class ControladoraPlanoAcao {
 		}
 		catch (\Exception $e) {
 			DB::rollback();
-			$this->sistemaLog->addInfo($e->getMessage());
 
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
@@ -224,6 +222,52 @@ class ControladoraPlanoAcao {
 			$planoAcao = $this->colecaoPlanoAcao->comId($id);
 
 			$resposta = ['conteudo'=> $planoAcao, 'status' => true, 'mensagem'=> 'Plano de ação encontrado com sucesso.']; 
+		}
+		catch (\Exception $e) {
+			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()]; 
+		}
+
+		return $resposta;
+	}
+
+	function confirmarResponsabilidade(){
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
+			
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id'], $this->params);
+
+			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
+				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
+	
+				throw new Exception($msg);
+			}
+
+			$colaboradorLogado = new Colaborador(); $colaboradorLogado->fromArray($this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario()));
+
+			if(!isset($colaboradorLogado) and !($colaboradorLogado instanceof Colaborador)){
+				throw new Exception("Colaborador não encontrado na base de dados.");
+			}	
+
+			$planoAcao  = new PlanoAcao(); $planoAcao->fromArray($this->colecaoPlanoAcao->comId($this->params['id']));
+
+			if(!isset($planoAcao) and !($planoAcao instanceof Colaborador)){
+				throw new Exception("Colaborador não encontrado na base de dados.");
+			}	
+			
+			$responsavelAtual = new Colaborador(); $responsavelAtual->fromArray($planoAcao->getResponsavel());
+
+			if(!isset($responsavelAtual) and !($planoAcao instanceof Colaborador)){
+				throw new Exception("Colaborador não encontrado na base de dados.");
+			}	
+			
+			if($responsavelAtual->getId() != $colaboradorLogado->getId()) throw new Exception("Não é possível confirmar a responsabilidade, porque o colaborador atual é diferente do colaborador logado no sistema!");
+			
+			$planoAcao->setResponsabilidade(true);
+			$planoAcao->setStatus(StatusPaEnumerado::AGUARDANDO_EXECUCAO);
+
+			$this->colecaoPlanoAcao->atualizar($planoAcao);
+
+			$resposta = ['conteudo'=> $planoAcao, 'status' => true, 'mensagem'=> 'Responsabilidade confirmada com sucesso.']; 
 		}
 		catch (\Exception $e) {
 			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()]; 

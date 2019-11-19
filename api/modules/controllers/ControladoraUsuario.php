@@ -98,7 +98,7 @@ class ControladoraUsuario {
 				throw new Exception($msg);
 			}			
 			
-			$setor = $this->colecaoSetor->comId($this->params['setor']);
+			$setor = new Setor(); $setor->fromArray($this->colecaoSetor->comId($this->params['setor']));
 	
 			if(!isset($setor) and !($setor instanceof Setor)){
 				throw new Exception("Setor não encontrada na base de dados.");

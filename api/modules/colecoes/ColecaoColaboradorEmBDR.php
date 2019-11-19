@@ -23,7 +23,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 				$id = DB::table(self::TABELA)->insertGetId([ 
 					'nome' => $obj->getNome() ,
-					'sobrenome' => $obj->getSobreNome(),
+					'sobrenome' => $obj->getSobrenome(),
 					'email' => $obj->getEmail(),
 					'usuario_id' => $obj->getUsuario()->getId(),
 					'setor_id'	=> $obj->getSetor()->getId()
@@ -32,8 +32,9 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 				$atuacoesLojas = [];
 
 				foreach($obj->getLojas() as $loja){
-					
-					$atuacoesLojas[] = ['loja_id' => $loja->getId(), 'colaborador_id' =>  $id];
+					$lojaAtual = new Loja(); $lojaAtual->fromArray($loja);
+
+					$atuacoesLojas[] = ['loja_id' => $lojaAtual->getId(), 'colaborador_id' =>  $id];
 				}
 				
 				DB::table(self::TABELA_RELACIONAL)->insert($atuacoesLojas);
@@ -45,8 +46,9 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 				return $obj;
 			}
 			catch (\Exception $e)
-			{
-				throw new ColecaoException("Erro ao adicionar usuário.", $e->getCode(), $e);
+			{	
+				Util::printr($e->getMessage());
+				throw new ColecaoException("Erro ao adicionar colaborador.", $e->getCode(), $e);
 			}
 		}
 	}
