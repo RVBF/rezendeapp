@@ -25,6 +25,7 @@ class ControladoraQuestionamento {
 	private $colecaoColaborador;
 	private $colecaoPendencia;
 	private $colecaoChecklist;
+	private $colecaoHistorico;
 	
 	function __construct($params,  Sessao $sessao) {
 		$this->params = $params;
@@ -33,8 +34,8 @@ class ControladoraQuestionamento {
 		$this->colecaoColaborador = Dice::instance()->create('ColecaoColaborador');
 		$this->colecaoPendencia  = Dice::instance()->create('ColecaoPendencia');
 		$this->colecaoChecklist = Dice::instance()->create('ColecaoChecklist');
+		$this->colecaoHistorico = Dice::instance()->create('ColecaoHistoricoResponsabilidade');
 		$this->servicoLogin = new ServicoLogin($sessao);
-
 	}
 
 	function todos() {
@@ -85,6 +86,12 @@ class ControladoraQuestionamento {
 				throw new Exception($msg);
 			}
 
+			$responsavelAtual = new Colaborador(); $responsavelAtual->fromArray($this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario()));
+
+			if(!isset($responsavelAtual) and !($responsavelAtual instanceof Colaborador)){
+				throw new Exception("Colaborador não encontrado na base de dados.");
+			}	
+
 			$planoDeAcao = null;
 			$pendencia = NULL;
 			$questionamento = NULL;
@@ -98,26 +105,41 @@ class ControladoraQuestionamento {
 						$this->params['planoAcao']['responsavel'] > 0
 					){
 
-						$responsavel = $this->colecaoColaborador->comId($this->params['planoAcao']['responsavel']);
+						$responsavel = new Colaborador(); $responsavel->fromArray($this->colecaoColaborador->comId($this->params['planoAcao']['responsavel']));
 
 						if(!isset($responsavel) and !($responsavel instanceof Colaborador)){
 							throw new Exception("Colaborador não encontrado na base de dados.");
 						}	
+						
 
 						$dataLimitePA = new Carbon($this->params['planoAcao']['dataLimite'], 'America/Sao_Paulo');
 
 						$planoDeAcao = new PlanoAcao(
 							0,
-							StatusPaEnumerado::AGUARDANDO_RESPONSAVEL,
+							($responsavel->getId() == $responsavelAtual->getId()) ? StatusPaEnumerado::AGUARDANDO_EXECUCAO : StatusPaEnumerado::AGUARDANDO_RESPONSAVEL,
 							$this->params['planoAcao']['descricao'],
 							$dataLimitePA,
 							$this->params['planoAcao']['solucao'],
 							'',
-							$responsavel
+							$responsavel,
+							null,
+							'',
+							'',
+							($responsavel->getId() == $responsavelAtual->getId()) ?  true : false
 						);
 
 						$this->colecaoPlanoAcao->adicionar($planoDeAcao);
 
+
+						$historico = new HistoricoResponsabilidade(
+							0,
+							Carbon::now(),
+							$planoDeAcao,
+							$responsavelAtual,
+							$responsavel
+						);
+
+						$this->colecaoHistorico->adicionar($historico);
 					}
 					else{
 						throw new Exception("É necessário cadastrar um plano de ação para questionamentos com resposta inferior a" . OpcoesRespostaEnumerada::BOM);

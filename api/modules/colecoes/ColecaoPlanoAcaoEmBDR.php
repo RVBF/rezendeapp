@@ -24,6 +24,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 					'descricaonaoconformidade' => $obj->getDescricao(),
 					'descricaosolucao' => $obj->getSolucao(),
 					'datalimite' => $obj->getDataLimite()->toDateTimeString(),
+					'responsabilidade' => $obj->getResponsabilidade(),
 					'responsavel_id' => ($obj->getResponsavel() instanceof Colaborador) ? $obj->getResponsavel()->getId() : $obj->getResponsavel()['id']
 				]
 			);
@@ -77,12 +78,10 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 					'status' => $obj->getStatus(),
 					'descricaonaoconformidade' => $obj->getDescricao(),
 					'descricaosolucao' => $obj->getSolucao(),
-					'datalimite' => $obj->getDataLimite()->toDateTimeString(),
-					'datacadastro' => ($obj->getDataCadastro() == '') ? NULL : $obj->getDataCadastro(),
-					'dataexecucao' => ($obj->getDataExecucao() == '') ? NULL : $obj->getDataExecucao(),
+					'datalimite' => ($obj instanceof Carbon) ? $obj->getDataLimite()->toDateTimeString() : $obj->getDataLimite(),
+					'responsabilidade' => $obj->getResponsabilidade(),
 					'responsavel_id' => ($obj->getResponsavel() instanceof Colaborador) ? $obj->getResponsavel()->getId() : $obj->getResponsavel()['id']
 				];
-				// Util::printr($filds);
 
 				DB::table(self::TABELA)->where('id', $obj->getId())->update($filds);
 
@@ -127,7 +126,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 		try {	
 
 			$query = DB::table(self::TABELA)->select(self::TABELA . '.*')->where('responsavel_id', $responsavelId);
-				
+
 			if($search != '') {
 				$buscaCompleta = $search;
 				$palavras = explode(' ', $buscaCompleta);
@@ -183,6 +182,8 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 		}
 		catch (\Exception $e)
 		{			
+			Util::printr($e->getMessage());
+
 			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
 		}
 	}
@@ -190,6 +191,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 	function todos($limite = 0, $pulo = 0, $search = '') {
 		try {	
 			$plasnosDeAcao = DB::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+
 			$plasnosDeAcaoObjects = [];
 
 			foreach ($plasnosDeAcao as $key => $planoDeACao) {
@@ -200,6 +202,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 		}
 		catch (\Exception $e)
 		{
+
 			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
 		}
 	}
@@ -233,9 +236,9 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 			'',
 			$responsavel,
 			null,
-			'',
 			$row['datacadastro'],
 			$row['dataexecucao'],
+			$row['responsabilidade'],
 			[]
 		);
 		return $planoDeAcao->toArray();

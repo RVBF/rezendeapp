@@ -52,7 +52,8 @@ class Dice {
 		DI::config(DI::let('ColecaoQuestionario')->create('ColecaoQuestionarioEmBDR'));
 		DI::config(DI::let('ColecaoQuestionamento')->create('ColecaoQuestionamentoEmBDR'));	
 		DI::config(DI::let('ColecaoPlanoAcao')->create('ColecaoPlanoAcaoEmBDR'));		
-		DI::config(DI::let('ColecaoPendencia')->create('ColecaoPendenciaEmBDR'));		
+		DI::config(DI::let('ColecaoPendencia')->create('ColecaoPendenciaEmBDR'));
+		DI::config(DI::let('ColecaoHistoricoResponsabilidade')->create('ColecaoHistoricoResponsabilidadeEmBDR'));	
 	}
 }
 
