@@ -19,11 +19,11 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 	
 
-			$id = DB::table(self::TABELA)->insertGetId([
+			$id = DB::table(self::TABELA)->insertGetId( [
 					'status' => $obj->getStatus(),
 					'descricaonaoconformidade' => $obj->getDescricao(),
 					'descricaosolucao' => $obj->getSolucao(),
-					'datalimite' => $obj->getDataLimite()->toDateTimeString(),
+					'datalimite' => ($obj instanceof Carbon) ? $obj->getDataLimite()->toDateTimeString() : $obj->getDataLimite(),
 					'responsabilidade' => $obj->getResponsabilidade(),
 					'responsavel_id' => ($obj->getResponsavel() instanceof Colaborador) ? $obj->getResponsavel()->getId() : $obj->getResponsavel()['id']
 				]

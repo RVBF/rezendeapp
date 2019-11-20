@@ -69,59 +69,58 @@ class ControladoraPlanoAcao {
 		return RTTI::getAttributes($conteudo,  RTTI::allFlags());
 	}
 	
-	function adicionar($setorId = 0) {
+	function adicionar() {
 		DB::beginTransaction();
 
 		try {
-
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
 
-			if(!$this->servicoLogin->eAdministrador()){
-				throw new Exception("Usuário sem permissão para executar ação.");
-			}
+			// if(!$this->servicoLogin->eAdministrador()){
+			// 	throw new Exception("Usuário sem permissão para executar ação.");
+			// }
 
-			$inexistentes = \ArrayUtil::nonExistingKeys(['titulo', 'descricao', 'dataLimite', 'setor', 'loja'], $this->params);
-
-			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
-				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
-	
-				throw new Exception($msg);
-			}
-	
-			$setor = $this->colecaoSetor->comId(($setorId> 0) ? $setorId : \ParamUtil::value($this->params, 'setor'));
-
-			if(!isset($setor) and !($setor instanceof Setor)){
-				throw new Exception("Setor não encontrada na base de dados.");
-			}
-
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'descricao', 'dataLimite', 'solucao', 'responsavel', 'unidade'], $this->params);
+		
+			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) throw new Exception('Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes));
 				
-			$loja = $this->colecaoLoja->comId((\ParamUtil::value($this->params, 'loja')> 0) ? \ParamUtil::value($this->params, 'loja') : \ParamUtil::value($this->params, 'loja'));
+			$loja = new Loja();  $loja->fromArray($this->colecaoLoja->comId(ParamUtil::value($this->params, 'unidade')));
 
-			if(!isset($loja) and !($loja instanceof Loja)){
-				throw new Exception("Loja não encontrada na base de dados.");
-			}
+			if(!isset($loja) and !($loja instanceof Loja)) throw new Exception("Loja não encontrada na base de dados.");
+
+			$responsavelAtual = new Colaborador(); $responsavelAtual->fromArray($this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario()));
+
+			if(!isset($responsavelAtual) and !($responsavelAtual instanceof Colaborador)) throw new Exception("Colaborador não encontrado na base de dados.");
+
+			$responsavel = new Colaborador();  $responsavel->fromArray($this->colecaoColaborador->comId(ParamUtil::value($this->params, 'responsavel')));
+
+			if(!isset($responsavel) and !($responsavel instanceof Responsavel)) throw new Exception("Responsável não encontrada na base de dados.");
+
+			$dataLimite = new Carbon();                  // equivalent to Carbon::now()
 			$dataLimite = new Carbon(\ParamUtil::value($this->params, 'dataLimite'), 'America/Sao_Paulo');
 
-			$tarefa = new Checklist(
+			$planoAcao = new PlanoAcao(
 				0,
-				\ParamUtil::value($this->params, 'titulo'),
+				($responsavel->getId() == $responsavelAtual->getId()) ? StatusPaEnumerado::AGUARDANDO_EXECUCAO : StatusPaEnumerado::AGUARDANDO_RESPONSAVEL,
 				\ParamUtil::value($this->params, 'descricao'),
 				$dataLimite,
-				'',
-				$setor,
 				$loja,
-				$this->colecaoUsuario->comId($this->servicoLogin->getIdUsuario())
-
+				$resposta = '',
+				$responsavel,
+				$loja,
+				'',
+				'',
+				($responsavel->getId() == $responsavelAtual->getId()) ?  true : false
 			);
-	
+			
 			$resposta = [];
+						
+			$this->colecaoPlanoAcao->adicionar($planoAcao);
 
-			$tarefa = $this->colecaoChecklist->adicionar($tarefa);
-			$resposta = ['categoria'=> RTTI::getAttributes( $tarefa, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria cadastrada com sucesso.']; 
+			$resposta = ['status' => true, 'mensagem'=> 'Plano de ação atualizado com sucesso.']; 
+			
 			DB::commit();
-
 		}
 		catch (\Exception $e) {
 			DB::rollback();

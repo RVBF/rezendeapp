@@ -112,18 +112,23 @@
 
 			$(evento.target).find('.questionario_link').on('click', function(event){
 				event.preventDefault();
-				router.navigate('/questionarios')
+				router.navigate('/questionarios');
 			});
 
 			$(evento.target).find('.cadastrar_questionario_link').on('click', function(event){
 				event.preventDefault();
-				router.navigate('/cadastrar-questionario')
+				router.navigate('/cadastrar-questionario');
 
 			});
 
 			$(evento.target).find('.cadastrar_checklist_link').on('click', function(event){
 				event.preventDefault();
-				router.navigate('/cadastrar-checklist')
+				router.navigate('/cadastrar-checklist');
+			});
+
+			$(evento.target).find('.cadastrar_planoacao_link').on('click', function(event){
+				event.preventDefault();
+				router.navigate('/cadastrar-pa');
 			});
 		}
 	};
