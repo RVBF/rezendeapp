@@ -11,7 +11,7 @@
 	function ControladoraFormPlanoAcao(servicoPlanoAcao) {
 		var _this = this;
 
-		_this.alterar;
+		_this.alterar = false;
 		_this.formulario = $('#planoacao_form');
 		_this.botaoSubmissao = $('#editar');
 		_this.dataLimite = '';
@@ -140,6 +140,16 @@
 			_this.formulario.submit(false);
 			if(window.location.href.search('visualizar') != -1) servicoPlanoAcao.comId(pegarId(window.location.href,'visualizar-pa')).done(_this.desenhar);
 			else  if(window.location.href.search('editar') != -1) servicoPlanoAcao.comId(pegarId(window.location.href,'editar-pa')).done(_this.desenhar);
+			else{
+				_this.alterar = false;
+				_this.configurarEventos();
+				_this.popularColaboradores();
+				_this.popularLojas();
+				$('.card-title').html('<h3>Cadastrar PA</h3>');
+				_this.formulario.find('#botoes').prepend(' <div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end"><button type="button" id="cadastrar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Cadastrar</button></div>').promise().done(function(){
+					$('#cadastrar').on('click', _this.salvar);
+				});
+			}
 
 		}
 
@@ -244,6 +254,7 @@
 		};
 	
 		_this.salvar = function salvar() {
+			console.log('entrei');
 			_this.formulario.validate(criarOpcoesValidacao());
         };
 		

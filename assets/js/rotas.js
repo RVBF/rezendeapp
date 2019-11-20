@@ -90,6 +90,7 @@
 	router.get('/editar-setor/:id', criarRotaPara('formulario-setor.html'));
 	
 	router.get('/plano-acao', criarRotaPara('pa-listagem.html'));
+	router.get('/cadastrar-pa', criarRotaPara('formulario-pa.html'));	
 	router.get('/visualizar-pa/:id', criarRotaPara('formulario-pa.html'));
 	router.get('/editar-pa/:id', criarRotaPara('formulario-pa.html'));
 

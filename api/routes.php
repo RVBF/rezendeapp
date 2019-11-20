@@ -2,7 +2,6 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \phputil\JSON;
-
 // Início das rotas para categorias
 	$app->get('/categorias', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 		$this->logger->addInfo("Acessando listagem de categorias");
