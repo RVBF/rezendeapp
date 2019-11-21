@@ -84,7 +84,6 @@ class ColecaoQuestionarioEmBDR implements ColecaoQuestionario {
 	function todos($limite = 0, $pulo = 0, $search = '') {
 		try {	
 			$query = DB::table(self::TABELA)->select(self::TABELA . '.*');
-			// Util::printr($query->get());
 
 			if($search != '') {
 				$buscaCompleta = $search;

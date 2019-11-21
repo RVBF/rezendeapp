@@ -208,7 +208,6 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 		}
 		catch (\Exception $e)
 		{			
-			Util::printr($e->getMessage());
 			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
 		}
 	}

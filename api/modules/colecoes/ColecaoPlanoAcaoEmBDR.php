@@ -18,7 +18,6 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 		try {	
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 	
-
 			$id = DB::table(self::TABELA)->insertGetId( [
 					'status' => $obj->getStatus(),
 					'descricaonaoconformidade' => $obj->getDescricao(),
@@ -28,13 +27,15 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 					'responsavel_id' => ($obj->getResponsavel() instanceof Colaborador) ? $obj->getResponsavel()->getId() : $obj->getResponsavel()['id']
 				]
 			);
+
 			$obj->setId($id);		
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
 		}
 		catch (\Exception $e) {
 			Util::printr($e->getMessage());
-			throw new ColecaoException("Erro ao adicionar tarefa ", $e->getCode(), $e);
+
+			throw new ColecaoException("Erro ao adicionar Plano de ação!", $e->getCode(), $e);
 		}
 	}
 
@@ -182,7 +183,6 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 		}
 		catch (\Exception $e)
 		{			
-			Util::printr($e->getMessage());
 
 			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
 		}

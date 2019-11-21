@@ -48,7 +48,6 @@ class ControladoraPlanoAcao {
 			$erro = null;
 
 			$colaborador = new Colaborador();  $colaborador->fromArray($this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario()));
-			// Util::printr($colaborador);
 
 			$objetos = $this->colecaoPlanoAcao->todosComResponsavelId($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $colaborador->getId());
 
@@ -84,9 +83,8 @@ class ControladoraPlanoAcao {
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'descricao', 'dataLimite', 'solucao', 'responsavel', 'unidade'], $this->params);
 		
 			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) throw new Exception('Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes));
-				
-			$loja = new Loja();  $loja->fromArray($this->colecaoLoja->comId(ParamUtil::value($this->params, 'unidade')));
 
+			$loja = new Loja();  $loja->fromArray($this->colecaoLoja->comId(ParamUtil::value($this->params, 'unidade')));
 			if(!isset($loja) and !($loja instanceof Loja)) throw new Exception("Loja não encontrada na base de dados.");
 
 			$responsavelAtual = new Colaborador(); $responsavelAtual->fromArray($this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario()));
@@ -105,8 +103,8 @@ class ControladoraPlanoAcao {
 				($responsavel->getId() == $responsavelAtual->getId()) ? StatusPaEnumerado::AGUARDANDO_EXECUCAO : StatusPaEnumerado::AGUARDANDO_RESPONSAVEL,
 				\ParamUtil::value($this->params, 'descricao'),
 				$dataLimite,
-				$loja,
-				$resposta = '',
+				'',
+				'',
 				$responsavel,
 				$loja,
 				'',
