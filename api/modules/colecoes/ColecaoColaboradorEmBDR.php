@@ -47,7 +47,6 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 			}
 			catch (\Exception $e)
 			{	
-				Util::printr($e->getMessage());
 				throw new ColecaoException("Erro ao adicionar colaborador.", $e->getCode(), $e);
 			}
 		}

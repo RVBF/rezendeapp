@@ -22,8 +22,11 @@
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
 			var opcoes = {
 			};
+
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
+				console.log(':)');
+
 				var obj = _this.conteudo();
 
 				var terminado = function() {
@@ -146,8 +149,8 @@
 				_this.popularColaboradores();
 				_this.popularLojas();
 				$('.card-title').html('<h3>Cadastrar PA</h3>');
-				_this.formulario.find('#botoes').prepend(' <div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end"><button type="button" id="cadastrar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Cadastrar</button></div>').promise().done(function(){
-					$('#cadastrar').on('click', _this.salvar);
+				_this.formulario.find('#botoes').prepend(' <div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end"><button type="submit" id="cadastrar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Cadastrar</button></div>').promise().done(function(){
+					$('#botoes').find('#cadastrar').on('click', _this.salvar);
 				});
 			}
 
@@ -254,19 +257,9 @@
 		};
 	
 		_this.salvar = function salvar() {
-			console.log('entrei');
 			_this.formulario.validate(criarOpcoesValidacao());
         };
 		
-		_this.cancelar = function cancelar(event) {
-			var contexto = _this.formulario.parents('#painel_formulario');
-			contexto.addClass('desabilitado');
-			_this.formulario.find('.msg').empty();
-			_this.formulario.find('.msg').parents('.row').addClass('d-none');
-			contexto.addClass('d-none');
-			contexto.desabilitar(true);
-
-		};
 
 		// Configura os eventos do formulário
 		_this.configurar = function configurar(status = false) {

@@ -89,7 +89,6 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
             return true;
         }
         catch (\Exception $e) {
-			Util::printr($e->getMessage());
             throw new ColecaoException("Erro ao adicionar tarefa ", $e->getCode(), $e);
         }
     }
@@ -194,8 +193,6 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 			return $questionamentosObjects;
 		} 		
 		catch (\Exception $e) {
-			Util::printr($e->getMessage());
-
 			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
 		}
 	}

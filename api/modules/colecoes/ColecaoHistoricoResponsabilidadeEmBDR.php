@@ -32,7 +32,6 @@ class ColecaoHistoricoResponsabilidadeEmBDR implements ColecaoHistoricoResponsab
 			return $obj;
 		}
 		catch (\Exception $e) {
-			Util::printr($e->getMessage());
 
 			throw new ColecaoException("Erro ao adicionar Checklist ", $e->getCode(), $e);
 		}
