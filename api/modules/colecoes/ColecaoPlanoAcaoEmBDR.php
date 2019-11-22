@@ -33,25 +33,8 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 
 		}
 		catch (\Exception $e) {
-			Util::printr($e->getMessage());
-
 			throw new ColecaoException("Erro ao adicionar Plano de ação!", $e->getCode(), $e);
 		}
-	}
-
-	function removerComSetorId($id, $idSetor) {
-		if($this->validarRemocaoTarefa($id)){
-			try {	
-				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-				$removido = DB::table(self::TABELA)->where('id', $id)->where('setor_id', $idSetor)->delete();
-				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-				return $removido;
-			}
-			catch (\Exception $e) {
-				throw new ColecaoException("Erro ao remover categoria com o id do setor.", $e->getCode(), $e);
-			}
-		}
-
 	}
 
 	function remover($id) {

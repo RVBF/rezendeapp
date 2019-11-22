@@ -22,6 +22,7 @@
 		_this.contador =0;
 		_this.servicoPlanoAcao = new app.ServicoPlanoAcao();
 		_this.servicoPendencia = new app.ServicoPendencia();
+		_this.anexos = [];
 
 
 		// Cria as opções de validação do formulário
@@ -32,6 +33,7 @@
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
 				var obj = _this.conteudo();
+				console.log($(form).serializeArray());
 				var terminado = function() {
 					_this.formulario.desabilitar(false);
 					if($("[name='opcao']:checked").val() != 'Bom'){
@@ -99,7 +101,8 @@
 					dataLimitePe.toString() + ' ' + $('#hora_limitepe').val(),
 					$('#descricao-solucao').val(),
 					$('#responsavelpe').val()
-				)
+				),
+				_this.anexos
 			);
 		};
 
@@ -253,6 +256,7 @@
 
 		_this.popularQuestao = function popularQuestao() {
 			_this.objetoAtual = _this.questionamentos.shift();
+			_this.anexo = [];
 			let html = '';
 			html += '<div class="row form-row questionamento mb-0-dto">'
 				html +='<div class="col col-sm-12 col-md-12 col-lg-12 col-12 mb-0-dto">';
@@ -306,14 +310,14 @@
 								html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2">';
 										html += '<a class="list-group-item list-group-item-action orange accent-4 subicon-dto element" data-toggle="tooltip" title="Nenhum arquivo selecionado.">';
 										html += '<i class="mdi mdi-microphone white-text"></i>';
-										html += '<input class="d-none form-control" type="file" name="pergunta_audio" id="pergunta_audio" accept="image/*">';
+										html += '<input class="d-none form-control arquivos_audio tamanhoArquivosPadrao" type="file" name="pergunta_audio" id="pergunta_audio" accept="audio/mpeg,audio/x-pn-realaudio">';
 										html += '</a>';
 								html += '</div>';
 								
 								html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2">';
 										html += '<a class="list-group-item list-group-item-action orange accent-4 subicon-dto element" data-toggle="tooltip" title="Nenhum arquivo selecionado.">';
 										html += '<i class="mdi mdi-camera-outline white-text"></i>';
-										html += '<input class="d-none form-control" type="file" ref="file"  name="pergunta_camera" id="pergunta_camera" accept="image/*">';
+										html += '<input class="d-none form-control arquivos_imagem tamanhoArquivosPadrao" type="file" ref="file"  name="pergunta_camera" id="pergunta_camera" accept="image/*" >';
 										html += '</a>';
 								html += '</div>';
 						
@@ -353,44 +357,45 @@
 				_this.formulario.find('input[type="file"]').change(function(evt){
 					var elemento = $(this);
 					var file = evt.target.files[0];
-					var reader = new FileReader();
-					var idPergunta = elemento.attr('name').split('_')[2];
-					
 					var nomeArquivo = $(this).val().split('\\');
 					nomeArquivo = nomeArquivo[nomeArquivo.length -1];
+					var reader = new FileReader();
+					reader.onerror = function (evt) {
+						switch(evt.target.error.code) {
+							case evt.target.error.NOT_FOUND_ERR:
+							  alert('File Not Found!');
+							  break;
+							case evt.target.error.NOT_READABLE_ERR:
+							  alert('File is not readable');
+							  break;
+							case evt.target.error.ABORT_ERR:
+							  break; // noop
+							default:
+							  alert('An error occurred reading this file.');
+						  };
+					};
+					reader.onprogress =  function updateProgress(evt) {
+						var progress = document.querySelector('.percent');
 
-					reader.readAsDataURL(file);
+						// evt is an ProgressEvent.
+						if (evt.lengthComputable) {
+						  var percentLoaded = Math.round((evt.loaded / evt.total) * 100);
+						  // Increase the progress bar length.
+						  if (percentLoaded < 100) {
+							progress.style.width = percentLoaded + '%';
+							progress.textContent = percentLoaded + '%';
+						  }
+						}
+					};
+					reader.onabort = function(e) {
+						alert('File read cancelled');
+					};
 
 					reader.onload = function () {
-						if(_this.respostas.length > 0){
-							var estaAdicionado = false;
-							for(var posicaoAtual in _this.respostas){
-								var atual = _this.respostas[posicaoAtual];
-								if(atual.pergunta == idPergunta){
-									atual.files.push({'nome': nomeArquivo, 'arquivo': reader.result, 'tipo' : file.type});
-									estaAdicionado = true;
-									_this.respostas[posicaoAtual] = atual;
-									break;
-								}
-							}
-							
-							if(!estaAdicionado) {
-								var resposta = new app.Resposta();
-								resposta.pergunta = idPergunta;
-								resposta.files.push({'nome': nomeArquivo, 'arquivo': reader.result, 'tipo' : file.type});
-								_this.respostas.push(resposta);
-							}
-						}
-						else{
-							
-							var resposta = new app.Resposta();
-							resposta.pergunta = idPergunta;
-							resposta.files.push({'nome': nomeArquivo,'arquivo': reader.result, 'tipo' : file.type});
-							_this.respostas.push(resposta);
-						}
+						_this.anexos.push({'nome': nomeArquivo,'arquivo': reader.result, 'tipo' : file.type});
 					};
-					reader.onerror = function (error) {
-					};
+					
+					reader.readAsDataURL(file);
 				});
 
 				_this.formulario.find('.opcoes_questionamento').on('click', 'a', function (event) {

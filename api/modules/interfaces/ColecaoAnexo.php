@@ -8,7 +8,7 @@
  */
 
 interface ColecaoAnexo extends Colecao {
-   public function comRespostaId($id);
+   public function comQuestionamentoId($id);
 }
 
 

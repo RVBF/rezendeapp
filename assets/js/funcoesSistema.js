@@ -20,7 +20,7 @@
 				$(this).fileinput({
 					theme: "explorer",
 					// uploadUrl: "/file-upload-batch/2",
-					allowedFileExtensions: ['jpg', 'png', 'gif'],
+					allowedFileExtensions: ['jpg', '"png"', 'gif'],
 					overwriteInitial: false,
 					initialPreviewAsData: true
 				});
@@ -157,15 +157,22 @@
 		}
 		
 		$.validator.addMethod("cRequired", $.validator.methods.required, "Campo obrigatório.");
+		$.validator.addMethod("formatoAudio", $.validator.methods.fileType, "Formato de áudio inválido! Formatos permitidos: mp3|wma|aac|ogg|ac3|wav!");
+		$.validator.addMethod("formatoImagem", $.validator.methods.fileType, "Formato de imagem inválido! Formatos permitidos: bmp|gif|jpeg|png!");
+		$.validator.addMethod('filesize', $.validator.methods.maxFileSize, 'Tamanho de arquivo invalido! O arquivo deve ser menor que  100KB e maior que 25MB"!');
+
 		$.validator.addMethod("emailFormat", function(email) {
 			var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
     		return pattern.test(email);
-		}, "Formato inválido para e-mail.");
+		}, "Formato de e-mail inválido!");
 
 		$.validator.addClassRules("campo_obrigatorio", {cRequired: true});
 		$.validator.addClassRules("email_formato", {emailFormat: true});
+		$.validator.addClassRules("arquivos_audio", {formatoAudio: {types: ["mp3","wma","aac","ogg","ac3","wav"]}});
+		$.validator.addClassRules("arquivos_imagem", {formatoImagem: {types: ["bmp","gif","jpeg","png"]}});
+		$.validator.addClassRules("tamanhoArquivosPadrao", {filesize: {size : 25, unit : 'MB'}});
 
-		
+
 		setInterval(function() {
 			app.verficarLogin();
 		}, 1800000);

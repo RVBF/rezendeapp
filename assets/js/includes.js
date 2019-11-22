@@ -138,6 +138,9 @@
 		loader.script('vendor/bootstrap3-dialog/dist/js/bootstrap-dialog.min.js');
 
 		loader.script('vendor/jquery-validation/dist/jquery.validate.min.js');
+		loader.script('vendor/jquery-validation/dist/additional-methods.min.js');
+		loader.script('assets/js/jquery.validate.file-master/jquery.validate.file.js');
+
 		loader.script('vendor/grapnel/dist/grapnel.min.js');		
 		loader.script('vendor/pickerjs/dist/picker.min.js');				
 		loader.script('vendor/moment/min/moment.min.js');
@@ -197,7 +200,6 @@
 
 		loader.script('assets/js/questionamento/questionamento.serv.js');
 		loader.script('assets/js/questionamento/questionamento.form.ctrl.js');
-
 
 		loader.script('assets/js/checklist/tipoChecklist.serv.js');
 		loader.script('assets/js/checklist/checklist.serv.js');

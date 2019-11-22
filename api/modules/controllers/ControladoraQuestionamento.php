@@ -26,6 +26,8 @@ class ControladoraQuestionamento {
 	private $colecaoPendencia;
 	private $colecaoChecklist;
 	private $colecaoHistorico;
+	private $servicoArquivo;
+	private $colecaoAnexo;
 	
 	function __construct($params,  Sessao $sessao) {
 		$this->params = $params;
@@ -35,6 +37,9 @@ class ControladoraQuestionamento {
 		$this->colecaoPendencia  = Dice::instance()->create('ColecaoPendencia');
 		$this->colecaoChecklist = Dice::instance()->create('ColecaoChecklist');
 		$this->colecaoHistorico = Dice::instance()->create('ColecaoHistoricoResponsabilidade');
+		$this->colecaoAnexo = Dice::instance()->create('ColecaoAnexo');
+
+		$this->servicoArquivo = ServicoArquivo::instance();
 		$this->servicoLogin = new ServicoLogin($sessao);
 	}
 
@@ -94,7 +99,11 @@ class ControladoraQuestionamento {
 
 			$planoDeAcao = null;
 			$pendencia = NULL;
-			$questionamento = NULL;
+
+			$questionamento = new Questionamento(); $questionamento->fromArray($this->colecaoQuestionamento->comId($this->params['id']));
+			if(!isset($questionamento) and !($questionamento instanceof Questionamento)){
+				throw new Exception("Questionamento não encontrado na base de dados.");
+			}				
 
 			if($this->params['formularioResposta']['opcao'] != OpcoesRespostaEnumerada::BOM){
 				if(isset($this->params['planoAcao'])){
@@ -142,7 +151,7 @@ class ControladoraQuestionamento {
 						$this->colecaoHistorico->adicionar($historico);
 					}
 					else{
-						throw new Exception("É necessário cadastrar um plano de ação para questionamentos com resposta inferior a" . OpcoesRespostaEnumerada::BOM);
+						throw new Exception("É necessário cadastrar um plano de ação para questionamentos com resposta inferior a " . strtolower(OpcoesRespostaEnumerada::BOM) .'!');
 					}
 				}
 
@@ -173,12 +182,28 @@ class ControladoraQuestionamento {
 						$this->colecaoPendencia->adicionar($pendencia);
 					}
 				}
-			}
 
-			$questionamento = new Questionamento(); $questionamento->fromArray($this->colecaoQuestionamento->comId($this->params['id']));
-			if(!isset($questionamento) and !($questionamento instanceof Questionamento)){
-				throw new Exception("Questionamento não encontrado na base de dados.");
-			}	
+				if(isset($this->params['anexos']) and count($this->params['anexos']) > 0){
+					$pastaTarefa = 'questionamento_'. $questionamento->getId();
+
+
+					foreach($this->params['anexos'] as $arquivo) {
+						$patch = $this->servicoArquivo->validarESalvarImagem($arquivo, $pastaTarefa, 'questionamento_' . $questionamento->getId());
+						$anexo = new Anexo(
+							0,
+							$patch,
+							$arquivo['tipo'],
+							$questionamento
+						);
+
+						$this->colecaoAnexo->adicionar($anexo);
+					}
+				}
+				else{
+					throw new Exception("Para respostas inferior a bom é necessário adicionar ao menos 1 anexo para comprovação do problema!");
+				}
+
+			}
 
 			$questionamento->setFormularioResposta(json_encode($this->params['formularioResposta']));
 			$questionamento->setStatus(($pendencia instanceof Pendencia or $planoDeAcao instanceof PlanoAcao) ? TipoQuestionamentoEnumerado::RESPONDIDO_COM_PENDENCIAS : TipoQuestionamentoEnumerado::RESPONDIDO);

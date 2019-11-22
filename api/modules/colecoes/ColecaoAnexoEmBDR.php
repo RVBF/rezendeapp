@@ -18,7 +18,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 		try {	
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-			$id = DB::table(self::TABELA)->insertGetId([ 'caminho' => $obj->getPatch(), 'tipo' => $obj->getTipo(), 'resposta_id' => $obj->getResposta()->getId()]);
+			$id = DB::table(self::TABELA)->insertGetId([ 'caminho' => $obj->getPatch(), 'tipo' => $obj->getTipo(), 'questionamento_id' => $obj->getQuestionamento()->getId()]);
             
 			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
@@ -26,32 +26,8 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 
 			return $obj;
 		}
-		catch (\Exception $e)
-		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
-		}
-	}
-
-	function adicionarTodas(&$objs){
-		try {	
-			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-			foreach ($objs as $key => $obj) {
-				$id = DB::table(self::TABELA)->insertGetId([ 'pergunta' => $obj->getPergunta(),
-						'tarefa_id' => $obj->getTarefa()->getId()
-					]
-				);
-				$obj->setId($id);
-				$objs[$key] = $obj;
-			}
-
-			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-
-
-			return $objs;
-		}
 		catch (\Exception $e) {
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException('Erro ao adicionar Anexo!');
 		}
 	}
 
@@ -73,8 +49,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 			
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-			DB::table(self::TABELA)->where('id', $obj->getId())->update([ 'pergunta' => $obj->getPergunta(),
-			'tarefa_id' => $obj->getTarefa()->getId()]);
+			DB::table(self::TABELA)->where('id', $obj->getId())->update([ 'caminho' => $obj->getPatch(), 'tipo' => $obj->getTipo(), 'questionamento_id' => $obj->geQuestionamento()->getId()]);
 
 			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 			return $obj;
@@ -98,7 +73,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 		}
 	}
 	
-	public function comRespostaId($id){
+	public function comQuestionamentoId($id){
 		try {	
 
 			$anexos = DB::table(self::TABELA)->where('resposta_id', $id)->get();
@@ -139,7 +114,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 		$base64 =  'data:'. $row['tipo'] . ';base64,'. $arquivo->imagemParaBase64($row['caminho']);
 		$anexo = new Anexo($row['id'], $row['caminho'], $row['tipo']);
 		$anexo->setArquivoBase64($base64);
-		return $anexo;
+		return $anexo->toArray();
 	}	
 
     function contagem() {
