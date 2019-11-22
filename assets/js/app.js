@@ -43,21 +43,21 @@ var app = {
 		errorClass: 'help-block',
 		errorPlacement: function (error, element)
 		{
-			var possivelSelect2 = element.parent('div');
-			var possivelInputaAddon = element.parent('div .input-group').nextAll('div .menu_input_addon_erro:first');
-			if(possivelSelect2.length)
-			{
-				element = possivelSelect2;
-			}
-			else
-			{
-				if(possivelInputaAddon.length)
-				{
-					element = possivelInputaAddon;
-				}
-			}
+			// var possivelSelect2 = element.parent('div');
+			// var possivelInputaAddon = element.parent('div .input-group').nextAll('div .menu_input_addon_erro:first');
+			// if(possivelSelect2.length)
+			// {
+			// 	element = possivelSelect2;
+			// }
+			// else
+			// {
+			// 	if(possivelInputaAddon.length)
+			// 	{
+			// 		element = possivelInputaAddon;
+			// 	}
+			// }
 
-			element.append(error);
+			element.parents('form').find('.msg').empty().append(error).append('<br>').removeClass('d-none').desabilitar(false);
 		}
 	});
 
