@@ -93,20 +93,6 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
         }
     }
 
-	function removerComSetorId($id, $idSetor) {
-		if($this->validarRemocaoTarefa($id)){
-			try {	
-				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-				$removido = DB::table(self::TABELA)->where('id', $id)->where('setor_id', $idSetor)->delete();
-				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-				return $removido;
-			}
-			catch (\Exception $e) {
-				throw new ColecaoException("Erro ao remover categoria com o id do setor.", $e->getCode(), $e);
-			}
-		}
-
-	}
 
 	function remover($id) {
 		if($this->validarRemocaoTarefa($id)){
@@ -125,19 +111,19 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 	}
 
 	function atualizar(&$obj) {
-		if($this->validarTarefa($obj)) {
+		// if($this->validarTarefa($obj)) {
 			try {
-				
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-				$filds = [ 'titulo' => $obj->getTitulo(),
-					'descricao' => $obj->getDescricao(),
-					'data_limite' => ($obj->getDataLimite() instanceof Carbon)  ? $obj->getDataLimite()->toDateTimeString() : $obj->getDataLimite(),
-					'encerrada' => $obj->getEncerrada(),
-					'setor_id' => $obj->getSetor()->getId(),
-					'loja_id' => $obj->getLoja()->getId()
+				$filds = [ 
+					'status' => $obj->getStatus(),
+                    'formulariopergunta' => is_object($obj->getFormularioPergunta()) ? json_encode($obj->getFormularioPergunta()) : $obj->getFormularioPergunta(),
+                    'formularioresposta' => is_object($obj->getFormularioResposta()) ? json_encode($obj->getFormularioResposta()) : $obj->getFormularioResposta()
 				];
 				
+				if($obj->getPendencia() instanceof Pendencia || $obj->getPendencia() >0) $filds['pendencia_id'] =  ($obj->getPendencia() instanceof Pendencia)  ? $obj->getPendencia()->getId() : $obj->getPendencia();
+				if($obj->getChecklist() instanceof Checklist || $obj->getChecklist() > 0) $filds['checklist_id'] =  ($obj->getChecklist() instanceof Checklist)  ? $obj->getChecklist()->getId() : $obj->getChecklist();
+				if($obj->getPlanoAcao() instanceof PlanoAcao || $obj->getPlanoAcao() >0) $filds['planoacao_id'] =  ($obj->getPlanoAcao() instanceof PlanoAcao)  ? $obj->getPlanoAcao()->getId() : $obj->getPlanoAcao()['id'];
+
 				DB::table(self::TABELA)->where('id', $obj->getId())->update($filds);
 
 				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
@@ -146,9 +132,11 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 			}
 			catch (\Exception $e)
 			{
-				throw new ColecaoException("Erro ao atualizar tarefa.", $e->getCode(), $e);
+				Util::printr($e->getMessage());
+
+				throw new ColecaoException("Erro ao atualizar Questionamento.", $e->getCode(), $e);
 			}
-		}
+		// }
 	}
 
 	function comId($id){
@@ -193,6 +181,18 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 			return $questionamentosObjects;
 		} 		
 		catch (\Exception $e) {
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		}
+	}
+
+	function comPlanodeAcaoid($planoAcaoId = 0){
+		try {	
+			$questionamento = $this->construirObjeto(DB::table(self::TABELA)->where('planoacao_id', $planoAcaoId)->sharedLock()->get()[0]);
+			return $questionamento;
+		}
+		catch (\Exception $e)
+		{
+			Util::printr($e->getMessage());
 			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
 		}
 	}
@@ -325,6 +325,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 			$planoAcao,
 			$pendencia
 		);
+
 		return $questionamento->toArray();
 	}	
 

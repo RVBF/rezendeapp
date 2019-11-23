@@ -63,6 +63,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 					'descricaonaoconformidade' => $obj->getDescricao(),
 					'descricaosolucao' => $obj->getSolucao(),
 					'datalimite' => ($obj instanceof Carbon) ? $obj->getDataLimite()->toDateTimeString() : $obj->getDataLimite(),
+					'dataexecucao' => ($obj instanceof Carbon) ? $obj->getDataExecucao()->toDateTimeString() : $obj->getDataExecucao(),
 					'responsabilidade' => $obj->getResponsabilidade(),
 					'responsavel_id' => ($obj->getResponsavel() instanceof Colaborador) ? $obj->getResponsavel()->getId() : $obj->getResponsavel()['id']
 				];
@@ -75,15 +76,15 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 			}
 			catch (\Exception $e)
 			{
-
-				throw new ColecaoException("Erro ao atualizar tarefa.", $e->getCode(), $e);
+				Util::printr($e->getMessage());
+				throw new ColecaoException("Erro ao atualizar plano de ação.", $e->getCode(), $e);
 			}
 		// }
 	}
 
 	function comId($id){
 		try {	
-			$planosAcao = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
+			$planosAcao = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->sharedLock()->get()[0]);
 
 			return $planosAcao;
 		}
@@ -92,7 +93,6 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
 		}
 	}
-
 
 	function comPerguntaId($id){
 		try {	

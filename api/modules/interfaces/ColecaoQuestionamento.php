@@ -12,5 +12,6 @@ interface ColecaoQuestionamento extends Colecao{
     function questionamentosParaExecucao($checklistId);
     function questionamentosComStatus($status = []);
     function questionamentosComChecklistId($checklistId = 0);
+    function comPlanodeAcaoid($planoAcaoId = 0);
 }
 ?>

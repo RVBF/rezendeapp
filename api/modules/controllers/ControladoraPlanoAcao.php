@@ -24,6 +24,9 @@ class ControladoraPlanoAcao {
 	private $colecaoColaborador;
 	private $colecaoLoja;
 	private $colecaoPlanoAcao;
+	private $colecaoQuestionamento;
+	private $servicoArquivo;
+	private $colecaoAnexo;
 
 	function __construct($params,  Sessao $sessao) {
 		$this->params = $params;
@@ -34,6 +37,11 @@ class ControladoraPlanoAcao {
 		$this->colecaoColaborador = Dice::instance()->create('ColecaoColaborador');
 		$this->colecaoLoja = Dice::instance()->create('ColecaoLoja');
 		$this->colecaoPlanoAcao  = Dice::instance()->create('ColecaoPlanoAcao');
+		$this->colecaoQuestionamento = Dice::instance()->create('ColecaoQuestionamento');
+		$this->servicoArquivo = ServicoArquivo::instance();
+		$this->colecaoAnexo = Dice::instance()->create('ColecaoAnexo');
+
+
 	}
 
 	function todos() {
@@ -272,5 +280,85 @@ class ControladoraPlanoAcao {
 
 		return $resposta;
 	}
+
+
+    function executar(){
+		DB::beginTransaction();
+
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");		
+			
+			// if(!$this->servicoLogin->eAdministrador()){
+			// 	throw new Exception("Usuário sem permissão para executar ação.");
+			// }
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'solucao', 'anexos'], $this->params);
+			$resposta = [];
+
+			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
+				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
+
+				throw new Exception($msg);
+			}
+
+			$planoAcao = new PlanoAcao(); $planoAcao->fromArray($this->colecaoPlanoAcao->comId($this->params['id']));
+			if(!isset($planoAcao) and !($planoAcao instanceof PlanoAcao)){
+				throw new Exception("Questionamento não encontrado na base de dados.");
+			}				
+		
+			$planoAcao->setStatus(StatusPaEnumerado::EXECUTADO);
+			$planoAcao->setResposta(\ParamUtil::value($this->params, 'resposta'));
+			$planoAcao->setDataExecucao(Carbon::now());
+
+			$this->colecaoPlanoAcao->atualizar($planoAcao);
+
+			$questionamento = new Questionamento(); $questionamento->fromArray($this->colecaoQuestionamento->comPlanodeAcaoid(\ParamUtil::value($this->params, 'id')));
+			if(!isset($questionamento) and !($questionamento instanceof Questionamento)){
+				throw new Exception("Questionamento não encontrado na base de dados.");
+			}	
+
+			$questionamento->setStatus(TipoQuestionamentoEnumerado::RESPONDIDO);
+
+			$this->colecaoQuestionamento->atualizar($questionamento);
+
+			$checklist = new Checklist(); $checklist->fromArray($this->colecaoChecklist->comId($questionamento->getId()));
+			if(!isset($checklist) and !($checklist instanceof Checklist)){
+				throw new Exception("checklist não encontrado na base de dados.");
+			}	
+		
+			$checklist->setStatus(StatusChecklistEnumerado::EXECUTADO);
+			$this->colecaoChecklist->atualizar($checklist);
+
+			if(isset($this->params['anexos']) and count($this->params['anexos']) > 0){
+				$pastaTarefa = 'planoacao_'. $questionamento->getId();
+
+				foreach($this->params['anexos'] as $arquivo) {
+					$patch = $this->servicoArquivo->validarESalvarImagem($arquivo, $pastaTarefa, 'planoacao_' . $questionamento->getId());
+					$anexo = new Anexo(
+						0,
+						$patch,
+						$arquivo['tipo'],
+						(isset($questionamento) and $questionamento instanceof Questionamento) ? $questionamento : 0,
+						(isset($planoAcao) and $planoAcao instanceof PlanoAcao) ? $planoAcao : 0
+					);
+
+					$this->colecaoAnexo->adicionar($anexo);
+				}
+			}
+			else{
+				throw new Exception("É necessário  pelo menos um anexo para comprar a execução do plano de ação!");
+			}
+
+			$resposta = ['status' => true, 'mensagem'=> 'Plano de ação executado com sucesso.']; 
+			DB::commit();
+		}
+		catch (\Exception $e) {
+			
+			DB::rollback();
+
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+		}
+
+		return $resposta;
+    }
 }
 ?>
