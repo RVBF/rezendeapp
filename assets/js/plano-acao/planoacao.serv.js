@@ -13,7 +13,8 @@
 		solucao,
 		responsavel,
 		unidade,
-        resposta,
+		resposta,
+		anexos,
         dataCadastro,
 		dataExecucao
     ){
@@ -22,6 +23,7 @@
         this.dataLimite = dataLimite || '';
         this.solucao = solucao || '';
 		this.resposta = resposta || '';
+		this.anexos = anexos || [],
 		this.responsavel = responsavel || 0;
 		this.unidade = unidade || 0
         this.dataCadastro = dataCadastro || '';
@@ -43,7 +45,8 @@
 			solucao,
 			responsavel,
 			unidade,
-            resposta,
+			resposta,
+			anexos,
             dataCadastro,
             dataExecucao
         ) {
@@ -54,7 +57,8 @@
 				solucao : solucao || '',
 				responsavel : responsavel || '',
 				unidade : unidade || '',
-                resposta : resposta || '',
+				resposta : resposta || '',
+				anexos : anexos || [],
                 dataCadastro : dataCadastro || '',
                 dataExecucao : dataExecucao || ''
 			};
@@ -106,13 +110,21 @@
 			});
 		};
 
-		_this.confirmarResponsabilidade = function(id){
+		_this.confirmarResponsabilidade = function confirmarResponsabilidade(id){
 			return $.ajax({
 				type: "POST",
 				url: _this.rota() + '/confirmar-responsabilidade',
 				data: { 'id' : id}
 			});
 		};
+
+		_this.executar = function executar(obj){
+			return $.ajax({
+				type: "POST",
+				url: _this.rota() + '/executar',
+				data: obj
+			});
+		}
 	}; // ServicoPlanoAcao
 
 	// Registrando

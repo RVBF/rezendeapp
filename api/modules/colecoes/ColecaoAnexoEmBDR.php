@@ -18,7 +18,13 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 		try {	
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-			$id = DB::table(self::TABELA)->insertGetId([ 'caminho' => $obj->getPatch(), 'tipo' => $obj->getTipo(), 'questionamento_id' => $obj->getQuestionamento()->getId()]);
+			$id = DB::table(self::TABELA)->insertGetId([ 
+				'caminho' => $obj->getPatch(),
+				'tipo' => $obj->getTipo(),
+				'questionamento_id' => ($obj->getQuestionamento() instanceof Questionamento) ? $obj->getQuestionamento()->getId() : 0,
+				'planoacao_id' => ($obj->getPlanoAcao() instanceof PlanoAcao) ? $obj->getPlanoAcao()->getId() : 0,
+
+			]);
             
 			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
@@ -27,6 +33,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 			return $obj;
 		}
 		catch (\Exception $e) {
+			Util::printr($e->getMessage());
 			throw new ColecaoException('Erro ao adicionar Anexo!');
 		}
 	}

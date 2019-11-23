@@ -75,6 +75,9 @@
 
 	router.get('/checklist', criarRotaPara('checklist.html'));
 	router.get('/cadastrar-checklist', criarRotaPara('formulario-checklist.html'));
+	router.get('/visualizar-checklist/:id', criarRotaPara('formulario-checklist.html'));
+	router.get('/editar-checklist/:id', criarRotaPara('formulario-checklist.html'));
+	router.get('/executar-checklist/:id', criarRotaPara('formulario-executarchecklist.html'));
 
 	router.get('/questionarios', criarRotaPara('questionarios.html'));
 	router.get('/cadastrar-questionario', criarRotaPara('formulario-questionario.html'));
@@ -93,8 +96,9 @@
 	router.get('/cadastrar-pa', criarRotaPara('formulario-pa.html'));	
 	router.get('/visualizar-pa/:id', criarRotaPara('formulario-pa.html'));
 	router.get('/editar-pa/:id', criarRotaPara('formulario-pa.html'));
+	router.get('/executar-pa/:id', criarRotaPara('formulario-executarpa.html'));
 
-	router.get('/executar-checklist/:id', criarRotaPara('formulario-executarchecklist.html'));
+
 	router.get('/inteligencia', criarRotaPara('inteligencia.html'));
 	router.get('/notificacao', criarRotaPara('notificacoes.html'));
 	router.get('/rd', criarRotaPara('rd.html'));

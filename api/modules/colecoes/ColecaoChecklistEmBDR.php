@@ -122,16 +122,15 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 
 	function comId($id){
 		try {	
-			$tarefa = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
 
-			return $tarefa;
+			$checklist = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
+			return $checklist;
 		}
 		catch (\Exception $e)
 		{
 			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
 		}
 	}
-
 
 	function comPerguntaId($id){
 		try {	
@@ -244,6 +243,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
 		}
 	}
+	
 	function todosComId($ids = []) {
 		try {	
 			$tarefas = DB::table(self::TABELA)->whereIn('id', $ids)->get();

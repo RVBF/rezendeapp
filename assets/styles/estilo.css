@@ -199,6 +199,24 @@ button{
     margin-right: 1em;
 }
 
+.bntArquivos{
+    display: inline-flex;
+    height: auto;
+    justify-content: center;
+}
+
+.bntArquivos{
+    font-size:24px;
+
+}
+.bntArquivos  input {
+    display: none;
+}
+
+
+.bntArquivos  i:hover {
+    opacity: 0.6;
+}
 
 .questionamento .pergunta i{
     font-size:6em;

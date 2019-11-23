@@ -56,7 +56,7 @@
 						});
 					}else{
 						_this.formulario.find('#msg').empty().removeClass('d-none').append(resposta.mensagem);
-						toastr.error(resposta.mensagem);
+						if(!resposta.status)toastr.error(resposta.mensagem);
 						if(_this.questionamentos.length == 0 & resposta.status) {
 							router.navigate('/checklist');
 							toastr.success(resposta.mensagem);

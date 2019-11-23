@@ -26,9 +26,9 @@ class Questionamento {
         $status =  '',
         $formularioPergunta = '',
         $formularioResposta = '',
-        $checklist = null,
-        $planoAcao = null,
-        $pendencia = null,
+        $checklist = 0,
+        $planoAcao = 0,
+        $pendencia = 0,
         $anexos = []
     ) {
     

@@ -265,6 +265,14 @@ use \phputil\JSON;
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 
+	$app->post('/plano-acao/executar', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando o cadastro de plano-acao");
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraPlanoAcao($req->getParsedBody(), $sessaoUsuario);
+		$response = $ctrl->executar();
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+	});
+
 	$app->put('/plano-acao', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 		$this->logger->addInfo("Acessando a atualização de plano-acao");
 		$sessaoUsuario = new Sessao($session);

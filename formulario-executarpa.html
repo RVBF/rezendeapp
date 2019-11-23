@@ -1,0 +1,69 @@
+<section id="detalhes">
+	<div class="col-12  col-sm-12 col-md-12 col-lg-12">
+		<div class="card-panel left-align">
+			<div id="detalhes_pa"></div>
+		</div>
+	</div>
+
+</section>
+<section id="painel_formulario">
+	<div class="col-12  col-sm-12 col-md-12 col-lg-12">
+		<section id="msg" class="card-panel left-align text-danger msg d-none desabilitado"></section>
+
+		<div class="card-panel left-align">
+			<form class="form-horizontal"  method="post" id="planoacaoexecucao_form">		
+				<input type="hidden" id="id" name ="id" />
+
+				<div class="row form-row mb-0-dto">
+					<div class="col col-sm-12 col-md-12 col-12 col-lg-12">
+						<div class="input-field mb-0-dto">
+							<textarea id="destalhes_execucao" class=" campo_obrigatorio materialize-textarea"></textarea>
+							<label for="destalhes_execucao">Insira detalhes da Execução</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="row form-row opcoes_arquivos">
+					<div class="col col-4 col-sm-3 col-lg-2 col-md-2">
+						<a class="list-group-item list-group-item-action orange accent-4 subicon-dto bntArquivos" data-toggle="tooltip" title="Nenhum arquivo selecionado.">
+							<i class="mdi mdi-microphone white-text"></i>
+							<input class="d-none form-control arquivos_audio tamanhoArquivosPadrao" type="file" name="audio" id="audio" accept="audio/mpeg,audio/x-pn-realaudio">
+						</a>
+					</div>
+					
+					<div class="col col-4 col-sm-3 col-lg-2 col-md-2">
+						<a class="list-group-item list-group-item-action orange accent-4 subicon-dto bntArquivos" data-toggle="tooltip" title="Nenhum arquivo selecionado.">
+							<i class="mdi mdi-camera-outline white-text"></i>
+							<input class="d-none form-control arquivos_imagem tamanhoArquivosPadrao" type="file" ref="file"  name="camera" id="camera" accept="image/*" >
+						</a>
+					</div>
+				</div>
+
+				<div class="row form-row" id="botoes">
+					<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end">
+						<button type="submit" id="salvar"  class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">
+							<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>
+								Encerrar<br>
+								plano de ação
+						</button>
+					</div>
+						
+					<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-start justify-content-md-start ">
+						<button class="waves-effect waves-light btn white grey-text text-darken-4 button-dto f-12-dto pa_link">
+							<i class="mdi mdi-close-circle-outline yellow-text text-accent-4"></i>
+							Cancelar
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+
+<script>
+	$(document).ready(function() {
+		var servicoPlanoDeAcao = new app.ServicoPlanoAcao();
+		var crltPlanoDeAcao = new app.ControladoraFormPlanoAcaoExecucao(servicoPlanoDeAcao);
+		crltPlanoDeAcao.configurar();
+	});
+</script>

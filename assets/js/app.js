@@ -57,7 +57,7 @@ var app = {
 			// 	}
 			// }
 
-			element.parents('form').find('.msg').empty().append(error).append('<br>').removeClass('d-none').desabilitar(false);
+			element.parents('body').find('.msg').empty().append(error).append('<br>').removeClass('d-none').desabilitar(false);
 		}
 	});
 
