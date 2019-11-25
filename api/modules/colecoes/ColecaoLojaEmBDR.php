@@ -27,7 +27,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 			}
 			catch (\Exception $e) {
-				throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+				throw new ColecaoException("Erro ao", $e->getCode(), $e);
 			}
 		}
 
@@ -42,7 +42,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 			}
 			catch (\Exception $e)
 			{
-				throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+				throw new ColecaoException("Erro ao remover loja!", $e->getCode(), $e);
 			}
 		}
 		
@@ -57,7 +57,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 			}
 			catch (\Exception $e)
 			{
-				throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+				throw new ColecaoException("Erro ao atualizar loja!", $e->getCode(), $e);
 			}
 		}
 		
@@ -71,7 +71,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar loja!", $e->getCode(), $e);
 		}
 	}
 
@@ -92,7 +92,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar lojas de atuação de um colaborador!", $e->getCode(), $e);
 		}
 	}
 
@@ -149,7 +149,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao listar lojas!", $e->getCode(), $e);
 		}
 	}
 
@@ -165,7 +165,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar lojas com referências!", $e->getCode(), $e);
 		}
 	}
 

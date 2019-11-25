@@ -1,5 +1,5 @@
 /**
- *  planoacao.list.ctrl.js
+ *  planoacaopendente.list.ctrl.js
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */
@@ -7,7 +7,7 @@
 {
 	'use strict';
 
-	function ControladoraListagemPlanoAcao(servicoPlanoAcao)
+	function ControladoraListagemPlanoAcaoPendente(servicoPlanoAcao)
 	{
 		var _this = this;
 		var _cont = 0;
@@ -16,12 +16,30 @@
 		_this.botaoEditar = $('#editar');
 		_this.botaoRemover = $('#remover');
 		_this.botaoAtualizar = $('#atualizar');
-		_this.idTabela = $('#planoacao');
+        _this.idTabela = $('#planoacao_pendentes');
+
+        var pegarId = function pegarId(url, palavra)
+		{
+			// Terminando com "ID/palavra"
+			var regexS = palavra+'+\/[0-9]';
+
+			var regex = new RegExp(regexS);
+			var resultado = regex.exec(url);
+
+			if (!resultado || resultado.length < 1)
+			{
+				return 0;
+			}
+
+			var array = resultado[0].split('/');
+
+			return array[1];
+		};
 
 		//Configura a tabela
 		_this.opcoesDaTabela = function opcoesDaTabela() {
-			var objeto =  new Object();
-			objeto.ajax = servicoPlanoAcao.rota();
+            var objeto =  new Object();
+			objeto.ajax = servicoPlanoAcao.paPendentes(pegarId(window.location.href,'planosacao-pendentes'));
 
 			objeto.carregando = true;
 			objeto.pageLength = 10;
@@ -173,8 +191,8 @@
 		_this.configurar = function configurar() {
 			_tabela = _this.idTabela.listar(_this.opcoesDaTabela());
 		};
-	} // ControladoraListagemPlanoAcao
+	} // ControladoraListagemPlanoAcaoPendente
 
 	// Registrando
-	app.ControladoraListagemPlanoAcao = ControladoraListagemPlanoAcao;
+	app.ControladoraListagemPlanoAcaoPendente = ControladoraListagemPlanoAcaoPendente;
 })(window, app, jQuery, toastr);

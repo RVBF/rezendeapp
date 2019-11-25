@@ -125,6 +125,10 @@
 				data: obj
 			});
 		}
+
+		_this.paPendentes = function paPendentes(id){
+			return _this.rota() + '/pendentes/' + id;
+		}
 	}; // ServicoPlanoAcao
 
 	// Registrando

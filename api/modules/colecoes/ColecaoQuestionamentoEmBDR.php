@@ -37,7 +37,6 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 	
 				$obj->setId($id);
 	
-				return $obj;
 			}
 			catch (\Exception $e) {
 				throw new ColecaoException("Erro ao adicionar tarefa ", $e->getCode(), $e);
@@ -53,17 +52,14 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 			$filds = [ 'status' => $obj->getStatus(),
 				'formularioresposta' => $obj->getFormularioResposta(),
 				'planoacao_id' => ($obj->getPlanoAcao() instanceof PlanoAcao)  ? $obj->getPlanoAcao()->getId() :  0,
-				'pendencia_id' => ($obj->getPendencia() instanceof PlanoAcao)  ? $obj->getPendencia()->getId() : 0
+				'pendencia_id' => ($obj->getPendencia() instanceof Pendencia)  ? $obj->getPendencia()->getId() : 0
 			];
-			
+
 			DB::table(self::TABELA)->where('id', $obj->getId())->update($filds);
-
 			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-
-			return $obj;
 		}
 		catch (\Exception $e)
-		{
+		{			
 			throw new ColecaoException("Erro ao executar questionamento.", $e->getCode(), $e);
 		}
 	}
@@ -132,7 +128,6 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 			}
 			catch (\Exception $e)
 			{
-				Util::printr($e->getMessage());
 
 				throw new ColecaoException("Erro ao atualizar Questionamento.", $e->getCode(), $e);
 			}
@@ -147,7 +142,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar  questionamento!", $e->getCode(), $e);
 		}
 	}
 
@@ -166,7 +161,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar questionamentos para execução!", $e->getCode(), $e);
 		}
 	}
 
@@ -181,7 +176,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 			return $questionamentosObjects;
 		} 		
 		catch (\Exception $e) {
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar questionamentos com a referência de checklist!", $e->getCode(), $e);
 		}
 	}
 
@@ -192,8 +187,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 		}
 		catch (\Exception $e)
 		{
-			Util::printr($e->getMessage());
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar questionamento com a referência de plano de ação!", $e->getCode(), $e);
 		}
 	}
 
@@ -209,7 +203,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 		} 		
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar questionamentos com a referência de status!", $e->getCode(), $e);
 		}
 	}
 
@@ -307,7 +301,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar questionamentos com referências!", $e->getCode(), $e);
 		}
 	}
 

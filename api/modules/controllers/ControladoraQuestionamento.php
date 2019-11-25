@@ -81,7 +81,7 @@ class ControladoraQuestionamento {
 			// if(!$this->servicoLogin->eAdministrador()){
 			// 	throw new Exception("Usuário sem permissão para executar ação.");
 			// }
-			
+
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'status','formularioPergunta', 'formularioResposta'], $this->params);
 			$resposta = [];
 
@@ -172,13 +172,12 @@ class ControladoraQuestionamento {
 	
 						$pendencia = new Pendencia(
 							0,
+							StatusPendenciaEnumerado::AGUARDANDO_EXECUCAO,
 							$this->params['pendencia']['descricao'],
 							$dataLimitePe,
 							$this->params['pendencia']['solucao'],
-							'',
 							$responsavel
 						);
-
 						$this->colecaoPendencia->adicionar($pendencia);
 					}
 				}
@@ -211,8 +210,9 @@ class ControladoraQuestionamento {
 			$questionamento->setPlanoAcao($planoDeAcao);
 
 			$this->colecaoQuestionamento->executar($questionamento);
-			
-			$checklist = new Checklist(); $checklist->fromArray($this->colecaoChecklist->comId($questionamento->getChecklist()));
+
+			$checklist = new Checklist(); $checklist->fromArray($this->colecaoChecklist->comId($questionamento->getChecklist()));				
+
 			$qtdQuestionamentosRepondido = $this->colecaoQuestionamento->contagem($checklist->getId(), [TipoQuestionamentoEnumerado::RESPONDIDO]);
 			$qtdQuestionamentosRepondidoPE = $this->colecaoQuestionamento->contagem($checklist->getId(), [TipoQuestionamentoEnumerado::NAO_RESPONDIDO]);
 			$qtdQuestionamentos = $this->colecaoQuestionamento->contagem($checklist->getId());
@@ -221,11 +221,11 @@ class ControladoraQuestionamento {
 			else if($qtdQuestionamentosRepondidoPE > 0) $checklist->setStatus(StatusChecklistEnumerado::EM_PROGRESSO);
 
 			$this->colecaoChecklist->atualizar($checklist);
+
 			$resposta = ['status' => true, 'mensagem'=> 'Questionamento executado com sucesso.']; 
 			DB::commit();
 		}
 		catch (\Exception $e) {
-			
 			DB::rollback();
 
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 

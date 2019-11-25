@@ -65,7 +65,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 			}
 			catch (\Exception $e)
 			{
-				throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+				throw new ColecaoException("Erro ao remover colaborador no banco de dados!", $e->getCode(), $e);
 			}
 		}		
 	}
@@ -101,20 +101,19 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 			}
 			catch (\Exception $e)
 			{
-				throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+				throw new ColecaoException("Erro ao atualizar colaborador no banco de dados", $e->getCode(), $e);
 			}
 		}	
 	}
 
 	function comId($id){
 		try {	
-			$colaborador = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
 
-			return $colaborador;
+			return (DB::table(self::TABELA)->where('id', $id)->count()) ? $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->first()) : [];
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar colaborador com id no banco de dados!", $e->getCode(), $e);
 		}
 	}
 
@@ -128,7 +127,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro a buscar usuario com usando a referêrencia de colaborador no banco de dados!", $e->getCode(), $e);
 		}
 	}
 
@@ -150,7 +149,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao listar colaboradores", $e->getCode(), $e);
 		}
 	}
 	
@@ -167,7 +166,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao listar colaboradores com a referência de usuário!", $e->getCode(), $e);
 		}
 	}
 
