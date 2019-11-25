@@ -1,5 +1,5 @@
 /**
- *  setor.list.ctrl.js
+ *  checklist.list.ctrl.js
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */
@@ -81,8 +81,8 @@
 								else if(data.status == 'Executado' ) html += '<span class="info_checklist green darken-1 btn-small">'+ data.status +'</span>';
 								else if(data.status == 'Aguardando Execução') html += '<span class="info_checklist red accent-4 btn-small">'+ data.status +'</span>';
 
-								html += (temPaPendente()) ? '<span class="info_checklist orange darken-4 btn-small">PA Pendente</span>' : '';
-								html += (temPendenciaPendente()) ? '<span class="info_checklist grey darken-1 btn-small">Pendência Pendente</span>' : '';
+								html += (temPaPendente()) ? '<a href="#" class="pas_pendentes"><span class="info_checklist orange darken-4 btn-small">PA Pendente</span></a>' : '';
+								html += (temPendenciaPendente()) ? '<a href="#" class="pes_pendentes"><span class="info_checklist grey darken-1 btn-small">Pendência Pendente</span></a>' : '';
 								
 								html += '<p><i class="mdi mdi-map-marker-radius orange-text text-accent-4"></i> <strong>' + data.loja.razaoSocial + '</strong> ' + data.loja.nomeFantasia + '</p>';
 								if(!estaRespondido())html += '<a href="#" class="executar_checklist"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.titulo + '</strong></p></a>';
@@ -100,6 +100,19 @@
 			objeto.rowsCallback = function(resposta){
 				$('.remover_setor_link').on('click', _this.remover);
 				$('.executar_checklist').on('click', _this.executar);
+				$('.pas_pendentes').on('click', function () {
+					event.preventDefault();
+					var objeto = _tabela.getObjetos()[$(this).parents('.listagem-padrao-item').index()];
+
+					router.navigate('/planosacao-pendentes/'+ objeto.id);
+				})
+
+				$('.pes_pendentes').on('click', function () {
+					event.preventDefault();
+					var objeto = _tabela.getObjetos()[$(this).parents('.listagem-padrao-item').index()];
+
+					router.navigate('/pendencias-pendentes/'+ objeto.id);
+				})
 
 				$('.info_checklist').each(function (i, item) {
 					if($(item).html() == 'Executado'){

@@ -14,17 +14,17 @@ use Illuminate\Database\Capsule\Manager as DB;
  * @author	Rafael Vinicius Barros Ferreira
  * @version	1.0
  */
-class ControladoraPlanoAcao {
+class ControladoraPendencia {
 
 	private $params;
 	private $colecaoChecklist;
-	private $colecaoSetor;
 	private $servicoLogin;
 	private $colecaoUsuario;
 	private $colecaoColaborador;
 	private $colecaoLoja;
 	private $colecaoPlanoAcao;
-	private $colecaoQuestionamento;
+    private $colecaoQuestionamento;
+    private $colecaoPendencia;
 	private $servicoArquivo;
 	private $colecaoAnexo;
 
@@ -40,8 +40,7 @@ class ControladoraPlanoAcao {
 		$this->colecaoQuestionamento = Dice::instance()->create('ColecaoQuestionamento');
 		$this->servicoArquivo = ServicoArquivo::instance();
 		$this->colecaoAnexo = Dice::instance()->create('ColecaoAnexo');
-
-
+        $this->colecaoPendencia = Dice::instance()->create('ColecaoPendencia');
 	}
 
 	function todos() {
@@ -57,12 +56,11 @@ class ControladoraPlanoAcao {
 
 			$colaborador = new Colaborador();  $colaborador->fromArray($this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario()));
 
-			$objetos = $this->colecaoPlanoAcao->todosComResponsavelId($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $colaborador->getId());
-
-			$contagem = $this->colecaoPlanoAcao->contagem($colaborador->getId());
+			$objetos = $this->colecaoPendencia->todosComResponsavelId($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $colaborador->getId());
+			$contagem = $this->colecaoPendencia->contagem($colaborador->getId());
 		}
 		catch (\Exception $e ) {
-			throw new Exception("Erro ao listar tarefas");
+			throw new Exception("Erro ao listar pêndencias");
 		}
 
 		$conteudo = new DataTablesResponse(
@@ -88,9 +86,9 @@ class ControladoraPlanoAcao {
 			$erro = null;
 
 			$colaborador = new Colaborador();  $colaborador->fromArray($this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario()));
-			$objetos = $this->colecaoPlanoAcao->todosComChecklistId($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $colaborador->getId(), $checklistId);
+			$objetos = $this->colecaoPendencia->todosComChecklistId($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $colaborador->getId(), $checklistId);
 
-			$contagem = $this->colecaoPlanoAcao->contagem($colaborador->getId());
+			$contagem = $this->colecaoPendencia->contagem($colaborador->getId());
 		}
 		catch (\Exception $e ) {
 			throw new Exception("Erro ao listar tarefas");
@@ -118,8 +116,9 @@ class ControladoraPlanoAcao {
 			// if(!$this->servicoLogin->eAdministrador()){
 			// 	throw new Exception("Usuário sem permissão para executar ação.");
 			// }
-			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'descricao', 'dataLimite', 'solucao', 'responsavel', 'unidade'], $this->params);
 
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'descricao', 'dataLimite', 'solucao', 'responsavel', 'unidade'], $this->params);
+		
 			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) throw new Exception('Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes));
 
 			$loja = new Loja();  $loja->fromArray($this->colecaoLoja->comId(ParamUtil::value($this->params, 'unidade')));
@@ -141,7 +140,7 @@ class ControladoraPlanoAcao {
 				($responsavel->getId() == $responsavelAtual->getId()) ? StatusPaEnumerado::AGUARDANDO_EXECUCAO : StatusPaEnumerado::AGUARDANDO_RESPONSAVEL,
 				\ParamUtil::value($this->params, 'descricao'),
 				$dataLimite,
-				\ParamUtil::value($this->params, 'solucao'),
+				'',
 				'',
 				$responsavel,
 				$loja,
@@ -310,7 +309,6 @@ class ControladoraPlanoAcao {
 
 		return $resposta;
 	}
-
 
     function executar(){
 		DB::beginTransaction();

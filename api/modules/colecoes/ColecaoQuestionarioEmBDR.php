@@ -17,7 +17,12 @@ class ColecaoQuestionarioEmBDR implements ColecaoQuestionario {
 		if($this->validarQuestionario($obj)){
 			try {	
 
-				$id = DB::table(self::TABELA)->insertGetId(['titulo' => $obj->getTitulo(), 'descricao'=> $obj->getDescricao(), 'tipoQuestionario' => $obj->getTipoQuestionario(), 'formulario' => $obj->getFormulario()]);
+				$id = DB::table(self::TABELA)->insertGetId([
+					'titulo' => $obj->getTitulo(),
+					'descricao'=> $obj->getDescricao(),
+					'tipoQuestionario' => $obj->getTipoQuestionario(),
+					'formulario' => $obj->getFormulario()
+				]);
 
 				$obj->setId($id);
 			}
@@ -139,7 +144,7 @@ class ColecaoQuestionarioEmBDR implements ColecaoQuestionario {
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar questionários com id!", $e->getCode(), $e);
 		}
 	}
 

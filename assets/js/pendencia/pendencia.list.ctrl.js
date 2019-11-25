@@ -1,5 +1,5 @@
 /**
- *  planoacao.list.ctrl.js
+ *  pendencia.list.ctrl.js
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */
@@ -7,8 +7,7 @@
 {
 	'use strict';
 
-	function ControladoraListagemPlanoAcao(servicoPlanoAcao)
-	{
+	function ControladoraListagemPendencia(servicoPendencia) {
 		var _this = this;
 		var _cont = 0;
 		var _tabela = null;
@@ -16,12 +15,12 @@
 		_this.botaoEditar = $('#editar');
 		_this.botaoRemover = $('#remover');
 		_this.botaoAtualizar = $('#atualizar');
-		_this.idTabela = $('#planoacao');
+		_this.idTabela = $('#pendencia');
 
 		//Configura a tabela
 		_this.opcoesDaTabela = function opcoesDaTabela() {
 			var objeto =  new Object();
-			objeto.ajax = servicoPlanoAcao.rota();
+			objeto.ajax = servicoPendencia.rota();
 
 			objeto.carregando = true;
 			objeto.pageLength = 10;
@@ -30,8 +29,9 @@
 			objeto.ordering= true;
 			objeto.searching = true;
 			objeto.searchDelay = 600;	
-			objeto.cadastrarLink = 'cadastrar_planoacao_link';
+			objeto.cadastrarLink = 'cadastrar_pendencia_link';
 			objeto.columnDefs = function (data){
+				console.log(data);
 				var html = '';
 				var dataLimite = moment(data.dataLimite);
 				var diferencaDias = dataLimite.diff(moment(),'days');
@@ -53,8 +53,7 @@
 						'<span class="info_checklist grey darken-1 btn-small">Pendência Pendente</span>';
 						
 						// html += '<p><i class="mdi mdi-map-marker-radius orange-text text-accent-4"></i> <strong>' + data.loja.razaoSocial + '</strong> ' + data.loja.nomeFantasia + '</p>';
-						if(data.status != 'Executado') html += '<a href="#" class="executar_pa"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.descricao + '</strong></p></a>';
-						else html += '</i> <strong class="orange-text text-accent-4">' + data.descricao + '</strong></p>';
+						html += '<a href="#" class="executar_pa"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.descricao + '</strong></p></a>';
 						html += '<p class="'+((diferencaDias > 0) ? 'teal-text text-darken-1': ' red-text text-accent-4 ')+'"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>'+textoDiasRestantes+'</strong></p>';
 						html += '<p><strong>Descrição da solução : </strong> ' + data.solucao + '</p>';
 					html += '</div>';
@@ -70,25 +69,6 @@
 									html += '</a>';
 									html += '</p>';
 								html += '</div>';
-								if(!data.responsabilidade){
-									html += '<div class="col col-12 col-lg-4 col-md-4 col-sm-4 mb-0-dto">';
-										html += '<p class="mb-0-dto">';
-										html += '<a href="#" class="detalhes-dto confirmar_responsabilidade">';
-										html += '<i class="far fa-check-square orange-text text-accent-4"></i>';
-										html += 'Confirmar responsabilidade';
-										html += '</a>';
-										html += '</p>';
-									html += '</div>';
-
-									html += '<div class="col col-12 col-lg-4 col-md-4 col-sm-4 mb-0-dto">';
-										html += '<p class="mb-0-dto">';
-										html += '<a href="#" class="detalhes-dto devolver_responsabilidade">';
-										html += '<i class="far fa-window-close orange-text text-accent-4"></i>';
-										html += 'Devolver responsabilidade';
-										html += '</a>';
-										html += '</p>';
-									html += '</div>';
-								}
 							html += '</div>';
 
 					html += '</div>';
@@ -121,7 +101,7 @@
 			event.preventDefault();
 			var objeto = _tabela.getObjetos()[$(this).parents('.listagem-padrao-item').index()];
 
-			servicoPlanoAcao.confirmarResponsabilidade(objeto.id).done(function (resposta) {
+			servicoPendencia.confirmarResponsabilidade(objeto.id).done(function (resposta) {
 				if(resposta.status){
 					_this.atualizar();
 					toastr.success(resposta.mensagem);
@@ -136,7 +116,7 @@
 		_this.visualizar = function visualizar(event) {
 			event.preventDefault();
 			var objeto = _tabela.getObjetos()[$(this).parents('.listagem-padrao-item').index()];
-			router.navigate('/visualizar-pa/'+ objeto.id);
+			router.navigate('/visualizar-pendencia/'+ objeto.id);
 		};
 
 		_this.atualizar = function atualizar(){
@@ -154,7 +134,7 @@
 						label	: '<u>S</u>im',
 						hotkey	: 'S'.charCodeAt(0),
 						action	: function(dialog){
-							servicoPlanoAcao.remover(objeto.id).done(window.sucessoPadrao).fail(window.erro);
+							servicoPendencia.remover(objeto.id).done(window.sucessoPadrao).fail(window.erro);
 							_this.atualizar();
 
 							dialog.close();
@@ -173,8 +153,8 @@
 		_this.configurar = function configurar() {
 			_tabela = _this.idTabela.listar(_this.opcoesDaTabela());
 		};
-	} // ControladoraListagemPlanoAcao
+	} // ControladoraListagemPendencia
 
 	// Registrando
-	app.ControladoraListagemPlanoAcao = ControladoraListagemPlanoAcao;
+	app.ControladoraListagemPendencia = ControladoraListagemPendencia;
 })(window, app, jQuery, toastr);

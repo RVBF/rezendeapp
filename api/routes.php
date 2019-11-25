@@ -236,7 +236,14 @@ use \phputil\JSON;
 		$ctrl = new ControladoraPlanoAcao($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->todos();
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+	});
 
+	$app->get('/plano-acao/pendentes/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando listagem de plano-acao");
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraPlanoAcao($req->getQueryParams(), $sessaoUsuario);
+		$response = $ctrl->todosPendentes($args['id']);
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 
 	$app->get('/plano-acao/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
@@ -291,6 +298,79 @@ use \phputil\JSON;
 
 	});
 // Fim das rotas para plano-acao
+
+// Início das rotas para pendencia
+	$app->get('/pendencia', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando listagem de pendencia");
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraPendencia($req->getQueryParams(), $sessaoUsuario);
+		$response = $ctrl->todos();
+
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+
+	});
+
+	$app->get('/pendencia/pendentes/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando listagem de plano-acao");
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraPendencia($req->getQueryParams(), $sessaoUsuario);
+		$response = $ctrl->todosPendentes($args['id']);
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+	});
+
+	$app->get('/pendencia/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando listagem de pendencia");
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraPendencia($req->getQueryParams(), $sessaoUsuario);
+		$response = $ctrl->comId($args['id']);
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+
+	});
+
+
+	$app->post('/pendencia', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando o cadastro de pendencia");
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraPendencia($req->getParsedBody(), $sessaoUsuario);
+		$response = $ctrl->adicionar();
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+	});
+
+	$app->post('/pendencia/confirmar-responsabilidade', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando o cadastro de pendencia");
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraPendencia($req->getParsedBody(), $sessaoUsuario);
+		$response = $ctrl->confirmarResponsabilidade();
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+	});
+
+	$app->post('/pendencia/executar', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando o cadastro de pendencia");
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraPendencia($req->getParsedBody(), $sessaoUsuario);
+		$response = $ctrl->executar();
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+	});
+
+	$app->put('/pendencia', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando a atualização de pendencia");
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraPendencia($req->getParsedBody(), $sessaoUsuario);
+		$response = $ctrl->atualizar();
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+
+	});
+
+	$app->delete('/pendencia/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraPendencia($req->getParsedBody(), $sessaoUsuario);
+		$response = $ctrl->remover($args['id']);
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+
+	});
+// Fim das rotas para plano-acao
+
 
 // Início das rotas para usuario
 	$app->get('/usuario', function(Request $req,  Response $res, $args = []) use ($app, $session) {

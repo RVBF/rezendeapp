@@ -122,25 +122,11 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 
 	function comId($id){
 		try {	
-
-			$checklist = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
-			return $checklist;
+			return (DB::table(self::TABELA)->where('id', $id)->count() >0 ) ? $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->first()) : [];
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
-		}
-	}
-
-	function comPerguntaId($id){
-		try {	
-			$tarefa = $this->construirObjeto(DB::table(self::TABELA)->select(self::TABELA. '.*')->join(ColecaoPerguntaEmBDR::TABELA, ColecaoPerguntaEmBDR::TABELA . '.tarefa_id', '=', self::TABELA . '.id')->where(ColecaoPerguntaEmBDR::TABELA . '.id', $id)->first());
-
-			return $tarefa;
-		}
-		catch (\Exception $e)
-		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar checklist no banco de dados", $e->getCode(), $e);
 		}
 	}
 
@@ -210,7 +196,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
 		}
 	}
-
+	
 	function todos($limite = 0, $pulo = 0) {
 		try {	
 			$checklist = DB::table(self::TABELA)->offset($limite)->limit($pulo)->get();
@@ -257,7 +243,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar checklists no banco de dados!", $e->getCode(), $e);
 		}
 	}
 
@@ -265,9 +251,9 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 		$setor = ($row['setor_id'] > 0) ? Dice::instance()->create('ColecaoSetor')->comId($row['setor_id']) : '';
 		$loja = ($row['loja_id'] > 0) ? Dice::instance()->create('ColecaoLoja')->comId($row['loja_id']) : '';
 		$questionador = ($row['questionador_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comUsuarioId($row['questionador_id']) : '';
-		$responsavel = ($row['responsavel_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comUsuarioId($row['responsavel_id']) : '';
-
+		$responsavel = ($row['responsavel_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comUsuarioId($row['responsavel_id']) : '';		
 		$questionamentos = ($row['id'] > 0) ? Dice::instance()->create('ColecaoQuestionamento')->questionamentosComChecklistId($row['id']) : '';
+
 
 		$checklist = new Checklist(
 			$row['id'],
@@ -284,6 +270,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			null,
 			$questionamentos
 		);
+
 		return $checklist->toArray();
 	}	
 

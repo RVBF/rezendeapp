@@ -34,7 +34,7 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario {
 				$obj->setId($id);
 			}
 			catch (\Exception $e) {
-				throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+				throw new ColecaoException("Erro ao adicioanr um grupo de usuário ao banco", $e->getCode(), $e);
 			}
 		}	
 	}

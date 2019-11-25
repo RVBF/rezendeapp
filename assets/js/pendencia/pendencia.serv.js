@@ -97,6 +97,10 @@
 				url: _this.rota() + '/pendencia' + id
 			});
 		};
+
+		_this.pePendentes = function pePendentes(id){
+			return _this.rota() + '/pendentes/' + id;
+		}
 	}; // Servicopendencia
 
 	// Registrando
