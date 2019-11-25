@@ -26,7 +26,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException('Erro ao adiocnar o anexo ao banco de dados!', $e->getCode(), $e);
 		}
 	}
 
@@ -36,7 +36,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException('Erro ao Remover o anexo do banco de dados!', $e->getCode(), $e);
 		}
 	}
 
@@ -49,7 +49,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 			}
 			catch (\Exception $e)
 			{
-				throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+				throw new ColecaoException('Erro aoo atualizar o Anexo no banco dade dados!', $e->getCode(), $e);
 			}
 		}
 		
@@ -59,11 +59,11 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 		try {	
 			$loja = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
 
-			return $loja;
+			return (DB::table(self::TABELA)->where('id', $id)->count()) ? $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->first()) : [];
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException('Erro ao buscar anexo com o id no banco de dados!', $e->getCode(), $e);
 		}
 	}
 
@@ -82,7 +82,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar  anexos no banco de dados!", $e->getCode(), $e);
 		}
 	}
 
@@ -98,7 +98,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar anexos no banco de dados!", $e->getCode(), $e);
 		}
 	}
 

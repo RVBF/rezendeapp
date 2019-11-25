@@ -191,12 +191,17 @@
 		loader.script('assets/js/setor/setor.form.ctrl.js');
 		loader.script('assets/js/setor/setor.list.ctrl.js');
 
-		loader.script('assets/js/plano-acao/planoacao.serv.js')
-		loader.script('assets/js/plano-acao/planoacao.form.ctrl.js')
-		loader.script('assets/js/plano-acao/planoacaoexecucao.form.ctrl.js')
-		loader.script('assets/js/plano-acao/planoacao.list.ctrl.js')
+		loader.script('assets/js/plano-acao/planoacao.serv.js');
+		loader.script('assets/js/plano-acao/planoacao.form.ctrl.js');
+		loader.script('assets/js/plano-acao/planoacaoexecucao.form.ctrl.js');
+		loader.script('assets/js/plano-acao/planoacao.list.ctrl.js');
+		loader.script('assets/js/plano-acao/planoacaopendente.list.ctrl.js');
+		
+		loader.script('assets/js/pendencia/pendencia.serv.js');
+		loader.script('assets/js/pendencia/pendencia.list.ctrl.js');
+		loader.script('assets/js/pendencia/pendenciapendente.list.ctrl.js');
 
-		loader.script('assets/js/pendencia/pendencia.serv.js')
+
 
 
 		loader.script('assets/js/questionamento/questionamento.serv.js');

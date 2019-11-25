@@ -81,11 +81,11 @@ class ColecaoHistoricoResponsabilidadeEmBDR implements ColecaoHistoricoResponsab
 		try {	
 			$tarefa = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
 
-			return $tarefa;
+			return $tare;
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar historico de responsabilidade  no banco de dados!", $e->getCode(), $e);
 		}
 	}
 

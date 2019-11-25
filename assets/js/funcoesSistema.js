@@ -32,12 +32,10 @@
 				$(this).formSelect();
 			});
 
-			
 			$(evento.target).find('.home').on('click', function(event){
 				event.preventDefault();
 				router.navigate('/');
 			});
-
 
 			$(evento.target).find('.checklist_link').on('click', function(event){
 				event.preventDefault();
@@ -129,6 +127,11 @@
 			$(evento.target).find('.cadastrar_planoacao_link').on('click', function(event){
 				event.preventDefault();
 				router.navigate('/cadastrar-pa');
+			});
+
+			$(evento.target).find('.pendencia_link').on('click', function(event){
+				event.preventDefault();
+				router.navigate('/pendencia');
 			});
 		}
 	};
