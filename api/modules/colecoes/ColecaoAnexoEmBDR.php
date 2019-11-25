@@ -33,7 +33,6 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 			return $obj;
 		}
 		catch (\Exception $e) {
-			Util::printr($e->getMessage());
 			throw new ColecaoException('Erro ao adicionar Anexo!');
 		}
 	}
@@ -47,7 +46,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao remover anexo!", $e->getCode(), $e);
 		}
 	}
 
@@ -61,22 +60,19 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 			return $obj;
 		}
-		catch (\Exception $e)
-		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		catch (\Exception $e) {
+			throw new ColecaoException("Erro ao atualizar anexo no banco de dados!", $e->getCode(), $e);
 		}
 		
 	}
 
 	function comId($id){
 		try {	
-			$anexo = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
-
-			return $pergunta;
+			return (DB::table(self::TABELA)->where('id', $id)->count() >  0) ? $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->first()) : [];
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar pendência  no banco de dados", $e->getCode(), $e);
 		}
 	}
 	
@@ -92,7 +88,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 			return $anexosObjects;
 		}
 		catch (\Exception $e) {
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar anexo no banco de dados!", $e->getCode(), $e);
 		}
 	}
 	/**
@@ -111,7 +107,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar anexos no banco de dados!", $e->getCode(), $e);
 		}
 	}
 

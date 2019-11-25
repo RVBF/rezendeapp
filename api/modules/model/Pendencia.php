@@ -13,7 +13,8 @@ class Pendencia {
     use ToArray;
     use FromArray;
     
-	private $id;
+    private $id;
+    private $status;
     private $descricao;
     private $dataLimite;
     private $solucao;
@@ -23,22 +24,22 @@ class Pendencia {
 
     function __construct(
         $id,
+        $status,
         $descricao,
         $dataLimite,
         $solucao,
-        $resposta = '',
-        $responsavel,
+        $responsavel = null,
         $dataCadastro = '',
         $dataExecucao = ''
      ) {
         $this->id = $id;
+        $this->status = $status;
         $this->descricao = $descricao;
         $this->dataLimite = $dataLimite;
         $this->solucao = $solucao;
         $this->responsavel  = $responsavel;
         $this->dataCadastro = $dataCadastro;
         $this->dataExecucao = $dataExecucao;
-
     }
 }
 ?>

@@ -97,6 +97,16 @@
 	router.get('/visualizar-pa/:id', criarRotaPara('formulario-pa.html'));
 	router.get('/editar-pa/:id', criarRotaPara('formulario-pa.html'));
 	router.get('/executar-pa/:id', criarRotaPara('formulario-executarpa.html'));
+	router.get('/planosacao-pendentes/:id', criarRotaPara('pa-pendentes.html'));
+
+
+	router.get('/pendencia', criarRotaPara('pendencia.html'));
+	router.get('/cadastrar-pendencia', criarRotaPara('formulario-pendencia.html'));	
+	router.get('/visualizar-pendencia/:id', criarRotaPara('formulario-pendencia.html'));
+	router.get('/editar-pendencia/:id', criarRotaPara('formulario-pendencia.html'));
+	router.get('/executar-pendencia/:id', criarRotaPara('formulario-executarpendencia.html'));
+	router.get('/pendencias-pendentes/:id', criarRotaPara('pe-pendentes.html'));
+	
 
 
 	router.get('/inteligencia', criarRotaPara('inteligencia.html'));

@@ -1,5 +1,5 @@
 /**
- *  planoacao.list.ctrl.js
+ *  pendenciapendente.list.ctrl.js
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */
@@ -7,7 +7,7 @@
 {
 	'use strict';
 
-	function ControladoraListagemPlanoAcao(servicoPlanoAcao)
+	function ControladoraListagemPendenciaPendente(servicoPendencia)
 	{
 		var _this = this;
 		var _cont = 0;
@@ -16,12 +16,30 @@
 		_this.botaoEditar = $('#editar');
 		_this.botaoRemover = $('#remover');
 		_this.botaoAtualizar = $('#atualizar');
-		_this.idTabela = $('#planoacao');
+        _this.idTabela = $('#pendencias_pendentes');
+
+        var pegarId = function pegarId(url, palavra)
+		{
+			// Terminando com "ID/palavra"
+			var regexS = palavra+'+\/[0-9]';
+
+			var regex = new RegExp(regexS);
+			var resultado = regex.exec(url);
+
+			if (!resultado || resultado.length < 1)
+			{
+				return 0;
+			}
+
+			var array = resultado[0].split('/');
+
+			return array[1];
+		};
 
 		//Configura a tabela
 		_this.opcoesDaTabela = function opcoesDaTabela() {
-			var objeto =  new Object();
-			objeto.ajax = servicoPlanoAcao.rota();
+            var objeto =  new Object();
+			objeto.ajax = servicoPendencia.pePendentes(pegarId(window.location.href,'pendencias-pendentes'));
 
 			objeto.carregando = true;
 			objeto.pageLength = 10;
@@ -70,25 +88,6 @@
 									html += '</a>';
 									html += '</p>';
 								html += '</div>';
-								if(!data.responsabilidade){
-									html += '<div class="col col-12 col-lg-4 col-md-4 col-sm-4 mb-0-dto">';
-										html += '<p class="mb-0-dto">';
-										html += '<a href="#" class="detalhes-dto confirmar_responsabilidade">';
-										html += '<i class="far fa-check-square orange-text text-accent-4"></i>';
-										html += 'Confirmar responsabilidade';
-										html += '</a>';
-										html += '</p>';
-									html += '</div>';
-
-									html += '<div class="col col-12 col-lg-4 col-md-4 col-sm-4 mb-0-dto">';
-										html += '<p class="mb-0-dto">';
-										html += '<a href="#" class="detalhes-dto devolver_responsabilidade">';
-										html += '<i class="far fa-window-close orange-text text-accent-4"></i>';
-										html += 'Devolver responsabilidade';
-										html += '</a>';
-										html += '</p>';
-									html += '</div>';
-								}
 							html += '</div>';
 
 					html += '</div>';
@@ -121,7 +120,7 @@
 			event.preventDefault();
 			var objeto = _tabela.getObjetos()[$(this).parents('.listagem-padrao-item').index()];
 
-			servicoPlanoAcao.confirmarResponsabilidade(objeto.id).done(function (resposta) {
+			servicoPendencia.confirmarResponsabilidade(objeto.id).done(function (resposta) {
 				if(resposta.status){
 					_this.atualizar();
 					toastr.success(resposta.mensagem);
@@ -154,7 +153,7 @@
 						label	: '<u>S</u>im',
 						hotkey	: 'S'.charCodeAt(0),
 						action	: function(dialog){
-							servicoPlanoAcao.remover(objeto.id).done(window.sucessoPadrao).fail(window.erro);
+							servicoPendencia.remover(objeto.id).done(window.sucessoPadrao).fail(window.erro);
 							_this.atualizar();
 
 							dialog.close();
@@ -173,8 +172,8 @@
 		_this.configurar = function configurar() {
 			_tabela = _this.idTabela.listar(_this.opcoesDaTabela());
 		};
-	} // ControladoraListagemPlanoAcao
+	} // ControladoraListagemPendenciaPendente
 
 	// Registrando
-	app.ControladoraListagemPlanoAcao = ControladoraListagemPlanoAcao;
+	app.ControladoraListagemPendenciaPendente = ControladoraListagemPendenciaPendente;
 })(window, app, jQuery, toastr);

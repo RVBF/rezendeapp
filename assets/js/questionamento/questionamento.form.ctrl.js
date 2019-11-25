@@ -33,7 +33,6 @@
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
 				var obj = _this.conteudo();
-				console.log($(form).serializeArray());
 				var terminado = function() {
 					_this.formulario.desabilitar(false);
 					if($("[name='opcao']:checked").val() != 'Bom'){
@@ -78,7 +77,7 @@
 		_this.conteudo = function conteudo() {
 			var dataLimitePa = moment(_this.dataLimitePa.getDate()).format('YYYY-MM-DD');
 			var dataLimitePe = moment(_this.dataLimitePe.getDate()).format('YYYY-MM-DD');
-
+			console.log($('#responsavelpa').children("option:selected").val());
 			return servicoQuestionamento.criar(
 				_this.objetoAtual.id,
 				_this.objetoAtual.status,
@@ -92,7 +91,7 @@
 					$('#nao-conformidade-pa').val(),
 					dataLimitePa.toString() + ' ' + $('#hora_limitepa').val(),
 					$('#descricao-pa').val(),
-					$('#responsavelpa').val(),
+					$('#responsavelpa').children("option:selected").val(),
 					'',
 				),
 				_this.servicoPendencia.criar(
@@ -100,7 +99,7 @@
 					$('#descricao-pendencia').val(),
 					dataLimitePe.toString() + ' ' + $('#hora_limitepe').val(),
 					$('#descricao-solucao').val(),
-					$('#responsavelpe').val()
+					$('#responsavelpe').children("option:selected").val()
 				),
 				_this.anexos
 			);

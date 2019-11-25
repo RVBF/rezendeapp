@@ -54,7 +54,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario {
 			else return false;
 		}
 		catch (\Exception $e) {
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao remover usuário com id.", $e->getCode(), $e);
 		}
 	}
 
@@ -73,7 +73,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario {
 			}
 			catch (\Exception $e)
 			{
-				throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+				throw new ColecaoException("Ero ao atualizar usuário!", $e->getCode(), $e);
 			}
 		}
 	}
@@ -86,7 +86,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario {
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar usuário!", $e->getCode(), $e);
 		}
 	}
 
@@ -140,7 +140,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario {
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar usuários!", $e->getCode(), $e);
 		}
 	}
 	
@@ -156,7 +156,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario {
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar usuários com referẽncias!", $e->getCode(), $e);
 		}
 	}
 	
@@ -184,7 +184,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario {
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar usuários com as referências de grupo", $e->getCode(), $e);
 		}
 	}
 
@@ -226,7 +226,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario {
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException("Erro ao alterar senha!", $e->getCode(), $e);
 		}
 	}
 	
