@@ -13,5 +13,7 @@ interface ColecaoQuestionamento extends Colecao{
     function questionamentosComStatus($status = []);
     function questionamentosComChecklistId($checklistId = 0);
     function comPlanodeAcaoid($planoAcaoId = 0);
+    function contagemPorColuna($valor = 0, $coluna = 'id');
+    function comPendenciaId($pendenciaId = 0);
 }
 ?>

@@ -76,7 +76,6 @@
 			});
 		};
 
-
 		_this.remover = function remover(id ) {
 			return $.ajax({
 				type: "DELETE",
@@ -84,7 +83,7 @@
 			});
 		};
 
-		_this.comId = function comId(id, ) {
+		_this.comId = function comId(id) {
 			return $.ajax({
 				type: "GET",
 				url: _this.rota() + '/' + id
@@ -100,6 +99,13 @@
 
 		_this.pePendentes = function pePendentes(id){
 			return _this.rota() + '/pendentes/' + id;
+		}
+
+		_this.executar = function executar(id){
+			return $.ajax({
+				type: "GET",
+				url: _this.rota() + '/executar/' + id
+			});
 		}
 	}; // Servicopendencia
 
