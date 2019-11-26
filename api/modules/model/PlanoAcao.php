@@ -25,6 +25,7 @@ class PlanoAcao {
     private $dataCadastro;
     private $dataExecucao;
     private $responsabilidade;
+    private $historicoAtual;
     private $historico;
 
     function __construct(
@@ -39,8 +40,9 @@ class PlanoAcao {
         $dataCadastro = '',
         $dataExecucao = '',
         $responsabilidade = false,
+        $historicoAtual = null,
         $historico = []
-    
+
      ) {
         $this->id = $id;
         $this->status = $status;

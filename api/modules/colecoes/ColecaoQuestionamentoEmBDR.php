@@ -89,7 +89,6 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
         }
     }
 
-
 	function remover($id) {
 		if($this->validarRemocaoTarefa($id)){
 			try {	
@@ -115,10 +114,10 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
                     'formulariopergunta' => is_object($obj->getFormularioPergunta()) ? json_encode($obj->getFormularioPergunta()) : $obj->getFormularioPergunta(),
                     'formularioresposta' => is_object($obj->getFormularioResposta()) ? json_encode($obj->getFormularioResposta()) : $obj->getFormularioResposta()
 				];
-				
-				if($obj->getPendencia() instanceof Pendencia || $obj->getPendencia() >0) $filds['pendencia_id'] =  ($obj->getPendencia() instanceof Pendencia)  ? $obj->getPendencia()->getId() : $obj->getPendencia();
-				if($obj->getChecklist() instanceof Checklist || $obj->getChecklist() > 0) $filds['checklist_id'] =  ($obj->getChecklist() instanceof Checklist)  ? $obj->getChecklist()->getId() : $obj->getChecklist();
-				if($obj->getPlanoAcao() instanceof PlanoAcao || $obj->getPlanoAcao() >0) $filds['planoacao_id'] =  ($obj->getPlanoAcao() instanceof PlanoAcao)  ? $obj->getPlanoAcao()->getId() : $obj->getPlanoAcao()['id'];
+
+				if($obj->getPendencia() instanceof Pendencia || isset($obj->getPendencia()['id'])) $filds['pendencia_id'] =  ($obj->getPendencia() instanceof Pendencia)  ? $obj->getPendencia()->getId() : $obj->getPendencia()['id'];
+				if($obj->getChecklist() instanceof Checklist || isset($obj->getChecklist()['id'])) $filds['checklist_id'] =  ($obj->getChecklist() instanceof Checklist)  ? $obj->getChecklist()->getId() : $obj->getChecklist()['id'];
+				if($obj->getPlanoAcao() instanceof PlanoAcao || isset($obj->getPlanoAcao()['id'])) $filds['planoacao_id'] =  ($obj->getPlanoAcao() instanceof PlanoAcao)  ? $obj->getPlanoAcao()->getId() : $obj->getPlanoAcao()['id'];
 
 				DB::table(self::TABELA)->where('id', $obj->getId())->update($filds);
 
@@ -128,7 +127,6 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 			}
 			catch (\Exception $e)
 			{
-
 				throw new ColecaoException("Erro ao atualizar Questionamento.", $e->getCode(), $e);
 			}
 		// }
@@ -182,8 +180,17 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 
 	function comPlanodeAcaoid($planoAcaoId = 0){
 		try {	
-			$questionamento = $this->construirObjeto(DB::table(self::TABELA)->where('planoacao_id', $planoAcaoId)->sharedLock()->get()[0]);
-			return $questionamento;
+			return (DB::table(self::TABELA)->where('planoacao_id', $planoAcaoId)->count()) ?  DB::table(self::TABELA)->where('planoacao_id', $planoAcaoId)->first() : [];
+		}
+		catch (\Exception $e)
+		{
+			throw new ColecaoException("Erro ao buscar questionamento com a referência de plano de ação!", $e->getCode(), $e);
+		}
+	}
+
+	function comPendenciaid($pendenciaId = 0){
+		try {	
+			return (DB::table(self::TABELA)->where('pendencia_id', $pendenciaId)->count()) ?  DB::table(self::TABELA)->where('pendencia_id', $pendenciaId)->first() : [];
 		}
 		catch (\Exception $e)
 		{
@@ -308,7 +315,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 	function construirObjeto(array $row) {
 		// $checklist = ($row['checklist_id'] > 0) ? Dice::instance()->create('ColecaoChecklist')->comId($row['checklist_id']) : null;
 		$planoAcao = ($row['planoacao_id'] > 0) ? Dice::instance()->create('ColecaoPlanoAcao')->comId($row['planoacao_id']) : null;
-		$pendencia = ($row['pendencia_id'] > 0) ? Dice::instance()->create('ColecaoPlanoAcao')->comId($row['pendencia_id']) : null;
+		$pendencia = ($row['pendencia_id'] > 0) ? Dice::instance()->create('ColecaoPendencia')->comId($row['pendencia_id']) : null;
 
 		$questionamento =  new Questionamento(
 			$row['id'],
@@ -319,12 +326,15 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 			$planoAcao,
 			$pendencia
 		);
-
 		return $questionamento->toArray();
 	}	
 
     function contagem($checklistId = 0, $status = []) {
 		return (count($status) > 0) ? DB::table(self::TABELA)->where('checklist_id', $checklistId)->whereIn('status',$status)->count() : DB::table(self::TABELA)->where('checklist_id', $checklistId)->count();
+	}
+
+	function contagemPorColuna($valor = 0, $coluna = 'id') {
+		return DB::table(self::TABELA)->where($coluna, $valor)->count();
 	}
 
 	private function validarTarefa(&$obj) {

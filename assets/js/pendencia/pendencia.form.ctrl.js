@@ -8,11 +8,11 @@
 {
 	'use strict';
 
-	function ControladoraFormPlanoAcao(servicoPlanoAcao) {
+	function ControladoraFormPendencia(servicoPedencia) {
 		var _this = this;
 
 		_this.alterar = false;
-		_this.formulario = $('#planoacao_form');
+		_this.formulario = $('#pendencia_form');
 		_this.botaoSubmissao = $('#editar');
 		_this.dataLimite = '';
 		_this.horaLimite = '';
@@ -34,10 +34,10 @@
 				
 				_this.formulario.desabilitar(true);
 			
-				var jqXHR = _this.alterar ? servicoPlanoAcao.atualizar(obj) : servicoPlanoAcao.adicionar(obj);
+				var jqXHR = _this.alterar ? servicoPedencia.atualizar(obj) : servicoPedencia.adicionar(obj);
 				jqXHR.done(function(resposta) {
 					if(resposta.status){
-						router.navigate('/plano-acao');
+						router.navigate('/pendencia');
 						toastr.success(resposta.mensagem);
 
 					}
@@ -80,7 +80,7 @@
 		_this.conteudo = function conteudo() {
 			var dataLimite = moment(_this.dataLimite.getDate()).format('YYYY-MM-DD');
 
-			return servicoPlanoAcao.criar(
+			return servicoPedencia.criar(
 				$('#id').val(),
 				$('#nao-conformidade-pa').val(),
 				dataLimite.toString() + ' ' + $('#hora_limitepa').val(),
@@ -139,8 +139,8 @@
 
 		_this.definirForm = function definirForm(status = false) {
 			_this.formulario.submit(false);
-			if(window.location.href.search('visualizar') != -1) servicoPlanoAcao.comId(pegarId(window.location.href,'visualizar-pa')).done(_this.desenhar);
-			else  if(window.location.href.search('editar') != -1) servicoPlanoAcao.comId(pegarId(window.location.href,'editar-pa')).done(_this.desenhar);
+			if(window.location.href.search('visualizar') != -1) servicoPedencia.comId(pegarId(window.location.href,'visualizar-pa')).done(_this.desenhar);
+			else  if(window.location.href.search('editar') != -1) servicoPedencia.comId(pegarId(window.location.href,'editar-pa')).done(_this.desenhar);
 			else{
 				_this.alterar = false;
 				_this.configurarEventos();
@@ -265,9 +265,9 @@
 		_this.configurar = function configurar(status = false) {
 			_this.definirForm(status);
 		};
-	}; // ControladoraFormPlanoAcao
+	}; // ControladoraFormPendencia
 
 	// Registrando
-	app.ControladoraFormPlanoAcao = ControladoraFormPlanoAcao;
+	app.ControladoraFormPendencia = ControladoraFormPendencia;
 
 })(window, app, jQuery, toastr);

@@ -23,11 +23,11 @@ class Pendencia {
     private $dataExecucao;
 
     function __construct(
-        $id,
-        $status,
-        $descricao,
-        $dataLimite,
-        $solucao,
+        $id = 0,
+        $status = '',
+        $descricao = '',
+        $dataLimite = '',
+        $solucao = '',
         $responsavel = null,
         $dataCadastro = '',
         $dataExecucao = ''

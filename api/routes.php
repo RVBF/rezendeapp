@@ -324,7 +324,6 @@ use \phputil\JSON;
 		$ctrl = new ControladoraPendencia($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->comId($args['id']);
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
-
 	});
 
 
@@ -344,11 +343,11 @@ use \phputil\JSON;
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 
-	$app->post('/pendencia/executar', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$app->get('/pendencia/executar/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 		$this->logger->addInfo("Acessando o cadastro de pendencia");
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraPendencia($req->getParsedBody(), $sessaoUsuario);
-		$response = $ctrl->executar();
+		$response = $ctrl->executar($args['id']);
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 
@@ -369,7 +368,7 @@ use \phputil\JSON;
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
-// Fim das rotas para plano-acao
+// Fim das rotas para  pendencia
 
 
 // Início das rotas para usuario
