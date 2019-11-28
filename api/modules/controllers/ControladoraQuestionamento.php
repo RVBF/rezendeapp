@@ -213,12 +213,16 @@ class ControladoraQuestionamento {
 
 			$checklist = new Checklist(); $checklist->fromArray($this->colecaoChecklist->comId($questionamento->getChecklist()));				
 
-			$qtdQuestionamentosRepondido = $this->colecaoQuestionamento->contagem($checklist->getId(), [TipoQuestionamentoEnumerado::RESPONDIDO]);
-			$qtdQuestionamentosRepondidoPE = $this->colecaoQuestionamento->contagem($checklist->getId(), [TipoQuestionamentoEnumerado::NAO_RESPONDIDO]);
-			$qtdQuestionamentos = $this->colecaoQuestionamento->contagem($checklist->getId());
-
-			if($qtdQuestionamentos == $qtdQuestionamentosRepondido) $checklist->setStatus(StatusChecklistEnumerado::EXECUTADO);
-			else if($qtdQuestionamentosRepondidoPE > 0) $checklist->setStatus(StatusChecklistEnumerado::EM_PROGRESSO);
+			if(!$this->colecaoChecklist->temPendencia($checklist->getId())){
+				$checklist->setStatus(StatusChecklistEnumerado::EXECUTADO);
+				$this->colecaoChecklist->atualizar($checklist);	
+			}
+			else{
+				if($checklist->getStatus() == StatusChecklistEnumerado::AGUARDANDO_EXECUCAO){
+					$checklist->setStatus(StatusChecklistEnumerado::EM_PROGRESSO);
+					$this->colecaoChecklist->atualizar($checklist);	
+				}
+			}
 
 			$this->colecaoChecklist->atualizar($checklist);
 

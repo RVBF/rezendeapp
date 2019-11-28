@@ -387,6 +387,12 @@ class ControladoraPlanoAcao {
 					$checklist->setStatus(StatusChecklistEnumerado::EXECUTADO);
 					$this->colecaoChecklist->atualizar($checklist);	
 				}
+				else{
+					if($checklist->getStatus() == StatusChecklistEnumerado::AGUARDANDO_EXECUCAO){
+						$checklist->setStatus(StatusChecklistEnumerado::EM_PROGRESSO);
+						$this->colecaoChecklist->atualizar($checklist);	
+					}
+				}
 			}
 		
 			if(isset($this->params['anexos']) and count($this->params['anexos']) > 0){

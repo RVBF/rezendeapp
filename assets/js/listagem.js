@@ -108,13 +108,13 @@
 
 			}
 			else{
-				while (this.objetos.objetos.length) {
+				while (_this.objetos.objetos.length) {
 					_this.objetos.objetos.pop();
 				}
 				
 				_this.objetos.objetos.push(data);
 			}
-
+			console.log(_this.objetos);
 			var html = '';
 
 			if(opcoes.hasHeader && listagemPadrao.find('.listagem-padrao-item').length == 0){
@@ -307,6 +307,7 @@
 		_this.atualizarTabela = function atualizarTabela(event){
 			if(event != undefined) event.preventDefault();
 			var sucesso = function (resposta) {
+
 				ultimaResposta = resposta;
 				listagemPadrao.find('.linhas').empty().append(_this.renderizarRows(resposta.data));
 				listagemPadrao.find('.info').empty().append(_this.renderizarInfo(resposta));

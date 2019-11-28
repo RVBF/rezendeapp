@@ -110,7 +110,7 @@
 				$('.pes_pendentes').on('click', function () {
 					event.preventDefault();
 					var objeto = _tabela.getObjetos()[$(this).parents('.listagem-padrao-item').index()];
-
+					console.log(objeto);
 					router.navigate('/pendencias-pendentes/'+ objeto.id);
 				})
 
