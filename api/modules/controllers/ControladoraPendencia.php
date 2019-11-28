@@ -364,6 +364,12 @@ class ControladoraPendencia {
 					$checklist->setStatus(StatusChecklistEnumerado::EXECUTADO);
 					$this->colecaoChecklist->atualizar($checklist);	
 				}
+				else{
+					if($checklist->getStatus() == StatusChecklistEnumerado::AGUARDANDO_EXECUCAO){
+						$checklist->setStatus(StatusChecklistEnumerado::EM_PROGRESSO);
+						$this->colecaoChecklist->atualizar($checklist);	
+					}
+				}
 			}
 		
 			$resposta = ['status' => true, 'mensagem'=> 'Pendência executada com sucesso!']; 
