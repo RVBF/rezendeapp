@@ -9,6 +9,7 @@
 
 interface ColecaoAnexo extends Colecao {
    public function comQuestionamentoId($id);
+   public function comPlanoAcaoId($id);
 }
 
 

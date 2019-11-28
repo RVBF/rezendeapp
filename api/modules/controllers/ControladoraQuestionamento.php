@@ -38,7 +38,6 @@ class ControladoraQuestionamento {
 		$this->colecaoChecklist = Dice::instance()->create('ColecaoChecklist');
 		$this->colecaoHistorico = Dice::instance()->create('ColecaoHistoricoResponsabilidade');
 		$this->colecaoAnexo = Dice::instance()->create('ColecaoAnexo');
-
 		$this->servicoArquivo = ServicoArquivo::instance();
 		$this->servicoLogin = new ServicoLogin($sessao);
 	}

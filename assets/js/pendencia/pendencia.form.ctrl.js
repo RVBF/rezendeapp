@@ -39,7 +39,6 @@
 					if(resposta.status){
 						router.navigate('/pendencia');
 						toastr.success(resposta.mensagem);
-
 					}
 					else{
 						$('body #msg').empty().removeClass('d-none').append(resposta.mensagem);
@@ -176,7 +175,7 @@
 				if(_this.objeto.status != 'Executado'){
 					_this.formulario.find('#botoes').prepend(' <div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end"><button type="button" id="editar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Editar</button></div>').promise().done(function(){
 						_this.formulario.find('#editar').on('click', function(event){
-							router.navigate('/editar-pa/'+ _this.objeto.id);
+							router.navigate('/editar-pendencia/'+ _this.objeto.id);
 						});
 					});
 				}

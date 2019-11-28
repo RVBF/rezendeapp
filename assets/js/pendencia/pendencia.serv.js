@@ -12,6 +12,7 @@
         dataLimite,
 		solucao,
 		responsavel,
+		unidade,
         dataCadastro,
         dataExecucao
     ){
@@ -20,6 +21,7 @@
         this.dataLimite = dataLimite || '';
 		this.solucao = solucao || '';
 		this.responsavel  = responsavel || 0;
+		this.unidade = unidade || 0;
         this.dataCadastro = dataCadastro || '';
         this.dataExecucao = dataExecucao || '';
     };
@@ -38,6 +40,7 @@
             dataLimite,
 			solucao,
 			responsavel,
+			unidade,
             dataCadastro,
             dataExecucao
         ) {
@@ -47,6 +50,7 @@
                 dataLimite : dataLimite || '',
 				solucao : solucao || '',
 				responsavel : responsavel ||  0,
+				unidade : unidade || 0,
                 dataCadastro : dataCadastro || '',
                 dataExecucao : dataExecucao || ''
 			};

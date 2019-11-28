@@ -19,7 +19,9 @@
     "pickerjs": "fengyuanchen/pickerjs#^1.2.1",
     "moment": "^2.24.0",
     "jquery-mobile": "^1.4.5",
-    "popper.js": "^1.16.0"
+    "popper.js": "^1.16.0",
+    "downloadjs" : "1.4.8"
+
   },
   "devDependencies": {}
 }

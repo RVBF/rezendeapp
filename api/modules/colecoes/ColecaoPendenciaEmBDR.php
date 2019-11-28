@@ -21,11 +21,11 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 					'status' => $obj->getStatus(),
 					'descricao' => $obj->getDescricao(),
 					'descricaosolucao' => $obj->getSolucao(),
-					'datalimite' => $obj->getDataLimite()->toDateTimeString(),
+					'datalimite' => ($obj->getDataLimite() instanceof Carbon) ? $obj->getDataLimite()->toDateTimeString() : $obj->getDataLimite(),
 					'responsavel_id' => $obj->getResponsavel()->getId()
 				]
 			);
-
+			
 			$obj->setId($id);	
 	
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
@@ -72,7 +72,6 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 			try {
 				
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
 				$filds = [ 'status' => $obj->getStatus(),
 					'descricao' => $obj->getDescricao(),
 					'descricaosolucao' => $obj->getSolucao(),
@@ -87,9 +86,7 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 
 				return $obj;
 			}
-			catch (\Exception $e)
-			{
-
+			catch (\Exception $e) {
 				throw new ColecaoException("Erro ao atualizar tarefa.", $e->getCode(), $e);
 			}
 	}

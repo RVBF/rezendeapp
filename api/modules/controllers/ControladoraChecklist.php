@@ -83,7 +83,6 @@ class ControladoraChecklist {
 			}
 		}
 		catch (\Exception $e ) {
-			Util::printr($e->getMessage());
 			throw new Exception("Erro ao listar checklist");
 		}	
 		

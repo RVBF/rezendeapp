@@ -263,6 +263,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 	function construirObjeto(array $row) {
 		$responsavel = ($row['responsavel_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comId($row['responsavel_id']) : '';
 		$historicoAtual = Dice::instance()->create('ColecaoHistoricoResponsabilidade')->comPlanoAcaoId($row['id']);
+		$anexos = Dice::instance()->create('ColecaoAnexo')->comPlanoAcaoId($row['id']);
 
 		$planoDeAcao = new PlanoAcao(
 			$row['id'],
@@ -277,10 +278,9 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 			$row['dataexecucao'],
 			$row['responsabilidade'],
 			$historicoAtual,
-			[]
+			[],
+			$anexos
 		);
-
-		// $planoDeAcao->getHIstoricoAtual()->setPlanoACao($planoDeAcao);
 
 		return $planoDeAcao->toArray();
 	}	
