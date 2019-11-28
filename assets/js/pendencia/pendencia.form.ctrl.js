@@ -82,10 +82,10 @@
 
 			return servicoPedencia.criar(
 				$('#id').val(),
-				$('#nao-conformidade-pa').val(),
-				dataLimite.toString() + ' ' + $('#hora_limitepa').val(),
-				$('#descricao-pa').val(),
-				$('#responsavelpa').val(),
+				$('#nao-conformidade').val(),
+				dataLimite.toString() + ' ' + $('#hora_limite').val(),
+				$('#descricao').val(),
+				$('#responsavel').val(),
 				$('#unidade').val(),
 				'',
 			);
@@ -95,11 +95,11 @@
 			if(window.location.href.search('visualizar') != -1){
 
 			}else{
-				_this.dataLimite =new Picker($('#data_limitepa').get()[0], {
+				_this.dataLimite =new Picker($('#data_limite').get()[0], {
 					format : 'DD de MMMM de YYYY',
 					controls: true,
 					inline: true,
-					container: '.date-panel-pa',					
+					container: '.date-panel',					
 					text : {
 						title: 'Selecione a data',
 						cancel: 'Cancelar',
@@ -117,12 +117,12 @@
 					monthsShort : ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
 				});
 	
-				_this.horaLimite = new Picker($('#hora_limitepa').get()[0], {
+				_this.horaLimite = new Picker($('#hora_limite').get()[0], {
 					format: 'HH:mm',
 					headers: true,
 					controls: true,
 					inline: true,
-					container: '.time-panel-pa',	
+					container: '.time-panel',	
 					text : {
 						title: 'Selecione a hora',
 						cancel: 'Cancelar',
@@ -139,14 +139,14 @@
 
 		_this.definirForm = function definirForm(status = false) {
 			_this.formulario.submit(false);
-			if(window.location.href.search('visualizar') != -1) servicoPedencia.comId(pegarId(window.location.href,'visualizar-pa')).done(_this.desenhar);
-			else  if(window.location.href.search('editar') != -1) servicoPedencia.comId(pegarId(window.location.href,'editar-pa')).done(_this.desenhar);
+			if(window.location.href.search('visualizar') != -1) servicoPedencia.comId(pegarId(window.location.href,'visualizar-pendencia')).done(_this.desenhar);
+			else  if(window.location.href.search('editar') != -1) servicoPedencia.comId(pegarId(window.location.href,'editar-pendencia')).done(_this.desenhar);
 			else{
 				_this.alterar = false;
 				_this.configurarEventos();
 				_this.popularColaboradores();
 				_this.popularLojas();
-				$('.card-title').html('<h3>Cadastrar PA</h3>');
+				$('.card-title').html('<h3>Cadastrar Pendência</h3>');
 				_this.formulario.find('#botoes').prepend(' <div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end"><button type="submit" id="cadastrar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Cadastrar</button></div>').promise().done(function(){
 					$('#botoes').find('#cadastrar').on('click', _this.salvar);
 				});
@@ -162,13 +162,13 @@
 			_this.popularColaboradores();
 			_this.popularLojas();
 			_this.formulario.find('#id').val(_this.objeto.id).focus().blur();
-			_this.formulario.find('#nao-conformidade-pa').val(_this.objeto.descricao).focus().blur();
-			_this.formulario.find('#descricao-pa').val(_this.objeto.solucao).focus().blur();
-			_this.formulario.find('#responsavelpa').val(_this.objeto.responsavel.id).focus().blur();
-			$("#responsavelpa").formSelect();
+			_this.formulario.find('#nao-conformidade').val(_this.objeto.descricao).focus().blur();
+			_this.formulario.find('#descricao').val(_this.objeto.solucao).focus().blur();
+			_this.formulario.find('#responsavel').val(_this.objeto.responsavel.id).focus().blur();
+			$("#responsavel").formSelect();
 			var dataLimite = moment(_this.objeto.dataLimite);
-			$('#data_limitepa').val(dataLimite.format('DD') + ' de ' + dataLimite.format('MMMM') + ' de ' + dataLimite.format('YYYY')).focus().blur();
-			$('#hora_limitepa').val(dataLimite.format('HH') + ':' + dataLimite.format('mm')).focus().blur();
+			$('#data_limite').val(dataLimite.format('DD') + ' de ' + dataLimite.format('MMMM') + ' de ' + dataLimite.format('YYYY')).focus().blur();
+			$('#hora_limite').val(dataLimite.format('HH') + ':' + dataLimite.format('mm')).focus().blur();
 
 			if(window.location.href.search('visualizar') != -1) {
 				_this.formulario.desabilitar(true);
@@ -181,7 +181,7 @@
 					});
 				}
 			
-				$('.card-title').html('<h3>Visualizar PA</h3>');
+				$('.card-title').html('<h3>Visualizar Pendência</h3>');
 			}
 			else if(window.location.href.search('editar') != -1) {
 				_this.alterar = true;
@@ -198,7 +198,7 @@
 					$('#salvar').on('click', _this.salvar);
 
 				});
-				$('.card-title').html('<h3>Editar PA</h3>');
+				$('.card-title').html('<h3>Editar Pendência</h3>');
 			}
 		};
 
@@ -232,16 +232,16 @@
 		_this.popularColaboradores  =  function popularColaboradores(valor = 0)
 		{
 			var sucesso = function (resposta) {
-				$("#responsavelpa").empty();
+				$("#responsavel").empty();
 
 				$.each(resposta.data, function(i ,item) {
-					$("#responsavelpa").append($('<option>', {
+					$("#responsavel").append($('<option>', {
 						value: item.id,
 						text: item.nome  + ' ' + item.sobrenome
 					}));
 				});
 
-				$('#responsavelpa').formSelect();
+				$('#responsavel').formSelect();
 			};
 
 			var erro = function(resposta)
