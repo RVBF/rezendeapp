@@ -151,19 +151,16 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 		catch (\Exception $e)
 		{			
 
-			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
+			throw new ColecaoException("Erro ao listar checklists.", $e->getCode(), $e);
 		}
 	}
 
 	function todosComChecklistId($limite = 0, $pulo = 10, $search = '', $colaboradorId = 0, $checklistId = 0){
 		try {	
-
-
 			$query = DB::table(self::TABELA)->select(self::TABELA .'.*')->where(self::TABELA .'.responsavel_id', $colaboradorId);
 			$query->leftJoin(ColecaoQuestionamentoEmBDR::TABELA, ColecaoQuestionamentoEmBDR::TABELA. '.planoacao_id', '=', self::TABELA .'.id');
 			$query->leftJoin(ColecaoChecklistEmBDR::TABELA, ColecaoQuestionamentoEmBDR::TABELA. '.checklist_id', '=', ColecaoChecklistEmBDR::TABELA .'.id');
 			$query->where(ColecaoChecklistEmBDR::TABELA .'.id', $checklistId);
-			
 			if($search != '') {
 				$buscaCompleta = $search;
 				$palavras = explode(' ', $buscaCompleta);
@@ -207,7 +204,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 				$query->groupBy(self::TABELA.'.id');
 			}
 			
-			$query->groupBy('id','status', 'descricaonaoconformidade','descricaosolucao', 'datalimite', 'dataexecucao', 'responsabilidade', 'datacadastro', 'responsavel_id')
+			$query->groupBy('id','status', 'descricaonaoconformidade','descricaosolucao', 'datalimite', 'dataexecucao', 'responsabilidade', 'datacadastro', 'responsavel_id', 'loja_id')
 							->orderByRaw(self::TABELA . '.status = "' . StatusPaEnumerado::EXECUTADO . '" ASC , '. self::TABELA.'.datalimite ASC')
 							->offset($limite)
 							->limit($pulo);
@@ -222,10 +219,8 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 
 			return $planosAcaoObjects;
 		}
-		catch (\Exception $e)
-		{			
-			Util::printr($e->getMessage());
-			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
+		catch (\Exception $e) {			
+			throw new ColecaoException("Erro ao listar planos de ação com referência de checklist.", $e->getCode(), $e);
 		}
 	}
 
@@ -244,7 +239,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 		catch (\Exception $e)
 		{
 
-			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
+			throw new ColecaoException("Erro ao listar checklists.", $e->getCode(), $e);
 		}
 	}
 	

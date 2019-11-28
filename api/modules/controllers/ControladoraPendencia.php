@@ -91,7 +91,7 @@ class ControladoraPendencia {
 			$contagem = $this->colecaoPendencia->contagem($colaborador->getId());
 		}
 		catch (\Exception $e ) {
-			throw new Exception("Erro ao listar tarefas");
+			throw new Exception("Erro ao listar checklists");
 		}
 
 		$conteudo = new DataTablesResponse(
@@ -319,6 +319,7 @@ class ControladoraPendencia {
 			// if(!$this->servicoLogin->eAdministrador()){
 			// 	throw new Exception("Usuário sem permissão para executar ação.");
 			// }
+
 			$resposta = [];
 			$colaborador = new Colaborador();  $colaborador->fromArray($this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario()));
 			if(!isset($colaborador) and !($colaborador instanceof Colaborador)){
@@ -342,6 +343,7 @@ class ControladoraPendencia {
 			$questionamento = null;
 			if($this->colecaoQuestionamento->contagemPorColuna($id, 'pendencia_id') > 0){
 				$questionamento = new Questionamento(); $questionamento->fromArray($this->colecaoQuestionamento->comPendenciaId($id));
+
 				if(!isset($questionamento) and !($questionamento instanceof Questionamento)){
 					throw new Exception("Questionamento não encontrado na base de dados.");
 				}	
@@ -358,7 +360,6 @@ class ControladoraPendencia {
 				if(!isset($checklist) and !($checklist instanceof Checklist)){
 					throw new Exception("checklist não encontrado na base de dados.");
 				}	
-			
 				if(!$this->colecaoChecklist->temPendencia($checklist->getId())){
 					$checklist->setStatus(StatusChecklistEnumerado::EXECUTADO);
 					$this->colecaoChecklist->atualizar($checklist);	
