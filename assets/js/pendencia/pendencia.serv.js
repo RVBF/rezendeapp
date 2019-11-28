@@ -69,6 +69,7 @@
 
 
 		_this.atualizar = function atualizar(obj) {
+			// console.log
 			return $.ajax({
 				type: "PUT",
 				url: _this.rota(),
