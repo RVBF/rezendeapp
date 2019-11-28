@@ -104,7 +104,7 @@
 	router.get('/cadastrar-pendencia', criarRotaPara('formulario-pendencia.html'));	
 	router.get('/visualizar-pendencia/:id', criarRotaPara('formulario-pendencia.html'));
 	router.get('/editar-pendencia/:id', criarRotaPara('formulario-pendencia.html'));
-	router.get('/executar-pendencia/:id', criarRotaPara('formulario-executarpendencia.html'));
+	router.get('/executar-pendencia/:id', criarRotaPara('formulario-executarpe.html'));
 	router.get('/pendencias-pendentes/:id', criarRotaPara('pe-pendentes.html'));
 	
 

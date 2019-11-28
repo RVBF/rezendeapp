@@ -21,18 +21,16 @@
         var pegarId = function pegarId(url, palavra)
 		{
 			// Terminando com "ID/palavra"
-			var regexS = palavra+'+\/[0-9]';
+			var regexS = palavra+'+\/[0-9]{1,}';
 
 			var regex = new RegExp(regexS);
 			var resultado = regex.exec(url);
-
 			if (!resultado || resultado.length < 1)
 			{
 				return 0;
 			}
 
 			var array = resultado[0].split('/');
-
 			return array[1];
 		};
 
@@ -154,6 +152,7 @@
 		_this.visualizar = function visualizar(event) {
 			event.preventDefault();
 			var objeto = _tabela.getObjetos()[$(this).parents('.listagem-padrao-item').index()];
+
 			router.navigate('/visualizar-pa/'+ objeto.id);
 		};
 

@@ -198,11 +198,10 @@
 		loader.script('assets/js/plano-acao/planoacaopendente.list.ctrl.js');
 		
 		loader.script('assets/js/pendencia/pendencia.serv.js');
+		loader.script('assets/js/pendencia/pendencia.form.ctrl.js');
+		loader.script('assets/js/pendencia/pendenciaexecucao.form.ctrl.js');
 		loader.script('assets/js/pendencia/pendencia.list.ctrl.js');
 		loader.script('assets/js/pendencia/pendenciapendente.list.ctrl.js');
-
-
-
 
 		loader.script('assets/js/questionamento/questionamento.serv.js');
 		loader.script('assets/js/questionamento/questionamento.form.ctrl.js');

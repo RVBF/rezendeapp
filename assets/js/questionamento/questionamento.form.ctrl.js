@@ -77,7 +77,6 @@
 		_this.conteudo = function conteudo() {
 			var dataLimitePa = moment(_this.dataLimitePa.getDate()).format('YYYY-MM-DD');
 			var dataLimitePe = moment(_this.dataLimitePe.getDate()).format('YYYY-MM-DD');
-			console.log($('#responsavelpa').children("option:selected").val());
 			return servicoQuestionamento.criar(
 				_this.objetoAtual.id,
 				_this.objetoAtual.status,

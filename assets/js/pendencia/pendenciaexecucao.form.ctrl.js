@@ -7,12 +7,12 @@
 (function(window, app, $, toastr) {
 	'use strict';
 
-	function ControladoraFormPlanoAcaoExecucao(servicoPlanoAcao) {
+	function ControladoraFormPendenciaExecucao(servicoPendencia) {
 		var _this = this;
 
 		_this.alterar;
-		_this.formulario = $('#planoacaoexecucao_form');
-		_this.idPlanoAcao = window.location.href.split('#')[1].substring(1, url.length).split('/')[1];
+		_this.formulario = $('#pendenciaexecucao_form');
+		_this.idPendencia = window.location.href.split('#')[1].substring(1, url.length).split('/')[1];
 		_this.objeto = null
 		_this.anexos = [];
 
@@ -31,11 +31,11 @@
 
 				_this.formulario.desabilitar(true);
 
-				var jqXHR = servicoPlanoAcao.executar(obj);
+				var jqXHR = servicoPendencia.executar(obj.id);
 			
 				jqXHR.done(function(resposta) {
 					if(resposta.status){
-						router.navigate('/plano-acao');
+						router.navigate('/pendencia');
 						toastr.success(resposta.mensagem);
 					}
 					else{
@@ -56,7 +56,7 @@
         
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
-			return servicoPlanoAcao.criar(
+			return servicoPendencia.criar(
 				_this.objeto.id,
 				_this.objeto.descricao,
 				_this.objeto.dataLimite,
@@ -71,60 +71,10 @@
 		};
 
 		_this.configurarEventos = function configurarEventos() {
-
-			_this.formulario.find('input[type="file"]').change(function(evt){
-				var elemento = $(this);
-				var file = evt.target.files[0];
-				var nomeArquivo = $(this).val().split('\\');
-				nomeArquivo = nomeArquivo[nomeArquivo.length -1];
-				var reader = new FileReader();
-				reader.onerror = function (evt) {
-					switch(evt.target.error.code) {
-						case evt.target.error.NOT_FOUND_ERR:
-						  alert('File Not Found!');
-						  break;
-						case evt.target.error.NOT_READABLE_ERR:
-						  alert('File is not readable');
-						  break;
-						case evt.target.error.ABORT_ERR:
-						  break; // noop
-						default:
-						  alert('An error occurred reading this file.');
-					  };
-				};
-				reader.onprogress =  function updateProgress(evt) {
-					var progress = document.querySelector('.percent');
-
-					// evt is an ProgressEvent.
-					if (evt.lengthComputable) {
-					  var percentLoaded = Math.round((evt.loaded / evt.total) * 100);
-					  // Increase the progress bar length.
-					  if (percentLoaded < 100) {
-						progress.style.width = percentLoaded + '%';
-						progress.textContent = percentLoaded + '%';
-					  }
-					}
-				};
-				reader.onabort = function(e) {
-					alert('File read cancelled');
-				};
-
-				reader.onload = function () {
-					_this.anexos.push({'nome': nomeArquivo,'arquivo': reader.result, 'tipo' : file.type});
-				};
-				
-				reader.readAsDataURL(file);
-			});
-
-
-			_this.formulario.find('i').on('click', function (event) {
-				$(this).next("input[type='file']").trigger('click');
-			});
-
 			_this.formulario.find('#salvar').on('click',_this.salvar);
 		};
 
-		_this.buscarQuestionamento  =  function buscarQuestionamento(valor = 0)	{
+		_this.buscarPendencia  =  function buscarPendencia(valor = 0)	{
 			var sucesso = function (resposta) {
 				_this.objeto = resposta.conteudo;
 				_this.desenhar(_this.objeto);
@@ -136,7 +86,7 @@
 				toastr.error(mensagem);
 				return false;
 			}
-			var jqXHR = servicoPlanoAcao.comId(_this.idPlanoAcao);
+			var jqXHR = servicoPendencia.comId(_this.idPendencia);
 			jqXHR.done(sucesso).fail(erro);
 		};
 
@@ -146,25 +96,22 @@
 
 			html += '<div class="row">';
 			html += '<div class="col-12  col-sm-12 col-md-12 col-lg-12">';
-			html += '<p class="text-danger text-uppercase font-weight-bold"><strong>Tarefa</strong</p>';
+			html += '<p class="text-danger text-uppercase font-weight-bold"><strong>Pendência</strong</p>';
 			html += '<p>'+obj.descricao+'</p>';
-			html += '<p class="text-danger text-uppercase font-weight-bold"><strong>Plano de ação</strong</p>';
+			html += '<p class="text-danger text-uppercase font-weight-bold"><strong>Descrição da solução</strong</p>';
 			html += '<p>'+obj.solucao+'</p>';
 			html += '<p class="text-danger text-uppercase font-weight-bold"><strong>Data Limite</strong</p>';
 			html += '<p>'+dataLimite.format('DD/MM/YYYY')+'</p>'
 			html += '</div>';
 			html += '</div>';
 
-			$('body #detalhes_pa').append(html);
+			$('body #detalhes_pe').append(html);
 			_this.formulario.find('#id').val(obj.id)
-
-
 		};
 
         _this.definirForm = function definirForm() {
 			_this.formulario.submit(false);
-			_this.buscarQuestionamento();
-			_this.formulario.find('#destalhes_exeucao').focus();
+			_this.buscarPendencia();
 			_this.configurarEventos();
         }
 
@@ -179,6 +126,6 @@
 	}; // ControladoraFormPlanocaoExecucao
 
 	// Registrando
-	app.ControladoraFormPlanoAcaoExecucao = ControladoraFormPlanoAcaoExecucao;
+	app.ControladoraFormPendenciaExecucao = ControladoraFormPendenciaExecucao;
 
 })(window, app, jQuery, toastr);

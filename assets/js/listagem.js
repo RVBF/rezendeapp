@@ -76,8 +76,6 @@
 		_this.requisitarRegistros = function requisitarRegistros() {
 			var parametrosRequisicao =  function parametrosRequisicao() {
 				if(!opcoes.listagemTemporal) {			
-					console.log(parseInt($('#qtd_resultados').val()));
-
 					_this.paginacao = {
 						start : _this.inicioDaPagina(),
 						length : parseInt($('#qtd_resultados').val())

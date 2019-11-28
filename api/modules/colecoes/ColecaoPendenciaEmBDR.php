@@ -68,17 +68,16 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 	}
 
 	function atualizar(&$obj) {
-		if($this->validarPA($obj)) {
 			try {
 				
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-				$filds = [ 'titulo' => $obj->getTitulo(),
+				$filds = [ 'status' => $obj->getStatus(),
 					'descricao' => $obj->getDescricao(),
-					'data_limite' => ($obj->getDataLimite() instanceof Carbon)  ? $obj->getDataLimite()->toDateTimeString() : $obj->getDataLimite(),
-					'encerrada' => $obj->getEncerrada(),
-					'setor_id' => $obj->getSetor()->getId(),
-					'loja_id' => $obj->getLoja()->getId()
+					'descricaosolucao' => $obj->getSolucao(),
+					'dataexecucao' => ($obj->getDataExecucao() instanceof Carbon) ? $obj->getDataExecucao()->toDateTimeString() : $obj->getDataExecucao(), 
+					'datalimite' => ($obj->getDataLimite() instanceof Carbon) ? $obj->getDataLimite()->toDateTimeString() : $obj->getDataLimite(), 
+					'responsavel_id' => ($obj->getResponsavel() instanceof Colaborador) ? $obj->getResponsavel()->getId() : $obj->getResponsavel()['id']
 				];
 				
 				DB::table(self::TABELA)->where('id', $obj->getId())->update($filds);
@@ -92,7 +91,6 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 
 				throw new ColecaoException("Erro ao atualizar tarefa.", $e->getCode(), $e);
 			}
-		}
 	}
 
 	function comId($id){

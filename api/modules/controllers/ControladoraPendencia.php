@@ -253,7 +253,7 @@ class ControladoraPendencia {
 			
 			if (! is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
 
-			$planoAcao = $this->colecaoPlanoAcao->comId($id);
+			$planoAcao = $this->colecaoPendencia->comId($id);
 
 			$resposta = ['conteudo'=> $planoAcao, 'status' => true, 'mensagem'=> 'Plano de ação encontrado com sucesso.']; 
 		}
@@ -310,7 +310,7 @@ class ControladoraPendencia {
 		return $resposta;
 	}
 
-    function executar(){
+    function executar($id){
 		DB::beginTransaction();
 
 		try {
@@ -319,64 +319,53 @@ class ControladoraPendencia {
 			// if(!$this->servicoLogin->eAdministrador()){
 			// 	throw new Exception("Usuário sem permissão para executar ação.");
 			// }
-			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'solucao', 'anexos'], $this->params);
 			$resposta = [];
-
-			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
-				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
-
-				throw new Exception($msg);
-			}
-
-			$planoAcao = new PlanoAcao(); $planoAcao->fromArray($this->colecaoPlanoAcao->comId($this->params['id']));
-			if(!isset($planoAcao) and !($planoAcao instanceof PlanoAcao)){
-				throw new Exception("Questionamento não encontrado na base de dados.");
-			}				
-		
-			$planoAcao->setStatus(StatusPaEnumerado::EXECUTADO);
-			$planoAcao->setResposta(\ParamUtil::value($this->params, 'resposta'));
-			$planoAcao->setDataExecucao(Carbon::now());
-
-			$this->colecaoPlanoAcao->atualizar($planoAcao);
-
-			$questionamento = new Questionamento(); $questionamento->fromArray($this->colecaoQuestionamento->comPlanodeAcaoid(\ParamUtil::value($this->params, 'id')));
-			if(!isset($questionamento) and !($questionamento instanceof Questionamento)){
-				throw new Exception("Questionamento não encontrado na base de dados.");
+			$colaborador = new Colaborador();  $colaborador->fromArray($this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario()));
+			if(!isset($colaborador) and !($colaborador instanceof Colaborador)){
+				throw new Exception("Colaborador não encontrado na base de dados.");
 			}	
 
-			$questionamento->setStatus(TipoQuestionamentoEnumerado::RESPONDIDO);
-
-			$this->colecaoQuestionamento->atualizar($questionamento);
-
-			$checklist = new Checklist(); $checklist->fromArray($this->colecaoChecklist->comId($questionamento->getId()));
-			if(!isset($checklist) and !($checklist instanceof Checklist)){
-				throw new Exception("checklist não encontrado na base de dados.");
+			$pendencia = new Pendencia(); $pendencia->fromArray($this->colecaoPendencia->comId($id));
+			if(!isset($pendencia) and !($pendencia instanceof Pendencia)){
+				throw new Exception("Pendência não encontrada na base de dados.");
 			}	
-		
-			$checklist->setStatus(StatusChecklistEnumerado::EXECUTADO);
-			$this->colecaoChecklist->atualizar($checklist);
+			
+			$responsavel = new Colaborador(); $responsavel->fromArray($pendencia->getResponsavel());
 
-			if(isset($this->params['anexos']) and count($this->params['anexos']) > 0){
-				$pastaTarefa = 'planoacao_'. $questionamento->getId();
+			if($colaborador->getId() != $responsavel->getId()) throw new Exception("Só o usuário Responsável pode executar essa pendência!");
+			
+			$pendencia->setStatus(StatusPendenciaEnumerado::EXECUTADO);
+			$pendencia->setDataExecucao(Carbon::now());
 
-				foreach($this->params['anexos'] as $arquivo) {
-					$patch = $this->servicoArquivo->validarESalvarImagem($arquivo, $pastaTarefa, 'planoacao_' . $questionamento->getId());
-					$anexo = new Anexo(
-						0,
-						$patch,
-						$arquivo['tipo'],
-						(isset($questionamento) and $questionamento instanceof Questionamento) ? $questionamento : 0,
-						(isset($planoAcao) and $planoAcao instanceof PlanoAcao) ? $planoAcao : 0
-					);
+			$this->colecaoPendencia->atualizar($pendencia);
 
-					$this->colecaoAnexo->adicionar($anexo);
+			$questionamento = null;
+			if($this->colecaoQuestionamento->contagemPorColuna($id, 'pendencia_id') > 0){
+				$questionamento = new Questionamento(); $questionamento->fromArray($this->colecaoQuestionamento->comPendenciaId($id));
+				if(!isset($questionamento) and !($questionamento instanceof Questionamento)){
+					throw new Exception("Questionamento não encontrado na base de dados.");
+				}	
+				
+				if($questionamento->getPlanoAcao() != null){
+					$planoAcao =  new PlanoAcao(); $planoAcao->fromArray($questionamento->getPlanoAcao());
+					if($planoAcao->getStatus() != StatusPaEnumerado::EXECUTADO){
+						$questionamento->setStatus(TipoQuestionamentoEnumerado::RESPONDIDO);
+						$this->colecaoQuestionamento->atualizar($questionamento);
+					}
+				}
+				
+				$checklist = new Checklist(); $checklist->fromArray($this->colecaoChecklist->comId($questionamento->getChecklist()));
+				if(!isset($checklist) and !($checklist instanceof Checklist)){
+					throw new Exception("checklist não encontrado na base de dados.");
+				}	
+			
+				if(!$this->colecaoChecklist->temPendencia($checklist->getId())){
+					$checklist->setStatus(StatusChecklistEnumerado::EXECUTADO);
+					$this->colecaoChecklist->atualizar($checklist);	
 				}
 			}
-			else{
-				throw new Exception("É necessário  pelo menos um anexo para comprar a execução do plano de ação!");
-			}
-
-			$resposta = ['status' => true, 'mensagem'=> 'Plano de ação executado com sucesso.']; 
+		
+			$resposta = ['status' => true, 'mensagem'=> 'Pendência executada com sucesso!']; 
 			DB::commit();
 		}
 		catch (\Exception $e) {
@@ -387,6 +376,6 @@ class ControladoraPendencia {
 		}
 
 		return $resposta;
-    }
+	}
 }
 ?>

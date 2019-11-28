@@ -35,53 +35,24 @@ class ColecaoHistoricoResponsabilidadeEmBDR implements ColecaoHistoricoResponsab
 
 			throw new ColecaoException("Erro ao adicionar Checklist ", $e->getCode(), $e);
 		}
-    }
-    
-	function remover($id) {
-		if($this->validarRemocaoTarefa($id)){
-			try {	
-				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-				$removido = DB::table(self::TABELA)->where('id', $id)->delete();
-				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-				return $removido;
-			}
-			catch (\Exception $e)
-			{
-				throw new ColecaoException("Erro ao remover categoria.", $e->getCode(), $e);
-			}
+	}
+	function atualizar(&$obj){}
+	function remover($id){}
+
+    function comPlanoAcaoId($planoAcaoId = 0){
+		try {	
+			return (DB::table(self::TABELA)->where('planoacao_id', $planoAcaoId)->count() > 0) ? $this->construirObjeto(DB::table(self::TABELA)->where('planoacao_id', $planoAcaoId)->orderBy('id', 'DESC')->first()) : [];
 		}
-
+		catch (\Exception $e)
+		{
+			throw new ColecaoException("Erro ao buscar historico de responsabilidade  no banco de dados!", $e->getCode(), $e);
+		}
 	}
 
-	function atualizar(&$obj) {
-        try {
-            
-            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-            $filds = [ 
-                'data' => $obj->getData(),
-                'planoacao_id' => $obj->getPlanoAcao()->getId(),
-                'responsavelatual_id' =>$obj->getResponsavelAtual()->getId(),
-                'responsavelanterior_id' => $obj->getResponsavelAnterior()->getId()
-            ];
-
-            DB::table(self::TABELA)->where('id', $obj->getId())->update($filds);
-
-            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-
-            return $obj;
-        }
-        catch (\Exception $e)
-        {
-            throw new ColecaoException("Erro ao atualizar tarefa.", $e->getCode(), $e);
-        }
-	}
 
 	function comId($id){
 		try {	
-			$tarefa = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
-
-			return $tare;
+			return (DB::table(self::TABELA)->where('id', $id)->count() > 0) ? $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->first()) : [];
 		}
 		catch (\Exception $e)
 		{
@@ -113,11 +84,14 @@ class ColecaoHistoricoResponsabilidadeEmBDR implements ColecaoHistoricoResponsab
 
 		$historico = new HistoricoResponsabilidade(
 			$row['id'],
-            $row['datahoramudacanca'],
+			$row['datahoramudacanca'],
+			null,
             $responsavelAtual,
             $responsavelAnterior
 		);
-		return $checklist->toArray();
+
+		
+		return $historico->toArray();
 	}	
 
     function contagem() {
