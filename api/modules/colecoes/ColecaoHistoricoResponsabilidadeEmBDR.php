@@ -72,9 +72,8 @@ class ColecaoHistoricoResponsabilidadeEmBDR implements ColecaoHistoricoResponsab
 
 			return $historicoObjects;
 		}
-		catch (\Exception $e)
-		{
-			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
+		catch (\Exception $e) {
+			throw new ColecaoException("Erro ao listar checklists.", $e->getCode(), $e);
 		}
 	}
 
