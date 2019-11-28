@@ -1,0 +1,36 @@
+<section id="painel_formulario">
+	<div class="col-12  col-sm-12 col-md-12 col-lg-12">
+		<section id="msg" class="card-panel left-align text-danger msg d-none desabilitado"></section>
+
+		<div class="card-panel left-align">
+			<form class="form-horizontal"  method="post" id="pendenciaexecucao_form">		
+				<input type="hidden" id="id" name ="id" />
+                <div id="detalhes_pe"></div>
+
+				<div class="row form-row" id="botoes">
+					<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end">
+						<button type="submit" id="salvar"  class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">
+							<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>
+								Executar
+						</button>
+					</div>
+						
+					<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-start justify-content-md-start ">
+						<button class="waves-effect waves-light btn white grey-text text-darken-4 button-dto f-12-dto pa_link">
+							<i class="mdi mdi-close-circle-outline yellow-text text-accent-4"></i>
+							Cancelar
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+
+<script>
+	$(document).ready(function() {
+		var servicoPendencia = new app.ServicoPendencia();
+		var crltPendencia = new app.ControladoraFormPendenciaExecucao(servicoPendencia);
+		crltPendencia.configurar();
+	});
+</script>

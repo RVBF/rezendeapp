@@ -82,7 +82,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 	}
 
 	function comId($id){
-		try {	
+		try {		
 			return (DB::table(self::TABELA)->where('id', $id)->count() > 0) ? $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->first()) : [];
 		}
 		catch (\Exception $e){
@@ -267,6 +267,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 
 	function construirObjeto(array $row) {
 		$responsavel = ($row['responsavel_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comId($row['responsavel_id']) : '';
+		$historicoAtual = Dice::instance()->create('ColecaoHistoricoResponsabilidade')->comPlanoAcaoId($row['id']);
 
 		$planoDeAcao = new PlanoAcao(
 			$row['id'],
@@ -280,8 +281,12 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 			$row['datacadastro'],
 			$row['dataexecucao'],
 			$row['responsabilidade'],
+			$historicoAtual,
 			[]
 		);
+
+		// $planoDeAcao->getHIstoricoAtual()->setPlanoACao($planoDeAcao);
+
 		return $planoDeAcao->toArray();
 	}	
 

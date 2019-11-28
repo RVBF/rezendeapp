@@ -53,7 +53,7 @@
 						'<span class="info_checklist grey darken-1 btn-small">Pendência Pendente</span>';
 						
 						// html += '<p><i class="mdi mdi-map-marker-radius orange-text text-accent-4"></i> <strong>' + data.loja.razaoSocial + '</strong> ' + data.loja.nomeFantasia + '</p>';
-						html += '<a href="#" class="executar_pa"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.descricao + '</strong></p></a>';
+						html += '<a href="#" class="executar_pe"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.descricao + '</strong></p></a>';
 						html += '<p class="'+((diferencaDias > 0) ? 'teal-text text-darken-1': ' red-text text-accent-4 ')+'"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>'+textoDiasRestantes+'</strong></p>';
 						html += '<p><strong>Descrição da solução : </strong> ' + data.solucao + '</p>';
 					html += '</div>';
@@ -81,7 +81,7 @@
 			};
 			objeto.rowsCallback = function(resposta){
 				$('.remover_setor_link').on('click', _this.remover);
-				$('.executar_pa').on('click', _this.executar);
+				$('.executar_pe').on('click', _this.executar);
 				$('.visualizar_pa').on('click', _this.visualizar);
 				$('.confirmar_responsabilidade').on('click', _this.confirmarResponsabilidade);
 				$('.devolver_responsabilidade').on('click', _this.devolverResponsabilidade);
@@ -94,7 +94,7 @@
 			event.preventDefault();
 			var objeto = _tabela.getObjetos()[$(this).parents('.listagem-padrao-item').index()];
 
-			router.navigate('/executar-pa/'+ objeto.id);
+			router.navigate('/executar-pendencia/'+ objeto.id);
 		};
 
 		_this.confirmarResponsabilidade = function confirmarResponsabilidade(event) {

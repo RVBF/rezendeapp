@@ -8,5 +8,6 @@
  */
 
 interface ColecaoHistoricoResponsabilidade extends Colecao {
+    function comPlanoAcaoId($planoAcaoId = 0);
 }
 ?>

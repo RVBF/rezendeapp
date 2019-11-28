@@ -27,6 +27,8 @@ class ControladoraPlanoAcao {
 	private $colecaoQuestionamento;
 	private $servicoArquivo;
 	private $colecaoAnexo;
+	private $colecaoHistorico;
+
 
 	function __construct($params,  Sessao $sessao) {
 		$this->params = $params;
@@ -40,8 +42,7 @@ class ControladoraPlanoAcao {
 		$this->colecaoQuestionamento = Dice::instance()->create('ColecaoQuestionamento');
 		$this->servicoArquivo = ServicoArquivo::instance();
 		$this->colecaoAnexo = Dice::instance()->create('ColecaoAnexo');
-
-
+		$this->colecaoHistorico = Dice::instance()->create('ColecaoHistoricoResponsabilidade');
 	}
 
 	function todos() {
@@ -58,7 +59,6 @@ class ControladoraPlanoAcao {
 			$colaborador = new Colaborador();  $colaborador->fromArray($this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario()));
 
 			$objetos = $this->colecaoPlanoAcao->todosComResponsavelId($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $colaborador->getId());
-
 			$contagem = $this->colecaoPlanoAcao->contagem($colaborador->getId());
 		}
 		catch (\Exception $e ) {
@@ -89,6 +89,7 @@ class ControladoraPlanoAcao {
 
 			$colaborador = new Colaborador();  $colaborador->fromArray($this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario()));
 			$objetos = $this->colecaoPlanoAcao->todosComChecklistId($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $colaborador->getId(), $checklistId);
+			// Util::printr($objetos);
 
 			$contagem = $this->colecaoPlanoAcao->contagem($colaborador->getId());
 		}
@@ -178,6 +179,7 @@ class ControladoraPlanoAcao {
 			// if(!$this->servicoLogin->eAdministrador()){
 			// 	throw new Exception("Usuário sem permissão para executar ação.");
 			// }
+			$colaborador = new Colaborador();  $colaborador->fromArray($this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario()));
 
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'descricao', 'dataLimite', 'solucao', 'responsavel', 'unidade'], $this->params);
 		
@@ -196,12 +198,30 @@ class ControladoraPlanoAcao {
 			$dataLimite = new Carbon(\ParamUtil::value($this->params, 'dataLimite'), 'America/Sao_Paulo');
 
 			$planoAcao = new PlanoAcao(); $planoAcao->fromArray($this->colecaoPlanoAcao->comId(\ParamUtil::value($this->params, 'id')));
-			
+			$responsavelAnterior = new Colaborador();  $responsavelAnterior->fromArray($this->colecaoColaborador->comId($planoAcao->getResponsavel()['id']));
+
+			if($colaborador->getId() != $responsavelAnterior->getId()) throw new Exception("O plano de ação só pode ser editado pelo responsável!");
+
 			$planoAcao->setDescricao(\ParamUtil::value($this->params, 'descricao'));
 			$planoAcao->setSolucao(\ParamUtil::value($this->params, 'solucao'));
 			$planoAcao->setDataLimite($dataLimite);
-			$planoAcao->setUnidade($loja);
+			$planoAcao->setUnidade($loja);		
 			$planoAcao->setResponsavel($responsavel);
+
+			if($responsavel->getId() != $responsavelAnterior->getId()){
+				
+				$historico = new HistoricoResponsabilidade(
+					0,
+					Carbon::now(),
+					$planoAcao,
+					$responsavel,
+					$responsavelAnterior
+				);
+
+				$this->colecaoHistorico->adicionar($historico);
+			}
+
+			
 			$resposta = [];
 						
 			$this->colecaoPlanoAcao->atualizar($planoAcao);
@@ -311,7 +331,6 @@ class ControladoraPlanoAcao {
 		return $resposta;
 	}
 
-
     function executar(){
 		DB::beginTransaction();
 
@@ -331,38 +350,47 @@ class ControladoraPlanoAcao {
 			}
 
 			$planoAcao = new PlanoAcao(); $planoAcao->fromArray($this->colecaoPlanoAcao->comId($this->params['id']));
-			if(!isset($planoAcao) and !($planoAcao instanceof PlanoAcao)){
-				throw new Exception("Questionamento não encontrado na base de dados.");
-			}				
-		
+			if(!isset($planoAcao) and !($planoAcao instanceof PlanoAcao)) throw new Exception("Plano de ação não encontrado no banco de dados.");
+
+			$responsavel = new Colaborador(); $responsavel->fromArray($planoAcao->getResponsavel());
+
 			$planoAcao->setStatus(StatusPaEnumerado::EXECUTADO);
 			$planoAcao->setResposta(\ParamUtil::value($this->params, 'resposta'));
 			$planoAcao->setDataExecucao(Carbon::now());
 
 			$this->colecaoPlanoAcao->atualizar($planoAcao);
 
-			$questionamento = new Questionamento(); $questionamento->fromArray($this->colecaoQuestionamento->comPlanodeAcaoid(\ParamUtil::value($this->params, 'id')));
-			if(!isset($questionamento) and !($questionamento instanceof Questionamento)){
-				throw new Exception("Questionamento não encontrado na base de dados.");
-			}	
-
-			$questionamento->setStatus(TipoQuestionamentoEnumerado::RESPONDIDO);
-
-			$this->colecaoQuestionamento->atualizar($questionamento);
-
-			$checklist = new Checklist(); $checklist->fromArray($this->colecaoChecklist->comId($questionamento->getId()));
-			if(!isset($checklist) and !($checklist instanceof Checklist)){
-				throw new Exception("checklist não encontrado na base de dados.");
-			}	
+			$questionamento = null;
+			if($this->colecaoQuestionamento->contagemPorColuna(\ParamUtil::value($this->params, 'id'), 'planoacao_id') > 0){
+				$questionamento = new Questionamento(); $questionamento->fromArray($this->colecaoQuestionamento->comPlanodeAcaoid(\ParamUtil::value($this->params, 'id')));
+				if(!isset($questionamento) and !($questionamento instanceof Questionamento)){
+					throw new Exception("Questionamento não encontrado na base de dados.");
+				}	
+	
+				if($questionamento->getPendencia() != null){
+					$pendencia =  new PlanoAcao(); $pendencia->fromArray($questionamento->getPendencia());
+					if($pendencia->getStatus() != StatusPendenciaEnumerado::EXECUTADO){
+						$questionamento->setStatus(TipoQuestionamentoEnumerado::RESPONDIDO);
+						$this->colecaoQuestionamento->atualizar($questionamento);
+					}
+				}
+				
+				$checklist = new Checklist(); $checklist->fromArray($this->colecaoChecklist->comId($questionamento->getChecklist()));
+				if(!isset($checklist) and !($checklist instanceof Checklist)){
+					throw new Exception("checklist não encontrado na base de dados.");
+				}	
+			
+				if(!$this->colecaoChecklist->temPendencia($checklist->getId())){
+					$checklist->setStatus(StatusChecklistEnumerado::EXECUTADO);
+					$this->colecaoChecklist->atualizar($checklist);	
+				}
+			}
 		
-			$checklist->setStatus(StatusChecklistEnumerado::EXECUTADO);
-			$this->colecaoChecklist->atualizar($checklist);
-
 			if(isset($this->params['anexos']) and count($this->params['anexos']) > 0){
-				$pastaTarefa = 'planoacao_'. $questionamento->getId();
+				$pastaTarefa = 'planoacao_'. $planoAcao->getId();
 
 				foreach($this->params['anexos'] as $arquivo) {
-					$patch = $this->servicoArquivo->validarESalvarImagem($arquivo, $pastaTarefa, 'planoacao_' . $questionamento->getId());
+					$patch = $this->servicoArquivo->validarESalvarImagem($arquivo, $pastaTarefa, 'planoacao_' . $planoAcao->getId());
 					$anexo = new Anexo(
 						0,
 						$patch,

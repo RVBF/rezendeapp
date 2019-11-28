@@ -219,8 +219,8 @@
 				$("#questionarios").empty();
 
 				$.each(resposta.data, function(i ,item) {
-					console.log(item)
-					 let opcoes = {
+
+					let opcoes = {
 						value: item.id,
 						text: item.titulo,
 						selected : (i ==0) ? true : false

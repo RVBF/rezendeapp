@@ -21,7 +21,7 @@
         var pegarId = function pegarId(url, palavra)
 		{
 			// Terminando com "ID/palavra"
-			var regexS = palavra+'+\/[0-9]';
+			var regexS = palavra+'+\/[0-9]{1,}';
 
 			var regex = new RegExp(regexS);
 			var resultado = regex.exec(url);

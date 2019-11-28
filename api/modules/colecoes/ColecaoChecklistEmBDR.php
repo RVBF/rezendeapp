@@ -133,7 +133,6 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 	function todosComLojaIds($limite = 0, $pulo = 10, $search = '', $idsLojas = []){
 		try {	
 			$query = DB::table(self::TABELA)->selectRaw(self::TABELA . '.*, COUNT('.self::TABELA.'.id) as qtd')->whereIn('loja_id',$idsLojas);
-
 			if($search != '') {
 				$buscaCompleta = $search;
 				$palavras = explode(' ', $buscaCompleta);
@@ -210,7 +209,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
+			throw new ColecaoException("Erro ao listar checklists.", $e->getCode(), $e);
 		}
 	}
 	
@@ -226,7 +225,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			return $checklistsObjects;
 		}
 		catch (\Exception $e) {
-			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
+			throw new ColecaoException("Erro ao listar checklists.", $e->getCode(), $e);
 		}
 	}
 	
@@ -276,6 +275,42 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 
     function contagem($idsLojas = []) {
 		return (count($idsLojas) > 0) ?  DB::table(self::TABELA)->whereIn('loja_id', $idsLojas)->count() : DB::table(self::TABELA)->count();
+	}
+
+	function temPendencia($idChecklist = 0){
+		try {	
+
+			$questionamentos = Dice::instance()->create('ColecaoQuestionamento')->questionamentosComChecklistId($idChecklist);
+
+			foreach($questionamentos as $questionamento){
+				$questionamentoAtual = new Questionamento(); $questionamentoAtual->fromArray($questionamento);
+				
+				if($questionamentoAtual->getPlanoAcao()){
+					$planoAcao = new PlanoAcao(); $planoAcao->fromArray($questionamentoAtual->getPlanoAcao());
+
+					if($planoAcao != StatusPaEnumerado::EXECUTADO) return true;
+				}
+			}
+
+			foreach($questionamentos as $questionamento){
+				$questionamentoAtual = new Questionamento(); $questionamentoAtual->fromArray($questionamento);
+				
+				if($questionamentoAtual->getPendencia()){
+
+					$pendencia = new Pendencia(); $pendencia->fromArray($questionamentoAtual->getPendencia());
+
+					if($pendencia != StatusPendenciaEnumerado::EXECUTADO) return true;
+				}
+			}
+		}
+		catch (\Exception $e)
+		{
+			Util::printr($e->getMessage());
+
+			throw new ColecaoException("Erro ao buscar checklists no banco de dados!", $e->getCode(), $e);
+		}
+
+		return false;
 	}
 
 	private function validarTarefa(&$obj) {
