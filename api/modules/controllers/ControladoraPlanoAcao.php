@@ -31,6 +31,7 @@ class ControladoraPlanoAcao {
 
 
 	function __construct($params,  Sessao $sessao) {
+
 		$this->params = $params;
 		$this->servicoLogin = new ServicoLogin($sessao);
 		$this->colecaoChecklist = Dice::instance()->create('ColecaoChecklist');
@@ -43,6 +44,7 @@ class ControladoraPlanoAcao {
 		$this->servicoArquivo = ServicoArquivo::instance();
 		$this->colecaoAnexo = Dice::instance()->create('ColecaoAnexo');
 		$this->colecaoHistorico = Dice::instance()->create('ColecaoHistoricoResponsabilidade');
+
 	}
 
 	function todos() {
@@ -57,12 +59,11 @@ class ControladoraPlanoAcao {
 			$erro = null;
 
 			$colaborador = new Colaborador();  $colaborador->fromArray($this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario()));
-
 			$objetos = $this->colecaoPlanoAcao->todosComResponsavelId($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $colaborador->getId());
 			$contagem = $this->colecaoPlanoAcao->contagem($colaborador->getId());
 		}
 		catch (\Exception $e ) {
-			throw new Exception("Erro ao listar tarefas");
+			throw new Exception("Erro ao listar checklists");
 		}
 
 		$conteudo = new DataTablesResponse(
@@ -78,6 +79,7 @@ class ControladoraPlanoAcao {
 
 	function todosPendentes($checklistId) {
 		try {
+
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
@@ -88,13 +90,12 @@ class ControladoraPlanoAcao {
 			$erro = null;
 
 			$colaborador = new Colaborador();  $colaborador->fromArray($this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario()));
-			$objetos = $this->colecaoPlanoAcao->todosComChecklistId($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $colaborador->getId(), $checklistId);
-			// Util::printr($objetos);
 
+			$objetos = $this->colecaoPlanoAcao->todosComChecklistId($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $colaborador->getId(), $checklistId);
 			$contagem = $this->colecaoPlanoAcao->contagem($colaborador->getId());
 		}
 		catch (\Exception $e ) {
-			throw new Exception("Erro ao listar tarefas");
+			throw new Exception("Erro ao listar checklists");
 		}
 
 		$conteudo = new DataTablesResponse(
@@ -350,6 +351,7 @@ class ControladoraPlanoAcao {
 			}
 
 			$planoAcao = new PlanoAcao(); $planoAcao->fromArray($this->colecaoPlanoAcao->comId($this->params['id']));
+			
 			if(!isset($planoAcao) and !($planoAcao instanceof PlanoAcao)) throw new Exception("Plano de ação não encontrado no banco de dados.");
 
 			$responsavel = new Colaborador(); $responsavel->fromArray($planoAcao->getResponsavel());
@@ -359,10 +361,11 @@ class ControladoraPlanoAcao {
 			$planoAcao->setDataExecucao(Carbon::now());
 
 			$this->colecaoPlanoAcao->atualizar($planoAcao);
-
 			$questionamento = null;
+
 			if($this->colecaoQuestionamento->contagemPorColuna(\ParamUtil::value($this->params, 'id'), 'planoacao_id') > 0){
 				$questionamento = new Questionamento(); $questionamento->fromArray($this->colecaoQuestionamento->comPlanodeAcaoid(\ParamUtil::value($this->params, 'id')));
+
 				if(!isset($questionamento) and !($questionamento instanceof Questionamento)){
 					throw new Exception("Questionamento não encontrado na base de dados.");
 				}	
@@ -374,12 +377,12 @@ class ControladoraPlanoAcao {
 						$this->colecaoQuestionamento->atualizar($questionamento);
 					}
 				}
-				
+
 				$checklist = new Checklist(); $checklist->fromArray($this->colecaoChecklist->comId($questionamento->getChecklist()));
 				if(!isset($checklist) and !($checklist instanceof Checklist)){
 					throw new Exception("checklist não encontrado na base de dados.");
 				}	
-			
+
 				if(!$this->colecaoChecklist->temPendencia($checklist->getId())){
 					$checklist->setStatus(StatusChecklistEnumerado::EXECUTADO);
 					$this->colecaoChecklist->atualizar($checklist);	

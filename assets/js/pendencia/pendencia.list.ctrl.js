@@ -31,7 +31,6 @@
 			objeto.searchDelay = 600;	
 			objeto.cadastrarLink = 'cadastrar_pendencia_link';
 			objeto.columnDefs = function (data){
-				console.log(data);
 				var html = '';
 				var dataLimite = moment(data.dataLimite);
 				var diferencaDias = dataLimite.diff(moment(),'days');
