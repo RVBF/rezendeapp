@@ -124,8 +124,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 		try {	
 			return (DB::table(self::TABELA)->where('id', $id)->count() >0 ) ? $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->first()) : [];
 		}
-		catch (\Exception $e)
-		{
+		catch (\Exception $e){
 			throw new ColecaoException("Erro ao buscar checklist no banco de dados", $e->getCode(), $e);
 		}
 	}
@@ -190,9 +189,8 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 
 			return $checklistsObjects;
 		}
-		catch (\Exception $e)
-		{			
-			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
+		catch (\Exception $e) {	
+			throw new ColecaoException("Erro ao listar checklists.", $e->getCode(), $e);
 		}
 	}
 	
@@ -207,8 +205,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 
 			return $checklistObjects;
 		}
-		catch (\Exception $e)
-		{
+		catch (\Exception $e) {
 			throw new ColecaoException("Erro ao listar checklists.", $e->getCode(), $e);
 		}
 	}
@@ -279,8 +276,15 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 
 	function temPendencia($idChecklist = 0){
 		try {	
-
 			$questionamentos = Dice::instance()->create('ColecaoQuestionamento')->questionamentosComChecklistId($idChecklist);
+
+			foreach($questionamentos as $questionamento){
+				$questionamentoAtual = new Questionamento(); $questionamentoAtual->fromArray($questionamento);
+				
+				if($questionamentoAtual->getStatus() != TipoQuestionamentoEnumerado::RESPONDIDO) {
+					return true;
+				}
+			}
 
 			foreach($questionamentos as $questionamento){
 				$questionamentoAtual = new Questionamento(); $questionamentoAtual->fromArray($questionamento);
@@ -288,7 +292,9 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 				if($questionamentoAtual->getPlanoAcao()){
 					$planoAcao = new PlanoAcao(); $planoAcao->fromArray($questionamentoAtual->getPlanoAcao());
 
-					if($planoAcao != StatusPaEnumerado::EXECUTADO) return true;
+					if($planoAcao->getStatus() != StatusPaEnumerado::EXECUTADO) {
+						return true;
+					}
 				}
 			}
 
@@ -299,18 +305,17 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 
 					$pendencia = new Pendencia(); $pendencia->fromArray($questionamentoAtual->getPendencia());
 
-					if($pendencia != StatusPendenciaEnumerado::EXECUTADO) return true;
+					if($pendencia->getStatus() != StatusPendenciaEnumerado::EXECUTADO) return true;
 				}
 			}
+
+			return false;
 		}
 		catch (\Exception $e)
 		{
-			Util::printr($e->getMessage());
 
 			throw new ColecaoException("Erro ao buscar checklists no banco de dados!", $e->getCode(), $e);
 		}
-
-		return false;
 	}
 
 	private function validarTarefa(&$obj) {

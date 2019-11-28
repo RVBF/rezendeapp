@@ -180,7 +180,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 
 	function comPlanodeAcaoid($planoAcaoId = 0){
 		try {	
-			return (DB::table(self::TABELA)->where('planoacao_id', $planoAcaoId)->count()) ?  DB::table(self::TABELA)->where('planoacao_id', $planoAcaoId)->first() : [];
+			return (DB::table(self::TABELA)->where('planoacao_id', $planoAcaoId)->count()) ?  $this->construirObjeto(DB::table(self::TABELA)->where('planoacao_id', $planoAcaoId)->first()) : [];
 		}
 		catch (\Exception $e)
 		{
@@ -190,7 +190,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 
 	function comPendenciaid($pendenciaId = 0){
 		try {	
-			return (DB::table(self::TABELA)->where('pendencia_id', $pendenciaId)->count()) ?  DB::table(self::TABELA)->where('pendencia_id', $pendenciaId)->first() : [];
+			return (DB::table(self::TABELA)->where('pendencia_id', $pendenciaId)->count()) ? $this->construirObjeto(DB::table(self::TABELA)->where('pendencia_id', $pendenciaId)->first()) : [];
 		}
 		catch (\Exception $e)
 		{
@@ -274,7 +274,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 		}
 		catch (\Exception $e)
 		{			
-			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
+			throw new ColecaoException("Erro ao listar checklists.", $e->getCode(), $e);
 		}
 	}
 
@@ -291,7 +291,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
+			throw new ColecaoException("Erro ao listar checklists.", $e->getCode(), $e);
 		}
 	}
 	

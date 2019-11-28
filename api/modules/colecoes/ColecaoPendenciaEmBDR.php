@@ -32,6 +32,7 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 
 		}
 		catch (\Exception $e) {
+			Util::printr($e->getMessage());
 			throw new ColecaoException("Erro ao adicionar nova pendência", $e->getCode(), $e);
 		}
 	}
@@ -227,9 +228,8 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 
 			return $tarefasObjects;
 		}
-		catch (\Exception $e)
-		{			
-			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
+		catch (\Exception $e) {			
+			throw new ColecaoException("Erro ao listar checklists.", $e->getCode(), $e);
 		}
 	}
 
@@ -246,7 +246,7 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
+			throw new ColecaoException("Erro ao listar checklists.", $e->getCode(), $e);
 		}
 	}
 	
@@ -302,7 +302,7 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 				$query->groupBy(self::TABELA.'.id');
 			}
 			
-			$query->groupBy('id','status', 'descricao','descricaosolucao', 'datalimite', 'dataexecucao', 'datacadastro', 'responsavel_id')
+			$query->groupBy('id','status', 'descricao','descricaosolucao', 'datalimite', 'dataexecucao', 'datacadastro', 'responsavel_id', 'loja_id')
 							->orderByRaw(self::TABELA . '.status = "' . StatusPaEnumerado::EXECUTADO . '" ASC , '. self::TABELA.'.datalimite ASC')
 							->offset($limite)
 							->limit($pulo);
@@ -319,8 +319,7 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 		}
 		catch (\Exception $e)
 		{			
-			Util::printr($e->getMessage());
-			throw new ColecaoException("Erro ao listar tarefas.", $e->getCode(), $e);
+			throw new ColecaoException("Erro ao listar checklists.", $e->getCode(), $e);
 		}
 	}
 	function todosComId($ids = []) {
@@ -344,12 +343,14 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 		$responsavel = ($row['responsavel_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comId($row['responsavel_id']) : '';
 
 		$pendencia = new Pendencia(
-            $row['id'],
-            $row['descricao'],
-            $row['descricaosolucao'],
-            $row['datalimite'],
-            $row['datacadastro'],
-            $responsavel
+			$row['id'],
+            $row['status'],
+			$row['descricao'],
+			$row['datalimite'],
+			$row['descricaosolucao'],
+            $responsavel,
+			$row['datacadastro'],
+            $row['dataexecucao']
 		);
 		
 		return $pendencia->toArray();
