@@ -369,13 +369,16 @@ class ControladoraPlanoAcao {
 				if(!isset($questionamento) and !($questionamento instanceof Questionamento)){
 					throw new Exception("Questionamento não encontrado na base de dados.");
 				}	
-	
 				if($questionamento->getPendencia() != null){
 					$pendencia =  new PlanoAcao(); $pendencia->fromArray($questionamento->getPendencia());
 					if($pendencia->getStatus() != StatusPendenciaEnumerado::EXECUTADO){
 						$questionamento->setStatus(TipoQuestionamentoEnumerado::RESPONDIDO);
 						$this->colecaoQuestionamento->atualizar($questionamento);
 					}
+				}
+				else if($questionamento->getPendencia() == null){
+					$questionamento->setStatus(TipoQuestionamentoEnumerado::RESPONDIDO);
+					$this->colecaoQuestionamento->atualizar($questionamento);
 				}
 
 				$checklist = new Checklist(); $checklist->fromArray($this->colecaoChecklist->comId($questionamento->getChecklist()));

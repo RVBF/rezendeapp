@@ -135,23 +135,18 @@ class ControladoraPendencia {
 			$dataLimite = new Carbon();                  // equivalent to Carbon::now()
 			$dataLimite = new Carbon(\ParamUtil::value($this->params, 'dataLimite'), 'America/Sao_Paulo');
 
-			$planoAcao = new PlanoAcao(
+			$pendencia = new Pendencia(
 				0,
-				($responsavel->getId() == $responsavelAtual->getId()) ? StatusPaEnumerado::AGUARDANDO_EXECUCAO : StatusPaEnumerado::AGUARDANDO_RESPONSAVEL,
+				StatusPendenciaEnumerado::AGUARDANDO_EXECUCAO,
 				\ParamUtil::value($this->params, 'descricao'),
 				$dataLimite,
 				'',
-				'',
-				$responsavel,
-				$loja,
-				'',
-				'',
-				($responsavel->getId() == $responsavelAtual->getId()) ?  true : false
+				$responsavel
 			);
 			
 			$resposta = [];
 						
-			$this->colecaoPlanoAcao->adicionar($planoAcao);
+			$this->colecaoPendencia->adicionar($pendencia);
 
 			$resposta = ['status' => true, 'mensagem'=> 'Plano de ação atualizado com sucesso.']; 
 			
@@ -166,7 +161,7 @@ class ControladoraPendencia {
 		return $resposta;
 	}
 
-	function atualizar($setorId = 0) {
+	function atualizar() {
 		DB::beginTransaction();
 
 		try {
@@ -177,7 +172,6 @@ class ControladoraPendencia {
 			// if(!$this->servicoLogin->eAdministrador()){
 			// 	throw new Exception("Usuário sem permissão para executar ação.");
 			// }
-
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'descricao', 'dataLimite', 'solucao', 'responsavel', 'unidade'], $this->params);
 		
 			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) throw new Exception('Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes));
@@ -194,24 +188,22 @@ class ControladoraPendencia {
 			$dataLimite = new Carbon();                  // equivalent to Carbon::now()
 			$dataLimite = new Carbon(\ParamUtil::value($this->params, 'dataLimite'), 'America/Sao_Paulo');
 
-			$planoAcao = new PlanoAcao(); $planoAcao->fromArray($this->colecaoPlanoAcao->comId(\ParamUtil::value($this->params, 'id')));
-			
-			$planoAcao->setDescricao(\ParamUtil::value($this->params, 'descricao'));
-			$planoAcao->setSolucao(\ParamUtil::value($this->params, 'solucao'));
-			$planoAcao->setDataLimite($dataLimite);
-			$planoAcao->setUnidade($loja);
-			$planoAcao->setResponsavel($responsavel);
+			$pendencia = new Pendencia(); $pendencia->fromArray($this->colecaoPendencia->comId(\ParamUtil::value($this->params, 'id')));
+
+			$pendencia->setDescricao(\ParamUtil::value($this->params, 'descricao'));
+			$pendencia->setSolucao(\ParamUtil::value($this->params, 'solucao'));
+			$pendencia->setDataLimite($dataLimite);
+			$pendencia->setUnidade($loja);
+			$pendencia->setResponsavel($responsavel);
 			$resposta = [];
 						
-			$this->colecaoPlanoAcao->atualizar($planoAcao);
-
-			$resposta = ['status' => true, 'mensagem'=> 'Plano de ação atualizado com sucesso.']; 
+			$this->colecaoPendencia->atualizar($pendencia);
+			$resposta = ['status' => true, 'mensagem'=> 'Pendência atualizada com sucesso.']; 
 			
 			DB::commit();
 		}
 		catch (\Exception $e) {
 			DB::rollback();
-
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 
@@ -354,6 +346,10 @@ class ControladoraPendencia {
 						$questionamento->setStatus(TipoQuestionamentoEnumerado::RESPONDIDO);
 						$this->colecaoQuestionamento->atualizar($questionamento);
 					}
+				}
+				else if($questionamento->getPlanoAcao() == null){
+					$questionamento->setStatus(TipoQuestionamentoEnumerado::RESPONDIDO);
+					$this->colecaoQuestionamento->atualizar($questionamento);
 				}
 				
 				$checklist = new Checklist(); $checklist->fromArray($this->colecaoChecklist->comId($questionamento->getChecklist()));

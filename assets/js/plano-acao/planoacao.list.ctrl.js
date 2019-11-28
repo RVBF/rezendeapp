@@ -45,23 +45,20 @@
 						html += '<p class="data">'+ dataLimite.format('DD/MM/YYYY')+ '</p>';
 					html += '</div>';
 					html += '<div class="col col-12 col-lg-9 col-md-9 col-sm-8">';
-						if(data.status == 'Aguardando Responsável' ) html += '<span class="info_checklist yellow darken-2 btn-small">'+ data.status +'</span>';
-						else if(data.status == 'Executado' ) html += '<span class="info_checklist green darken-1 btn-small">'+ data.status +'</span>';
-						else if(data.status == 'Aguardando Execução') html += '<span class="info_checklist red accent-4 btn-small">'+ data.status +'</span>';
-
-						'<span class="info_checklist orange darken-4 btn-small">PA Pendente</span>';
-						'<span class="info_checklist grey darken-1 btn-small">Pendência Pendente</span>';
-						
-						// html += '<p><i class="mdi mdi-map-marker-radius orange-text text-accent-4"></i> <strong>' + data.loja.razaoSocial + '</strong> ' + data.loja.nomeFantasia + '</p>';
+						html += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12 mb-0-dto">';
+							if(data.status == 'Aguardando Responsável' ) html += '<span class="info_checklist yellow darken-2 btn-small">'+ data.status +'</span>';
+							else if(data.status == 'Executado' ) html += '<span class="info_checklist green darken-1 btn-small">'+ data.status +'</span>';
+							else if(data.status == 'Aguardando Execução') html += '<span class="info_checklist red accent-4 btn-small">'+ data.status +'</span>';
+						html += '</div>';
 						if(data.status != 'Executado') html += '<a href="#" class="executar_pa"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.descricao + '</strong></p></a>';
 						else html += '</i> <strong class="orange-text text-accent-4">' + data.descricao + '</strong></p>';
-						html += '<p class="'+((diferencaDias > 0) ? 'teal-text text-darken-1': ' red-text text-accent-4 ')+'"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>'+textoDiasRestantes+'</strong></p>';
+						html += '<p class="'+((diferencaDias > 0) ? ' teal-text text-darken-1 ': ' red-text text-accent-4 ')+'"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>'+textoDiasRestantes+'</strong></p>';
 						html += '<p><strong>Descrição da solução : </strong> ' + data.solucao + '</p>';
 					html += '</div>';
 
 					html += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12 mb-0-dto opc_tabela">';
 							html += '<div class="row">'
-								html += '<div class="col col-12 col-lg-4 col-md-4 col-sm-4 mb-0-dto">';
+								html += '<div class="col col-12 col-lg-3 col-md-3 col-sm-3 mb-0-dto">';
 
 									html += '<p class="mb-0-dto">';
 									html += '<a href="#" class="detalhes-dto visualizar_pa">';
@@ -70,6 +67,10 @@
 									html += '</a>';
 									html += '</p>';
 								html += '</div>';
+								html += '<div class="col col-12 col-lg-3 col-md-3 col-sm-3 mb-0-dto">';
+									if (data.anexos.length > 0 ) html += '<a href="anexos.html" class="anexos"><i class="mdi mdi-paperclip orange-text text-accent-4"></i>ANEXOS</a>';
+								html += '</div>';
+
 								if(!data.responsabilidade){
 									html += '<div class="col col-12 col-lg-4 col-md-4 col-sm-4 mb-0-dto">';
 										html += '<p class="mb-0-dto">';
@@ -105,11 +106,42 @@
 				$('.visualizar_pa').on('click', _this.visualizar);
 				$('.confirmar_responsabilidade').on('click', _this.confirmarResponsabilidade);
 				$('.devolver_responsabilidade').on('click', _this.devolverResponsabilidade);
+				
+				$('.anexos').on('click', function (event) {
+					event.preventDefault();
+					var objeto = _tabela.getObjetos()[$(this).parents('.listagem-padrao-item').index()];
+					$('.modal').modal();
+					$('.modal').find('#drop-zone').empty();
+					var contador = 0;
+
+					var html = '';
+					for(var indice in objeto.anexos) {
+						var caminho = objeto.anexos[indice].patch.split('/');
+						var nome = caminho[caminho.length -1];
+						var conteudo = objeto.anexos[indice].arquivoBase64.split(';')[1];
+
+						html += (contador == 0) ? '<div class="row">' : '';
+						html += (contador >= 0 && contador <= 3) ? '<div class="col-md-4 col-sm-4 col-xs-4 col-4" >' : '' ;
+						html += '<a  class="download" href="' +  objeto.anexos[indice].arquivoBase64 + '" arquivo="' + conteudo + '" nomeArquivo="' + nome + '"  tipo="'+ objeto.anexos[indice].tipo +'" download>';
+						html += (objeto.anexos[indice].tipo.split('/')[0] == 'image') ? '<i class="fas fa-file-image"></i>' : '<i class="far fa-file-audio"></i>';
+						html += '<br><span class="name toltip" title="' + nome + '">' + nome.substring(1, 10) + '</span></a>';
+						html += (contador >= 0 && contador <= 3) ?  '</div>' : '';
+						html +=  (contador == 3) ? '</div>': '';
+
+						contador++;
+
+						if(contador == 3) contador = 0;
+						else contador++;
+					}
+
+					$('.modal').find('#drop-zone').append(html);
+
+				});
 			};
 
 			return objeto;
 		};
-
+		
 		_this.executar = function executar (event) {
 			event.preventDefault();
 			var objeto = _tabela.getObjetos()[$(this).parents('.listagem-padrao-item').index()];

@@ -134,7 +134,7 @@
 				router.navigate('/pendencia');
 			});
 
-			$(evento.target).find('.cadastrar_pendencia_link').on('click', function() {
+			$(evento.target).find('.cadastrar_pendencia_link').on('click', function(event){
 				event.preventDefault();
 				router.navigate('/cadastrar-pendencia');
 			});

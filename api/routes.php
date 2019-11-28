@@ -355,7 +355,6 @@ use \phputil\JSON;
 		$this->logger->addInfo("Acessando a atualização de pendencia");
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraPendencia($req->getParsedBody(), $sessaoUsuario);
-		Util::printr(':)');
 		$response = $ctrl->atualizar();
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 

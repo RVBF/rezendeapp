@@ -116,6 +116,10 @@ body{
 .agenda-dto.cinza .exc{
   color: #c0ca33;
 }
+
+.agenda-dto.cinza .anexos i{
+  font-size: 1em;
+}
 .agenda-dto .dia{
   font-size: 28px;
   font-weight: 700;

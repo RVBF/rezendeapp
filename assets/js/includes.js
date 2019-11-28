@@ -161,7 +161,7 @@
 		// loader.script('vendor/pickadate/lib/compressed/picker.time.js');
 		// loader.script('vendor/select2/dist/js/select2.min.js');
 		// loader.script('vendor/piexifjs/piexif.js');
-		// loader.script('vendor/downloadjs/download.min.js');
+		loader.script('vendor/downloadjs/download.min.js');
 
 		// Inicialização
 		loader.script('assets/js/listagem.js');

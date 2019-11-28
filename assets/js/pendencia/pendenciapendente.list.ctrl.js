@@ -48,7 +48,7 @@
 			objeto.ordering= true;
 			objeto.searching = true;
 			objeto.searchDelay = 600;	
-			objeto.cadastrarLink = 'cadastrar_planoacao_link';
+			objeto.cadastrarLink = 'cadastrar_pendencia_link';
 			objeto.columnDefs = function (data){
 				var html = '';
 				var dataLimite = moment(data.dataLimite);

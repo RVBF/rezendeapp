@@ -91,6 +91,23 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 			throw new ColecaoException("Erro ao buscar anexo no banco de dados!", $e->getCode(), $e);
 		}
 	}
+
+	public function comPlanoAcaoId($id){
+		try {	
+
+			$anexos = DB::table(self::TABELA)->where('planoacao_id', $id)->get();
+
+			$anexosObjects = [];
+			foreach ($anexos as $anexo) {
+				$anexosObjects[] =  $this->construirObjeto($anexo);
+			}
+
+			return $anexosObjects;
+		}
+		catch (\Exception $e) {
+			throw new ColecaoException("Erro ao buscar anexo no banco de dados!", $e->getCode(), $e);
+		}
+	}
 	/**
 	 * @inheritDoc
 	 */
@@ -115,7 +132,13 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 		$arquivo = ServicoArquivo::instance();
 
 		$base64 =  'data:'. $row['tipo'] . ';base64,'. $arquivo->imagemParaBase64($row['caminho']);
-		$anexo = new Anexo($row['id'], $row['caminho'], $row['tipo']);
+		$anexo = new Anexo($row['id'],
+			$row['caminho'],
+			$row['tipo'],
+			$row['questionamento_id'],
+			$row['planoacao_id']
+		);
+
 		$anexo->setArquivoBase64($base64);
 		return $anexo->toArray();
 	}	
