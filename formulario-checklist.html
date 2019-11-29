@@ -5,12 +5,14 @@
                  <div class="row">
                      <div class="col-12  col-sm-12 col-md-12 col-lg-12">
                          <form class="form-horizontal "  method="post" id="checklist_form">
+                            <span class="card-title"></span>
+
                              <input type="hidden" id="id" name ="id" />
          
                              <div class="row form-row">
                                 <div class="col col-md-6 col-12 col-sm-12 col-lg-6">
                                     <div class="input-field">
-                                        <input type="text" class="form-control validate " id ="titulo" name="titulo"/>
+                                        <input type="text" class="form-control validate campo_obrigatorio" id ="titulo" name="titulo"/>
                                         <label for="titulo">*Título: </label>
                                     </div>
                                 </div>
@@ -78,27 +80,19 @@
                              <div class="row form-row">
                                  <div class="col col-md-12 col-12 col-sm-12 col-lg-12 ">
                                      <div class="input-field">
-                                         <textarea class=" materialize-textarea validate" id="descricao" name="descricao" rows="5"></textarea>
-                                         <label for="descricao">*Descrição</label>
+                                        <textarea class=" materialize-textarea validate campo_obrigatorio" id="descricao" name="descricao" rows="5"></textarea>
+                                        <label for="descricao">*Descrição</label>
                                      </div>
                                  </div>    
                                 </div>
  
-                             <div class="row form-row">
-                                 <div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end">
-                                     <button type="submit" id="salvar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">
-                                         <i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>
-                                             Finalizar<br>
-                                             plano de ação
-                                     </button>
-                                 </div>
-                             
-                                 <div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-start justify-content-md-start ">
-                                     <button class="waves-effect waves-light btn white grey-text text-darken-4 button-dto f-12-dto setor_link">
-                                         <i class="mdi mdi-close-circle-outline yellow-text text-accent-4"></i>
-                                         Cancelar
-                                     </button>
-                                 </div>
+                            <div class="row form-row" id="botoes">
+                                <div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-start justify-content-md-start ">
+                                    <button class="waves-effect waves-light btn white grey-text text-darken-4 button-dto f-12-dto checklist_link">
+                                        <i class="mdi mdi-close-circle-outline yellow-text text-accent-4"></i>
+                                        Cancelar
+                                    </button>
+                                </div>
                              </div>
                          </form>
                      </div>

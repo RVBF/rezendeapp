@@ -65,11 +65,8 @@
 			});
 		};
 
-		_this.todos = function todos() {
-			return $.ajax({
-				type : "GET",
-				url: _this.rota()
-			});
+		_this.todos = function todos(id) {
+			return _this.rota() + '/' + id;
 		};
 
 		_this.atualizarComSetorId = function atualizarComSetorId(obj, idSetor) {

@@ -17,43 +17,41 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 	function __construct(){}
 
 	function adicionar(&$obj) {
-		if($this->validarTarefa($obj)){
-			try {	
-				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-				
-				$id = DB::table(self::TABELA)->insertGetId([ 
-					'titulo' => $obj->getTitulo(),
-					'status' => $obj->getStatus(),
-					'tipoChecklist' => $obj->getTipoChecklist(),
-					'descricao' => $obj->getDescricao(),
-					'data_limite' => $obj->getDataLimite()->toDateTimeString(),
-					'questionador_id' => $obj->getQuestionador()->getId(),
-					'responsavel_id' => $obj->getResponsavel()->getId(),
-					'setor_id' => $obj->getSetor()->getId(),
-					'loja_id' => $obj->getLoja()->getId(),
-					'questionador_id' =>$obj->getQuestionador()->getId()
-				]);
+		try {	
+			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+			
+			$id = DB::table(self::TABELA)->insertGetId([ 
+				'titulo' => $obj->getTitulo(),
+				'status' => $obj->getStatus(),
+				'tipoChecklist' => $obj->getTipoChecklist(),
+				'descricao' => $obj->getDescricao(),
+				'data_limite' => $obj->getDataLimite()->toDateTimeString(),
+				'questionador_id' => $obj->getQuestionador()->getId(),
+				'responsavel_id' => $obj->getResponsavel()->getId(),
+				'setor_id' => $obj->getSetor()->getId(),
+				'loja_id' => $obj->getLoja()->getId(),
+				'questionador_id' =>$obj->getQuestionador()->getId()
+			]);
 
-				$obj->setId($id);
-				$questionariosInserts = [];
+			$obj->setId($id);
+			$questionariosInserts = [];
 
-				foreach ($obj->getQuestionarios() as $questionario) {
-					$questionariosInserts[] = [
-						'checklist_id' => $obj->getId(),
-						'questionario_id' => $questionario['id'],
-					];
-				}
-
-				DB::table(self::TABELA_RELACIONAL)->insert($questionariosInserts);
-				
-				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-	
-	
-				return $obj;
+			foreach ($obj->getQuestionarios() as $questionario) {
+				$questionariosInserts[] = [
+					'checklist_id' => $obj->getId(),
+					'questionario_id' => $questionario['id'],
+				];
 			}
-			catch (\Exception $e) {
-				throw new ColecaoException("Erro ao adicionar Checklist ", $e->getCode(), $e);
-			}
+
+			DB::table(self::TABELA_RELACIONAL)->insert($questionariosInserts);
+			
+			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+
+			return $obj;
+		}
+		catch (\Exception $e) {
+			throw new ColecaoException("Erro ao adicionar Checklist ", $e->getCode(), $e);
 		}
 	}
 
@@ -89,35 +87,42 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 	}
 
 	function atualizar(&$obj) {
-		// if($this->validarTarefa($obj)) {
-			try {
-				
-				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+		try {	
+			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-				$filds = [ 
-					'titulo' => $obj->getTitulo(),
-					'status' => $obj->getStatus(),
-					'tipoChecklist' => $obj->getTipoChecklist(),
-					'descricao' => $obj->getDescricao(),
-					'data_limite' => ($obj->getDataLimite() instanceof Carbon) ? $obj->getDataLimite()->toDateTimeString(): $obj->getDataLimite(),
-					'questionador_id' => ($obj->getQuestionador() instanceof Colaborador) ? $obj->getQuestionador()->getId() : $obj->getQuestionador()['id'],
-					'responsavel_id' => ($obj->getResponsavel() instanceof Colaborador) ? $obj->getResponsavel()->getId() : $obj->getResponsavel()['id'],
-					'setor_id' => ($obj->getSetor() instanceof Setor) ? $obj->getSetor()->getId() : $obj->getSetor()['id'],
-					'loja_id' => ($obj->getLoja() instanceof Loja) ? $obj->$obj->getLoja()->getId() : $obj->getLoja()['id'],
-					'questionador_id' => ($obj->getQuestionador() instanceof Colaborador) ?  $obj->getQuestionador()->getId() : $obj->getQuestionador()['id']
-				];
 
-				DB::table(self::TABELA)->where('id', $obj->getId())->update($filds);
+			$filds = [
+				'titulo' => $obj->getTitulo(),
+				'status' => $obj->getStatus(),
+				'tipoChecklist' => $obj->getTipoChecklist(),
+				'descricao' => $obj->getDescricao(),
+				'data_limite' => ($obj->getDataLimite() instanceof Carbon) ? $obj->getDataLimite()->toDateTimeString() : $obj->getDataLimite(),
+				'dataexecucao' => ($obj->getDataLimite() instanceof Carbon) ? $obj->getDataLimite()->toDateTimeString() : $obj->getDataLimite(),
+				'questionador_id' => ($obj->getQuestionador() instanceof Colaborador) ? $obj->getQuestionador()->getId() : $obj->getQuestionador()['id'],
+				'responsavel_id' => ($obj->getResponsavel() instanceof Colaborador) ? $obj->getResponsavel()->getId() : $obj->getResponsavel()['id'],
+				'setor_id' => ($obj->getSetor() instanceof Setor) ? $obj->getSetor()->getId() : $obj->getSetor()['id'],
+				'loja_id' =>  ($obj->getLoja() instanceof Loja)  ? $obj->getLoja()->getId() : $obj->getLoja()['id'],
+				'questionador_id' => ($obj->getQuestionador() instanceof Colaborador) ? $obj->getQuestionador()->getId() : $obj->getQuestionador()['id'],
+			];
 
-				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+			DB::table(self::TABELA)->where('id', $obj->getId())->update($filds);
 
-				return $obj;
-			}
-			catch (\Exception $e)
-			{
-				throw new ColecaoException("Erro ao atualizar tarefa.", $e->getCode(), $e);
-			}
-		// }
+			// $questionariosInserts = [];
+
+			// foreach ($obj->getQuestionarios() as $questionario) {
+			// 	$questionariosInserts[] = [
+			// 		'checklist_id' => $obj->getId(),
+			// 		'questionario_id' => $questionario['id'],
+			// 	];
+			// }
+
+			// DB::table(self::TABELA_RELACIONAL)->insert($questionariosInserts);
+			
+			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+		}
+		catch (\Exception $e) {
+			throw new ColecaoException("Erro ao atualizar Checklist ", $e->getCode(), $e);
+		}
 	}
 
 	function comId($id){

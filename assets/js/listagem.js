@@ -26,21 +26,25 @@
 			}); 
 
 			if(opcoes.listagemTemporal){
+				listagemPadrao.find('.timeline').scroll(function() {
+					var scroll = $(this);
+					let tamanhoLinhas =  parseInt(listagemPadrao.find('.timeline').find('.linhas').height() - listagemPadrao.find('.timeline').height());
+					let scrollNumerico = parseInt(listagemPadrao.find('.timeline').scrollTop());
+					if((tamanhoLinhas - scrollNumerico)  > 0 && (tamanhoLinhas - scrollNumerico) <= 10 ) {
+						scrollNumerico = scrollNumerico + (tamanhoLinhas - scrollNumerico);
+					}
 
-					listagemPadrao.find('.timeline').scroll(function() {
-						var scroll = $(this);
-						if (listagemPadrao.find('.timeline').scrollTop() >= parseInt(listagemPadrao.find('.timeline').find('.linhas').height() - listagemPadrao.find('.timeline').height())) {
-							// setTimeout(function () {
-							if(_this.recordsTotal != null && $('.listagem-padrao-item').length <_this.recordsTotal){
-								  listagemPadrao.find('.timeline').find('.linhas').fadeOut();
-								// if($('.listagem-padrao-item').length ==)
+					if (scrollNumerico >= tamanhoLinhas) {
+						if(_this.recordsTotal == null){
+							if(listagemPadrao.find('.linhas').find('listagem-padrao-item').length < _this.objetos.objetos.length) {
+								listagemPadrao.find('.timeline').find('.linhas').fadeOut();
+
 								_this.renderizarRegistrosTabelaTemporal();
 							}
-							else if(_this.recordsTotal == null) _this.renderizarRegistrosTabelaTemporal();
-
-							// }, 300)
 						}
-					});
+						else if(_this.recordsTotal != null) _this.renderizarRegistrosTabelaTemporal();
+					}
+				});
 			}
 		};
 
@@ -114,7 +118,7 @@
 				
 				_this.objetos.objetos.push(data);
 			}
-			console.log(_this.objetos);
+
 			var html = '';
 
 			if(opcoes.hasHeader && listagemPadrao.find('.listagem-padrao-item').length == 0){
@@ -160,7 +164,6 @@
 		};
 
 		_this.renderizarRegistrosTabelaTemporal = function renderizarRegistrosTabelaTemporal () {
-			
 			var sucesso = function (resposta) {
 				if(resposta.recordsFiltered > 0){
 					ultimaResposta = resposta;

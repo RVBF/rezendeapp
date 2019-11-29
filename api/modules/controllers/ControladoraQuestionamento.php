@@ -42,7 +42,7 @@ class ControladoraQuestionamento {
 		$this->servicoLogin = new ServicoLogin($sessao);
 	}
 
-	function todos() {
+	function todos($checklistId = 0) {
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
@@ -52,8 +52,8 @@ class ControladoraQuestionamento {
 			$contagem = 0;
 			$objetos = [];
 			$erro = null;
-			$objetos = $this->colecaoQuestionamento->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');
-			$contagem = $this->colecaoQuestionamento->contagem();
+			$objetos = $this->colecaoQuestionamento->todosComChecklistId($this->params['homePage'], $this->params['pageLength'], (isset($dtr->search->value)) ? $dtr->search->value : '', $checklistId);
+			$contagem = $this->colecaoQuestionamento->contagemPorColuna($checklistId, 'checklist_id');
 		}
 		catch (\Exception $e )
 		{

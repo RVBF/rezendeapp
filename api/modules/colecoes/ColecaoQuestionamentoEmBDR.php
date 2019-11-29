@@ -214,10 +214,10 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 		}
 	}
 
-	function todosComLojaIds($limite = 0, $pulo = 0, $search = '', $idsLojas = []){
+	function todosComChecklistId($pageHome = 0, $pageLength = 10,  $search = '', $checklistId  = 0){
 		try {	
 
-			$query = DB::table(self::TABELA)->select(self::TABELA . '.*')->whereIn('loja_id', $idsLojas);
+			$query = DB::table(self::TABELA)->select(self::TABELA . '.*')->where('checklist_id', $checklistId);
 				
 			if($search != '') {
 				$buscaCompleta = $search;
@@ -263,7 +263,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 			}
 			
 
-			$questionamentos = $query->offset($limite)->limit($pulo)->get();
+			$questionamentos = $query->orderBy('id', 'ASC')->offset($pageHome)->limit($pageLength)->get();
 
 			$questionamentosObjects = [];
 			foreach ($questionamentos as $key => $tarefa) {
@@ -272,8 +272,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 
 			return $questionamentosObjects;
 		}
-		catch (\Exception $e)
-		{			
+		catch (\Exception $e) {			
 			throw new ColecaoException("Erro ao listar checklists.", $e->getCode(), $e);
 		}
 	}
@@ -316,6 +315,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 		// $checklist = ($row['checklist_id'] > 0) ? Dice::instance()->create('ColecaoChecklist')->comId($row['checklist_id']) : null;
 		$planoAcao = ($row['planoacao_id'] > 0) ? Dice::instance()->create('ColecaoPlanoAcao')->comId($row['planoacao_id']) : null;
 		$pendencia = ($row['pendencia_id'] > 0) ? Dice::instance()->create('ColecaoPendencia')->comId($row['pendencia_id']) : null;
+		$anexos = Dice::instance()->create('ColecaoAnexo')->comQuestionamentoId($row['id']);
 
 		$questionamento =  new Questionamento(
 			$row['id'],
@@ -324,7 +324,8 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 			json_decode($row['formularioresposta']),
 			$row['checklist_id'],
 			$planoAcao,
-			$pendencia
+			$pendencia,
+			$anexos
 		);
 		return $questionamento->toArray();
 	}	

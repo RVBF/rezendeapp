@@ -96,10 +96,10 @@
 			});
 		};
 
-		_this.comId = function comId(id, idSetor) {
+		_this.comId = function comId(id) {
 			return $.ajax({
 				type: "GET",
-				url: _this.rota(idSetor) + '/' + id
+				url: _this.rota() + '/' + id
 			});
 		};
 

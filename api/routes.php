@@ -2,6 +2,7 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \phputil\JSON;
+
 // Início das rotas para categorias
 	$app->get('/categorias', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 		$this->logger->addInfo("Acessando listagem de categorias");
@@ -150,11 +151,20 @@ use \phputil\JSON;
 // Fim das rotas para loja
 
 // Início das rotas para questionamento
+
 	$app->get('/questionamento', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 		$this->logger->addInfo("Acessando listagem de lojas");	
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraQuestionamento($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->todos();
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+	});
+
+	$app->get('/questionamento/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando listagem de lojas");	
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraQuestionamento($req->getQueryParams(), $sessaoUsuario);
+		$response = $ctrl->todos($args['id']);
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 
@@ -216,6 +226,15 @@ use \phputil\JSON;
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraChecklist($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->adicionar();
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+
+	});
+
+	$app->get('/checklist/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando listagem de plano-acao");
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraChecklist($req->getQueryParams(), $sessaoUsuario);
+		$response = $ctrl->comId($args['id']);
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
@@ -406,7 +425,6 @@ use \phputil\JSON;
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 // Fim das rotas para usuario
-
 
 // Início das rotas para login
 	$app->post('/login', function(Request $req,  Response $res, $args = []) use ($app, $session) {

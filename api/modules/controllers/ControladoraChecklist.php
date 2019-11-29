@@ -202,60 +202,80 @@ class ControladoraChecklist {
 		return $resposta;
 	}
 
-	function atualizar($setorId = 0) {
+	function atualizar() {
 		DB::beginTransaction();
-
 		try {
+			$resposta = [];
+
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}
 
-			if(!$this->servicoLogin->eAdministrador()){
-				throw new Exception("Usuário sem permissão para executar ação.");
-			}
+			// if(!$this->servicoLogin->eAdministrador()){
+			// 	throw new Exception("Usuário sem permissão para executar ação.");
+			// }
 
-			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo', 'descricao', 'dataLimite', 'setor', 'loja'], $this->params);
-		
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id','titulo', 'descricao', 'dataLimite', 'setor', 'loja', 'questionarios'], $this->params);
+
 			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 	
 				throw new Exception($msg);
 			}
+			
+			$setor = new Setor(); $setor->fromArray($this->colecaoSetor->comId(($this->params['setor'] > 0) ? $this->params['setor'] : \ParamUtil::value($this->params, 'setor')));
 
-			$setor = $this->colecaoSetor->comId(\ParamUtil::value($this->params, 'setor'));
-
-			if(!isset($setor) and !(setor instanceof Setor)){
-				throw new Exception("Setor não encontrada na base de dados.");
+			if(!isset($setor) and !($setor instanceof Setor)){
+				throw new Exception("Setor não encontrado na base de dados.");
 			}
 
 				
-			$loja = $this->colecaoLoja->comId((\ParamUtil::value($this->params, 'loja')> 0) ? \ParamUtil::value($this->params, 'loja') : \ParamUtil::value($this->params, 'loja'));
+			$loja = new Loja(); $loja->fromArray($this->colecaoLoja->comId((\ParamUtil::value($this->params, 'loja')> 0) ? \ParamUtil::value($this->params, 'loja') : \ParamUtil::value($this->params, 'loja')));
 
 			if(!isset($loja) and !($loja instanceof Loja)){
 				throw new Exception("Loja não encontrada na base de dados.");
 			}
 
-			$dataLimite = new Carbon();                  // equivalent to Carbon::now()
+			$questionarios = $this->colecaoQuestionario->todosComId($this->params['questionarios']);
+
+			if(!isset($questionarios) and count($questionarios) == count($this->params['questionarios'])){
+				throw new Exception("Alguma opção de questionário seleciona não foi encontrado na base de dados.");
+			}
+
+			$responsavel = new Colaborador(); $responsavel->fromArray($this->colecaoColaborador->comId((\ParamUtil::value($this->params, 'responsavel')> 0) ? \ParamUtil::value($this->params, 'responsavel') : \ParamUtil::value($this->params, 'responsavel')));
+
+			if(!isset($responsavel) and !($responsavel instanceof Colaborador)){
+				throw new Exception("Responśavel não encontrado na base de dados.");
+			}
+
+			$questionador = new Colaborador(); $questionador->fromArray($this->colecaoColaborador->comId((\ParamUtil::value($this->params, 'questionario')> 0) ? \ParamUtil::value($this->params, 'responsavel') : \ParamUtil::value($this->params, 'responsavel')));
+
+			if(!isset($responsavel) and !($responsavel instanceof Colaborador)){
+				throw new Exception("Responśavel não encontrado na base de dados.");
+			}
+
+
 			$dataLimite = new Carbon(\ParamUtil::value($this->params, 'dataLimite'), 'America/Sao_Paulo');
 
-			$tarefa = $this->colecaoChecklist->comId(\ParamUtil::value($this->params, 'id'));
+			$checklist = new Checklist(); $checklist->fromArray($this->colecaoChecklist->comId(\ParamUtil::value($this->params, 'id')));
+			if(!isset($checklist) and !($checklist instanceof Checklist)){
+				throw new Exception("Checklist não encontrado na base de dados.");
+			}
 
-			if($tarefa->getEncerrada()) throw new Exception("Não é possível editar uma tarefa já encerrada.");
+			$checklist->setTitulo(\ParamUtil::value($this->params, 'titulo'));
+			$checklist->setDescricao(\ParamUtil::value($this->params, 'descricao'));
+			$checklist->setDataLimite($dataLimite);
+			$checklist->setTipoCheccklist(\ParamUtil::value($this->params, 'tipoChecklist'));
+			$checklist->setSetor($setor);
+			$checklist->setLoja($loja);
+			$checklist->setQuestionador($questionador);
+			$checklist->setResponsavel($responsavel);
 
-			$tarefa->setTitulo(\ParamUtil::value($this->params, 'titulo'));
-			$tarefa->setDescricao(\ParamUtil::value($this->params, 'descricao'));
-			$tarefa->setDataLimite($dataLimite);
-			$tarefa->setSetor($setor);
-			$tarefa->setLoja($loja);
-	
-			$resposta = [];
-					
-			$tarefa = $this->colecaoChecklist->atualizar($tarefa);
+			$this->colecaoChecklist->atualizar($checklist);
 
-			$resposta = ['categoria'=> RTTI::getAttributes( $tarefa, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Categoria cadastrada com sucesso.']; 
+			$resposta = ['status' => true, 'mensagem'=> 'Checklist cadastrado  com sucesso.']; 
 			
 			DB::commit();
-
 		}
 		catch (\Exception $e) {
 			DB::rollback();
@@ -311,6 +331,23 @@ class ControladoraChecklist {
 		}
 
 		
+
+		return $resposta;
+	}
+
+	function comId($id) {
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
+			
+			if (! is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
+
+			$checklist = $this->colecaoChecklist->comId($id);
+
+			$resposta = ['conteudo'=> $checklist, 'status' => true, 'mensagem'=> 'Checklist encontrado com sucesso.']; 
+		}
+		catch (\Exception $e) {
+			$resposta = ['status' => false, 'mensagem'=>  "Erro ao encontrar checklist com o id."]; 
+		}
 
 		return $resposta;
 	}
