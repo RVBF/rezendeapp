@@ -1,15 +1,16 @@
-<section class="listagem-padrao" id="planoacao_pendentes">    
-  <div class="row">
-    <div class="col col-sm-12 col-12 card-panel left-align">
-      <div class="linhas"> </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="info col-md-12 col-12 col-sm-12 col-lg-12"></div>
-  </div>
+<section class="listagem-padrao" id="questionamentos">    
+	<div class="row">
+		<div class="col col-sm-12 col-12 card-panel left-align timeline">
+			<div class="linhas fadeIn"></div>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="info col-md-12 col-12 col-sm-12 col-lg-12"></div>
+	</div>
 </section>
-
-<div class="modal fade" id="planoAcaoModal" tabindex="-1" role="dialog" aria-labelledby="planoAcaoModalLabel" aria-hidden="true">
+	
+<div class="modal fade" id="questionameto" tabindex="-1" role="dialog" aria-labelledby="questionametoLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -40,9 +41,9 @@
 
 <script>
 $(document).ready(function() {
-  var servicoPlanoAcao = new app.ServicoPlanoAcao();
-  var crltPlanoAcao = new app.ControladoraListagemPlanoAcaoPendente(servicoPlanoAcao);
+	var servicoQuestionamento = new app.ServicoQuestionamento();
+	var crltQuestionamento = new app.ControladoraListagemQuestionamento(servicoQuestionamento);
 
-  crltPlanoAcao.configurar();
+	crltQuestionamento.configurar();
 });
 </script> 

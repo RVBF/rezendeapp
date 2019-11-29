@@ -58,7 +58,7 @@
 
 					html += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12 mb-0-dto opc_tabela">';
 							html += '<div class="row">'
-								html += '<div class="col col-12 col-lg-3 col-md-3 col-sm-3 mb-0-dto">';
+								html += '<div class="col col-12 col-lg-4 col-md-4 col-sm-4 mb-0-dto">';
 
 									html += '<p class="mb-0-dto">';
 									html += '<a href="#" class="detalhes-dto visualizar_pa">';
@@ -67,8 +67,8 @@
 									html += '</a>';
 									html += '</p>';
 								html += '</div>';
-								html += '<div class="col col-12 col-lg-3 col-md-3 col-sm-3 mb-0-dto">';
-									if (data.anexos.length > 0 ) html += '<a href="anexos.html" class="anexos"><i class="mdi mdi-paperclip orange-text text-accent-4"></i>ANEXOS</a>';
+								html += '<div class="col col-12 col-lg-4 col-md-4 col-sm-4 mb-0-dto">';
+									if (data.anexos.length > 0 ) html += '<a href="anexos.html" class="anexos detalhes-dto"><i class="mdi mdi-paperclip orange-text"></i>ANEXOS</a>';
 								html += '</div>';
 
 								if(!data.responsabilidade){
@@ -77,15 +77,6 @@
 										html += '<a href="#" class="detalhes-dto confirmar_responsabilidade">';
 										html += '<i class="far fa-check-square orange-text text-accent-4"></i>';
 										html += 'Confirmar responsabilidade';
-										html += '</a>';
-										html += '</p>';
-									html += '</div>';
-
-									html += '<div class="col col-12 col-lg-4 col-md-4 col-sm-4 mb-0-dto">';
-										html += '<p class="mb-0-dto">';
-										html += '<a href="#" class="detalhes-dto devolver_responsabilidade">';
-										html += '<i class="far fa-window-close orange-text text-accent-4"></i>';
-										html += 'Devolver responsabilidade';
 										html += '</a>';
 										html += '</p>';
 									html += '</div>';

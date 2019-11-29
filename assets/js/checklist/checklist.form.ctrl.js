@@ -19,19 +19,27 @@
 		_this.dataLimite = '';
 		_this.horaLimite = '';
 
+		var pegarId = function pegarId(url, palavra)
+		{
+
+			// Terminando com "ID/palavra"
+			var regexS = palavra+'+\/[0-9]{1,}';
+
+			var regex = new RegExp(regexS);
+			var resultado = regex.exec(url);
+
+			if (!resultado || resultado.length < 1)
+			{
+				return 0;
+			}
+
+			var array = resultado[0].split('/');
+			return array[1];
+		};
 
 		// Cria as opções de validação do formulário
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
 			var opcoes = {
-				rules: {
-					"titulo": { rangelength : [ 2, 100 ] },
-					'descricao':{ rangelength : [10,255] }
-				},
-
-				messages: {
-					"titulo": { rangelength : $.validator.format("O campo nome deve ter no mínimo  {2} e no máximo {100} caracteres.") },
-					"descricao": { rangelength : $.validator.format("O campo nome deve ter no mínimo  {0} e no máximo {255} caracteres.") }
-				}
 			};
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
@@ -44,9 +52,16 @@
 				_this.formulario.desabilitar(true);
 			
 				var jqXHR = _this.alterar ? servicoChecklist.atualizar(obj) : servicoChecklist.adicionar(obj);
-				jqXHR.done(function() {
-					// router.navigate('/checklist');
-					toastr.success('Checklist Adicionado com sucesso!')
+				jqXHR.done(function(resposta) {
+					if(resposta.status){
+						router.navigate('/checklist');
+						toastr.success(resposta.mensagem);
+
+					}
+					else{
+						$('body #msg').empty().removeClass('d-none').append(resposta.mensagem);
+						toastr.error(resposta.mensagem);
+					}
 				}).fail(window.erro).always(terminado);
 
 				if(_this.alterar){
@@ -77,58 +92,43 @@
 		};
 
 		_this.configurarBotoes = function configurarBotoes() {
-				_this.dataLimite =new Picker($('#data').get()[0], {
-					format : 'DD de MMMM de YYYY',
-					controls: true,
-					inline: true,
-					container: '.date-panel',					
-					text : {
-						title: 'Selecione a data',
-						cancel: 'Cancelar',
-						confirm: 'OK',
-						year: 'Ano',
-						month: 'Mês',
-						day: 'Dia',
-						hour: 'Hora',
-						minute: 'Minuto',
-						second: 'Segundo',
-						millisecond: 'Milissegundos',
-					},
-					headers : true,
-					months : ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-					monthsShort : ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
-				});
+			_this.dataLimite =new Picker($('#data').get()[0], {
+				format : 'DD de MMMM de YYYY',
+				controls: true,
+				inline: true,
+				container: '.date-panel',					
+				text : {
+					title: 'Selecione a data',
+					cancel: 'Cancelar',
+					confirm: 'OK',
+					year: 'Ano',
+					month: 'Mês',
+					day: 'Dia',
+					hour: 'Hora',
+					minute: 'Minuto',
+					second: 'Segundo',
+					millisecond: 'Milissegundos',
+				},
+				headers : true,
+				months : ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+				monthsShort : ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+			});
 
-				_this.horaLimite = new Picker($('#hora').get()[0], {
-					format: 'HH:mm',
-					headers: true,
-					controls: true,
-					inline: true,
-					container: '.time-panel',	
-					text : {
-						title: 'Selecione a hora',
-						cancel: 'Cancelar',
-						confirm: 'OK',
-						hour: 'Hora',
-						minute: 'Minuto',
-						second: 'Segundo',
-						millisecond: 'Milissegundos',
-					},
-				});
-
-			_this.botaoSubmissao.on('click', _this.salvar);
-			_this.cancelarModoEdicao.on('click', _this.cancelar);
-		};
-
-		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro() {
-			_this.formulario.parents('#painel_formulario').promise().done(function() {
-				_this.formulario.find('#titulo').focus();
-				_this.popularLojas();
-				_this.popularTiposDeChecklist();
-				_this.popularColaboradores();
-				_this.popularQuestionarios();
-				_this.popularSetores();
-				_this.configurarBotoes();
+			_this.horaLimite = new Picker($('#hora').get()[0], {
+				format: 'HH:mm',
+				headers: true,
+				controls: true,
+				inline: true,
+				container: '.time-panel',	
+				text : {
+					title: 'Selecione a hora',
+					cancel: 'Cancelar',
+					confirm: 'OK',
+					hour: 'Hora',
+					minute: 'Minuto',
+					second: 'Segundo',
+					millisecond: 'Milissegundos',
+				},
 			});
 		};
 
@@ -258,58 +258,87 @@
 
 			$("#tipo-checklist").formSelect();
 		};
-		
-
-
-		_this.iniciarFormularioModoEdicao = function iniciarFormularioModoEdicao() {
-			_this.iniciarFormularioModoCadastro();
-		};
 
 		_this.definirForm = function definirForm(status) {			
 			_this.formulario.submit(false);
 			_this.alterar = status;
 
-		 	if(!_this.alterar) {
-				_this.iniciarFormularioModoCadastro();
-			}
+			if(window.location.href.search('visualizar') != -1) servicoChecklist.comId(pegarId(window.location.href,'visualizar-checklist')).done(_this.desenhar);
+			else  if(window.location.href.search('editar') != -1) servicoChecklist.comId(pegarId(window.location.href,'editar-checklist')).done(_this.desenhar);
 			else{
-				_this.iniciarFormularioModoEdicao();
+				_this.formulario.parents('#painel_formulario').promise().done(function() {
+					_this.formulario.find('#titulo').focus();
+					_this.popularLojas();
+					_this.popularTiposDeChecklist();
+					_this.popularColaboradores();
+					_this.popularQuestionarios();
+					_this.popularSetores();
+					_this.configurarBotoes();
+					$('.card-title').html('<h3>Cadastrar Checklist</h3>');
+					_this.formulario.find('#botoes').prepend(' <div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end"><button type="submit" id="cadastrar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Cadastrar</button></div>').promise().done(function(){
+						$('#botoes').find('#cadastrar').on('click', _this.salvar);
+					});
+				});
 			}
 		}
 
 		// Desenha o objeto no formulário
 		_this.desenhar = function desenhar(obj) {
-			var dataPicker = $('#data_limite').pickadate('picker');
-			var horaPicker = $('#hora_limite').pickatime('picker');
+			_this.objeto = obj.conteudo;
+			_this.popularLojas();
+			_this.popularTiposDeChecklist();
+			_this.popularColaboradores();
+			_this.popularQuestionarios();
+			_this.popularSetores();
+			_this.configurarBotoes();
 
-			var data  = obj.dataLimite.split('/');
-			var hora = obj.dataLimite.split(' ')[1].split(':');
+			_this.formulario.find('#id').val(_this.objeto.id).focus().blur();
+			_this.formulario.find('#titulo').val(_this.objeto.descricao).focus().blur();
+			_this.formulario.find('#setor').val(_this.objeto.setor.id).focus().blur();
+			_this.formulario.find('#unidade').val(_this.objeto.loja.id).focus().blur();
+			_this.formulario.find('#unidade').val(_this.objeto.loja.id).focus().blur();
 
-			_this.formulario.find('#id').val(obj.id);
-			_this.formulario.find('#titulo').val(obj.titulo);
-			_this.formulario.find('#descricao').val(obj.descricao);
-			_this.formulario.find('#setor').val(obj.setor.id);
-			_this.formulario.find('#loja').val(obj.loja.id);
+			var dataLimite = moment(_this.objeto.dataLimite);
+			$('#data').val(dataLimite.format('DD') + ' de ' + dataLimite.format('MMMM') + ' de ' + dataLimite.format('YYYY')).focus().blur();
+			$('#hora').val(dataLimite.format('HH') + ':' + dataLimite.format('mm')).focus().blur();
+			$('#descricao').val(_this.objeto.descricao).focus().blur();
+			if(window.location.href.search('visualizar') != -1) {
+				_this.formulario.desabilitar(true);
+				_this.formulario.find('#botoes').desabilitar(false);
+				if(_this.objeto.status != 'Executado'){
+					_this.formulario.find('#botoes').prepend(' <div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end"><button type="button" id="editar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Editar</button></div>').promise().done(function(){
+						_this.formulario.find('#editar').on('click', function(event){
+							router.navigate('/editar-checklist/'+ _this.objeto.id);
+						});
+					});
+				}
+			
+				$('.card-title').html('<h3>Visualizar Checklist</h3>');
+			}
+			else if(window.location.href.search('editar') != -1) {
+				_this.alterar = true;
+				_this.dataLimite.setDate(dataLimite.toDate());
+				_this.horaLimite.setDate(dataLimite.toDate());
+				_this.formulario.find('#questionarios').parents('.select-wrapper').desabilitar(true);
+				var html = '';
+				html += '<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end">';
+				html += '<button id="salvar" type="submit" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">';
+				html += '<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 ">';
+				html += '</i>salvar</button>';
+				html += '</div>';
 
+				_this.formulario.find('#botoes').prepend(html).promise().done(function(){
+					$('#salvar').on('click', _this.salvar);
 
-			dataPicker.set('select', new Date(data[0], data[1], data[2]))
-			horaPicker.set('select', hora[0] + ':' + hora[1], { format: 'hh:i' })
+				});
+
+				$('.card-title').html('<h3>Editar Checklist</h3>');
+			}
 		};
-
 		_this.salvar = function salvar() {
 			_this.formulario.validate(criarOpcoesValidacao());
         };
 		
-		_this.cancelar = function cancelar(event) {
-			var contexto = _this.formulario.parents('#painel_formulario');
-			contexto.addClass('desabilitado');
-			_this.formulario.find('.msg').empty();
-			_this.formulario.find('.msg').parents('.row').addClass('d-none');
-			contexto.addClass('d-none');
-			contexto.desabilitar(true);
-
-		};
-
 		// Configura os eventos do formulário
 		_this.configurar = function configurar(status = false) {
 			_this.definirForm(status);

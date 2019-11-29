@@ -178,9 +178,9 @@
 		loader.script('assets/js/funcoesSistema.js');
 		loader.script('assets/js/index.list.ctrl.js');
 
-		loader.script('assets/js/categoria/categoria.serv.js');
-		loader.script('assets/js/categoria/categoria.form.ctrl.js');
-		loader.script('assets/js/categoria/categoria.list.ctrl.js');
+		// loader.script('assets/js/categoria/categoria.serv.js');
+		// loader.script('assets/js/categoria/categoria.form.ctrl.js');
+		// loader.script('assets/js/categoria/categoria.list.ctrl.js');
 
 		loader.script('assets/js/questionario/tipoquestionario.serv.js');
 		loader.script('assets/js/questionario/questionario.serv.js');
@@ -205,6 +205,8 @@
 
 		loader.script('assets/js/questionamento/questionamento.serv.js');
 		loader.script('assets/js/questionamento/questionamento.form.ctrl.js');
+		loader.script('assets/js/questionamento/questionamento.list.ctrl.js');
+
 
 		loader.script('assets/js/checklist/tipoChecklist.serv.js');
 		loader.script('assets/js/checklist/checklist.serv.js');
@@ -220,13 +222,12 @@
 		loader.script('assets/js/grupo de usuario/grupousuario.form.ctrl.js');
 		loader.script('assets/js/grupo de usuario/grupousuario.list.ctrl.js');[]
 
-		loader.script('assets/js/usuario/usuario.serv.js');
 		loader.script('assets/js/usuario/usuario.form.ctrl.js');
 		loader.script('assets/js/usuario/usuario.list.ctrl.js');
 		loader.script('assets/js/login/login.form.ctrl.js');
 		
-		loader.script('assets/js/permissao/permissao.serv.js');
-		loader.script('assets/js/permissao/permissao.form.ctrl.js');
+		// loader.script('assets/js/permissao/permissao.serv.js');
+		// loader.script('assets/js/permissao/permissao.form.ctrl.js');
 	}});
 	var loader = new window.Loader();
 

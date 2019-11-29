@@ -79,7 +79,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 	public function comQuestionamentoId($id){
 		try {	
 
-			$anexos = DB::table(self::TABELA)->where('resposta_id', $id)->get();
+			$anexos = DB::table(self::TABELA)->where('questionamento_id', $id)->get();
 			$anexosObjects = [];
 			foreach ($anexos as $anexo) {
 				$anexosObjects[] =  $this->construirObjeto($anexo);
