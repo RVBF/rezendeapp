@@ -113,7 +113,9 @@ select.qtd_resultados_pesquisapadrao {
 .listagem-padrao .paginacao{
     text-align: right;
 }
-
+.modal{
+    z-index: 10000;
+}
 
 .listagem-padrao .card-panel{
     padding: 1em !important;

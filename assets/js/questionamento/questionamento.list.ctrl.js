@@ -45,7 +45,6 @@
 			objeto.hasHeader = true;
             objeto.classesDesignerTabela = 'agenda-dto valign-wrapper';
 			objeto.columnDefs = function (data){
-				console.log(data);
                 var html = '';
                 html += '<div class="col col-12 col-lg-4 col-md-4 col-sm-4">';
                     if(data.status == 'Respondido Com Pendências' ) html += '<span class="info_checklist yellow darken-2 btn-small">'+ data.status +'</span>';
@@ -69,6 +68,8 @@
 				$('.anexos').on('click', function (event) {
 					event.preventDefault();
 					var objeto = _tabela.getObjetos()[$(this).parents('.listagem-padrao-item').index()];
+					console.log(_tabela.getObjetos());
+
 					$('.modal').modal();
 					$('.modal').find('#drop-zone').empty();
 					var contador = 0;
