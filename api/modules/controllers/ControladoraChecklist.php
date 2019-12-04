@@ -164,6 +164,7 @@ class ControladoraChecklist {
 			$questionarios =$this->params['questionarios'];
 
 			$questionamentos = [];
+			$contador = 0;
 			foreach($questionarios as $questionarioId){
 				$questionario = new Questionario(); $questionario->fromArray($this->colecaoQuestionario->comId($questionarioId));
 
@@ -174,6 +175,7 @@ class ControladoraChecklist {
 				$formulario = json_decode($questionario->getFormulario());
 
 				foreach ($formulario->perguntas as $pergunta) {
+					$contador++;
 					$questionamentos[] = new Questionamento(
 						0,
 						TipoQuestionamentoEnumerado::NAO_RESPONDIDO,
@@ -183,6 +185,8 @@ class ControladoraChecklist {
 						null,
 						[]
 					);
+
+					end($questionamentos)->setIndice($contador);
 				}
 			}
 

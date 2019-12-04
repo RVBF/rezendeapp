@@ -20,6 +20,7 @@ class Questionamento {
     private $planoAcao;
     private $pendencia;
     private $anexos;
+    private $indice;
 
     function __construct(
         $id = 0,

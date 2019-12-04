@@ -19,7 +19,6 @@
 		_this.horaLimitePa = '';
 		_this.dataLimitePe = '';
 		_this.horaLimitePe = '';
-		_this.contador =0;
 		_this.servicoPlanoAcao = new app.ServicoPlanoAcao();
 		_this.servicoPendencia = new app.ServicoPendencia();
 		_this.anexos = [];
@@ -265,7 +264,7 @@
 					html += '<div class="row form-row mb-0-dto">'
 						html +='<div class="col col-sm-12 col-md-12 col-lg-12 col-12 mb-0-dto">';
 							html +='<p class="mb-0-dto">';
-							html +=  _this.objetoAtual.formularioPergunta.pergunta;
+							html +=  _this.objetoAtual.indice + ' : ' + _this.objetoAtual.formularioPergunta.pergunta;
 							html +='</p>';
 						html +='</div>';
 					html +='</div>';
@@ -509,7 +508,6 @@
 			var sucesso = function (resposta) {
 				_this.resetarForm();
 				_this.questionamentos = resposta.conteudo;
-
 				_this.popularQuestao();
 
 			};

@@ -150,7 +150,10 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 				$query->groupBy(self::TABELA.'.id');
 			}
 			
-			$pendencia = $query->offset($limite)->limit($pulo)->get();
+			$pendencia = $query->groupBy('id','status', 'descricao','descricaosolucao', 'datalimite', 'dataexecucao', 'datacadastro', 'responsavel_id', 'loja_id')
+								->orderByRaw(self::TABELA . '.status = "' . StatusPaEnumerado::EXECUTADO . '" ASC , '. self::TABELA.'.datalimite ASC')
+								->offset($limite)
+								->limit($pulo)->get();
 
 			$pendenciaObjects = [];
 
