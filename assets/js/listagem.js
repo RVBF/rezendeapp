@@ -52,6 +52,10 @@
 			return _this.objetos.objetos[0];
 		}
 
+		_this.getObjetosTemporalListagem = function getObjetosTemporalListagem(){
+			return _this.objetos.objetos;
+		}
+
 		_this.paginaAtual = function paginaAtual(){
 			return parseInt(listagemPadrao.find('#listagem_paginacao').find('.pagina-atual').first().attr('data-dt-idx'));
 		};

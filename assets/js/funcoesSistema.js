@@ -158,6 +158,23 @@
 
 	$(document).ready(function() {	
 		moment.locale('pt-BR');	
+		$(window).scroll(function () {
+
+			//Display or hide scroll to top button 
+			if ($(this).scrollTop() > 100) {
+				$('.scrollup').fadeIn();
+			} else {
+				$('.scrollup').fadeOut();
+			}
+		});
+	
+		$('.scrollup').click(function () {
+			$("html, body").animate({
+				scrollTop: 0
+			}, 600);
+			return false;
+		});
+
 
 		$('.tooltip').tooltip(); 
 		if(window.location.href == 'http://rezendeconstrucao.com.br/rezendeapp/' || window.location.href == 'http://rezendeapp.local/'){ 

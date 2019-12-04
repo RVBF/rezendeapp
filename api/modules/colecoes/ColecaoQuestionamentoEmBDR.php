@@ -71,7 +71,8 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 
             foreach($objetos as $obj) {
                 $inserts[] = [ 
-                    'status' => $obj->getStatus(),
+					'status' => $obj->getStatus(),
+					'indice' => $obj->getIndice(),
                     'formulariopergunta' => $obj->getFormularioPergunta(),
                     'formularioresposta' => $obj->getFormularioResposta(),
                     'checklist_id' => ($obj->getChecklist() instanceof Checklist) ? $obj->getChecklist()->getId() : 0,
@@ -174,6 +175,8 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 			return $questionamentosObjects;
 		} 		
 		catch (\Exception $e) {
+			Util::printr($e->getMessage());
+
 			throw new ColecaoException("Erro ao buscar questionamentos com a referência de checklist!", $e->getCode(), $e);
 		}
 	}
@@ -327,6 +330,9 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 			$pendencia,
 			$anexos
 		);
+
+		$questionamento->setIndice($row['indice']);
+		
 		return $questionamento->toArray();
 	}	
 

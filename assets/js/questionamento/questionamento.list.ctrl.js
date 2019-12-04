@@ -52,8 +52,8 @@
                     else if(data.status == 'Não Respondido') html += '<span class="info_checklist red accent-4 btn-small">'+ data.status +'</span>';
                 html += '</div>';
                 html += '<div class="col col-12 col-lg-6 col-md-6 col-sm-6">';
-                    html += '<p class=""><strong> Pergunta : </strong>'+ data.formularioPergunta.pergunta + '</p>';
-                  if(typeof data.formularioPergunta.opcao  != 'undefined')  html += '<p class=""><strong>Opção selecionada : </strong>'+ data.formularioResposta.opcao + '</p>';
+					html += '<p class=""><strong> Pergunta : </strong>'+ data.formularioPergunta.pergunta + '</p>';
+                  if(data.formularioResposta != null)  html += '<p class=""><strong>Opção selecionada : </strong>'+ data.formularioResposta.opcao + '</p>';
 				html += '</div>';
 				
 				html += '<div class="col col-12 col-lg-2 col-md-2 col-sm-2 mb-0-dto">';
@@ -67,8 +67,7 @@
 			objeto.rowsCallback = function(resposta){
 				$('.anexos').on('click', function (event) {
 					event.preventDefault();
-					var objeto = _tabela.getObjetos()[$(this).parents('.listagem-padrao-item').index()];
-					console.log(_tabela.getObjetos());
+					var objeto = _tabela.getObjetosTemporalListagem()[$(this).parents('.listagem-padrao-item').index() -1];
 
 					$('.modal').modal();
 					$('.modal').find('#drop-zone').empty();

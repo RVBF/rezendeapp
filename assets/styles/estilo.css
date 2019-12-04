@@ -3,7 +3,29 @@
     position: sticky;
     opacity: unset;
     background-color: white;
-    z-index: 10000;
+    z-index: 1039;
+}
+
+.scrollup {
+    text-align: center;
+    cursor: pointer;
+    vertical-align: middle;
+    width: 39px;
+    height: 39px;
+    border-radius: 20px;
+    font-size: 20px;
+    position: fixed;
+    bottom: 30px;
+    right: 20px;
+    border: 1px solid #fff;
+    display: none;
+    background: #ff6d00;
+    z-index: 1040;
+
+}
+.scrollup > a {
+    position:relative;
+    color:#fff;
 }
 
 .sidenav{
@@ -114,8 +136,9 @@ select.qtd_resultados_pesquisapadrao {
     text-align: right;
 }
 .modal{
-    z-index: 10000;
+    z-index: 1000000;
 }
+
 
 .listagem-padrao .card-panel{
     padding: 1em !important;

@@ -53,6 +53,7 @@ class ControladoraQuestionamento {
 			$objetos = [];
 			$erro = null;
 			$objetos = $this->colecaoQuestionamento->todosComChecklistId($this->params['homePage'], $this->params['pageLength'], (isset($dtr->search->value)) ? $dtr->search->value : '', $checklistId);
+			// Util::printr($objetos);
 			$contagem = $this->colecaoQuestionamento->contagemPorColuna($checklistId, 'checklist_id');
 		}
 		catch (\Exception $e )

@@ -138,7 +138,10 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 				$query->groupBy(self::TABELA.'.id');
 			}
 			
-			$planosAcao = $query->offset($limite)->limit($pulo)->get();
+			$planosAcao = $query->groupBy('id','status', 'descricaonaoconformidade','descricaosolucao', 'datalimite', 'dataexecucao', 'responsabilidade', 'datacadastro', 'responsavel_id', 'loja_id')
+								->orderByRaw(self::TABELA . '.status = "' . StatusPaEnumerado::EXECUTADO . '" ASC , '. self::TABELA.'.datalimite ASC')
+								->offset($limite)
+								->limit($pulo)->get();
 
 			$planosAcaoObjects = [];
 
