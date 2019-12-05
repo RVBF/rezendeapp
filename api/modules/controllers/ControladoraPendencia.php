@@ -356,6 +356,7 @@ class ControladoraPendencia {
 				if(!isset($checklist) and !($checklist instanceof Checklist)){
 					throw new Exception("checklist não encontrado na base de dados.");
 				}	
+
 				if(!$this->colecaoChecklist->temPendencia($checklist->getId())){
 					$checklist->setStatus(StatusChecklistEnumerado::EXECUTADO);
 					$this->colecaoChecklist->atualizar($checklist);	

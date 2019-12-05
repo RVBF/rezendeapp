@@ -106,7 +106,31 @@ class ControladoraQuestionamento {
 			}				
 
 			if($this->params['formularioResposta']['opcao'] != OpcoesRespostaEnumerada::BOM){
-				if(isset($this->params['planoAcao'])){
+				if(isset($this->params['planoAcao']) || isset($this->params['pendencia'])){
+
+					if(!(((
+						strlen($this->params['pendencia']['descricao']) > 0 and
+						strlen($this->params['pendencia']['dataLimite']) > 0 and
+						strlen($this->params['pendencia']['solucao']) > 0 and
+						$this->params['pendencia']['responsavel'] > 0
+					) and !(
+						strlen($this->params['planoAcao']['descricao']) > 0 and
+						strlen($this->params['planoAcao']['dataLimite']) > 0 and
+						strlen($this->params['planoAcao']['solucao']) > 0 and
+						$this->params['planoAcao']['responsavel'] > 0
+					)) || (!(
+						strlen($this->params['pendencia']['descricao']) > 0 and
+						strlen($this->params['pendencia']['dataLimite']) > 0 and
+						strlen($this->params['pendencia']['solucao']) > 0 and
+						$this->params['pendencia']['responsavel'] > 0
+					) and (
+						strlen($this->params['planoAcao']['descricao']) > 0 and
+						strlen($this->params['planoAcao']['dataLimite']) > 0 and
+						strlen($this->params['planoAcao']['solucao']) > 0 and
+						$this->params['planoAcao']['responsavel'] > 0
+					)))) 	throw new Exception("É necessário cadastrar um plano de ação ou uma pendência para questionamentos com resposta inferior a " . strtolower(OpcoesRespostaEnumerada::BOM) .'!');
+
+				
 					if(
 						strlen($this->params['planoAcao']['descricao']) > 0 and
 						strlen($this->params['planoAcao']['dataLimite']) > 0 and
@@ -150,12 +174,7 @@ class ControladoraQuestionamento {
 
 						$this->colecaoHistorico->adicionar($historico);
 					}
-					else{
-						throw new Exception("É necessário cadastrar um plano de ação para questionamentos com resposta inferior a " . strtolower(OpcoesRespostaEnumerada::BOM) .'!');
-					}
-				}
 
-				if(isset($this->params['pendencia'])){
 					if(
 						strlen($this->params['pendencia']['descricao']) > 0 and
 						strlen($this->params['pendencia']['dataLimite']) > 0 and
