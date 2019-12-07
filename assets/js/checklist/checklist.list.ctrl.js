@@ -32,14 +32,12 @@
 			objeto.searchDelay = 600;	
 			objeto.cadastrarLink = 'cadastrar_checklist_link';
 			objeto.columnDefs = function (data){
-				console.log(data);
 				var estaRespondido = function estaRespondido() {
 					var i = 0;
 					for (var indice in data.questionamentos) {
 						var elemento = data.questionamentos[indice];
 						if(elemento.status == 'Respondido' || elemento.status == 'Respondido Com Pendências')i++;
 					}
-
 
 					return ( i == data.questionamentos.length ) ? true : false;
 				};

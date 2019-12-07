@@ -124,9 +124,106 @@
 	});
 	
 	router.on('navigate', function(event){
-		// GET /foo/bar
-		// console.log('URL changed to %s', this.path());
-		// => URL changed to /foo/bar
+		let html = '';
+		let url = window.location.href.replace(/^.*\//g, '');
+		if(url == '#' || url == ''){
+			html += '<a id="logo-container" href="#" class="brand-logo center home"><img src="assets/images/logo_branco.png" alt="" class="logo-dto"></a>';
+			html += '<a href="#" data-target="nav-mobile" class="sidenav-trigger button-collapse show-on-large"><i class="material-icons">menu</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+
+		}
+		else if(url == 'configuracao'){
+			html += '<span class="center local-dto">Configurações</span>';
+			html += '<a href="#" class="left m16-dto home"><i class="material-icons">navigate_before</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+		}
+		else if(url == 'rd'){
+			html += '<span class="center local-dto">R&D DE TALENTOS</span>';
+			html += '<a href="#" class="left m16-dto home"><i class="material-icons">navigate_before</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+		}
+		else if(url == 'notificacao'){
+			html += '<span class="center local-dto">Notificações</span>';
+			html += '<a href="#" class="left m16-dto home"><i class="material-icons">navigate_before</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+		}
+		else if(url == 'pendencia'){
+			html += '<span class="center local-dto">Pendências</span>';
+			html += '<a href="#" class="left m16-dto home"><i class="material-icons">navigate_before</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+		}
+		else if(url == 'checklist'){
+			html += '<span class="center local-dto">Checklists</span>';
+			html += '<a href="#" class="left m16-dto home"><i class="material-icons">navigate_before</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+		}
+		else if(url == 'plano-acao'){
+			html += '<span class="center local-dto">Plano de Ação</span>';
+			html += '<a href="#" class="left m16-dto home"><i class="material-icons">navigate_before</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+		}
+		else if(url == 'inteligencia'){
+			html += '<span class="center local-dto">inteligência</span>';
+			html += '<a href="#" class="left m16-dto home"><i class="material-icons">navigate_before</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+		}
+		else if(url == 'cadastrar-checklist'){
+			html += '<span class="center local-dto">Cadastrar Checklist</span>';
+			html += '<a href="#" class="left m16-dto checklist_link"><i class="material-icons">navigate_before</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+		}
+		else if(url == 'questionarios'){
+			html += '<span class="center local-dto">Questionários</span>';
+			html += '<a href="#" class="left m16-dto configuracao_link"><i class="material-icons">navigate_before</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+		}
+		else if(url == 'colaboradores'){
+			html += '<span class="center local-dto">Colaboradores</span>';
+			html += '<a href="#" class="left m16-dto configuracao_link"><i class="material-icons">navigate_before</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+		}
+		else if(url == 'setores'){
+			html += '<span class="center local-dto">Setores</span>';
+			html += '<a href="#" class="left m16-dto configuracao_link"><i class="material-icons">navigate_before</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+		}
+		else if(url == 'lojas'){
+			html += '<span class="center local-dto">Lojas</span>';
+			html += '<a href="#" class="left m16-dto configuracao_link"><i class="material-icons">navigate_before</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+		}
+		else if(window.location.href.search('executar-checklist') != -1){
+			html += '<span class="center local-dto">Executar Checklist</span>';
+			html += '<a href="#" class="left m16-dto checklist_link"><i class="material-icons">navigate_before</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+		}
+		else if(window.location.href.search('pendencias-pendentes') != -1){
+			html += '<span class="center local-dto">Pendências pendente</span>';
+			html += '<a href="#" class="left m16-dto checklist_link"><i class="material-icons">navigate_before</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+		}
+		else if(window.location.href.search('Visualizar-Pendência') != -1){
+			html += '<span class="center local-dto">Visualizar Pendência</span>';
+			html += '<a href="#" class="left m16-dto pendencia_link"><i class="material-icons">navigate_before</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+		}
+		else if(window.location.href.search('visualizar-pa') != -1){
+			html += '<span class="center local-dto">Visualizar PA</span>';
+			html += '<a href="#" class="left m16-dto pa_link"><i class="material-icons">navigate_before</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+		}
+		else if(window.location.href.search('planosacao-pendentes') != -1){
+			html += '<span class="center local-dto">Pendências pendente</span>';
+			html += '<a href="#" class="left m16-dto checklist_link"><i class="material-icons">navigate_before</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+		}
+		else if(window.location.href.search('executar-pa') != -1){
+			html += '<span class="center local-dto">Executar Plano de Ação</span>';
+			html += '<a href="#" class="left m16-dto pa_link"><i class="material-icons">navigate_before</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+		}
+
+		$('body').find('.topo-opcoes').empty().append(html);
 	});
 	// Registra como global
 	window.router = router;

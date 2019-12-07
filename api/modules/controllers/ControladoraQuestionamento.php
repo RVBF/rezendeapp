@@ -107,7 +107,6 @@ class ControladoraQuestionamento {
 
 			if($this->params['formularioResposta']['opcao'] != OpcoesRespostaEnumerada::BOM){
 				if(isset($this->params['planoAcao']) || isset($this->params['pendencia'])){
-
 					if(!(((
 						strlen($this->params['pendencia']['descricao']) > 0 and
 						strlen($this->params['pendencia']['dataLimite']) > 0 and
@@ -220,7 +219,6 @@ class ControladoraQuestionamento {
 				else{
 					throw new Exception("Para respostas inferior a bom é necessário adicionar ao menos 1 anexo para comprovação do problema!");
 				}
-
 			}
 
 			$questionamento->setFormularioResposta(json_encode($this->params['formularioResposta']));
