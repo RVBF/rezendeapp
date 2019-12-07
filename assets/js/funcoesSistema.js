@@ -5,7 +5,6 @@
 	function iniciarFuncoesPadroesSistema(event)
 	{
 		var evento = event;
-		
 		if(typeof(evento) != 'undefined')
 		{
 			$(evento.target).find('.desabilitado').each(function(i) {
@@ -32,109 +31,111 @@
 				$(this).formSelect();
 			});
 
-			$(evento.target).find('.home').on('click', function(event){
+
+			$(evento.target).on('click', '.home', function(event){
 				event.preventDefault();
 				router.navigate('/');
+				console.log('entrei');
 			});
 
-			$(evento.target).find('.checklist_link').on('click', function(event){
+			$(evento.target).on('click', '.checklist_link',function(event){
 				event.preventDefault();
 				router.navigate('/checklist');
 			});
 
-			$(evento.target).find('.pa_link').on('click', function(event){
+			$(evento.target).on('click', '.pa_link',function(event){
 				event.preventDefault();
 				router.navigate('/plano-acao');
 			});
 
-			$(evento.target).find('.inteligencia_link').on('click', function(event){
+			$(evento.target).on('click', '.inteligencia_link',function(event){
 				event.preventDefault();
-				router.navigate('/executar-checklist');
+				router.navigate('/inteligencia');
 			});
 
-			$(evento.target).find('.notificacao_link').on('click', function(event){
+			$(evento.target).on('click', '.notificacao_link',function(event){
 				event.preventDefault();
 				router.navigate('/notificacao');
 			});
 
-			$(evento.target).find('.rd_link').on('click', function(event){
+			$(evento.target).on('click', '.rd_link',function(event){
 				event.preventDefault();
 				router.navigate('/rd');
 			});
 
-			$(evento.target).find('.configuracao_link').on('click', function(event){
+			$(evento.target).on('click', '.configuracao_link',function(event){
 				event.preventDefault();
 				router.navigate('/configuracao');
 			});
 
-			$(evento.target).find('.cadastrar_checklist_link').on('click', function(event){
+			$(evento.target).on('click', '.cadastrar_checklist_link',function(event){
 				event.preventDefault();
 				router.navigate('/cadastrar-checklist')
 			});
 
-			$(evento.target).find('.colaboradores_link').on('click', function(event){
+			$(evento.target).on('click', '.colaboradores_link',function(event){
 				event.preventDefault();
 				router.navigate('/colaboradores');
 			});
 
-			$(evento.target).find('.cadastrar_colaborador_link').on('click', function (event) {
+			$(evento.target).on('click', '.cadastrar_colaborador_link',function (event) {
 				event.preventDefault();
 				router.navigate('/cadastrar-colaborador');
 			});
 
 
-			$(evento.target).find('.loja_link').on('click', function (event) {
+			$(evento.target).on('click', '.loja_link',function (event) {
 				event.preventDefault();
 				router.navigate('/lojas');
 			});
 
-			$(evento.target).find('.cadastrar_loja_link').on('click', function (event) {
+			$(evento.target).on('click', '.cadastrar_loja_link',function (event) {
 				event.preventDefault();
 				router.navigate('/cadastrar-loja');
 			});
 
-			$(evento.target).find('.editar_loja_link').on('click', function (event) {
+			$(evento.target).on('click', '.editar_loja_link',function (event) {
 				event.preventDefault();
 				router.navigate('/editar-loja');
 			});
 
-			$(evento.target).find('.setor_link').on('click', function (event) {
+			$(evento.target).on('click', '.setor_link',function (event) {
 				event.preventDefault();
 				router.navigate('/setores');
 			});
 			
-			$(evento.target).find('.cadastrar_setor_link').on('click', function(event) {
+			$(evento.target).on('click', '.cadastrar_setor_link',function(event) {
 				event.preventDefault();
 				router.navigate('/cadastrar-setor');
 			});
 
-			$(evento.target).find('.questionario_link').on('click', function(event){
+			$(evento.target).on('click', '.questionario_link',function(event){
 				event.preventDefault();
 				router.navigate('/questionarios');
 			});
 
-			$(evento.target).find('.cadastrar_questionario_link').on('click', function(event){
+			$(evento.target).on('click', '.cadastrar_questionario_link',function(event){
 				event.preventDefault();
 				router.navigate('/cadastrar-questionario');
 
 			});
 
-			$(evento.target).find('.cadastrar_checklist_link').on('click', function(event){
+			$(evento.target).on('click', '.cadastrar_checklist_link',function(event){
 				event.preventDefault();
 				router.navigate('/cadastrar-checklist');
 			});
 
-			$(evento.target).find('.cadastrar_planoacao_link').on('click', function(event){
+			$(evento.target).on('click', '.cadastrar_planoacao_link',function(event){
 				event.preventDefault();
 				router.navigate('/cadastrar-pa');
 			});
 
-			$(evento.target).find('.pendencia_link').on('click', function(event){
+			$(evento.target).on('click', '.pendencia_link',function(event){
 				event.preventDefault();
 				router.navigate('/pendencia');
 			});
 
-			$(evento.target).find('.cadastrar_pendencia_link').on('click', function(event){
+			$(evento.target).on('click', '.cadastrar_pendencia_link',function(event){
 				event.preventDefault();
 				router.navigate('/cadastrar-pendencia');
 			});
