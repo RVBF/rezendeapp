@@ -86,6 +86,7 @@
             _this.renderizarOpcoesHTML();  
             _this.renderizarAtividadesUsuario();
             _this.renderizarDadosUsuario();
+            router.trigger('navigate');
 		};
 	} // ControladoraIndex
 
