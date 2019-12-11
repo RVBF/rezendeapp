@@ -218,7 +218,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 	
 	function listagemTemporalcomLojasIds($pageHome = 0, $pageLength = 10,$search = '', $idsLojas = []){
 		try {	
-			$checklists = DB::table(self::TABELA)->whereIn('loja_id',$idsLojas)->orderBy('data_limite', 'ASC')->offset($pageHome)->limit($pageLength)->get();
+			$checklists = DB::table(self::TABELA)->whereIn('loja_id',$idsLojas)->where('status',StatusChecklistEnumerado::AGUARDANDO_EXECUCAO)->orderBy('data_limite', 'ASC')->offset($pageHome)->limit($pageLength)->get();
 
 			$checklistsObjects = [];
 			foreach ($checklists as $key => $checklist) {
