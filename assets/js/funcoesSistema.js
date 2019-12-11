@@ -35,7 +35,6 @@
 			$(evento.target).on('click', '.home', function(event){
 				event.preventDefault();
 				router.navigate('/');
-				console.log('entrei');
 			});
 
 			$(evento.target).on('click', '.checklist_link',function(event){

@@ -92,11 +92,10 @@ body{
   border-bottom: 0;
   margin-bottom: 0;
 }
-.agenda-dto .dia,
+/* .agenda-dto .dia,
 .agenda-dto .data,
 .agenda-dto .exc{
-  color: #0171c4;
-}
+} */
 .agenda-dto.vermelho .dia,
 .agenda-dto.vermelho .data,
 .agenda-dto.vermelho .exc{
@@ -108,6 +107,9 @@ body{
   color: #ff6d00;
 }
 .agenda-dto.cinza,
+.agenda-dto.cinza .anexos i,
+.agenda-dto.cinza .dias_restantes,
+.agenda-dto.cinza .descricao,
 .agenda-dto.cinza .dia,
 .agenda-dto.cinza .data,
 .agenda-dto.cinza .orange-text.text-accent-4{
@@ -117,9 +119,6 @@ body{
   color: #c0ca33;
 }
 
-.agenda-dto.cinza .anexos i{
-  font-size: 1em;
-}
 .agenda-dto .dia{
   font-size: 28px;
   font-weight: 700;
