@@ -255,7 +255,32 @@
 			var  jqXHR = servicoUsuario.todos();
 			jqXHR.done(sucesso).fail(erro);
 		};
-	
+		
+		_this.adiconarAcao = function adiconarAcao(){
+			var quantidade = $(this).parents('form').find('.acoes').find('.acao').length + 1;
+			var html  = '';
+			html += '<div class="row form-row acao">';
+				html += '<input type= "hidden" class="ids"  name="acao_pa_' + quantidade +'" value ='+ quantidade +'>';
+				html += '<div class="col col-sm-12 col-md-12 col-12 col-lg-12">';
+					html += '<div class="input-field ">';
+						html += '<a href="#" class="remover_acao" id="remover_acao"><i class="prefix mdi mdi-minus"></i></a>';
+						html += '<textarea id="acao_pa_' + quantidade + '" class=" campo_obrigatorio materialize-textarea validate"></textarea>';
+						html += '<label for="acao_pa_' + quantidade + '">Descreva o P.A</label>												';
+					html += '</div>';
+				html += '</div>';
+			html += '</div>';
+
+
+			_this.formulario.find('.perguntas').append(html);
+			$('.remover_acao:last').on('click', _this.removerACao);
+		};
+
+		_this.removerAcao = function(){
+			var quantidade = $(this).parents('.acoes').find('.acao').length;
+			
+			if(quantidade > 1) $(this).parents('.acao').remove();
+		};
+
 		_this.salvar = function salvar() {
 			_this.formulario.validate(criarOpcoesValidacao());
         };

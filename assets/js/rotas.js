@@ -242,6 +242,11 @@
 			html += '<a href="#" class="left m16-dto pendencia_link"><i class="material-icons">navigate_before</i></a>';
 			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
 		}
+		else if(window.location.href.search('cadastrar-pa') != -1){
+			html += '<span class="center local-dto">Cadastrar PA</span>';
+			html += '<a href="#" class="left m16-dto pendencia_link"><i class="material-icons">navigate_before</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+		}
 
 		$('body').find('.topo-opcoes').empty().append(html);
 	});
