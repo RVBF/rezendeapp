@@ -75,23 +75,31 @@
 							html += '<a href="#" class="executar_pe"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.descricao + '</strong></p></a>';
 						}
 						else html += '</i> <strong class="orange-text text-accent-4">' + data.descricao + '</strong></p>';
-						html += '<p class="'+((diferencaDias > 0) ? 'teal-text text-darken-1': ' red-text text-accent-4 ')+'"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>'+textoDiasRestantes+'</strong></p>';
+						html += '<p class="dias_restantes '+((diferencaDias > 0) ? 'teal-text text-darken-1': ' red-text text-accent-4 ')+'"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>'+textoDiasRestantes+'</strong></p>';
 						html += '<p><strong>Descrição da solução : </strong> ' + data.solucao + '</p>';
 					html += '</div>';
 
 					html += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12 mb-0-dto opc_tabela">';
-							html += '<div class="row">'
-								html += '<div class="col col-12 col-lg-4 col-md-4 col-sm-4 mb-0-dto">';
-
+						html += '<div class="row">'
+							html += '<div class="col col-12 col-lg-4 col-md-4 col-sm-4 mb-0-dto">';
+								html += '<p class="mb-0-dto">';
+								html += '<a href="#" class="detalhes-dto visualizar_pe">';
+								html += '<i class="mdi mdi-eye-outline orange-text text-accent-4"></i>';
+								html += 'VER DETALHES';
+								html += '</a>';
+								html += '</p>';
+							html += '</div>';
+							if(data.status != 'Executado' ) {
+								html += '<div class="col col-12 col-lg-3 col-md-3 col-sm-3 mb-0-dto">';
 									html += '<p class="mb-0-dto">';
-									html += '<a href="#" class="detalhes-dto visualizar_pa">';
-									html += '<i class="mdi mdi-eye-outline orange-text text-accent-4"></i>';
-									html += 'VER DETALHES';
+									html += '<a href="#" class="detalhes-dto executar_pa">';
+									html += '<i class="mdi mdi-clipboard-check orange-text text-accent-4"></i>';
+									html += 'EXECUTAR';
 									html += '</a>';
 									html += '</p>';
 								html += '</div>';
-							html += '</div>';
-
+							}
+						html += '</div>';
 					html += '</div>';
 				html += '</div>';
 
@@ -103,7 +111,7 @@
 			objeto.rowsCallback = function(resposta){
 				$('.remover_setor_link').on('click', _this.remover);
 				$('.executar_pe').on('click', _this.executar);
-				$('.visualizar_pa').on('click', _this.visualizar);
+				$('.visualizar_pe').on('click', _this.visualizar);
 				$('.confirmar_responsabilidade').on('click', _this.confirmarResponsabilidade);
 				$('.devolver_responsabilidade').on('click', _this.devolverResponsabilidade);
 			};
@@ -137,7 +145,7 @@
 		_this.visualizar = function visualizar(event) {
 			event.preventDefault();
 			var objeto = _tabela.getObjetos()[$(this).parents('.listagem-padrao-item').index()];
-			router.navigate('/visualizar-pa/'+ objeto.id);
+			router.navigate('/visualizar-pendencia/'+ objeto.id);
 		};
 
 		_this.atualizar = function atualizar(){
