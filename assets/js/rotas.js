@@ -213,13 +213,38 @@
 			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
 		}
 		else if(window.location.href.search('planosacao-pendentes') != -1){
-			html += '<span class="center local-dto">Pendências pendente</span>';
+			html += "<span class='center local-dto'>PA's pendentes</span>";
 			html += '<a href="#" class="left m16-dto checklist_link"><i class="material-icons">navigate_before</i></a>';
 			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
 		}
 		else if(window.location.href.search('executar-pa') != -1){
 			html += '<span class="center local-dto">Executar Plano de Ação</span>';
 			html += '<a href="#" class="left m16-dto pa_link"><i class="material-icons">navigate_before</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+		}
+		else if(window.location.href.search('executar-pendencia') != -1){
+			html += '<span class="center local-dto">Executar Pendência</span>';
+			html += '<a href="#" class="left m16-dto pendencia_link"><i class="material-icons">navigate_before</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+		}
+		else if(window.location.href.search('visualizar-pendencia') != -1){
+			html += '<span class="center local-dto">Visualizar Pendência</span>';
+			html += '<a href="#" class="left m16-dto pendencia_link"><i class="material-icons">navigate_before</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+		}
+		else if(window.location.href.search('visualizar-checklist') != -1){
+			html += '<span class="center local-dto">Visualizar Checklist</span>';
+			html += '<a href="#" class="left m16-dto pendencia_link"><i class="material-icons">navigate_before</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+		}
+		else if(window.location.href.search('perguntas') != -1){
+			html += '<span class="center local-dto">Perguntas</span>';
+			html += '<a href="#" class="left m16-dto pendencia_link"><i class="material-icons">navigate_before</i></a>';
+			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
+		}
+		else if(window.location.href.search('cadastrar-pa') != -1){
+			html += '<span class="center local-dto">Cadastrar PA</span>';
+			html += '<a href="#" class="left m16-dto pendencia_link"><i class="material-icons">navigate_before</i></a>';
 			html +=  '<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a>';
 		}
 
