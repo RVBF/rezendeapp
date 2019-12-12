@@ -106,6 +106,7 @@ class ControladoraQuestionamento {
 			}				
 
 			if($this->params['formularioResposta']['opcao'] != OpcoesRespostaEnumerada::BOM){
+				// Util::printr($this->params['planoAcao']);
 				if(isset($this->params['planoAcao']) || isset($this->params['pendencia'])){
 					if(!(((
 						strlen($this->params['pendencia']['descricao']) > 0 and
@@ -115,7 +116,7 @@ class ControladoraQuestionamento {
 					) and !(
 						strlen($this->params['planoAcao']['descricao']) > 0 and
 						strlen($this->params['planoAcao']['dataLimite']) > 0 and
-						strlen($this->params['planoAcao']['solucao']) > 0 and
+						count($this->params['planoAcao']['solucao']) > 0 and
 						$this->params['planoAcao']['responsavel'] > 0
 					)) || (!(
 						strlen($this->params['pendencia']['descricao']) > 0 and
@@ -125,7 +126,7 @@ class ControladoraQuestionamento {
 					) and (
 						strlen($this->params['planoAcao']['descricao']) > 0 and
 						strlen($this->params['planoAcao']['dataLimite']) > 0 and
-						strlen($this->params['planoAcao']['solucao']) > 0 and
+						count($this->params['planoAcao']['solucao']) > 0 and
 						$this->params['planoAcao']['responsavel'] > 0
 					)))) 	throw new Exception("É necessário cadastrar um plano de ação ou uma pendência para questionamentos com resposta inferior a " . strtolower(OpcoesRespostaEnumerada::BOM) .'!');
 
@@ -133,7 +134,7 @@ class ControladoraQuestionamento {
 					if(
 						strlen($this->params['planoAcao']['descricao']) > 0 and
 						strlen($this->params['planoAcao']['dataLimite']) > 0 and
-						strlen($this->params['planoAcao']['solucao']) > 0 and
+						count($this->params['planoAcao']['solucao']) > 0 and
 						$this->params['planoAcao']['responsavel'] > 0
 					){
 
@@ -151,7 +152,7 @@ class ControladoraQuestionamento {
 							($responsavel->getId() == $responsavelAtual->getId()) ? StatusPaEnumerado::AGUARDANDO_EXECUCAO : StatusPaEnumerado::AGUARDANDO_RESPONSAVEL,
 							$this->params['planoAcao']['descricao'],
 							$dataLimitePA,
-							$this->params['planoAcao']['solucao'],
+							json_encode($this->params['planoAcao']['solucao']),
 							'',
 							$responsavel,
 							null,

@@ -149,7 +149,15 @@
 			html += '<p class="text-danger text-uppercase font-weight-bold"><strong>Tarefa</strong</p>';
 			html += '<p>'+obj.descricao+'</p>';
 			html += '<p class="text-danger text-uppercase font-weight-bold"><strong>Plano de ação</strong</p>';
-			html += '<p>'+obj.solucao+'</p>';
+			// html += '<p>'+obj.solucao+'</p>';
+
+			html += '<ul  class="list-group list-group-flush">';
+			for (const index in obj.solucao.acoes) {
+				var acao =  obj.solucao.acoes[index];
+				html += '<li class="list-group-item" >Ação '+ (parseInt(index) + 1) + ' : ' + acao.acao + '</li>';
+			}
+			html += '</ul>';
+
 			html += '<p class="text-danger text-uppercase font-weight-bold"><strong>Data Limite</strong</p>';
 			html += '<p>'+dataLimite.format('DD/MM/YYYY')+'</p>'
 			html += '</div>';

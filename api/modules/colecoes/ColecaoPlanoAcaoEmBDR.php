@@ -273,7 +273,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 			$row['status'],
 			$row['descricaonaoconformidade'],
 			$row['datalimite'],
-			$row['descricaosolucao'],
+			json_decode($row['descricaosolucao']),
 			'',
 			$responsavel,
 			null,

@@ -27,10 +27,35 @@
 			var instances = M.FormSelect.init($(evento.target).find('.select'), {});
 
 			$(evento.target).find('.select').on('click', function () {
-
 				$(this).formSelect();
 			});
 
+			$(event.target).on('click', '.alterarsenha_link', function(event){
+				event.preventDefault();
+				router.navigate('/alterar-senha');
+			});
+
+			$(evento.target).on('click', '.efetuar_logout', function(event){
+				event.preventDefault();
+				mostrarTelaDeCarregamento();
+
+				var servicoLogout = new app.ServicoLogout();
+				var elemento = $(this);
+
+				var sucesso = function sucesso(data, textStatus, jqXHR) {
+					tirarTelaDeCarregamento();
+					window.sucessoPadrao(data, textStatus, jqXHR);
+					
+					if(data.status) {
+						window.sessionStorage.clear();
+						router.navigate('/login');
+					}
+				};
+				var jqXHR = servicoLogout.sair();
+	
+				jqXHR.done(sucesso).fail(erro);
+				
+			});
 
 			$(evento.target).on('click', '.home', function(event){
 				event.preventDefault();
@@ -230,6 +255,8 @@
 
 		window.erro = function erro( jqXHR, textStatus, errorThrown ) {
 			toastr.error(jqXHR.responseText);
+			tirarTelaDeCarregamento();
+
 		};
 
 		window.sucessoPadrao = function sucessoPadrao(data, textStatus, jqXHR){

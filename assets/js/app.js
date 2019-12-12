@@ -82,6 +82,19 @@ var app = {
 			});
 		}
 	});
-
+	
+	var loader = $('#mainLoader');
+	let tempoDeAnimacao = 250;
+	window.mostrarTelaDeCarregamento = function mostrarTelaDeCarregamento() {
+		loader.find('.loader').removeClass('d-none');
+		loader.find('.loaderPageLeft').animate({ 'width': '50%' }, tempoDeAnimacao);
+		loader.find('.loaderPageRight').animate({ 'width': '50%' }, tempoDeAnimacao);
+	}
+  
+	window.tirarTelaDeCarregamento = function tirarTelaDeCarregamento() {
+		loader.find('.loader').addClass('d-none');
+		loader.find('.loaderPageLeft').animate({ 'width': '0px' }, tempoDeAnimacao);
+		loader.find('.loaderPageRight').animate({ 'width': '0px' }, tempoDeAnimacao);
+	}
 })(app, document, jQuery, toastr,  window, BootstrapDialog);
   

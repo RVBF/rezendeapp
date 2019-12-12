@@ -72,14 +72,15 @@
 
         _this.renderizarDadosUsuario = function renderizarDadosUsuario() {
             var sessao = new app.Sessao();
-
-            $('body').find('.nome_usuario').each(function() {
-                $(this).empty().html(JSON.parse(sessao.getSessao()).nome);
-            });
-            
-            $('body').find('.setor_usuario').each(function() {
-                $(this).empty().html(JSON.parse(sessao.getSessao()).setor);
-            });
+            if(sessao != null){
+                $('body').find('.nome_usuario').each(function() {
+                    $(this).empty().html(JSON.parse(sessao.getSessao()).nome);
+                });
+                
+                $('body').find('.setor_usuario').each(function() {
+                    $(this).empty().html(JSON.parse(sessao.getSessao()).setor);
+                });
+            }
         }
 
 		_this.configurar = function configurar() {

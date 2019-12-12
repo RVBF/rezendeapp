@@ -31,7 +31,6 @@ class ControladoraPlanoAcao {
 
 
 	function __construct($params,  Sessao $sessao) {
-
 		$this->params = $params;
 		$this->servicoLogin = new ServicoLogin($sessao);
 		$this->colecaoChecklist = Dice::instance()->create('ColecaoChecklist');
@@ -135,7 +134,7 @@ class ControladoraPlanoAcao {
 
 			if(!isset($responsavel) and !($responsavel instanceof Responsavel)) throw new Exception("Responsável não encontrada na base de dados.");
 
-			$dataLimite = new Carbon();                  // equivalent to Carbon::now()
+			$dataLimite = new Carbon();
 			$dataLimite = new Carbon(\ParamUtil::value($this->params, 'dataLimite'), 'America/Sao_Paulo');
 
 			$planoAcao = new PlanoAcao(
@@ -143,7 +142,7 @@ class ControladoraPlanoAcao {
 				($responsavel->getId() == $responsavelAtual->getId()) ? StatusPaEnumerado::AGUARDANDO_EXECUCAO : StatusPaEnumerado::AGUARDANDO_RESPONSAVEL,
 				\ParamUtil::value($this->params, 'descricao'),
 				$dataLimite,
-				\ParamUtil::value($this->params, 'solucao'),
+				json_encode($this->params['solucao']),
 				'',
 				$responsavel,
 				$loja,
@@ -204,7 +203,7 @@ class ControladoraPlanoAcao {
 			if($colaborador->getId() != $responsavelAnterior->getId()) throw new Exception("O plano de ação só pode ser editado pelo responsável!");
 
 			$planoAcao->setDescricao(\ParamUtil::value($this->params, 'descricao'));
-			$planoAcao->setSolucao(\ParamUtil::value($this->params, 'solucao'));
+			$planoAcao->setSolucao(json_encode($this->params['solucao']));
 			$planoAcao->setDataLimite($dataLimite);
 			$planoAcao->setUnidade($loja);		
 			$planoAcao->setResponsavel($responsavel);

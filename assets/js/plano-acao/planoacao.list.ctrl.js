@@ -56,7 +56,12 @@
 						if(data.status != 'Executado') html += '<a href="#" class="executar_pa"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="black-text descricao">' + data.descricao + '</strong></p></a>';
 						else html += '</i> <strong class="black-text descricao">' + data.descricao + '</strong></p>';
 						html += '<p class="dias_restantes '+((diferencaDias > 0) ? 'black-text': ' red-text text-accent-4 ')+'"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>'+textoDiasRestantes+'</strong></p>';
-						html += '<p><strong>Descrição da solução : </strong> ' + data.solucao + '</p>';
+						html += '<p><strong>Ações para Solução : </strong> ';
+						for (const index in data.solucao.acoes) {
+							var acao =  data.solucao.acoes[index];
+							html += acao.acao + ((parseInt(index)+1 == data.solucao.acoes.length) ? '.' : ',');
+						}
+						html += '</p>';
 					html += '</div>';
 
 					html += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12 mb-0-dto opc_tabela">';
