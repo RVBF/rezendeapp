@@ -73,6 +73,13 @@
 				url: _this.rota() + '/' + id
 			});
 		};
+		_this.atualizarSenha = function atualizarSenha(senha, novaSenha) {
+			return $.ajax({
+				type: "PUT",
+				url: _this.rota() +'/atualizar-senha',
+				data: {senha:  senha, novaSenha : novaSenha}
+			});
+		}
 	}; // ServicoCategoria
 
 	// Registrando

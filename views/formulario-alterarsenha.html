@@ -1,0 +1,76 @@
+<section id="painel_formulario">
+	<div class="row">
+		<div class="col-md-12 col-12 col-sm-12 col-lg-12">
+			<section id="msg" class="card-panel left-align text-danger msg d-none  desabilitado"></section>
+
+			<div class="card-panel left-align">
+				<div class="row">
+					<div class="col-12  col-sm-12 col-md-12 col-lg-12">
+						<form class="form-horizontal "  method="post" id="alterarsenha_form">
+							<input type="hidden" id="id" name ="id" />
+
+                            <div class="row form-row">
+                                <div class="col-md-12 col-12 col-sm-12 col-lg-12">
+                                    <div class="input-field">
+                                        <input type="password" id="senha_anterior" name="senha_anterior" class="form-control campo_obrigatorio" />
+                                        <label for="senha_anterior">*Senha  Anterior:</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row form-row">
+                                <div class="col-md-12 col-12 col-sm-12 col-lg-12">
+                                    <div class="input-field">
+                                        <input type="password" id="nova_senha" name="nova_senha" class="form-control campo_obrigatorio" />
+                                        <label for="nova_senha">*Nova Senha:</label>
+                                    </div>
+                                </div>
+                            </div>
+
+							<div class="row form-row">
+								<div class="col-md-12 col-12 col-sm-12 col-lg-12">
+									<div class="input-field">
+										<input type="password" id="confirmacao_senha" name="confirmacao_senha" class="form-control campo_obrigatorio"/>
+										<label for="confirmacao_senha">*Confirmacão de Senha:</label>
+									</div>
+								</div>
+							</div>
+
+							<div  class="row form-row d-none">
+								<div class="col-xs-12  col-sm-12 col-md-12 col-12">
+									<br /><div id="msg" class="text-danger msg" ></div>
+								</div>
+							</div>
+								
+
+							<div class="row form-row">
+								<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end">
+									<button type="submit" id="salvar"  class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">
+										<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>
+                                        Salvar
+									</button>
+								</div>
+							
+								<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-start justify-content-md-start ">
+									<button class="waves-effect waves-light btn white grey-text text-darken-4 button-dto f-12-dto colaboradores_link">
+										<i class="mdi mdi-close-circle-outline yellow-text text-accent-4"></i>
+										Cancelar
+									</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+</section>
+
+
+<script>
+    $(document).ready(function() {
+        var servicoUsuario = new app.ServicoUsuario();
+        var crltUsuario = new app.ControladoraFormAlterarSenhaUsuario(servicoUsuario);
+        crltUsuario.configurar();
+    });
+</script>

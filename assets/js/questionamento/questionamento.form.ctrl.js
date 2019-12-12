@@ -31,6 +31,8 @@
 
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
+				mostrarTelaDeCarregamento();
+
 				var obj = _this.conteudo();
 				var terminado = function() {
 					_this.formulario.desabilitar(false);
@@ -40,6 +42,8 @@
 							if(elemento.hasClass('d-none') && elemento.hasClass('desabilitado')) elemento.desabilitar(true);
 						});
 					}
+
+					tirarTelaDeCarregamento();
 				};
 
 				_this.formulario.desabilitar(true);
@@ -60,6 +64,7 @@
 							toastr.success(resposta.mensagem);
 						}
 					}
+					tirarTelaDeCarregamento();
 				}).always(terminado).fail(window.erro);
 
 				if(_this.alterar){
@@ -76,6 +81,15 @@
 		_this.conteudo = function conteudo() {
 			var dataLimitePa = moment(_this.dataLimitePa.getDate()).format('YYYY-MM-DD');
 			var dataLimitePe = moment(_this.dataLimitePe.getDate()).format('YYYY-MM-DD');
+			var configuraoAcoesPA = {acoes : []};
+
+			if(_this.formulario.find('.acao').length > 0){
+				$('.ids').each(function(){
+					var id = $(this).val();
+					configuraoAcoesPA.acoes.push({id: id, acao: $('#acao_pa_'+ id).val()});
+				});
+			}
+
 			return servicoQuestionamento.criar(
 				_this.objetoAtual.id,
 				_this.objetoAtual.status,
@@ -88,7 +102,7 @@
 					'',
 					$('#nao-conformidade-pa').val(),
 					dataLimitePa.toString() + ' ' + $('#hora_limitepa').val(),
-					$('#descricao-pa').val(),
+					configuraoAcoesPA,
 					$('#responsavelpa').children("option:selected").val(),
 					'',
 				),
@@ -212,6 +226,7 @@
 				},
 			});
 
+			$('body').find('.adicionar_acao').on('click', _this.adiconarAcao);
 		};
 
 		_this.resetarForm = function resetarForm() {
@@ -525,6 +540,27 @@
 
 		_this.iniciarFormularioModoEdicao = function iniciarFormularioModoEdicao() {
 			_this.iniciarFormularioModoCadastro();
+		};
+
+		_this.adiconarAcao = function adiconarAcao(){
+			var quantidade = $(this).parents('form').find('.acoes').find('.acao').length + 1;
+			var html  = '';
+			html += '<div class="row form-row acao">';
+				html += '<input type= "hidden" class="ids"  name="acao_pa_' + quantidade +'" value ='+ quantidade +'>';
+				html += '<div class="col col-sm-12 col-md-12 col-12 col-lg-12">';
+					html += '<div class="input-field ">';
+						html += ' <i class="remover_acao prefix mdi mdi-minus-circle-outline"  id="remover_acao"></i>';
+						html += '<textarea id="acao_pa_' + quantidade + '" class=" campo_obrigatorio materialize-textarea validate"></textarea>';
+						html += '<label for="acao_pa_' + quantidade + '">Ação ' + quantidade + '</label>												';
+					html += '</div>';
+				html += '</div>';
+			html += '</div>';
+
+
+			_this.formulario.find('.acoes').append(html);
+			$('.remover_acao:last').on('click', function () {
+				$(this).parents('.acao').remove();
+			});
 		};
 
 		_this.definirForm = function definirForm(status) {			

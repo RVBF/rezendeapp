@@ -228,10 +228,11 @@ class ControladoraUsuario {
 			
 			if (! is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
 
-			$usuario = $this->colecaoUsuario->comId($id);
-			$usuario->setGruposUsuario($this->colecaoGrupoDeUsuario->comUsuarioId($usuario->getId()));
+			$usuario = new Usuario(); $usuario->fromArray($this->colecaoUsuario->comId($id));
+			
+			$usuario->setGruposUsuarios($this->colecaoGrupoDeUsuario->comUsuarioId($usuario->getId()));
 
-			$resposta = ['conteudo'=> RTTI::getAttributes($usuario, RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Usuário removido com sucesso.']; 
+			$resposta = ['conteudo'=> $usuario->toArray(), 'status' => true, 'mensagem'=> 'Usuário removido com sucesso.']; 
 		}
 		catch (\Exception $e) {
 			DB::rollback();

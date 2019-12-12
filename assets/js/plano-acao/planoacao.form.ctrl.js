@@ -79,12 +79,21 @@
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
 			var dataLimite = moment(_this.dataLimite.getDate()).format('YYYY-MM-DD');
+			var configuraoAcoes = {acoes : []};
 
+			if(_this.formulario.find('.acao').length > 0){
+				$('.ids').each(function(){
+					var id = $(this).val();
+					configuraoAcoes.acoes.push({id: id, acao: $('#acao_pa_'+ id).val()});
+				});
+			}
+
+			
 			return servicoPlanoAcao.criar(
 				$('#id').val(),
 				$('#nao-conformidade-pa').val(),
 				dataLimite.toString() + ' ' + $('#hora_limitepa').val(),
-				$('#descricao-pa').val(),
+				configuraoAcoes,
 				$('#responsavelpa').val(),
 				$('#unidade').val(),
 				'',
@@ -133,6 +142,8 @@
 						millisecond: 'Milissegundos',
 					},
 				});
+
+				$('body').find('.adicionar_acao').on('click', _this.adiconarAcao);
 			}
 
 		};
@@ -143,6 +154,7 @@
 			else  if(window.location.href.search('editar') != -1) servicoPlanoAcao.comId(pegarId(window.location.href,'editar-pa')).done(_this.desenhar);
 			else{
 				_this.alterar = false;
+				$('.acoes').find('.acao:first').find('.input-field').prepend('<i class="adicionar_acao prefix mdi mdi-plus-circle-outline"  id="adicionar_acao"></i>');
 				_this.configurarEventos();
 				_this.popularColaboradores();
 				_this.popularLojas();
@@ -150,20 +162,50 @@
 				_this.formulario.find('#botoes').prepend(' <div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end"><button type="submit" id="cadastrar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Cadastrar</button></div>').promise().done(function(){
 					$('#botoes').find('#cadastrar').on('click', _this.salvar);
 				});
-			}
 
+			}
 		}
 
 		// Desenha o objeto no formulário
 		_this.desenhar = function desenhar(resposta) {
 			_this.objeto = resposta.conteudo;
+			if(window.location.href.search('editar') != -1) $('.acoes').find('.acao:first').find('.input-field').prepend('<i class="adicionar_acao prefix mdi mdi-plus-circle-outline"  id="adicionar_acao"></i>');
 
 			_this.configurarEventos();
 			_this.popularColaboradores();
 			_this.popularLojas();
 			_this.formulario.find('#id').val(_this.objeto.id).focus().blur();
 			_this.formulario.find('#nao-conformidade-pa').val(_this.objeto.descricao).focus().blur();
-			_this.formulario.find('#descricao-pa').val(_this.objeto.solucao).focus().blur();
+			_this.formulario.find('.acoes').find('textarea:last').val(_this.objeto.solucao.acoes[0].acao).focus().blur();
+			console.log(_this.objeto.solucao.acoes);
+			for (var i = 1; i < _this.objeto.solucao.acoes.length; i++) {
+				var elemento = _this.objeto.solucao.acoes[i];
+				var html  = '';
+				html += '<div class="row form-row acao">';
+					html += '<input type= "hidden" class="ids"  name="acao_pa_' + (i+1) +'" value ='+ (i+1) +'>';
+					html += '<div class="col col-sm-12 col-md-12 col-12 col-lg-12">';
+						html += '<div class="input-field ">';
+						if(window.location.href.search('editar') != -1)	html += ' <i class="remover_acao prefix mdi mdi-minus-circle-outline"  id="remover_acao"></i>';
+							html += '<textarea id="acao_pa_' + (i+1) + '" value="'+elemento.acao+'" class=" campo_obrigatorio materialize-textarea validate">'+elemento.acao+'</textarea>';
+							html += '<label for="acao_pa_' + (i+1) + '">Ação ' + (i+1) + '</label>												';
+						html += '</div>';
+					html += '</div>';
+				html += '</div>';
+
+				_this.formulario.find('.acoes').append(html);
+				
+				if(window.location.href.search('editar') != -1){
+					$('.remover_acao:last').on('click', function () {
+						$(this).parents('.acao').remove();
+					});
+				}
+
+
+				_this.formulario.find('.acoes').find('textarea:last').focus().blur();
+			}
+
+
+
 			_this.formulario.find('#responsavelpa').val(_this.objeto.responsavel.id).focus().blur();
 			$("#responsavelpa").formSelect();
 			var dataLimite = moment(_this.objeto.dataLimite);
@@ -263,22 +305,18 @@
 				html += '<input type= "hidden" class="ids"  name="acao_pa_' + quantidade +'" value ='+ quantidade +'>';
 				html += '<div class="col col-sm-12 col-md-12 col-12 col-lg-12">';
 					html += '<div class="input-field ">';
-						html += '<a href="#" class="remover_acao" id="remover_acao"><i class="prefix mdi mdi-minus"></i></a>';
+						html += ' <i class="remover_acao prefix mdi mdi-minus-circle-outline"  id="remover_acao"></i>';
 						html += '<textarea id="acao_pa_' + quantidade + '" class=" campo_obrigatorio materialize-textarea validate"></textarea>';
-						html += '<label for="acao_pa_' + quantidade + '">Descreva o P.A</label>												';
+						html += '<label for="acao_pa_' + quantidade + '">Ação ' + quantidade + '</label>												';
 					html += '</div>';
 				html += '</div>';
 			html += '</div>';
 
 
-			_this.formulario.find('.perguntas').append(html);
-			$('.remover_acao:last').on('click', _this.removerACao);
-		};
-
-		_this.removerAcao = function(){
-			var quantidade = $(this).parents('.acoes').find('.acao').length;
-			
-			if(quantidade > 1) $(this).parents('.acao').remove();
+			_this.formulario.find('.acoes').append(html);
+			$('.remover_acao:last').on('click', function () {
+				$(this).parents('.acao').remove();
+			});
 		};
 
 		_this.salvar = function salvar() {

@@ -78,24 +78,24 @@
    'use strict';
    var dependenciasCSS = [];
 
-   dependenciasCSS.push({ url: 'https://fonts.googleapis.com/icon?family=Material+Icons' });
-   dependenciasCSS.push({ url: 'https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap' });
-   dependenciasCSS.push({ url: 'vendor/bootstrap/dist/css/bootstrap.min.css' });
-   dependenciasCSS.push({ url: 'assets/styles/bootstrap3.css' });
+   // dependenciasCSS.push({ url: 'https://fonts.googleapis.com/icon?family=Material+Icons' });
+   // dependenciasCSS.push({ url: 'https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap' });
+   // dependenciasCSS.push({ url: 'vendor/bootstrap/dist/css/bootstrap.min.css' });
+   // dependenciasCSS.push({ url: 'assets/styles/bootstrap3.css' });
 
-   dependenciasCSS.push({ url: 'vendor/bootstrap/dist/css/bootstrap-reboot.css' });
-   dependenciasCSS.push({ url: 'vendor/bootstrap/dist/css/bootstrap-grid.css' });
+   // dependenciasCSS.push({ url: 'vendor/bootstrap/dist/css/bootstrap-reboot.css' });
+   // dependenciasCSS.push({ url: 'vendor/bootstrap/dist/css/bootstrap-grid.css' });
 
    // dependenciasCSS.push({ url : 'assets/styles/materialdesignicons.css', opcoes : { media : 'screen,projection' }});
    // dependenciasCSS.push({ url : 'assets/styles/materialize.css', opcoes : { media : 'screen,projection' }});
-   dependenciasCSS.push({ url: 'vendor/font-awesome/css/all.min.css', opcoes: { media: 'screen,projection' } });
-   dependenciasCSS.push({ url: 'assets/styles/style.css', opcoes: { media: 'screen,projection' } });
-   dependenciasCSS.push({ url: 'assets/styles/estilo.css', opcoes: { media: 'screen,projection' } });
+   // dependenciasCSS.push({ url: 'vendor/font-awesome/css/all.min.css', opcoes: { media: 'screen,projection' } });
+   // dependenciasCSS.push({ url: 'assets/styles/style.css', opcoes: { media: 'screen,projection' } });
+   // dependenciasCSS.push({ url: 'assets/styles/estilo.css', opcoes: { media: 'screen,projection' } });
 
-   dependenciasCSS.push({ url: 'vendor/tether/dist/css/tether.min.css' });
-   dependenciasCSS.push({ url: 'vendor/bootstrap3-dialog/dist/css//bootstrap-dialog.min.css' });
-   dependenciasCSS.push({ url: 'vendor/toastr/toastr.min.css' });
-   dependenciasCSS.push({ url: 'vendor/pickerjs/dist/picker.min.css' });
+   // dependenciasCSS.push({ url: 'vendor/tether/dist/css/tether.min.css' });
+   // dependenciasCSS.push({ url: 'vendor/bootstrap3-dialog/dist/css//bootstrap-dialog.min.css' });
+   // dependenciasCSS.push({ url: 'vendor/toastr/toastr.min.css' });
+   // dependenciasCSS.push({ url: 'vendor/pickerjs/dist/picker.min.css' });
 
 
    // dependenciasCSS.push({ url : 'vendor/datatables.net-dt/css//jquery.dataTables.min.css' });
@@ -111,10 +111,10 @@
 
    var loader = new window.Loader();
 
-   dependenciasCSS.forEach(function (e, index, arr) {
-      if (e.hasOwnProperty('opcoes') && (!!e.aviso)) loader.link(e.url, 'stylesheet', 'text/css', e.opcoes);
-      else loader.css(e.url);
-   });
+   // dependenciasCSS.forEach(function (e, index, arr) {
+   //    if (e.hasOwnProperty('opcoes') && (!!e.aviso)) loader.link(e.url, 'stylesheet', 'text/css', e.opcoes);
+   //    else loader.css(e.url);
+   // });
 })(window);
 
 
@@ -171,6 +171,7 @@
          loader.script('assets/js/login/login.serv.js');
          loader.script('assets/js/logout/logout.serv.js');
 
+
          loader.script('assets/js/funcoesSistema.js');
          loader.script('assets/js/index.list.ctrl.js');
 
@@ -219,11 +220,13 @@
          loader.script('assets/js/grupo de usuario/grupousuario.list.ctrl.js');[]
 
          loader.script('assets/js/usuario/usuario.form.ctrl.js');
+         loader.script('assets/js/usuario/usuario_alterarsenha.form.ctrl.js');
          loader.script('assets/js/usuario/usuario.list.ctrl.js');
          loader.script('assets/js/login/login.form.ctrl.js');
 
          // loader.script('assets/js/permissao/permissao.serv.js');
          // loader.script('assets/js/permissao/permissao.form.ctrl.js');
+
       }
    });
    var loader = new window.Loader();
