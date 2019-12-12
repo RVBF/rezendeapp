@@ -1,134 +1,155 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	<meta name="keywords" content="HTML,CSS,XML,JavaScript">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="Description" content="Author: Rafael Vinicius Barros Ferreira, Description: Software desenvolvido para Rezende Materiais de construção.">
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-	
-	<title>RezendeApp</title>
-	<link rel="manifest" href="manifest.json">
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+   <meta name="keywords" content="HTML,CSS,XML,JavaScript">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="Description"
+      content="Author: Rafael Vinicius Barros Ferreira, Description: Software desenvolvido para Rezende Materiais de construção.">
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
 
-	<script type="text/javascript" async="true" defer="true" src="assets/js/includes.js"></script>
+   <title>RezendeApp</title>
+   <link rel="manifest" href="manifest.json">
 
-	<!-- Add to home screen for Safari on iOS -->
-	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name="apple-mobile-web-app-status-bar-style" content="black">
-	<meta name="apple-mobile-web-app-title" content="Weather PWA">
-	<link rel="shortcut icon" href="assets/images/icons/Logo_Rezende_Icone_512x512.png" type="image/x-icon">
-	<link rel="apple-touch-icon" href="assets/images/icons/Logo_Rezende_Icone_152x152.png">
-	<meta name="msapplication-TileImage" content="assets/images/icons/Logo_Rezende_Icone_144x144.png">
-	<meta name="msapplication-TileColor" content="#f9f9f9">
-	<meta name="theme-color" content="#f9f9f9">
+   <link rel="stylesheet" href="assets/styles/materialdesignicons.css">
+   <link rel="stylesheet" href="assets/styles/materialize.css">
+
+   <script type="text/javascript" async="true" defer="true" src="assets/js/includes.js"></script>
+
+   <!-- Add to home screen for Safari on iOS -->
+   <meta name="apple-mobile-web-app-capable" content="yes">
+   <meta name="apple-mobile-web-app-status-bar-style" content="black">
+   <meta name="apple-mobile-web-app-title" content="Weather PWA">
+   <link rel="shortcut icon" href="assets/images/icons/Logo_Rezende_Icone_512x512.png" type="image/x-icon">
+   <link rel="apple-touch-icon" href="assets/images/icons/Logo_Rezende_Icone_152x152.png">
+   <meta name="msapplication-TileImage" content="assets/images/icons/Logo_Rezende_Icone_144x144.png">
+   <meta name="msapplication-TileColor" content="#f9f9f9">
+   <meta name="theme-color" content="#f9f9f9">
 </head>
-<body class="grey lighten-4"> 
-	<header>
-		<nav class="orange accent-4" role="navigation">
-			<div class="nav-wrapper container">
-				<div class="topo-opcoes">
-					<!-- <a id="logo-container" href="#" class="brand-logo center home"><img src="assets/images/logo_branco.png" alt="" class="logo-dto"></a>
+
+<body class="grey lighten-4">
+   <header>
+      <nav class="orange accent-4" role="navigation">
+         <div class="nav-wrapper container">
+            <div class="topo-opcoes">
+               <!-- <a id="logo-container" href="#" class="brand-logo center home"><img src="assets/images/logo_branco.png" alt="" class="logo-dto"></a>
 
 					<a href="#" data-target="nav-mobile" class="sidenav-trigger button-collapse show-on-large"><i class="material-icons">menu</i></a>
 	
 					<a href="login.html" class="right m16-dto exit-dto"><i class="material-icons">exit_to_app</i><span>Sair</span></a> -->
-				</div>
-			</div>
+            </div>
+         </div>
 
-			
-			<ul id="nav-mobile" class="sidenav">
-				<li>
-					<div class="user-view ">
-						<a href="#"><img class="responsive-img home" src="assets/images/logo.jpg"></a>
-						<a href="#"><span class="name grey-text text-darken-4 nome_usuario"></span></a>
-						<a href="#"><span class="email grey-text text-darken-4 setor_usuario"></span></a>
-					</div>
-				</li>
-			
-				<li>
-					<a href="#" class="waves-effect checklist_link" ><i class="mdi mdi-clipboard-check orange-text"></i>CHECKLIST</a>
-				</li>
-				
-				<li>
-					<div class="divider divider-dto"></div>
-				</li>
-				
-				<li>
-					<a href="#" class="waves-effect pa_link" ><i class="mdi mdi-bullseye-arrow orange-text"></i>PLANOS DE AÇÃO</a>
-				</li>
-				
-				<li>
-					<div class="divider divider-dto"></div>
-				</li>
-				
-				<li>
-					<a href="#" class="waves-effect  pendencia_link" ><i class="mdi mdi-clipboard-alert-outline orange-text checklist_organizacao_link"></i>PÊNDENCIAS</a>
-				</li>
-				
-				<li>
-					<div class="divider divider-dto"></div>
-				</li>
-				
-				<li>
-					<a href="#" class="waves-effect  inteligencia_link" ><i class="mdi mdi-podcast orange-text inteligencia_link"></i>INTELIGÊNCIA DE MERCADO</a>
-				</li>
-				
-				<li>
-					<div class="divider divider-dto"></div>
-				</li>
-				
-				<li>
-					<a href="#" class="waves-effect  notificacao_link" ><i class="mdi mdi-bell-ring-outline orange-text notificacao_link"></i>NOTIFICAÇÕES</a>
-				</li>
-				
-				<li>
-					<div class="divider divider-dto"></div>
-				</li>
-				
-				<li>
-					<a href="#" class="waves-effect  rd_link" ><i class="mdi mdi-medal orange-text rd_link"></i>R&D DE TALENTOS</a>
-				</li>
-				
-				<li>
-					<a href="#" class="waves-effect  configuracao_link" ><i class="mdi mdi-settings-outline orange-text configuracao_link"></i>CONFIGURAÇÕES</a>
-				</li>
-				
-				<li>
-					<div class="divider divider-dto"></div>
-				</li>
-				
-				<li>
-					<a href="#" class="waves-effect  logout_link" ><i class="mdi mdi-exit-to-app orange-text logout_link"></i>SAIR</a>
-				</li>
-			</ul>
-		</nav>	
-	</header>
 
-	<main class="container">
-		<section id="dados_usuario_Logado">
-			<div class="row mb-0-dto">
-				<div class="col">
-					<h6 class="fw-700-dto mb-0-dto nome_usuario"></h6>
-					<p class="mt-0-dto setor_usuario"></p>
-				</div>
-			</div>
-		</section>
+         <ul id="nav-mobile" class="sidenav">
+            <li>
+               <div class="user-view ">
+                  <a href="#"><img class="responsive-img home" src="assets/images/logo.jpg"></a>
+                  <a href="#"><span class="name grey-text text-darken-4 nome_usuario"></span></a>
+                  <a href="#"><span class="email grey-text text-darken-4 setor_usuario"></span></a>
+               </div>
+            </li>
 
-		<section id="app"></section>
-	</main>
-	
-	<div class="row">
-		<div class="col-md-12 d-flex justify-content-end">
-			<div class="scrollup" style="display: block;">
-				<a href="#">
-					<i class="fas fa-chevron-up"></i>
-				</a>
-			</div> 
-		</div>
-	</div>
+            <li>
+               <a href="#" class="waves-effect checklist_link"><i
+                     class="mdi mdi-clipboard-check orange-text"></i>CHECKLIST</a>
+            </li>
 
-	<noscript>
-		<p>Por favor habilite o JavaScript!</p>
-	</noscript>
+            <li>
+               <div class="divider divider-dto"></div>
+            </li>
+
+            <li>
+               <a href="#" class="waves-effect pa_link"><i class="mdi mdi-bullseye-arrow orange-text"></i>PLANOS DE
+                  AÇÃO</a>
+            </li>
+
+            <li>
+               <div class="divider divider-dto"></div>
+            </li>
+
+            <li>
+               <a href="#" class="waves-effect  pendencia_link"><i
+                     class="mdi mdi-clipboard-alert-outline orange-text checklist_organizacao_link"></i>PÊNDENCIAS</a>
+            </li>
+
+            <li>
+               <div class="divider divider-dto"></div>
+            </li>
+
+            <li>
+               <a href="#" class="waves-effect  inteligencia_link"><i
+                     class="mdi mdi-podcast orange-text inteligencia_link"></i>INTELIGÊNCIA DE MERCADO</a>
+            </li>
+
+            <li>
+               <div class="divider divider-dto"></div>
+            </li>
+
+            <li>
+               <a href="#" class="waves-effect  notificacao_link"><i
+                     class="mdi mdi-bell-ring-outline orange-text notificacao_link"></i>NOTIFICAÇÕES</a>
+            </li>
+
+            <li>
+               <div class="divider divider-dto"></div>
+            </li>
+
+            <li>
+               <a href="#" class="waves-effect  rd_link"><i class="mdi mdi-medal orange-text rd_link"></i>R&D DE
+                  TALENTOS</a>
+            </li>
+
+            <li>
+               <a href="#" class="waves-effect  configuracao_link"><i
+                     class="mdi mdi-settings-outline orange-text configuracao_link"></i>CONFIGURAÇÕES</a>
+            </li>
+
+            <li>
+               <div class="divider divider-dto"></div>
+            </li>
+
+            <li>
+               <a href="#" class="waves-effect  logout_link"><i
+                     class="mdi mdi-exit-to-app orange-text logout_link"></i>SAIR</a>
+            </li>
+         </ul>
+      </nav>
+   </header>
+
+   <main class="container">
+      <section id="dados_usuario_Logado">
+         <div class="row mb-0-dto">
+            <div class="col">
+               <h6 class="fw-700-dto mb-0-dto nome_usuario"></h6>
+               <p class="mt-0-dto setor_usuario"></p>
+            </div>
+         </div>
+      </section>
+
+      <section id="app"></section>
+   </main>
+
+   <div class="row">
+      <div class="col-md-12 d-flex justify-content-end">
+         <div class="scrollup" style="display: block;">
+            <a href="#">
+               <i class="fas fa-chevron-up"></i>
+            </a>
+         </div>
+      </div>
+   </div>
+
+   <div class="loaderPage" id="mainLoader">
+      <div class="loaderPageLeft"></div>
+      <div class="loaderPageRight"></div>
+      <div class="loader"></div>
+   </div>
+
+   <noscript>
+      <p>Por favor habilite o JavaScript!</p>
+   </noscript>
 </body>
+
 </html>
