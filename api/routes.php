@@ -416,7 +416,16 @@ use \phputil\JSON;
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
+	
+	$app->put('/usuario/atualizar-senha', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando a atualização de usuario.");
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraUsuario($req->getParsedBody(), $sessaoUsuario);
+		$response = $ctrl->atualizarSenha();
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
+	});
+	
 	$app->delete('/usuario/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 		$this->logger->addInfo("Deletando a usuario de id ". $args['id'] . '.');
 		$sessaoUsuario = new Sessao($session);

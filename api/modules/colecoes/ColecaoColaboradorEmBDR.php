@@ -184,15 +184,15 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 	}
 
 	private function validarColaborador(&$obj) {
-		if(!is_string($obj->getNome())) throw new ColecaoException('Valor inválido para nome.');
+		if(!is_string($obj->getNome())) throw new ColecaoException('Valor inválido para nome!');
 		
-		if(!is_string($obj->getSobrenome())) throw new ColecaoException('Valor inválido para a sobrenome.');
-		if(!is_string($obj->getEmail())) throw new ColecaoException('Valor inválido para a e-mail.');
+		if(!is_string($obj->getSobrenome())) throw new ColecaoException('Valor inválido para a sobrenome!');
+		if(!is_string($obj->getEmail())) throw new ColecaoException('Valor inválido para a e-mail!');
 
 		if(strlen($obj->getNome()) <= Colaborador::TAM_TEXT_MIM && strlen($obj->getNome()) > Colaborador::TAM_TEXT_MAX) throw new ColecaoException('O nome deve conter no mínimo '. Colaborador::TAM_TEXT_MIM . ' e no máximo '. Colaborador::TAM_TEXT_MAX . '.');
 		if(strlen($obj->getSobrenome()) <= Colaborador::TAM_TEXT_MIM && strlen($obj->getSobrenome()) > Colaborador::TAM_TEXT_MAX) throw new ColecaoException('O nome deve conter no mínimo '. Colaborador::TAM_TEXT_MIM . ' e no máximo '. Colaborador::TAM_TEXT_MAX . '.');
 
-		if($this->validarFormatoDeEmail($obj->getEmail())) throw new Exception("Formato de e-mail inválido.");
+		if($this->validarFormatoDeEmail($obj->getEmail())) throw new Exception("Formato de e-mail inválido!");
 		
 		$quantidade = DB::table(self::TABELA)->where('email', $obj->getEmail())->where('id', '!=', $obj->getId())->count();
 		

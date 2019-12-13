@@ -40,19 +40,18 @@
 				
                 _this.formulario.desabilitar(true);                
                 
-                var jqXHR = servicoUsuario.atualizarSenha($('#senha').val(), $('#nova_senha').val());
+                var jqXHR = servicoUsuario.atualizarSenha($('#senha_anterior').val(), $('#nova_senha').val(), $('#confirmacao_senha').val());
 
 				jqXHR.done(function(resposta) {
 					if(resposta.status){
-						router.navigate('/colaboradores');
-						toastr.success('Colaborador Adicionado com sucesso!');
+						router.navigate('/configuracao');
+						toastr.success(resposta.mensagem);
 					}
 					else{
-						$('body #msg').empty().removeClass('d-none').append(resposta.mensagem);
+						$('body #msg').empty().removeClass('d-none').append(resposta.mensagem).focus();
 						toastr.error(resposta.mensagem);
 					}
-
-				}).fail(window.erro);
+				}).fail(window.erro).always(terminado);
 			}; // submitHandler
 
 			return opcoes;
@@ -64,7 +63,6 @@
         }
 
 		_this.definirForm = function definirForm() {	
-            console.log('entrei');	
             _this.formulario.submit(false);
             _this.configurarBotoes();
             

@@ -7,13 +7,14 @@
  {
 	'use strict';
 
-	function Usuario(id = 0, nome = '', sobrenome = '', email = '', login = '', senha = '', lojas = [], setor =0) {
+	function Usuario(id = 0, nome = '', sobrenome = '', email = '', login = '', senha = '', lojas = [], setor =0, avatar ={}) {
 		this.id = id  || 0;
         this.nome = nome || '';
         this.login = login  || 0;
 		this.senha = senha || '';
 		this.lojas =  lojas || [];
 		this.setor =  setor || 0;
+		this.avatar = avatar || '';
 	};
 
 	function ServicoUsuario() { // Model
@@ -24,7 +25,7 @@
 		};
 
 		// Cria um objeto de usuario
-		this.criar = function criar(id = 0, nome = '', sobrenome = '', email = '', login = '', senha = '', lojas = [], setor =0) {
+		this.criar = function criar(id = 0, nome = '', sobrenome = '', email = '', login = '', senha = '', lojas = [], setor =0, avatar = {}) {
 			return {
 				id : id  || 0,
 				nome : nome || '',
@@ -33,7 +34,8 @@
 				login : login  || '',
 				senha : senha  || '',
 				lojas : lojas || [],
-				setor : setor || 0
+				setor : setor || 0,
+				avatar : avatar || {}
 			};
 		};
 
@@ -73,11 +75,11 @@
 				url: _this.rota() + '/' + id
 			});
 		};
-		_this.atualizarSenha = function atualizarSenha(senha, novaSenha) {
+		_this.atualizarSenha = function atualizarSenha(senha, novaSenha, confirmacaoSenha) {
 			return $.ajax({
 				type: "PUT",
 				url: _this.rota() +'/atualizar-senha',
-				data: {senha:  senha, novaSenha : novaSenha}
+				data: {senha:  senha, novaSenha : novaSenha, confirmacaoSenha: confirmacaoSenha}
 			});
 		}
 	}; // ServicoCategoria
