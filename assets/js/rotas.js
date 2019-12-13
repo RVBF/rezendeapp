@@ -236,6 +236,10 @@
          html += '<span class="center local-dto">Alterar Senha</span>';
          html += '<a href="#/" class="left m16-dto pa_link"><i class="material-icons">navigate_before</i></a>';
       }
+      else if(window.location.href.search('cadastrar-colaborador') != -1){
+         html += '<span class="center local-dto">Cadastrar Colaborador</span>';
+         html += '<a href="#/" class="left m16-dto colaboradores_link"><i class="material-icons">navigate_before</i></a>';
+      }
       html += '<a href="#/" class="right m16-dto exit-dto efetuar_logout"><i class="material-icons ">exit_to_app</i><span>Sair</span></a>';
 
       $('body').find('.topo-opcoes').empty().append(html);

@@ -16,6 +16,7 @@
 		_this.botaoSubmissao = $('#salvar');
 		_this.cancelarModoEdicao = $('#cancelar_edicao');
 		_this.obj = null;
+		_this.avatar = {};
 		// Cria as opções de validação do formulário
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
 			var opcoes = {
@@ -86,9 +87,7 @@
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
 				var obj = _this.conteudo();
-
-					
-				var terminado = function() {
+				var terminado = function terminado() {
 					_this.formulario.desabilitar(false);
 				};
 				
@@ -101,7 +100,7 @@
 						toastr.success('Colaborador Adicionado com sucesso!');
 					}
 					else{
-						$('body #msg').empty().removeClass('d-none').append(resposta.mensagem);
+						$('body #msg').empty().removeClass('d-none').append(resposta.mensagem).focus();
 						toastr.error(resposta.mensagem);
 					}
 
@@ -121,13 +120,63 @@
 				$('#login').val(), 
 				$('#senha').val(), 
 				$('#lojas').formSelect('getSelectedValues'),
-				$('#setor').val()
+				$('#setor').val(),
+				_this.avatar
 			);
 		};
 
 		_this.configurarBotoes = function configurarBotoes() {
 			_this.botaoSubmissao.on('click', _this.salvar);
 			_this.cancelarModoEdicao.on('click', _this.cancelar);
+			
+			_this.formulario.find('input[type="file"]').change(function(evt){
+				var elemento = $(this);
+				var file = evt.target.files[0];
+				var nomeArquivo = $(this).val().split('\\');
+				nomeArquivo = nomeArquivo[nomeArquivo.length -1];
+				var reader = new FileReader();
+				reader.onerror = function (evt) {
+					switch(evt.target.error.code) {
+						case evt.target.error.NOT_FOUND_ERR:
+						  alert('File Not Found!');
+						  break;
+						case evt.target.error.NOT_READABLE_ERR:
+						  alert('File is not readable');
+						  break;
+						case evt.target.error.ABORT_ERR:
+						  break; // noop
+						default:
+						  alert('An error occurred reading this file.');
+					  };
+				};
+				reader.onprogress =  function updateProgress(evt) {
+					var progress = document.querySelector('.percent');
+
+					// evt is an ProgressEvent.
+					if (evt.lengthComputable) {
+					  var percentLoaded = Math.round((evt.loaded / evt.total) * 100);
+					  // Increase the progress bar length.
+					  if (percentLoaded < 100) {
+						progress.style.width = percentLoaded + '%';
+						progress.textContent = percentLoaded + '%';
+					  }
+					}
+				};
+				reader.onabort = function(e) {
+					alert('File read cancelled');
+				};
+
+				reader.onload = function () {
+					_this.avatar = {'nome': nomeArquivo,'arquivo': reader.result, 'tipo' : file.type};
+					elemento.prev('img').attr('src',reader.result);
+				};
+				
+				reader.readAsDataURL(file);
+			});
+
+			_this.formulario.find('img').on('click', function (event) {
+				$(this).next("input[type='file']").trigger('click');
+			});
 		};
 
 

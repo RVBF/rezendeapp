@@ -87,10 +87,10 @@ class ControladoraUsuario {
 				throw new Exception("Erro ao acessar página.");				
 			}
 
-			if(!$this->servicoLogin->eAdministrador()){
-				throw new Exception("Usuário sem permissão para executar ação.");
-			}
-
+			// if(!$this->servicoLogin->eAdministrador()){
+			// 	throw new Exception("Usuário sem permissão para executar ação.");
+			// }
+			
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'nome', 'sobrenome', 'email', 'login','senha', 'lojas', 'setor'], $this->params);
 			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
@@ -118,6 +118,28 @@ class ControladoraUsuario {
 
 
 			$this->colecaoUsuario->adicionar($usuario);
+
+			$avatar;
+			if(isset($this->params['avatar'])){
+				Util::printr($this->params['avatar']);
+				$pastaTarefa = 'colaborador_'. $questionamento->getId();
+				$patch = $this->servicoArquivo->validarESalvarImagem($this->params['avatar'], $pastaTarefa, 'colaborador_' . $questionamento->getId());
+
+
+				foreach($this->params['anexos'] as $arquivo) {
+					$anexo = new Anexo(
+						0,
+						$patch,
+						$arquivo['tipo'],
+						$questionamento
+					);
+
+					$this->colecaoAnexo->adicionar($anexo);
+				}
+			}
+			else{
+				throw new Exception("Para respostas inferior a bom é necessário adicionar ao menos 1 anexo para comprovação do problema!");
+			}
 
 			$colaborador = new Colaborador(
 				0, 
@@ -237,6 +259,39 @@ class ControladoraUsuario {
 		catch (\Exception $e) {
 			DB::rollback();
 			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()]; 
+		}
+
+		return $resposta;
+	}
+
+	function atualizarSenha() {
+		DB::beginTransaction();
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}
+			
+			$inexistentes = \ArrayUtil::nonExistingKeys(['senha', 'novaSenha', 'confirmacaoSenha'], $this->params);
+			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
+				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
+
+				throw new Exception($msg);
+			}	
+			$usuario = new Usuario(); $usuario->fromArray($this->colecaoUsuario->comId($this->servicoLogin->getIdUsuario()));
+			if(empty($usuario)) throw new Exception("Usuário não encontrado.");
+
+			$this->colecaoUsuario->novaSenha(
+				$usuario->getId(),
+				\ParamUtil::value($this->params, 'senha'),
+				\ParamUtil::value($this->params, 'novaSenha'),
+				\ParamUtil::value($this->params, 'confirmacaoSenha')
+			);
+
+			$resposta = ['status' => true, 'mensagem'=> 'Senha atualizada com sucesso.']; 
+		}
+		catch (\Exception $e) {
+			DB::rollback();
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 
 		return $resposta;
