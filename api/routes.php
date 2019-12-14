@@ -10,7 +10,6 @@ use \phputil\JSON;
 		$ctrl = new ControladoraCategoria($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->todos();
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
-
 	});
 
 	$app->post('/categorias', function(Request $req,  Response $res, $args = []) use ($app, $session) {
@@ -389,6 +388,48 @@ use \phputil\JSON;
 	});
 // Fim das rotas para  pendencia
 
+
+// Início das rotas para acessos
+	$app->get('/acesso', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando listagem de acessos");	
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraAcesso($req->getQueryParams(), $sessaoUsuario);
+		$response = $ctrl->todos();
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+	});
+
+	$app->post('/acesso', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando o cadastro de acesso");
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraAcesso($req->getParsedBody(), $sessaoUsuario);
+		$response = $ctrl->adicionar();
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+	});
+
+	$app->put('/acesso', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando a atualização de acesso.");
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraAcesso($req->getParsedBody(), $sessaoUsuario);
+		$response = $ctrl->atualizar();
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+	});
+	
+	$app->put('/acesso/atualizar-senha', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando a atualização de acesso.");
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraAcesso($req->getParsedBody(), $sessaoUsuario);
+		$response = $ctrl->atualizarSenha();
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+	});
+	
+	$app->delete('/acesso/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Deletando a acesso de id ". $args['id'] . '.');
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraAcesso($req->getParsedBody(), $sessaoUsuario);
+		$response = $ctrl->remover($args['id']);
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+	});
+// Fim das rotas para usuario
 
 // Início das rotas para usuario
 	$app->get('/usuario', function(Request $req,  Response $res, $args = []) use ($app, $session) {

@@ -141,6 +141,7 @@
          loader.script('vendor/pickerjs/dist/picker.min.js');
          loader.script('vendor/moment/min/moment.min.js');
          loader.script('vendor/moment/locale/pt-br.js');
+         loader.script('vendor/jstree/dist/jstree.min.js');
 
          // loader.script('vendor/datatables/media/js/jquery.dataTables.js');
          // loader.script('vendor/datatables/media/js/dataTables.bootstrap4.min.js');
@@ -224,9 +225,8 @@
          loader.script('assets/js/usuario/usuario.list.ctrl.js');
          loader.script('assets/js/login/login.form.ctrl.js');
 
-         // loader.script('assets/js/permissao/permissao.serv.js');
-         // loader.script('assets/js/permissao/permissao.form.ctrl.js');
-
+         loader.script('assets/js/acesso/acesso.serv.js');
+         loader.script('assets/js/acesso/configuraracesso.form.ctrl.js');
       }
    });
    var loader = new window.Loader();
