@@ -1,0 +1,38 @@
+<section id="acessos_formulario">
+   <div class="row row-dto">
+      <div class="col-12">
+         <section id="msg" class="card-panel left-align text-danger msg d-none desabilitado"></section>
+
+         <div class="card-panel left-align">
+            <div id="arvoreDeAcessos"></div>
+
+            <div class="row form-row">
+               <div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end">
+                  <button id="pronto"
+                     class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto configuracao_link">
+                     <i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>
+                     Pronto
+                  </button>
+               </div>
+
+               <div
+                  class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-start justify-content-md-start ">
+                  <button
+                     class="waves-effect waves-light btn white grey-text text-darken-4 button-dto f-12-dto configuracao_link">
+                     <i class="mdi mdi-close-circle-outline yellow-text text-accent-4"></i>
+                     Voltar
+                  </button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</section>
+
+<script>
+   $(document).ready(function () {
+      var servicoAcesso = new app.ServicoAcesso();
+      var ctrlAcesso = new app.ControladoraFormConfigurarAcesso(servicoAcesso);
+      ctrlAcesso.configurar();
+   });
+</script>

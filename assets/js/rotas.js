@@ -112,11 +112,12 @@
    router.get('/pendencias-pendentes/:id', criarRotaPara('pe-pendentes.html'));
 
 
- 
+
    router.get('/inteligencia', criarRotaPara('inteligencia.html'));
    router.get('/notificacao', criarRotaPara('notificacoes.html'));
    router.get('/rd', criarRotaPara('rd.html'));
    router.get('/configuracao', criarRotaPara('configuracoes.html'));
+   router.get('/configurar-acessos', criarRotaPara('configurar-acessos.html'));
    router.get('/login', criarRotaPara('login.html'));
    router.get('/alterar-senha', criarRotaPara('formulario-alterarsenha.html'));
 
@@ -236,10 +237,15 @@
          html += '<span class="center local-dto">Alterar Senha</span>';
          html += '<a href="#/" class="left m16-dto pa_link"><i class="material-icons">navigate_before</i></a>';
       }
-      else if(window.location.href.search('cadastrar-colaborador') != -1){
+      else if (window.location.href.search('cadastrar-colaborador') != -1) {
          html += '<span class="center local-dto">Cadastrar Colaborador</span>';
          html += '<a href="#/" class="left m16-dto colaboradores_link"><i class="material-icons">navigate_before</i></a>';
       }
+      else if (window.location.href.search('configurar-acessos') != -1) {
+         html += '<span class="center local-dto">Configurar Acessos</span>';
+         html += '<a href="#/" class="left m16-dto configuracao_link"><i class="material-icons">navigate_before</i></a>';
+      }
+
       html += '<a href="#/" class="right m16-dto exit-dto efetuar_logout"><i class="material-icons ">exit_to_app</i><span>Sair</span></a>';
 
       $('body').find('.topo-opcoes').empty().append(html);
