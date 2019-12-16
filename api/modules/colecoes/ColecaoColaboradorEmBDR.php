@@ -78,23 +78,25 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 	
 				DB::table(self::TABELA)->where('id', $obj->getId())->update([ 
 					'nome' => $obj->getNome() ,
-					'sobrenome' => $obj->getSobreNome(),
+					'sobrenome' => $obj->getSobrenome(),
 					'email' => $obj->getEmail(),
-					'usuario_id' => $obj->getUsuario()->getId()
+					'usuario_id' => $obj->getUsuario()->getId(),
+					'avatar_id' => ($obj->getAvatar() instanceof Anexo) ? $obj->getAvatar()->getId() : $obj->getAvatar()['id'],
 				]);
 				
 				DB::table(self::TABELA_RELACIONAL)->where('colaborador_id', $obj->getId())->delete();
-
 				if(is_array($obj->getLojas()) ? count($obj->getLojas()) : false){
 					$atuacoesLojas = [];
+					
+					DB::table(self::TABELA_RELACIONAL)->where('id', $obj->getId())->delete();
 
 					foreach($obj->getLojas() as $loja){
 					
 						$atuacoesLojas[] = ['loja_id' => $loja->getId(), 'colaborador_id' =>  $obj->getId()];
 					}
+					
 					DB::table(self::TABELA_RELACIONAL)->insert($atuacoesLojas);
 				}
-			
 			
 				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 				return $obj;
@@ -104,6 +106,23 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 				throw new ColecaoException("Erro ao atualizar colaborador no banco de dados", $e->getCode(), $e);
 			}
 		}	
+	}
+
+	function atualziarAvatar(&$obj){
+		if($this->validarColaborador($obj)){
+			try {
+				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+				DB::table(self::TABELA)->where('id', $obj->getId())->update([
+					'avatar_id' => ($obj->getAvatar() instanceof Anexo) ? $obj->getAvatar()->getId() : $obj->getAvatar()['id']
+				]);
+				
+				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+			} catch (\Throwable $th)
+			{
+				throw new ColecaoException("Erro ao atualizar colaborador no banco de dados", $e->getCode(), $e);
+			}
+		}
 	}
 
 	function comId($id){
@@ -171,11 +190,12 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 	}
 
 	function construirObjeto(array $row) {
+		$avatar =  ($row['avatar_id'] > 0) ? Dice::instance()->create('ColecaoAnexo')->comId($row['avatar_id']) : null;
 		$usuario = ($row['usuario_id'] > 0) ? Dice::instance()->create('ColecaoUsuario')->comId($row['usuario_id']) : null;
 		$setor = ($row['setor_id'] > 0) ? Dice::instance()->create('ColecaoSetor')->comId($row['setor_id']) : null;
 		$lojas = Dice::instance()->create('ColecaoLoja')->comColaboradorId($row['id']);
+		$colaborador = new Colaborador($row['id'], $row['nome'], $row['sobrenome'], $row['email'], $usuario, $setor, (is_array($lojas)) ? $lojas : [], $avatar);
 
-		$colaborador = new Colaborador($row['id'], $row['nome'], $row['sobrenome'], $row['email'], $usuario, $setor, (is_array($lojas)) ? $lojas : []);
 		return $colaborador->toArray();
 	}	
 

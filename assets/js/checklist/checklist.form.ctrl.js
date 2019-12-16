@@ -296,7 +296,6 @@
 			_this.formulario.find('#titulo').val(_this.objeto.descricao).focus().blur();
 			_this.formulario.find('#setor').val(_this.objeto.setor.id).focus().blur();
 			_this.formulario.find('#unidade').val(_this.objeto.loja.id).focus().blur();
-			_this.formulario.find('#unidade').val(_this.objeto.loja.id).focus().blur();
 
 			var dataLimite = moment(_this.objeto.dataLimite);
 			$('#data').val(dataLimite.format('DD') + ' de ' + dataLimite.format('MMMM') + ' de ' + dataLimite.format('YYYY')).focus().blur();

@@ -6,13 +6,13 @@
 			<div class="card-panel left-align">
 				<div class="row">
 					<div class="col-12  col-sm-12 col-md-12 col-lg-12">
-						<form class="form-horizontal "  method="post" id="usuario_form">
+						<form class="form-horizontal "  method="post" id="colaborador_form">
 							<input type="hidden" id="id" name ="id" />
 						
 							<div class="row form-row">
 								<div class="col col-md-12 col-12 col-sm-12 col-lg-12 mb-0-dto">
 									<div class="input-field">
-										<img src="https://acotelha.com.br/wp-content/uploads/2018/02/AVATAR-PARA-O-SITE-02.png" class="avatar"></img>
+										<img src="/assets/images/avatar-padrao.png" class="avatar"></img>
 										<input type="file" class="d-none form-control arquivos_imagem tamanhoArquivosPadrao" id="avatar"  id="name" accept="image/*" > 
 									</div>
 								</div>
@@ -92,14 +92,7 @@
 							</div>
 								
 
-							<div class="row form-row">
-								<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end">
-									<button type="submit" id="salvar"  class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">
-										<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>
-										Salvar
-									</button>
-								</div>
-							
+							<div class="row form-row" id="botoes">			
 								<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-start justify-content-md-start ">
 									<button class="waves-effect waves-light btn white grey-text text-darken-4 button-dto f-12-dto colaboradores_link">
 										<i class="mdi mdi-close-circle-outline yellow-text text-accent-4"></i>
@@ -118,8 +111,8 @@
 
 <script>
     $(document).ready(function() {
-        var servicoUsuario = new app.ServicoUsuario();
-        var crltUsuario = new app.ControladoraFormUsuario(servicoUsuario);
-        crltUsuario.configurar();
+        var servicoColaborador = new app.ServicoColaborador();
+        var crltColaborador = new app.ControladoraFormColaborador(servicoColaborador);
+        crltColaborador.configurar();
     });
 </script>

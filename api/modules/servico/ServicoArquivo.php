@@ -57,7 +57,25 @@ class ServicoArquivo {
    	    return $output;
 	}
 
+    function excluiPasta($nomePasta){
 
+        $output = realpath(dirname('..\\')) . Anexo::CAMINHO_ARQUIVOS. '/' . $nomePasta . '/' . $pastaEntidadeSalva . '/' . $extensao;
+        if(is_dir(realpath(dirname('..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta)) {
+
+            if(is_dir(realpath(dirname('..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta . '/' . $pastaEntidadeSalva)) file_put_contents($output, base64_decode($data));
+            else{
+                mkdir(realpath(dirname('..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta . '/' . $pastaEntidadeSalva, 0777);
+                file_put_contents($output, base64_decode($data));
+            }
+
+        }
+        else {
+            mkdir(realpath(dirname('..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta, 0777);
+            mkdir(realpath(dirname('..\\')) . Anexo::CAMINHO_ARQUIVOS . '/' . $nomePasta . '/' . $pastaEntidadeSalva, 0777);
+
+            file_put_contents($output, base64_decode($data));
+        }
+    }
     public function imagemParaBase64($caminho){
         $data = file_get_contents($caminho);
 

@@ -1,5 +1,5 @@
 /**
- *  usuario.form.ctrl.js
+ *  colaborador.form.ctrl.js
  *
  *  @author  Rafael Vinicius Barros Ferreira
  *	 @version 1.0
@@ -8,14 +8,15 @@
 {
 	'use strict';
 
-	function ControladoraFormUsuario(servicoUsuario) {
+	function ControladoraFormColaborador(servicoColaborador) {
 		var _this = this;
 
-		_this.alterar;
-		_this.formulario = $('#usuario_form');
+        _this.formulario = $('#colaborador_form');
 		_this.botaoSubmissao = $('#salvar');
 		_this.cancelarModoEdicao = $('#cancelar_edicao');
-		_this.obj = null;
+        _this.obj = null;
+        _this.servicoUsuario = new app.ServicoUsuario();
+
 		_this.avatar = {};
 
 
@@ -106,14 +107,14 @@
 
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
-				var obj = _this.conteudo();
+                var obj = _this.conteudo();
 				var terminado = function terminado() {
 					_this.formulario.desabilitar(false);
 				};
 				
-				_this.formulario.desabilitar(true);
+				 _this.formulario.desabilitar(true);
 			
-				var jqXHR = _this.alterar ? servicoUsuario.atualizar(obj) : servicoUsuario.adicionar(obj);
+				var jqXHR = (window.location.href.search('editar') != -1) ? servicoColaborador.atualizar(obj) : servicoColaborador.adicionar(obj);
 				jqXHR.done(function(resposta) {
 					if(resposta.status){
 						router.navigate('/colaboradores');
@@ -132,13 +133,16 @@
         
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
-			return servicoUsuario.criar(
+			return servicoColaborador.criar(
 				$('#id').val(),
 				$('#nome').val(),
 				$('#sobrenome').val(),
 				$('#email').val(),
-				$('#login').val(), 
-				$('#senha').val(), 
+                _this.servicoUsuario.criar(
+                    0,
+                    $('#login').val(),
+                    $('#senha').val()
+                ),
 				$('#lojas').formSelect('getSelectedValues'),
 				$('#setor').val(),
 				_this.avatar
@@ -278,75 +282,108 @@
 			jqXHR.done(sucesso).fail(erro);
 		};
 
-		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro() {
-			if(_this.obj != null || _this.obj != undefined) {
-				_this.obj = null;
-			}
-			_this.formulario.parents('#painel_formulario').removeClass('desabilitado').desabilitar(false);
-			_this.formulario.parents('#painel_formulario').removeClass('d-none');
-
-			_this.formulario.parents('#painel_formulario').promise().done(function(){
-				_this.formulario.find('#nome').focus();
-
-				_this.popularLojas();
-				_this.popularSetores();
-
-	
-				_this.configurarBotoes();
-	
-	
-				if(!$('#senha').hasClass('campo_obrigatorio')){
-					$('#senha').parent('div').removeClass('d-none');
-					$('#confirmacao_senha').parent('div').removeClass('d-none');
-		
-					$('#senha').addClass('campo_obrigatorio');
-					$('#lojas').addClass('campo_obrigatorio');
-					$('#confirmacao_senha ').addClass('campo_obrigatorio');
-				}
-			});
-			
-		};
-
-		_this.iniciarFormularioModoEdicao = function iniciarFormularioModoEdicao() {
-			_this.iniciarFormularioModoCadastro();
-			$('#msg').empty();
-
-			$('#login').parent('div').attr('class', 'col-md-12 col-xs-12 co-sm-12 col-12');
-			$('#senha').parent('div').addClass('d-none');
-			$('#confirmacao_senha').parent('div').addClass('d-none');
-
-			$('#lojas').removeClass('campo_obrigatorio');
-			$('#senha').removeClass('campo_obrigatorio');
-			$('#confirmacao_senha ').removeClass('campo_obrigatorio');
-		};
-
 		_this.definirForm = function definirForm(status) {			
 			_this.formulario.submit(false);
-			_this.alterar = status;
+          
+            _this.formulario.parents('#painel_formulario').removeClass('desabilitado').desabilitar(false);
+            _this.formulario.parents('#painel_formulario').removeClass('d-none');
 
-			if(window.location.href.search('visualizar') != -1) servicoUsuario.comId(pegarId(window.location.href,'visualizar-colaborador')).done(_this.desenhar);
-			else  if(window.location.href.search('editar') != -1) servicoUsuario.comId(pegarId(window.location.href,'editar-colaborador')).done(_this.desenhar);
-			else{
-				_this.iniciarFormularioModoCadastro();
-			}
+            _this.formulario.parents('#painel_formulario').promise().done(function(){
+                _this.formulario.find('#nome').focus();
+
+                _this.popularLojas();
+                _this.popularSetores();
+
+    
+                _this.configurarBotoes();
+    
+    
+                if(!$('#senha').hasClass('campo_obrigatorio')){
+                    $('#senha').parent('div').removeClass('d-none');
+                    $('#confirmacao_senha').parent('div').removeClass('d-none');
+        
+                    $('#senha').addClass('campo_obrigatorio');
+                    $('#lojas').addClass('campo_obrigatorio');
+                    $('#confirmacao_senha ').addClass('campo_obrigatorio');
+                }
+            });	
+
+			if(window.location.href.search('visualizar') != -1) {
+                $('#msg').empty();
+
+                $('#senha').parent().parent().parent().addClass('d-none').desabilitar(true);
+                $('#confirmacao_senha').parent().parent().parent().addClass('d-none').desabilitar(true);
+    
+                $('#lojas').removeClass('campo_obrigatorio');
+                $('#senha').removeClass('campo_obrigatorio');
+                $('#confirmacao_senha ').removeClass('campo_obrigatorio');
+                servicoColaborador.comId(pegarId(window.location.href,'visualizar-colaborador')).done(_this.desenhar);
+            }
+			else  if(window.location.href.search('editar') != -1) {
+                $('#msg').empty();
+
+                $('#senha').parent().parent().parent().addClass('d-none').desabilitar(true);
+                $('#confirmacao_senha').parent().parent().parent().addClass('d-none').desabilitar(true);
+    
+                $('#lojas').removeClass('campo_obrigatorio');
+                $('#senha').removeClass('campo_obrigatorio');
+                $('#confirmacao_senha ').removeClass('campo_obrigatorio');
+                servicoColaborador.comId(pegarId(window.location.href,'editar-colaborador')).done(_this.desenhar);
+            }else{
+                $('.card-title').html('<h3>Cadastrar Colaborador</h3>');
+                _this.formulario.find('#botoes').prepend(' <div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end"><button type="submit" id="cadastrar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Cadastrar</button></div>').promise().done(function(){
+                    $('#botoes').find('#cadastrar').on('click', _this.salvar);
+                });
+            }
 		}
 
 		// Desenha o objeto no formulário
-		_this.desenhar = function desenhar(obj) {
-			console.log(obj);
-			_this.obj = obj;
-			$('#id').val(obj.id).focus().blur();;
-			$('#nome').val(obj.colaborador.nome).focus().blur();;
-			$('#sobrenome').val(obj.colaborador.sobrenome).focus().blur();;
-			$('#email').val(obj.colaborador.email).focus().blur();;
-			$('#login').val(obj.login).focus().blur();;
+		_this.desenhar = function desenhar(resposta) {
+			_this.obj = resposta.conteudo;
+			$('#id').val(_this.obj.id).focus().blur();
+			$('#nome').val(_this.obj.nome).focus().blur();
+			$('#sobrenome').val(_this.obj.sobrenome).focus().blur();
+			$('#email').val(_this.obj.email).focus().blur();
+			$('#login').val(_this.obj.usuario.login).focus().blur();
 
-			if(window.location.href.search('visualizar') != -1) {
-				
-			}
-			else if(window.location.href.search('editar') != -1) {
-				iniciarFormularioModoEdicao();
-			}
+            if(_this.obj.avatar != null){
+                $('.avatar:first').attr('src', _this.obj.avatar.arquivoBase64)
+            }
+
+            if(resposta.conteudo.lojas != null){
+                for (const index in resposta.conteudo.lojas) {
+                    var loja = resposta.conteudo.lojas[index];
+                    $('#lojas option').each(function (i, value) {
+                       if(parseInt($(this).val()) == loja.id) $(this).attr('selected', true); 
+                    });
+                }
+                $('#lojas').trigger('click').focus().blur();
+            }
+
+            if(window.location.href.search('visualizar') != -1){
+                _this.formulario.desabilitar(true);
+				_this.formulario.find('#botoes').desabilitar(false);
+                _this.formulario.find('#botoes').prepend(' <div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end"><button type="button" id="editar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Editar</button></div>').promise().done(function(){
+                    _this.formulario.find('#editar').on('click', function(event){
+                        router.navigate('/editar-colaborador/'+ _this.obj.id);
+                    });
+                });
+			
+				$('.card-title').html('<h3>Visualizar Checklist</h3>');
+            } else if(window.location.href.search('editar') != -1){
+                _this.alterar = true;
+				var html = '';
+				html += '<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end">';
+				html += '<button id="salvar" type="submit" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">';
+				html += '<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 ">';
+				html += '</i>salvar</button>';
+				html += '</div>';
+
+				_this.formulario.find('#botoes').prepend(html).promise().done(function(){
+					$('#salvar').on('click', _this.salvar);
+
+				});
+            }
 
 		};
 
@@ -359,9 +396,9 @@
 		_this.configurar = function configurar(status = false) {
 			_this.definirForm(status);
 		};
-	}; // ControladoraFormUsuario
+	}; // ControladoraFormColaborador
 
 	// Registrando
-	app.ControladoraFormUsuario = ControladoraFormUsuario;
+	app.ControladoraFormColaborador = ControladoraFormColaborador;
 
 })(window, app, jQuery, toastr);

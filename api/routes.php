@@ -476,6 +476,50 @@ use \phputil\JSON;
 	});
 // Fim das rotas para usuario
 
+// Início das rotas para colaborador
+$app->get('/colaborador', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Acessando listagem de colaborador!");	
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraColaborador($req->getQueryParams(), $sessaoUsuario);
+	$response = $ctrl->todos();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+});
+
+$app->get('/colaborador/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Acessando listagem de colaborador!");	
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraColaborador($req->getQueryParams(), $sessaoUsuario);
+	$response = $ctrl->comId($args['id']);
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+});
+
+$app->post('/colaborador', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Acessando o cadastro de colaborador");
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraColaborador($req->getParsedBody(), $sessaoUsuario);
+	$response = $ctrl->adicionar();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+
+});
+
+$app->put('/colaborador', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Acessando a atualização de colaboradorusuario.");
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraColaborador($req->getParsedBody(), $sessaoUsuario);
+	$response = $ctrl->atualizar();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+
+});
+
+$app->delete('/colaborador/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo("Deletando a colaborador de id ". $args['id'] . '.');
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraColaborador($req->getParsedBody(), $sessaoUsuario);
+	$response = $ctrl->remover($args['id']);
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+});
+// Fim das rotas para colaborador
+
 // Início das rotas para login
 	$app->post('/login', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 		$sessaoUsuario = new Sessao($session);
