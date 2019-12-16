@@ -1,5 +1,5 @@
 /**
- *  usuario.list.ctrl.js
+ *  colaborador.list.ctrl.js
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */
@@ -7,7 +7,7 @@
 {
 	'use strict';
 
-	function ControladoraListagemUsuario(servicoUsuario)
+	function ControladoraListagemColaborador(servicoColaborador)
 	{
 		var _this = this;
 		var _cont = 0;
@@ -17,12 +17,12 @@
 		_this.botaoRemover = $('#remover');
 		_this.botaoAtualizar = $('#atualizar');
 		_this.idTabela = $('#listagem_colaboradores');
-		var ctrlFormulario = new app.ControladoraFormUsuario(servicoUsuario);
+		var ctrlFormulario = new app.ControladoraFormUsuario(servicoColaborador);
 
 		//Configura a tabela
 		_this.opcoesDaTabela = function opcoesDaTabela() {
 			var objeto =  new Object();
-			objeto.ajax = servicoUsuario.rota();
+			objeto.ajax = servicoColaborador.rota();
 
 			objeto.carregando = true;
 			objeto.pageLength = 20;
@@ -160,8 +160,8 @@
 			_this.botaoAtualizar.on('click',_this.atualizar);
 			_this.botaoRemover.on('click', _this.remover);;
 		};
-	} // ControladoraListagemUsuario
+	} // ControladoraListagemColaborador
 
 	// Registrando
-	app.ControladoraListagemUsuario = ControladoraListagemUsuario;
+	app.ControladoraListagemColaborador = ControladoraListagemColaborador;
 })(window, app, jQuery, toastr);

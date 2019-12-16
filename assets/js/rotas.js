@@ -88,6 +88,9 @@
 
    router.get('/colaboradores', criarRotaPara('colaboradores.html'));
    router.get('/cadastrar-colaborador', criarRotaPara('formulario-colaborador.html'));
+   router.get('/visualizar-colaborador/:id', criarRotaPara('formulario-colaborador.html'));
+   router.get('/editar-colaborador/:id', criarRotaPara('formulario-colaborador.html'));
+  
    router.get('/lojas', criarRotaPara('loja.html'));
    router.get('/cadastrar-loja', criarRotaPara('formulario-loja.html'));
    router.get('/editar-loja/:id', criarRotaPara('formulario-loja.html'));
@@ -103,15 +106,12 @@
    router.get('/executar-pa/:id', criarRotaPara('formulario-executarpa.html'));
    router.get('/planosacao-pendentes/:id', criarRotaPara('pa-pendentes.html'));
 
-
    router.get('/pendencia', criarRotaPara('pendencia.html'));
    router.get('/cadastrar-pendencia', criarRotaPara('formulario-pendencia.html'));
    router.get('/visualizar-pendencia/:id', criarRotaPara('formulario-pendencia.html'));
    router.get('/editar-pendencia/:id', criarRotaPara('formulario-pendencia.html'));
    router.get('/executar-pendencia/:id', criarRotaPara('formulario-executarpe.html'));
    router.get('/pendencias-pendentes/:id', criarRotaPara('pe-pendentes.html'));
-
-
 
    router.get('/inteligencia', criarRotaPara('inteligencia.html'));
    router.get('/notificacao', criarRotaPara('notificacoes.html'));
@@ -244,6 +244,10 @@
       else if (window.location.href.search('configurar-acessos') != -1) {
          html += '<span class="center local-dto">Configurar Acessos</span>';
          html += '<a href="#/" class="left m16-dto configuracao_link"><i class="material-icons">navigate_before</i></a>';
+      }
+      else if (window.location.href.search('visualizar-colaborador') != -1) {
+         html += '<span class="center local-dto">Visualizar Colaborador</span>';
+         html += '<a href="#/" class="left m16-dto colaboradores_link"><i class="material-icons">navigate_before</i></a>';
       }
 
       html += '<a href="#/" class="right m16-dto exit-dto efetuar_logout"><i class="material-icons ">exit_to_app</i><span>Sair</span></a>';

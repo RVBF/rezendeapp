@@ -7,14 +7,10 @@
  {
 	'use strict';
 
-	function Usuario(id = 0, nome = '', sobrenome = '', email = '', login = '', senha = '', lojas = [], setor =0, avatar ={}) {
+	function Usuario(id = 0, login = '', senha = '') {
 		this.id = id  || 0;
-        this.nome = nome || '';
         this.login = login  || 0;
 		this.senha = senha || '';
-		this.lojas =  lojas || [];
-		this.setor =  setor || 0;
-		this.avatar = avatar || '';
 	};
 
 	function ServicoUsuario() { // Model
@@ -25,26 +21,12 @@
 		};
 
 		// Cria um objeto de usuario
-		this.criar = function criar(id = 0, nome = '', sobrenome = '', email = '', login = '', senha = '', lojas = [], setor =0, avatar = {}) {
+		_this.criar = function criar(id = 0, login = '', senha = '') {
 			return {
 				id : id  || 0,
-				nome : nome || '',
-				sobrenome : sobrenome || '',
-				email : email || '',
 				login : login  || '',
-				senha : senha  || '',
-				lojas : lojas || [],
-				setor : setor || 0,
-				avatar : avatar || {}
+				senha : senha  || ''
 			};
-		};
-
-		_this.adicionar = function adicionar(obj) {
-			return $.ajax({
-				type: "POST",
-				url: _this.rota(),
-				data: obj
-			});
 		};
 
 		_this.todos = function todos() {
@@ -54,27 +36,13 @@
 			});
 		};
 
-		_this.atualizar = function atualizar(obj) {
-			return $.ajax({
-				type: "PUT",
-				url: _this.rota(),
-				data: obj
-			});
-		};
-
-		_this.remover = function remover(id) {
-			return $.ajax({
-				type: "DELETE",
-				url: _this.rota() + '/' + id
-			});
-		};
-
 		_this.comId = function comId(id) {
 			return $.ajax({
 				type: "GET",
 				url: _this.rota() + '/' + id
 			});
 		};
+
 		_this.atualizarSenha = function atualizarSenha(senha, novaSenha, confirmacaoSenha) {
 			return $.ajax({
 				type: "PUT",

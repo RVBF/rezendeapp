@@ -21,6 +21,8 @@ class ControladoraUsuario {
 	private $colecaoColaborador;
 	private $colecaoSetor;
 	private $colecaoGrupoDeUsuario;
+	private $servicoArquivo;
+	private $colecaoAnexo;
 
 	function __construct($params, Sessao $sessao) {
 		$this->params = $params;
@@ -30,8 +32,9 @@ class ControladoraUsuario {
 		$this->colecaoColaborador = Dice::instance()->create('ColecaoColaborador');
 		$this->colecaoSetor = Dice::instance()->create('ColecaoSetor');
 		$this->servicoLogin = new ServicoLogin($sessao);
+		$this->servicoArquivo = ServicoArquivo::instance();
+		$this->colecaoAnexo = Dice::instance()->create('ColecaoAnexo');
 		$this->sessao = $sessao;
-
 	}
 
 	function todos() {
@@ -78,147 +81,6 @@ class ControladoraUsuario {
 
 		return  RTTI::getAttributes($conteudo, RTTI::allFlags());
     }
-    
-    function adicionar() {
-		DB::beginTransaction();
-
-		try {
-			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
-			}
-
-			// if(!$this->servicoLogin->eAdministrador()){
-			// 	throw new Exception("Usuário sem permissão para executar ação.");
-			// }
-			
-			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'nome', 'sobrenome', 'email', 'login','senha', 'lojas', 'setor'], $this->params);
-			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
-				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
-
-				throw new Exception($msg);
-			}			
-			
-			$setor = new Setor(); $setor->fromArray($this->colecaoSetor->comId($this->params['setor']));
-	
-			if(!isset($setor) and !($setor instanceof Setor)){
-				throw new Exception("Setor não encontrada na base de dados.");
-			}
-
-			$lojas = $this->colecaoLoja->todosComIds($this->params['lojas']);
-
-			if(!isset($lojas) and !($lojas instanceof Loja)){
-				throw new Exception("Loja não encontrada na base de dados.");
-			}
-
-			$usuario = new Usuario( 
-				0, 
-				\ParamUtil::value($this->params, 'login'), 
-				\ParamUtil::value($this->params, 'senha')
-			);
-
-
-			$this->colecaoUsuario->adicionar($usuario);
-
-			$avatar;
-			if(isset($this->params['avatar'])){
-				Util::printr($this->params['avatar']);
-				$pastaTarefa = 'colaborador_'. $questionamento->getId();
-				$patch = $this->servicoArquivo->validarESalvarImagem($this->params['avatar'], $pastaTarefa, 'colaborador_' . $questionamento->getId());
-
-
-				foreach($this->params['anexos'] as $arquivo) {
-					$anexo = new Anexo(
-						0,
-						$patch,
-						$arquivo['tipo'],
-						$questionamento
-					);
-
-					$this->colecaoAnexo->adicionar($anexo);
-				}
-			}
-			else{
-				throw new Exception("Para respostas inferior a bom é necessário adicionar ao menos 1 anexo para comprovação do problema!");
-			}
-
-			$colaborador = new Colaborador(
-				0, 
-				\ParamUtil::value($this->params, 'nome'), 
-				\ParamUtil::value($this->params, 'sobrenome'), 
-				\ParamUtil::value($this->params, 'email'), 
-				$usuario,
-				$setor,
-				$lojas
-			);
-
-
-			$this->colecaoColaborador->adicionar($colaborador);
-
-			DB::commit();
-
-			$resposta = ['status' => true, 'mensagem'=> 'Usuário cadastrado com sucesso.']; 
-		}
-		catch (\Exception $e) {
-			DB::rollback();
-			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
-		}
-
-		return $resposta;
-	}
-
-	function atualizar(){
-		DB::beginTransaction();
-
-		try {
-			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
-			}
-
-			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'nome', 'sobrenome', 'email', 'login'], $this->params);
-
-			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
-				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
-
-				throw new Exception($msg);
-			}		
-			$lojas = null;
-
-			if(isset($this->params['lojas'])) $lojas = $this->colecaoLoja->todosComIds($this->params['lojas']);
-
-			if(!isset($lojas) and !($lojas instanceof Loja) and count($lojas)){
-				throw new Exception("Loja não encontrada na base de dados.");
-			}
-
-			$hash = HashSenha::instance();
-			$usuario = new Usuario( 
-				\ParamUtil::value($this->params, 'id'), 
-				\ParamUtil::value($this->params, 'login')
-			);
-
-			$usuario->setColaborador($this->colecaoColaborador->comUsuarioId($usuario->getId()));
-
-			$this->colecaoUsuario->atualizar($usuario);
-
-			$colaborador = $usuario->getColaborador();
-
-			$colaborador->setNome(\ParamUtil::value($this->params, 'nome'));
-			$colaborador->setSobrenome(\ParamUtil::value($this->params, 'sobrenome'));
-			$colaborador->setEmail(\ParamUtil::value($this->params, 'email'));
-			$colaborador->setLojas($lojas);
-
-			$this->colecaoColaborador->atualizar($colaborador);
-
-			DB::commit();
-
-			$resposta = ['status' => true, 'mensagem'=> 'Usuário cadastrado com sucesso.']; 
-		}
-		catch (\Exception $e) {
-			DB::rollback();
-			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
-		}
-
-		return $resposta;
-	}
 
 	function remover($id) {
 		DB::beginTransaction();
