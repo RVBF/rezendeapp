@@ -72,14 +72,16 @@
             $.each(recursos, function (indice, recurso) {
                nohsDeRecursos.push({
                   text: recurso.nome,
-                  state: { selected: acessosPorRecursos[recurso.id] != undefined }
+                  state: { selected: acessosPorRecursos[recurso.id] != undefined },
+                  icon: false
                });
             });
 
             nohs.push({
                text: modelNome,
                state: { opened: true },
-               children: nohsDeRecursos
+               children: nohsDeRecursos,
+               icon: false
             });
          });
 
@@ -89,7 +91,10 @@
             plugins: ['checkbox'],
             core: {
                data: nohs,
-               multiple: true
+               multiple: true,
+               themes: {
+                  variant: 'large'
+               }
             }
          });
       };

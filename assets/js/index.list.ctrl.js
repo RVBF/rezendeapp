@@ -3,37 +3,37 @@
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */
-(function(app, $) {
+(function (app, $) {
    'use strict';
 
    function ServicoIndex() { // Model
-       var _this = this;
-       // Rota no servidor
-       _this.rota = function rota() {
-           return app.api + '/index';
-       };
+      var _this = this;
+      // Rota no servidor
+      _this.rota = function rota() {
+         return app.api + '/index';
+      };
 
-       // Cria um objeto de usuario
-       this.criar = function criar(grupos = [], usuarios = []) {
-           return {
-               grupos : grupos  || 0,
-               usuarios : usuarios || ''
-           };
-       };
+      // Cria um objeto de usuario
+      this.criar = function criar(grupos = [], usuarios = []) {
+         return {
+            grupos: grupos || 0,
+            usuarios: usuarios || ''
+         };
+      };
 
-       _this.carregarListagemDeAtividades = function carregarListagemDeAtividades() {
-            return $.ajax({
-                type: "GET",
-                url: _this.rota() + '/minhas-atividades'
-            });
-       };
+      _this.carregarListagemDeAtividades = function carregarListagemDeAtividades() {
+         return $.ajax({
+            type: "GET",
+            url: _this.rota() + '/minhas-atividades'
+         });
+      };
 
-       _this.temPermissao = function temPermissao() {
-           return $.ajax({
-               type: "GET",
-               url: _this.rota() + '/tem-permissao'
-           });
-       };
+      _this.temPermissao = function temPermissao() {
+         return $.ajax({
+            type: "GET",
+            url: _this.rota() + '/tem-permissao'
+         });
+      };
    }; // ServicoIndex
    // Registrandonome_usuario
    app.ServicoIndex = ServicoIndex;
@@ -45,58 +45,57 @@
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */
-(function(window, app, $, toastr){
-	'use strict';
+(function (window, app, $, toastr) {
+   'use strict';
 
-	function ControladoraIndex(servicoIndex)
-	{
-        var _this = this;
+   function ControladoraIndex(servicoIndex) {
+      var _this = this;
 
 
-        _this.renderizarOpcoesHTML = function renderizarOpcoesHTMLname() {
-            var sucesso = function (resposta) {
-            };
-            
-			var  jqXHR = servicoIndex.temPermissao();
-			jqXHR.done(sucesso);
-        };
+      _this.renderizarOpcoesHTML = function renderizarOpcoesHTMLname() {
+         var sucesso = function (resposta) {
+         };
 
-        _this.renderizarAtividadesUsuario = function renderizarAtividadesUsuario(){
-            
-            var sucesso = function (resposta) {
-            };
+         var jqXHR = servicoIndex.temPermissao();
+         jqXHR.done(sucesso);
+      };
 
-            var  jqXHR = servicoIndex.carregarListagemDeAtividades();
-			jqXHR.done(sucesso);
-        };
+      _this.renderizarAtividadesUsuario = function renderizarAtividadesUsuario() {
 
-        _this.renderizarDadosUsuario = function renderizarDadosUsuario() {
-            var sessao = new app.Sessao();
-            if(sessao != null){
-                $('body').find('.nome_usuario').each(function() {
-                    $(this).empty().html(JSON.parse(sessao.getSessao()).nome);
-                });
-                
-                $('body').find('.setor_usuario').each(function() {
-                    $(this).empty().html(JSON.parse(sessao.getSessao()).setor);
-                });
-            }
-        }
+         var sucesso = function (resposta) {
+         };
 
-		_this.configurar = function configurar() {
-            _this.renderizarOpcoesHTML();  
-            _this.renderizarAtividadesUsuario();
-            _this.renderizarDadosUsuario();
-            router.trigger('navigate');
-		};
-	} // ControladoraIndex
+         var jqXHR = servicoIndex.carregarListagemDeAtividades();
+         jqXHR.done(sucesso);
+      };
 
-	// Registrando
-	app.ControladoraIndex = ControladoraIndex;
+      _this.renderizarDadosUsuario = function renderizarDadosUsuario() {
+         var sessao = new app.Sessao();
+         if (sessao != null) {
+            $('body').find('.nome_usuario').each(function () {
+               $(this).empty().html(JSON.parse(sessao.getSessao()).nome);
+            });
+
+            $('body').find('.setor_usuario').each(function () {
+               $(this).empty().html(JSON.parse(sessao.getSessao()).setor);
+            });
+         }
+      }
+
+      _this.configurar = function configurar() {
+         _this.renderizarOpcoesHTML();
+         _this.renderizarAtividadesUsuario();
+         _this.renderizarDadosUsuario();
+         router.trigger('navigate');
+      };
+   } // ControladoraIndex
+
+   // Registrando
+   app.ControladoraIndex = ControladoraIndex;
 })(window, app, jQuery, toastr);
 
-$(document).ready(function() {
-    var servicoIndex = new app.ServicoIndex();
-    var crltIndex = new app.ControladoraIndex(servicoIndex);
-    crltIndex.configurar();
+$(document).ready(function () {
+   var servicoIndex = new app.ServicoIndex();
+   var crltIndex = new app.ControladoraIndex(servicoIndex);
+   crltIndex.configurar();
 });
