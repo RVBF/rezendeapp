@@ -1,4 +1,7 @@
 <?php
+use phputil\traits\ToArray;
+use phputil\traits\GetterSetterWithBuilder;
+use phputil\traits\FromArray;
 
 /**
  *	GrupoDeUsuario
@@ -7,58 +10,19 @@
  *  @version	1.0
  */
 class GrupoUsuario {
+    use GetterSetterWithBuilder;
+    use ToArray;
+    use FromArray;
 
     private $id;
     private $nome;
     private $descricao;
     private $usuarios;
-    private $administrador; 
     
     function __construct($id = 0, $nome = '', $descricao = '', $usuarios = []) {
         $this->id = $id;
         $this->nome =  $nome;
         $this->descricao = $descricao;
-        $this->usuarios = $usuarios;
-        $his->administrador = false;
-    }
-
-    public function getId() {
-       return $this->id; 
-    }
-
-    public function setId($id) {
-        $this->id = $id;
-    }
-
-    public function getDescricao() {
-        return $this->descricao; 
-    }
- 
-    public function setDescricao($descricao) {
-        $this->descricao = $descricao;
-    }
-    
-    public function getNome(){
-        return $this->nome; 
-    }
- 
-    public function setNome($nome){
-        $this->nome = $nome;
-    }
-
-    public function getAdministrador(){
-        return $this->administrador; 
-    }
- 
-    public function setAdministrador($administrador){
-        $this->administrador = $administrador;
-    }
-
-    public function getUsuarios(){
-        return $this->usuarios; 
-    }
- 
-    public function setUsuarios($usuarios){
         $this->usuarios = $usuarios;
     }
 

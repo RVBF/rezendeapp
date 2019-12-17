@@ -1,5 +1,7 @@
 <?php
 use Illuminate\Database\Capsule\Manager as DB;
+use Carbon\Carbon;
+
 /**
  *	Coleção de Usuario em Banco de Dados Relacional.
  *
@@ -7,11 +9,13 @@ use Illuminate\Database\Capsule\Manager as DB;
  *	@version	1.0
  */
 
-class ColecaoUsuarioEmBDR implements ColecaoUsuario {
+class ColecaoUsuarioEmBDR  implements ColecaoUsuario {
 	const TABELA = 'usuario';
 	const VW_TABELA_COLABORADOR_USUARIO = 'vw_colaborador_usuario';
 	const TABELA_RELACIONAL = 'usuario_grupo_usuario';
-	function __construct(){}
+
+	function __construct(){
+	}
 
 	function adicionar(&$obj) {
 		if($this->validarUsuario($obj)) {
@@ -35,25 +39,11 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario {
 	}
 
 	function remover($id) {
-		try {
-			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-			if($this->validarRemocaoUsuario($id)) {				
-				$removido = DB::table(self::TABELA)->where('id', $id)->delete();
-
-				
-				$removido = DB::table(ColecaoColaboradorEmBDR::TABELA_RELACIONAL)->select(ColecaoColaboradorEmBDR::TABELA_RELACIONAL . '.*')
-					->join(ColecaoColaboradorEmBDR::TABELA, ColecaoColaboradorEmBDR::TABELA . '.id', '=', ColecaoColaboradorEmBDR::TABELA_RELACIONAL . '.colaborador_Id')
-					->where(ColecaoColaboradorEmBDR::TABELA . '.usuario_id', $id)
-					->delete();
-
-				$removido = DB::table(ColecaoColaboradorEmBDR::TABELA)->where('usuario_id', $id)->delete();
-
-				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-				return $removido;
-			}
-			else return false;
+		try {	
+			if($this->validarRemocaoUsuario($id)) DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->update(['deleted_at' => Carbon::now()->toDateTimeString()]);
 		}
-		catch (\Exception $e) {
+		catch (\Exception $e)
+		{
 			throw new ColecaoException("Erro ao remover usuário com id.", $e->getCode(), $e);
 		}
 	}
@@ -61,12 +51,14 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario {
 	function atualizar(&$obj) {
 		if($this->validarUsuario($obj)){
 			try {
-				
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+				$filds = ['login' => $obj->getLogin()];
+				if(strlen($obj->getSenha()) > 0) {
+					$hash = HashSenha::instance();
+					$filds['senha'] = $hash->gerarHashDeSenhaComSaltEmMD5($obj->getSenha());
+				}
 
-				DB::table(self::TABELA)->where('id', $obj->getId())->update([
-					'login' => $obj->getLogin()
-				]);
+				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $obj->getId())->update($filds);
 
 				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 				return $obj;
@@ -92,7 +84,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario {
 
 	function todos($limite = 0, $pulo = 0, $search = '') {
 		try {	
-			$query = DB::table(self::TABELA)->select(self::TABELA . '.id', self::TABELA . '.login', self::TABELA . '.administrador');
+			$query = DB::table(self::TABELA)->where('deleted_at', NULL)->select(self::TABELA . '.id', self::TABELA . '.login', self::TABELA . '.administrador');
 
 			if($search != '') {
 				$buscaCompleta = $search;
@@ -146,7 +138,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario {
 	
 	function todosComIds($ids = []) {
 		try {	
-			$usuarios = DB::table(self::TABELA)->select('id', 'login', 'administrador')->whereIn('id', $ids)->get();
+			$usuarios = DB::table(self::TABELA)->where('deleted_at', NULL)->select('id', 'login', 'administrador')->whereIn('id', $ids)->get();
 			$usuariosObjects = [];
 			foreach ($usuarios as $usuarios) {
 				$usuariosObjects[] =  $this->construirObjeto($usuarios);
@@ -170,7 +162,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario {
 	function comGrupoId($id){
 		try {
 
-			$grupos = DB::table(self::TABELA)->select(self::TABELA . '.*')
+			$grupos = DB::table(self::TABELA)->where('deleted_at', NULL)->select(self::TABELA . '.*')
 				->join(self::TABELA_RELACIONAL, self::TABELA_RELACIONAL . '.usuario_id', '=', self::TABELA . '.id')
 				->where(self::TABELA_RELACIONAL . '.grupo_usuario_id', $id)->get();
 				
@@ -196,7 +188,7 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario {
 	{
 		try {
 
-			if(DB::table(self::TABELA)->where('login', $login)->count() > 0) $usuario = $this->construirObjeto(DB::table(self::TABELA)->where('login', $login)->get()[0]);
+			if(DB::table(self::TABELA)->where('deleted_at', NULL)->where('login', $login)->count() > 0) $usuario = $this->construirObjeto(DB::table(self::TABELA)->where('login', $login)->get()[0]);
 			else $usuario = null;
 			return $usuario;
 		}
@@ -329,22 +321,6 @@ class ColecaoUsuarioEmBDR implements ColecaoUsuario {
 	}
 
 	private function validarRemocaoUsuario($id){
-		$quantidade = DB::table(ColecaoChecklistEmBDR::TABELA)->where('questionador_id', $id)->count();
-
-		if($quantidade > 0)throw new ColecaoException('Não foi possível excluir o usuário por que ele possui tarefas relacionadas a ele. Exclua todas as tarefas relacionadas e tente novamente.');
-
-		$quantidade = DB::table(ColecaoFormularioRespondidoEmBDR::TABELA)->where('respondedor_Id', $id)->count();
-
-		if($quantidade > 0)throw new ColecaoException('Não foi possível excluir o usuário por que ele possui formulários relacionadoss a ele. Exclua todas os formulários relacionados e tente novamente.');
-
-		$quantidade = DB::table(ColecaoLojaEmBDR::TABELA)->select(ColecaoLojaEmBDR::TABELA . '.*')
-			->join(ColecaoLojaEmBDR::TABELA_RELACIONAL , ColecaoLojaEmBDR::TABELA_RELACIONAL . '.loja_id', '=', ColecaoLojaEmBDR::TABELA . '.id')
-			->join(ColecaoColaboradorEmBDR::TABELA, ColecaoColaboradorEmBDR::TABELA . '.id', '=', ColecaoLojaEmBDR::TABELA_RELACIONAL . '.colaborador_id' )
-			->where(ColecaoColaboradorEmBDR::TABELA . '.usuario_id', $id)->count();
-
-
-		if($quantidade > 0)throw new ColecaoException('Não foi possível excluir o usuário por que ele possui lojas relacionadoss a ele. Retire todas as relações e tente novamente.');
-
 		return true;
 	}
 }

@@ -49,7 +49,7 @@ class ControladoraSetor {
 		}
 		catch (\Exception $e )
 		{
-			throw new Exception("Erro ao listar lojas.");
+			throw new Exception("Erro ao listar setores.");
 		}
 		$conteudo = new DataTablesResponse(
 			$contagem,

@@ -52,24 +52,14 @@ class ControladoraColaborador {
 			$objetos = [];
 			$erro = null;	
 
-			$objetos = $this->colecaoUsuario->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');
-			
-			foreach ($objetos as $key => $obj) {
-				$colaborador = $this->colecaoColaborador->comUsuarioId($obj['id']);
-
-				if(!isset($colaborador) and !($colaborador instanceof Colaborador)){
-					throw new Exception("Colaborador não encontrada na base de dados.");
-				}
-
-				$objetos[$key] = $colaborador;
-			}
-
-			
+			$objetos = $this->colecaoColaborador->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');	
+			// Util::printr($objetos);
 			$contagem = $this->colecaoUsuario->contagem();
 		}
 		catch (\Exception $e )
 		{
-			throw new Exception("Erro ao listar lojas.");
+			Util::printr($e->getMessage());
+			throw new Exception("Erro ao listar colaboradores.");
 		}
 		$conteudo = new DataTablesResponse(
 			$contagem,
@@ -100,7 +90,7 @@ class ControladoraColaborador {
 
 				throw new Exception($msg);
 			}			
-			
+
 			$setor = new Setor(); $setor->fromArray($this->colecaoSetor->comId($this->params['setor']));
 	
 			if(!isset($setor) and !($setor instanceof Setor)){
@@ -118,7 +108,6 @@ class ControladoraColaborador {
 				\ParamUtil::value($this->params['usuario'], 'senha')
 			);
 
-
 			$this->colecaoUsuario->adicionar($usuario);
 
 			$colaborador = new Colaborador(
@@ -131,14 +120,13 @@ class ControladoraColaborador {
 				$lojas
 			);
 
-
 			$this->colecaoColaborador->adicionar($colaborador);
 
-            $avatar;
+			$avatar;
 
             if(isset($this->params['avatar'])){
-				$pastaTarefa = 'colaborador_'. $colaborador->getId();
-				$patch = $this->servicoArquivo->validarESalvarImagem($this->params['avatar'], $pastaTarefa, 'colaborador_' . $colaborador->getId());
+				$pastaColaborador = 'colaborador_'. $colaborador->getId();
+				$patch = $this->servicoArquivo->validarESalvarImagem($this->params['avatar'], Colaborador::CAMINHO_IMAGEM, $pastaColaborador);
 				$avatar = new Anexo(
 					0,
 					$patch,
@@ -146,12 +134,10 @@ class ControladoraColaborador {
 				);
 
 				$this->colecaoAnexo->adicionar($avatar);
+				$colaborador->setAvatar($avatar);
+				$this->colecaoColaborador->atualizarAvatar($colaborador);
+	
 			}
-
-			$colaborador->setAvatar($avatar);
-			$this->colecaoColaborador->atualziarAvatar($colaborador);
-
-
 
 			DB::commit();
 
@@ -185,7 +171,6 @@ class ControladoraColaborador {
 			}			
 			
 			$setor = new Setor(); $setor->fromArray($this->colecaoSetor->comId($this->params['setor']));
-	
 			if(!isset($setor) and !($setor instanceof Setor)){
 				throw new Exception("Setor não encontrada na base de dados.");
 			}
@@ -197,12 +182,11 @@ class ControladoraColaborador {
             }
             $colaborador  = new Colaborador(); $colaborador->fromArray($this->colecaoColaborador->comId(\ParamUtil::value($this->params, 'id')));
             if(!isset($colaborador) and !($colaborador instanceof Colaborador)) throw new Exception("Colaborador não encontrado!");
-
-            $usuario = new Usuario(); $usuario->fromArray($this->colecaoUsuario->comId(\ParamUtil::value($this->params, 'id')));
-
-            $usuario->setLogin(\ParamUtil::value($this->params['usuario'], 'login'));
+		  
+			$usuario = new Usuario(); $usuario->fromArray($colaborador->getUsuario());
+			
+			$usuario->setLogin(\ParamUtil::value($this->params['usuario'], 'login'));
             $usuario->setSenha(\ParamUtil::value($this->params['usuario'], 'senha'));
-
             $this->colecaoUsuario->atualizar($usuario); 
 
             $colaborador->setNome(\ParamUtil::value($this->params, 'nome'));           
@@ -211,14 +195,12 @@ class ControladoraColaborador {
             $colaborador->setUsuario($usuario);
             $colaborador->setSetor($setor);
             $colaborador->setLojas($lojas);
-
+			if(isset($this->params['avatar'])) $colaborador->setAvatar(null);
 			$this->colecaoColaborador->atualizar($colaborador);
-
-            $avatar;
 
             if(isset($this->params['avatar'])){
 				$pastaColaborador = 'colaborador_'. $colaborador->getId();
-				$patch = $this->servicoArquivo->validarESalvarImagem($this->params['avatar'], $pastaColaborador, 'colaborador_' . $colaborador->getId());
+				$patch = $this->servicoArquivo->validarESalvarImagem($this->params['avatar'], Colaborador::CAMINHO_IMAGEM, $pastaColaborador);
 				$avatar = new Anexo(
 					0,
 					$patch,
@@ -226,14 +208,16 @@ class ControladoraColaborador {
 				);
 
 				$this->colecaoAnexo->adicionar($avatar);
+				$colaborador->setAvatar($avatar);
+				$this->colecaoColaborador->atualizarAvatar($colaborador);
 			}else{
-                $this->servicoArquivo->excluiPasta($pastaColaborador);
-            }
-
-			$colaborador->setAvatar($avatar);
-			$this->colecaoColaborador->atualziarAvatar($colaborador);
-
-
+				if($colaborador->getAvatar() != null){
+					$pastaColaborador = 'colaborador_'. $colaborador->getId();
+					if(!$this->servicoArquivo->excluiPasta(Colaborador::CAMINHO_IMAGEM, $pastaColaborador, $colaborador->getAvatar()['patch'])){
+						throw new Exception("Erro ao excluir arquivo");
+					}
+				}
+			}
 
 			DB::commit();
 
@@ -253,11 +237,12 @@ class ControladoraColaborador {
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
 			
-			if(!$this->servicoLogin->eAdministrador()) throw new Exception("Usuário sem permissão para executar ação.");
-
-			if (! is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
-			
-			if(!$this->colecaoUsuario->remover($id)) throw new Exception("Erro ao remover usuário.");
+			if (!is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
+			$colaborador = new Colaborador(); $colaborador->fromArray($this->colecaoColaborador->comId($id));
+			if(!($colaborador instanceof Colaborador)) throw new Exception("Colaborador não encontrado!");
+			$usuario = new Usuario(); $usuario->fromArray($colaborador->getUsuario());
+			$this->colecaoUsuario->remover($usuario->getId());
+			$this->colecaoColaborador->remover($id);
 			
 			DB::commit();
 

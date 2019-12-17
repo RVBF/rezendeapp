@@ -47,7 +47,7 @@ class ControladoraQuestionario {
 		}
 		catch (\Exception $e )
 		{
-			throw new Exception("Erro ao listar lojas.");
+			throw new Exception("Erro ao listar questionário.");
 		}
 		$conteudo = new DataTablesResponse(
 			$contagem,

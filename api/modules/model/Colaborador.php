@@ -25,6 +25,8 @@ class Colaborador {
 
     const TAM_TEXT_MIM = 3;
     const TAM_TEXT_MAX = 50;
+	const CAMINHO_IMAGEM = 'colaboradores';
+
 
     function __construct($id = 0, $nome = '', $sobrenome = '', $email = '', $usuario = null,  $setor = null, $lojas = [], $avatar = '') {
         $this->id = $id;

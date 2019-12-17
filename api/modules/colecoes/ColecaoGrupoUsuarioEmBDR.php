@@ -20,18 +20,18 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario {
 				$id = DB::table(self::TABELA)->insertGetId([ 
 					'nome' => $obj->getNome() ,
 					'descricao' => $obj->getDescricao(), 
-					'eadmin' => $obj->getAdministrador()
 				]);
-				
+				$obj->setId($id);
+
 				$gruposUsuarios = [];
 
 				foreach ($obj->getUsuarios() as $key => $usuario) {
-					$gruposUsuarios[] = ['usuario_id' => $usuario->getId(), 'grupo_usuario_id' =>  $id];
+					$usuarioAtual = new Usuario(); $usuarioAtual->fromArray($usuario);
+					$gruposUsuarios[] = ['usuario_id' => $usuarioAtual->getId(), 'grupo_usuario_id' =>  $obj->getId()];
 				}
 
 				DB::table(self::TABELA_RELACIONAL)->insert($gruposUsuarios);
 
-				$obj->setId($id);
 			}
 			catch (\Exception $e) {
 				throw new ColecaoException("Erro ao adicioanr um grupo de usuário ao banco", $e->getCode(), $e);
@@ -198,8 +198,7 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario {
 	function construirObjeto(array $row) {
 		$usuarios = Dice::instance()->create('ColecaoUsuario')->comGrupoId($row['id']);
 		$grupoDeUsuario = new GrupoUsuario($row['id'], $row['nome'], $row['descricao'], $usuarios);
-		$grupoDeUsuario->setAdministrador($row['eadmin']);
-		return $grupoDeUsuario;
+		return $grupoDeUsuario->toArray();
 	}	
 
     function contagem() {

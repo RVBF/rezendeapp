@@ -166,6 +166,16 @@
             event.preventDefault();
             router.navigate('/cadastrar-pendencia');
          });
+
+         $(evento.target).on('click', '.grupousuario_link', function (event) {
+            event.preventDefault();
+            router.navigate('/grupos-de-usuario');
+         });
+
+         $(evento.target).on('click', '.cadastrar_grupodeusuario_link', function (event) {
+            event.preventDefault();
+            router.navigate('/cadastrar-grupo-de-usuario');
+         });
       }
    };
 
