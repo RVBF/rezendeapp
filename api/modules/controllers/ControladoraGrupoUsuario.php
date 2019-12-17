@@ -28,35 +28,32 @@ class ControladoraGrupoUsuario {
 
 	function todos() {
 		try {
-			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
-			
-			if(!$this->servicoLogin->eAdministrador()) 	throw new Exception("Usuário sem permissão para executar ação.");
-			
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");				
+			}
 			$dtr = new DataTablesRequest($this->params);
 			$contagem = 0;
 			$objetos = [];
 			$erro = null;	
 
-			$objetos = $this->colecaoGrupoUsuario->todos(
-				$dtr->start,
-				$dtr->length,
-				(isset($dtr->search->value)) ? $dtr->search->value : ''
-			);
-
+			$objetos = $this->colecaoGrupoUsuario->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');	
+			// Util::printr($objetos);
 			$contagem = $this->colecaoGrupoUsuario->contagem();
 		}
-		catch (\Exception $e ) {
-			throw new Exception($e->getMessage());
+		catch (\Exception $e )
+		{
+			Util::printr($e->getMessage());
+			throw new Exception("Erro ao listar colaboradores.");
 		}
-
-		$conteudo = new DataTablesResponse($contagem, 
-			is_array($objetos) ? count($objetos) : 0, 
-			$objetos, 
-			$dtr->draw, 
+		$conteudo = new DataTablesResponse(
+			$contagem,
+			count($objetos), //count($objetos ),
+			$objetos,
+			$dtr->draw,
 			$erro
 		);
 
-		return $conteudo;
+		return  RTTI::getAttributes($conteudo, RTTI::allFlags());
     }
     
     function adicionar() {
@@ -64,8 +61,6 @@ class ControladoraGrupoUsuario {
 			DB::beginTransaction();
 
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
-
-			if(!$this->servicoLogin->eAdministrador()) throw new Exception("Usuário sem permissão para executar ação.");
 
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'nome','descricao', 'usuarios'], $this->params);
 		
@@ -85,10 +80,9 @@ class ControladoraGrupoUsuario {
 				\ParamUtil::value($this->params, 'descricao'), 
 				$usuarios
 			);
+			$this->colecaoGrupoUsuario->adicionar($grupoUsuario);
 
-			$grupoUsuario->setAdministrador(false);
-
-			$resposta = ['grupoUsuario'=> RTTI::getAttributes($this->colecaoGrupoUsuario->adicionar($grupoUsuario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Grupo de usuário cadastrado com sucesso.']; 
+			$resposta = ['status' => true, 'mensagem'=> 'Grupo de usuário cadastrado com sucesso.']; 
 			
 			DB::commit();
 		}

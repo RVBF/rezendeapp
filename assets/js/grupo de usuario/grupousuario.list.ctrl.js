@@ -1,5 +1,5 @@
 /**
- *  grupousuario.list.ctrl.js
+ *  colaborador.list.ctrl.js
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */
@@ -7,7 +7,7 @@
 {
 	'use strict';
 
-	function ControladoraListagemGrupoUsuario(servicoGrupoUsuario)
+	function ControladoraListagemGrupoUsuario(servicoGrupoDeUsuario)
 	{
 		var _this = this;
 		var _cont = 0;
@@ -16,136 +16,77 @@
 		_this.botaoEditar = $('#editar');
 		_this.botaoRemover = $('#remover');
 		_this.botaoAtualizar = $('#atualizar');
-		_this.idTabela = $('#grupousuario');
-		var ctrlFormulario = new app.ControladoraFormGrupoUsuario(servicoGrupoUsuario);
+		_this.idTabela = $('#listagem_gruposdeusuario');
+		var ctrlFormulario = new app.ControladoraFormUsuario(servicoGrupoDeUsuario);
 
 		//Configura a tabela
 		_this.opcoesDaTabela = function opcoesDaTabela() {
-			var objeto = $.extend(true, {}, app.dtOptions);
-			objeto.ajax = servicoGrupoUsuario.rota();
+			var objeto =  new Object();
+			objeto.ajax = servicoGrupoDeUsuario.rota();
 
-			objeto.columnDefs = [{
-					data: 'id',
-					targets: 0,
-					responsivePriority: 2,
-					visible : true
-				}, {
-					data: 'nome',
-					responsivePriority: 1,
-					targets: 1
-                }, {
-					data: 'descricao',
-					responsivePriority: 1,
-					targets: 2
-                }
-			];
+			objeto.carregando = true;
+			objeto.pageLength = 20;
+			objeto.lengthMenu =  [20, 30, 40, 100];
+			objeto.searching= true;
+			objeto.ordering= true;
+			objeto.searching = true;
+			objeto.searchDelay = 600;	
+			objeto.order = 'DESC';
+			objeto.cadastrarLink = 'cadastrar_grupodeusuario_link';
+			objeto.columnDefs = function (data){
+				console.log(data);
+				var html = '';
+				html += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12 mb-0-dto">';
+					html += '<div class="row mb-0-dto">';
+							html += '<div class="col co-lg-10 col-md-10 col-sm-10 col-8">'
+								html += '<p class="f-12-dto"><strong>Nome : </strong>'+ data.nome + '</p>'
+								html += '<p class="f-12-dto"><strong>descrição : </strong>'+ data.descricao + '</p>'
+								
+								html += '<p class="f-12-dto"><strong>Usuários : </strong>';
+								for (const index in data.usuarios) {
+									var usuario =  data.usuarios[index];
+									console.log(usuario);
+									html += usuario.login + ((parseInt(index)+1 == data.usuarios.length) ? '.' : ',');
+								}
+								html += '</p>';
+							html += '</div>';
 
+							html += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12 mb-0-dto opc_tabela">';
+								html += '<p class="mb-0-dto">';
+								html += '<a href="#" class="detalhes-dto visualizar_checklist">';
+								html += '<i class="mdi mdi-eye-outline small orange-text text-accent-4"></i>';
+								html += 'VER DETALHES';
+								html += '</a>';
+								html += '</p>';
+							html += '</div>';
+					html += '</div>';
+				html += '</div>';
+				
+					
+
+				return html;
+			};
+			objeto.rowsCallback = function (resposta) {
+				$('.visualizar_checklist').on('click',function(event){
+					event.preventDefault();
+					var objeto = _tabela.getObjetos()[$(this).parents('.listagem-padrao-item').index()];
+					console.log(objeto);
+					router.navigate('/visualizar-colaborador/'+ objeto.id);
+				});
+			}
 			return objeto;
-		};
-
-		_this.cadastrar = function cadastrar() {
-			var modoEdicao = false;
-			var contexto = $('#painel_formulario');
-			contexto.addClass('desabilitado');
-
-			contexto.addClass('d-none');
-			contexto.desabilitar(true);
-			contexto.find('form')[0].reset();
-			contexto.find('form').find('.msg').empty();
-			contexto.promise().done(function () {
-				ctrlFormulario.configurar(modoEdicao);
-			});			
-		};
-
-		_this.editar = function editar() {
-			var objeto = _tabela.row('.selected').data();
-			var modoEdicao = true;
-			var contexto = $('#painel_formulario');
-			contexto.addClass('desabilitado');
-
-			contexto.addClass('d-none');
-			contexto.desabilitar(true);
-			contexto.find('form')[0].reset();
-			contexto.find('form').find('.msg').empty();
-			
-			contexto.promise().done(function () {
-				ctrlFormulario.configurar(modoEdicao);
-				ctrlFormulario.desenhar(objeto);			
-			});	
 		};
 
 		_this.atualizar = function atualizar(){
  			_tabela.ajax.reload();
 		};
 
-		_this.remover = function remover(event){
-			var objeto = _tabela.row('.selected').data();
-
-			BootstrapDialog.show({
-				type	: BootstrapDialog.TYPE_DANGER,
-				title	: 'Deseja remover esta grupo de usuário?',
-				message	: 'ID : ' + objeto.id + ', Nome: '+ objeto.nome + '.',
-				size	: BootstrapDialog.SIZE_LARGE,
-				buttons	: [ {
-						label	: '<u>S</u>im',
-						hotkey	: 'S'.charCodeAt(0),
-						action	: function(dialog){
-							servicoGrupoUsuario.remover(objeto.id).done(window.sucessoPadrao).fail(window.erro);
-							_this.atualizar();
-							$('.depende_selecao').each(function(){
-								$(this).prop('disabled', true);
-							});
-
-							var contexto = $('#painel_formulario');
-							contexto.addClass('desabilitado');
-				
-							contexto.addClass('d-none');
-							contexto.desabilitar(true);
-							contexto.find('form')[0].reset();
-							dialog.close();
-						}
-					}, {
-						label	: '<u>N</u>ão',
-						hotkey	: 'N'.charCodeAt(0),
-						action	: function(dialog){
-							dialog.close();
-						}
-					}
-				]
-			});
-
-
-		}; // remover
-
-		_this.selecionar = function selecionar() {
-			var objeto = _tabela.row('.selected').data();
-
-			$('.depende_selecao').each(function(){
-				$(this).prop('disabled', false);
-			});
-
-			$('.opcoes').removeClass('desabilitado').removeClass('d-none');
-			$('.opcoes').desabilitar(false);
-		};
-
-		_this.deselect = function deselect() {
-			$('.depende_selecao').each(function(){
-				$(this).prop('disabled', true);
-			});
-			
-			$('.opcoes').addClass('desabilitado').addClass('d-none');
-			$('.opcoes').desabilitar(true);
-		};
-
 		_this.configurar = function configurar() {
-			_tabela = _this.idTabela.DataTable(_this.opcoesDaTabela());
+			_tabela = _this.idTabela.listar(_this.opcoesDaTabela());
 			_this.botaoCadastrar.on('click',_this.cadastrar);
 			_this.botaoEditar.on('click', _this.editar)
 			_this.botaoAtualizar.on('click',_this.atualizar);
-			_this.botaoRemover.on('click', _this.remover);
-
-			_tabela.on('select',_this.selecionar);
-			_tabela.on('deselect', _this.deselect);		
+			_this.botaoRemover.on('click', _this.remover);;
 		};
 	} // ControladoraListagemGrupoUsuario
 

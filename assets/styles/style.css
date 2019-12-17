@@ -145,7 +145,7 @@ body{
   padding: 15px;
 }
 .button-dto{
-  height: auto;
+  height: 100%;
   line-height: normal;
   padding: 1rem;
 }

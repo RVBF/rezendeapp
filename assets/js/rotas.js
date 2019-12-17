@@ -121,6 +121,10 @@
    router.get('/login', criarRotaPara('login.html'));
    router.get('/alterar-senha', criarRotaPara('formulario-alterarsenha.html'));
 
+   router.get('/grupos-de-usuario', criarRotaPara('gruposdeusuario.html'));
+   router.get('/cadastrar-grupo-de-usuario', criarRotaPara('formulario-grupodeusuario.html'));
+
+
    // 404
    router.get('/*', function (req, e) {
       if (!e.parent()) {
@@ -249,7 +253,18 @@
          html += '<span class="center local-dto">Visualizar Colaborador</span>';
          html += '<a href="#/" class="left m16-dto colaboradores_link"><i class="material-icons">navigate_before</i></a>';
       }
-
+      else if (window.location.href.search('editar-colaborador') != -1){
+         html += '<span class="center local-dto">Editar Colaboradores</span>';
+         html += '<a href="#/" class="left m16-dto colaboradores_link"><i class="material-icons">navigate_before</i></a>';
+      }
+      else if (window.location.href.search('grupos-de-usuario') != -1){
+         html += '<span class="center local-dto">Grupos de Usuário</span>';
+         html += '<a href="#/" class="left m16-dto configuracao_link"><i class="material-icons">navigate_before</i></a>';
+      }
+      else if (window.location.href.search('cadastrar-grupo-de-usuario') != -1){
+         html += '<span class="center local-dto">Cadastrar Grupo de Usuário</span>';
+         html += '<a href="#/" class="left m16-dto grupousuario_link"><i class="material-icons">navigate_before</i></a>';
+      }
       html += '<a href="#/" class="right m16-dto exit-dto efetuar_logout"><i class="material-icons ">exit_to_app</i><span>Sair</span></a>';
 
       $('body').find('.topo-opcoes').empty().append(html);

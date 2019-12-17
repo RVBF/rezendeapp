@@ -1,5 +1,5 @@
 
-<section class="listagem-padrao" id="listagem_colaboradores">    
+<section class="listagem-padrao" id="listagem_gruposdeusuario">    
     <div class="row">
 		<div class="col col-sm-12 col-12 card-panel left-align">
 			<div class="linhas"> </div>
@@ -13,9 +13,9 @@
 
 <script>
     $(document).ready(function() {
-        var servicoColaborador = new app.ServicoColaborador();
-        var crltColaborador = new app.ControladoraListagemColaborador(servicoColaborador);
+        var servicoGrupoDeUsuario = new app.ServicoGrupoUsuario();
+        var crltGrupoDeUsuario = new app.ControladoraListagemGrupoUsuario(servicoGrupoDeUsuario);
 
-        crltColaborador.configurar();
+        crltGrupoDeUsuario.configurar();
     });
 </script>

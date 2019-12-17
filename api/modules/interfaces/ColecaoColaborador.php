@@ -8,5 +8,6 @@
  */
 
 interface ColecaoColaborador extends Colecao {
+    function atualizarAvatar(&$obj);
 }
 ?>

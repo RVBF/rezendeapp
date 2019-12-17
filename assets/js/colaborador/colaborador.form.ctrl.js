@@ -115,17 +115,19 @@
 				 _this.formulario.desabilitar(true);
 			
 				var jqXHR = (window.location.href.search('editar') != -1) ? servicoColaborador.atualizar(obj) : servicoColaborador.adicionar(obj);
+				
 				jqXHR.done(function(resposta) {
 					if(resposta.status){
 						router.navigate('/colaboradores');
 						toastr.success('Colaborador Adicionado com sucesso!');
 					}
 					else{
+						terminado();
 						$('body #msg').empty().removeClass('d-none').append(resposta.mensagem).focus();
 						toastr.error(resposta.mensagem);
 					}
 
-				}).fail(window.erro).always(terminado);
+				}).fail(window.erro);
 			}; // submitHandler
 
 			return opcoes;
@@ -133,6 +135,7 @@
         
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
+
 			return servicoColaborador.criar(
 				$('#id').val(),
 				$('#nome').val(),
@@ -151,7 +154,6 @@
 
 		_this.configurarBotoes = function configurarBotoes() {
 			_this.botaoSubmissao.on('click', _this.salvar);
-			_this.cancelarModoEdicao.on('click', _this.cancelar);
 			
 			_this.formulario.find('input[type="file"]').change(function(evt){
 				var elemento = $(this);
@@ -255,7 +257,6 @@
 					}));
 				});
 
-
 				var ids = Array();
 
 				if(_this.obj != null || _this.obj != undefined) {
@@ -284,54 +285,27 @@
 
 		_this.definirForm = function definirForm(status) {			
 			_this.formulario.submit(false);
-          
-            _this.formulario.parents('#painel_formulario').removeClass('desabilitado').desabilitar(false);
-            _this.formulario.parents('#painel_formulario').removeClass('d-none');
 
-            _this.formulario.parents('#painel_formulario').promise().done(function(){
-                _this.formulario.find('#nome').focus();
+			_this.formulario.find('#nome').focus();
+			
+			_this.popularLojas();
+			_this.popularSetores();
 
-                _this.popularLojas();
-                _this.popularSetores();
-
-    
-                _this.configurarBotoes();
-    
-    
-                if(!$('#senha').hasClass('campo_obrigatorio')){
-                    $('#senha').parent('div').removeClass('d-none');
-                    $('#confirmacao_senha').parent('div').removeClass('d-none');
-        
-                    $('#senha').addClass('campo_obrigatorio');
-                    $('#lojas').addClass('campo_obrigatorio');
-                    $('#confirmacao_senha ').addClass('campo_obrigatorio');
-                }
-            });	
+			_this.configurarBotoes();
 
 			if(window.location.href.search('visualizar') != -1) {
                 $('#msg').empty();
-
-                $('#senha').parent().parent().parent().addClass('d-none').desabilitar(true);
-                $('#confirmacao_senha').parent().parent().parent().addClass('d-none').desabilitar(true);
-    
-                $('#lojas').removeClass('campo_obrigatorio');
-                $('#senha').removeClass('campo_obrigatorio');
-                $('#confirmacao_senha ').removeClass('campo_obrigatorio');
+                $('#senha').parent().parent().parent().remove();
+                $('#confirmacao_senha').parent().parent().parent().remove();
                 servicoColaborador.comId(pegarId(window.location.href,'visualizar-colaborador')).done(_this.desenhar);
             }
 			else  if(window.location.href.search('editar') != -1) {
                 $('#msg').empty();
-
-                $('#senha').parent().parent().parent().addClass('d-none').desabilitar(true);
-                $('#confirmacao_senha').parent().parent().parent().addClass('d-none').desabilitar(true);
-    
-                $('#lojas').removeClass('campo_obrigatorio');
-                $('#senha').removeClass('campo_obrigatorio');
-                $('#confirmacao_senha ').removeClass('campo_obrigatorio');
-                servicoColaborador.comId(pegarId(window.location.href,'editar-colaborador')).done(_this.desenhar);
+                $('#senha').parent().parent().parent().remove();
+                $('#confirmacao_senha').parent().parent().parent().remove();
+				servicoColaborador.comId(pegarId(window.location.href,'editar-colaborador')).done(_this.desenhar);
             }else{
-                $('.card-title').html('<h3>Cadastrar Colaborador</h3>');
-                _this.formulario.find('#botoes').prepend(' <div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end"><button type="submit" id="cadastrar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Cadastrar</button></div>').promise().done(function(){
+                _this.formulario.find('#botoes').prepend(' <div class="col col-md-3 col-3 col-sm-3 col-lg-3 d-flex"><button type="submit" id="cadastrar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Cadastrar</button></div>').promise().done(function(){
                     $('#botoes').find('#cadastrar').on('click', _this.salvar);
                 });
             }
@@ -347,6 +321,9 @@
 			$('#login').val(_this.obj.usuario.login).focus().blur();
 
             if(_this.obj.avatar != null){
+				var caminho = _this.obj.avatar.patch.split('/');
+				var nome = caminho[caminho.length -1];
+				_this.avatar = {'nome': nome,'arquivo': _this.obj.avatar.arquivoBase64, 'tipo' :_this.obj.avatar.tipo};
                 $('.avatar:first').attr('src', _this.obj.avatar.arquivoBase64)
             }
 
@@ -363,17 +340,19 @@
             if(window.location.href.search('visualizar') != -1){
                 _this.formulario.desabilitar(true);
 				_this.formulario.find('#botoes').desabilitar(false);
-                _this.formulario.find('#botoes').prepend(' <div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end"><button type="button" id="editar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Editar</button></div>').promise().done(function(){
+				_this.formulario.find('#botoes').prepend(' <div class="col col-md-3 col-3 col-sm-3 col-lg-3 d-flex"><button type="submit" id="renover" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-delete red-text text-darken-4"></i>Remover</button></div>').promise().done(function(){
+                    $('#botoes').find('#renover').on('click', _this.remover);
+                });
+                _this.formulario.find('#botoes').prepend(' <div class="col col-md-3 col-3 col-sm-3 col-lg-3 d-flex"><button type="button" id="editar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Editar</button></div>').promise().done(function(){
                     _this.formulario.find('#editar').on('click', function(event){
                         router.navigate('/editar-colaborador/'+ _this.obj.id);
                     });
                 });
 			
-				$('.card-title').html('<h3>Visualizar Checklist</h3>');
             } else if(window.location.href.search('editar') != -1){
                 _this.alterar = true;
 				var html = '';
-				html += '<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end">';
+				html += '<div class="col col-md-3 col-3 col-sm-3 col-lg-3 d-flex">';
 				html += '<button id="salvar" type="submit" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">';
 				html += '<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 ">';
 				html += '</i>salvar</button>';
@@ -381,7 +360,6 @@
 
 				_this.formulario.find('#botoes').prepend(html).promise().done(function(){
 					$('#salvar').on('click', _this.salvar);
-
 				});
             }
 
@@ -389,7 +367,42 @@
 
 		_this.salvar = function salvar() {
 			_this.formulario.validate(criarOpcoesValidacao());
-        };
+		};
+		
+		_this.remover = function remover(){
+			BootstrapDialog.show({
+				type	: BootstrapDialog.TYPE_DANGER,
+				title	: 'Deseja remover este colaborador?',
+				message	: 'Id: ' + _this.obj.id + '; Colaborador: ' + (_this.obj.nome + ' ' + _this.obj.sobrenome),
+				size	: BootstrapDialog.SIZE_LARGE,
+				buttons	: [ {
+						label	: '<u>S</u>im',
+						hotkey	: 'S'.charCodeAt(0),
+						action	: function(dialog){
+							servicoColaborador.remover(_this.obj.id).done(function (resposta) {
+								if(resposta.status){
+									router.navigate('/colaboradores');
+									toastr.success('Colaborador removido com sucesso!');
+									dialog.close();
+
+								}
+								else{
+									toastr.error(resposta.mensagem);
+
+									dialog.close();
+								}
+							});
+						}
+					}, {
+						label	: '<u>N</u>ão',
+						hotkey	: 'N'.charCodeAt(0),
+						action	: function(dialog){
+							dialog.close();
+						}
+					}
+				]
+			});
+		};
 		
 
 		// Configura os eventos do formulário

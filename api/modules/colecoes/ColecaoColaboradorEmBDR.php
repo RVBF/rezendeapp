@@ -1,6 +1,8 @@
 <?php
 use Illuminate\Database\Capsule\Manager as DB;
 use \phputil\RTTI;
+use Carbon\Carbon;
+
 
 /**
  *	Coleção de Colaborador em Banco de Dados Relacional.
@@ -13,8 +15,9 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 
 	const TABELA = 'colaborador';
     const TABELA_RELACIONAL = 'atuacao';
-    
-	function __construct(){}
+
+	function __construct(){
+	}
 
 	function adicionar(&$obj) {
 		if($this->validarColaborador($obj)) {
@@ -55,13 +58,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 	function remover($id) {
 		if($this->validarRemocaoColaborador($id)) {
 			try {	
-				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-				
-				$removido = DB::table(self::TABELA)->where('id', $id)->delete();
-				if($removido) $removido = DB::table(self::TABELA_RELACIONAL)->where('colaborador_id', $id)->delete();
-
-				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-				return $removido;
+				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->update(['deleted_at' =>Carbon::now()->toDateTimeString()]);
 			}
 			catch (\Exception $e)
 			{
@@ -75,24 +72,23 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 			try {
 			
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-	
-				DB::table(self::TABELA)->where('id', $obj->getId())->update([ 
+				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $obj->getId())->update([ 
 					'nome' => $obj->getNome() ,
 					'sobrenome' => $obj->getSobrenome(),
 					'email' => $obj->getEmail(),
 					'usuario_id' => $obj->getUsuario()->getId(),
-					'avatar_id' => ($obj->getAvatar() instanceof Anexo) ? $obj->getAvatar()->getId() : $obj->getAvatar()['id'],
+					'avatar_id' => ($obj->getAvatar() instanceof Anexo) ? $obj->getAvatar()->getId() : 0,
 				]);
-				
+
 				DB::table(self::TABELA_RELACIONAL)->where('colaborador_id', $obj->getId())->delete();
 				if(is_array($obj->getLojas()) ? count($obj->getLojas()) : false){
 					$atuacoesLojas = [];
 					
-					DB::table(self::TABELA_RELACIONAL)->where('id', $obj->getId())->delete();
+					DB::table(self::TABELA_RELACIONAL)->where('colaborador_id', $obj->getId())->delete();
 
 					foreach($obj->getLojas() as $loja){
-					
-						$atuacoesLojas[] = ['loja_id' => $loja->getId(), 'colaborador_id' =>  $obj->getId()];
+						$lojaAtual = new Loja(); $lojaAtual->fromArray($loja);
+						$atuacoesLojas[] = ['loja_id' => $lojaAtual->getId(), 'colaborador_id' =>  $obj->getId()];
 					}
 					
 					DB::table(self::TABELA_RELACIONAL)->insert($atuacoesLojas);
@@ -103,22 +99,26 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 			}
 			catch (\Exception $e)
 			{
+				Util::printr($e->getMessage());
+
 				throw new ColecaoException("Erro ao atualizar colaborador no banco de dados", $e->getCode(), $e);
 			}
 		}	
 	}
 
-	function atualziarAvatar(&$obj){
+	function atualizarAvatar(&$obj){
 		if($this->validarColaborador($obj)){
 			try {
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-				DB::table(self::TABELA)->where('id', $obj->getId())->update([
-					'avatar_id' => ($obj->getAvatar() instanceof Anexo) ? $obj->getAvatar()->getId() : $obj->getAvatar()['id']
+
+				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $obj->getId())->update([
+					'avatar_id' => ($obj->getAvatar() instanceof Anexo) ? $obj->getAvatar()->getId() : 0
 				]);
 				
 				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-			} catch (\Throwable $th)
+			}
+			catch (\Exception $e)
 			{
 				throw new ColecaoException("Erro ao atualizar colaborador no banco de dados", $e->getCode(), $e);
 			}
@@ -138,14 +138,11 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 
 	function comUsuarioId($id){
 		try {	
-			$colaborador = DB::table(self::TABELA)->where('usuario_Id', $id)->get();
-
-			if(is_array($colaborador)) $colaborador = (count($colaborador) > 0) ? $this->construirObjeto($colaborador[0]) : null;
-
-			return $colaborador;
+			return (DB::table(self::TABELA)->where('usuario_id', $id)->count()) ? $this->construirObjeto(DB::table(self::TABELA)->where('deleted_at', NULL)->where('usuario_id', $id)->first()) : [];
 		}
 		catch (\Exception $e)
 		{
+			Util::printr($e->getMessage());
 			throw new ColecaoException("Erro a buscar usuario com usando a referêrencia de colaborador no banco de dados!", $e->getCode(), $e);
 		}
 	}
@@ -155,7 +152,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 	 */
 	function todos($limite = 0, $pulo = 0) {
 		try {	
-			$colaboradores = DB::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+			$colaboradores = DB::table(self::TABELA)->where('deleted_at', NULL)->offset($limite)->limit($pulo)->get();
 
             $colaboradoresObjects = [];
 
@@ -174,7 +171,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 	
 	function todosComId($ids = []) {
 		try {	
-			$colaboradores = DB::table(self::TABELA)->whereIn('id', $ids)->get();
+			$colaboradores = DB::table(self::TABELA)->where('deleted_at', NULL)->whereIn('id', $ids)->get();
 			$colaboradoresObjects = [];
 
 			foreach ($colaboradores as $usuario) {
@@ -223,9 +220,9 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 	}
 
 	private function validarRemocaoColaborador($id){
-		$quantidade = DB::table(ColecaoUsuarioEmBDR::TABELA)->where('usuario_id', $id)->count();
+		// $quantidade = DB::table(ColecaoUsuarioEmBDR::TABELA)->where('deleted_at', NULL)->where('usuario_id', $id)->count();
 
-		if($quantidade > 0) throw new ColecaoException('Não foi possível excluir o colaborador por que ele possui um usuário relacionado a ele. Exclua todas o usuário relacionado e tente novamente.');
+		// if($quantidade > 0) throw new ColecaoException('Não foi possível excluir o colaborador por que ele possui um usuário relacionado a ele. Exclua todas o usuário relacionado e tente novamente.');
 		
 		return true;
 	}
