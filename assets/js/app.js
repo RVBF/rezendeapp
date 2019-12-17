@@ -87,8 +87,8 @@ var app = {
       loader.find('.loader').removeClass('d-none');
       $('body').css('overflow', 'hidden');
 
-      loader.find('.loaderPageLeft').animate({ 'width': '50%' }, tempoDeAnimacao);
-      loader.find('.loaderPageRight').animate({ 'width': '50%' }, tempoDeAnimacao);
+      loader.find('.loaderPageLeft').animate({ 'width': '60%' }, tempoDeAnimacao);
+      loader.find('.loaderPageRight').animate({ 'width': '60%' }, tempoDeAnimacao);
    }
 
    window.tirarTelaDeCarregamento = function tirarTelaDeCarregamento() {
