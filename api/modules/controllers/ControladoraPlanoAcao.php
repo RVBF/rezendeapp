@@ -255,7 +255,7 @@ class ControladoraPlanoAcao {
 
 			$status = ($idSetor > 0) ? $this->colecaoChecklist->removerComSetorId($id, $idSetor) :  $this->colecaoChecklist->remover($id);
 			
-			$resposta = ['status' => true, 'mensagem'=> 'Categoria removida com sucesso.']; 
+			$resposta = ['status' => true, 'mensagem'=> 'PLano de ação removida com sucesso.']; 
 			DB::commit();
 
 		}
@@ -358,6 +358,7 @@ class ControladoraPlanoAcao {
 			$planoAcao->setStatus(StatusPaEnumerado::EXECUTADO);
 			$planoAcao->setResposta(\ParamUtil::value($this->params, 'resposta'));
 			$planoAcao->setDataExecucao(Carbon::now());
+			$planoAcao->setSolucao(json_encode($planoAcao->getSolucao()));
 
 			$this->colecaoPlanoAcao->atualizar($planoAcao);
 			$questionamento = null;

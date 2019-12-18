@@ -100,7 +100,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 			}
 			catch (\Exception $e)
 			{
-				throw new ColecaoException("Erro ao remover categoria.", $e->getCode(), $e);
+				throw new ColecaoException("Erro ao remover Questionamento.", $e->getCode(), $e);
 			}
 		}
 

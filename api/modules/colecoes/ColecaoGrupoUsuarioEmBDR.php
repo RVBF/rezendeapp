@@ -1,5 +1,7 @@
 <?php
 use Illuminate\Database\Capsule\Manager as DB;
+use Carbon\Carbon;
+
 /**
  *	Coleção de Usuario em Banco de Dados Relacional.
  *
@@ -31,7 +33,6 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario {
 				}
 
 				DB::table(self::TABELA_RELACIONAL)->insert($gruposUsuarios);
-
 			}
 			catch (\Exception $e) {
 				throw new ColecaoException("Erro ao adicioanr um grupo de usuário ao banco", $e->getCode(), $e);
@@ -43,10 +44,7 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario {
 		if($this->validarDeleteGrupoDeUsuario($id)){
 
 			try {					
-				$removido = DB::table(self::TABELA)->where('id', $id)->delete();
-				if($removido) $removido = DB::table(self::TABELA_RELACIONAL)->where('grupo_usuario_id', $id)->delete();
-
-				return $removido;
+				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->update(['deleted_at'=> Carbon::now()->toDateTimeString()]);
 			}
 			catch (\Exception $e)
 			{
@@ -58,11 +56,9 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario {
 	function atualizar(&$obj) {
 		if($this->validarGrupoDeUsuario($obj)){
 			try {
-
-				DB::table(self::TABELA)->where('id', $obj->getId())->update([
+				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $obj->getId())->update([
 					'nome' => $obj->getNome(),
-					'descricao' => $obj->getDescricao(),
-					'eadmin' => $obj->getAdministrador()
+					'descricao' => $obj->getDescricao()
 				]);
 
 				DB::table(self::TABELA_RELACIONAL)->where('grupo_usuario_id', $obj->getId())->delete();
@@ -71,8 +67,8 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario {
 					$gruposUsuarios = [];
 
 					foreach($obj->getUsuarios() as $usuario){
-					
-						$gruposUsuarios[] = ['usuario_id' => $usuario->getId(), 'grupo_usuario_id' =>  $obj->getId()];
+						$usuarioAtual = new Usuario(); $usuarioAtual->fromArray($usuario);
+						$gruposUsuarios[] = ['usuario_id' => $usuarioAtual->getId(), 'grupo_usuario_id' =>  $obj->getId()];
 					}
 
 					DB::table(self::TABELA_RELACIONAL)->insert($gruposUsuarios);
@@ -89,18 +85,16 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario {
 
 	function comId($id){
 		try {
-			$usuario = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get());
-
-			return $usuario;
+			return (DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->count()) ? $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->first()) : [];
 		}
 		catch (\Exception $e) {
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException('Erro ao buscar grupo de usuário com id.', $e->getCode(), $e);
 		}
 	}
 
 	function comUsuarioId($id = 0){
 		try {	
-			$grupoDeusuarios = DB::table(self::TABELA)->select(self::TABELA . '.*')->join(self::TABELA_RELACIONAL, self::TABELA_RELACIONAL. '.grupo_usuario_id', '=', self::TABELA . '.id')->where(self::TABELA_RELACIONAL. '.usuario_id', $id)->get();
+			$grupoDeusuarios = DB::table(self::TABELA)->where('deleted_at', NULL)->select(self::TABELA . '.*')->join(self::TABELA_RELACIONAL, self::TABELA_RELACIONAL. '.grupo_usuario_id', '=', self::TABELA . '.id')->where(self::TABELA_RELACIONAL. '.usuario_id', $id)->get();
 
             $grupoDeusuariosObjects = [];
 
@@ -113,7 +107,7 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario {
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			throw new ColecaoException('Erro ao buscar grupos de usuário com  o id do usuário!', $e->getCode(), $e);
 		}
 	}
 
@@ -122,7 +116,7 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario {
 	*/
 	function todos($limite = 0, $pulo = 0, $search = '') {
 		try {	
-			$query = DB::table(self::TABELA)->select(self::TABELA . '.*');
+			$query = DB::table(self::TABELA)->where('deleted_at', NULL)->select(self::TABELA . '.*');
 			
 			if($search != '') {
 				$buscaCompleta = $search;
@@ -180,7 +174,7 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario {
 	
 	function todosComIdsDeUsuario($ids = []) {
 		try {	
-			$usuarios = DB::table(self::TABELA)->whereIn('id', $ids)->get();
+			$usuarios = DB::table(self::TABELA)->where('deleted_at', NULL)->whereIn('id', $ids)->get();
 			$usuariosObjects = [];
 
 			foreach ($usuarios as $usuario) {
@@ -202,7 +196,7 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario {
 	}	
 
     function contagem() {
-		return DB::table(self::TABELA)->count();
+		return DB::table(self::TABELA)->where('deleted_at', NULL)->count();
 	}
 
 	private function validarGrupoDeUsuario(&$obj) {
@@ -224,10 +218,10 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario {
 	}
 
 	private function validarDeleteGrupoDeUsuario($id){
-		$qtdReacionamento = DB::table(self::TABELA_RELACIONAL)->where('grupo_usuario_id', $id)->count();
+		$qtdReacionamento = DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->count();
 
-		if($qtdReacionamento > 0){
-			throw new ColecaoException('Esse grupo possue usuários relacionados a ele! Desfaça todos  os relacionamentos e tente novamente.');
+		if($qtdReacionamento == 0){
+			throw new ColecaoException('O grupo selecionado para remoção, não foi encontrado na base de dados!');
 		}
 
 		return true;

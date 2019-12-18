@@ -2,49 +2,21 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \phputil\JSON;
-
-// Início das rotas para categorias
-	$app->get('/categorias', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando listagem de categorias");
-		$sessaoUsuario = new Sessao($session);
-		$ctrl = new ControladoraCategoria($req->getQueryParams(), $sessaoUsuario);
-		$response = $ctrl->todos();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
-	});
-
-	$app->post('/categorias', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando o cadastro de categorias");
-		$sessaoUsuario = new Sessao($session);
-		$ctrl = new ControladoraCategoria($req->getParsedBody(), $sessaoUsuario);
-		$response = $ctrl->adicionar();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
-	});
-
-	$app->put('/categorias', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando a atualização de categorias");
-		$sessaoUsuario = new Sessao($session);
-		$ctrl = new ControladoraCategoria($req->getParsedBody(), $sessaoUsuario);
-		$response = $ctrl->atualizar();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
-
-	});
-
-	$app->delete('/categorias/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
-		$sessaoUsuario = new Sessao($session);
-		$ctrl = new ControladoraCategoria($req->getParsedBody(), $sessaoUsuario);
-		$response = $ctrl->remover($args['id']);
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
-
-	});
-// Fim das rotas para categorias
-
 // Início das rotas para setor
 	$app->get('/setor', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 		$this->logger->addInfo("Acessando listagem de setores");	
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraSetor($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->todos();
+
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+	});
+
+	$app->get('/setor/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando listagem de setores");	
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraSetor($req->getQueryParams(), $sessaoUsuario);
+		$response = $ctrl->comId($args['id']);
 
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
@@ -59,7 +31,7 @@ use \phputil\JSON;
 	});
 
 	$app->put('/setor', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando a atualização de categorias");
+		$this->logger->addInfo("Acessando a atualização de setors");
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraSetor($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->atualizar();
@@ -68,7 +40,7 @@ use \phputil\JSON;
 	});
 
 	$app->delete('/setor/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
+		$this->logger->addInfo("Deletando a setor de id ". $args['id'] . '.');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraSetor($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->remover($args['id']);
@@ -96,7 +68,7 @@ use \phputil\JSON;
 	});
 
 	$app->put('/questionario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando a atualização de categorias");
+		$this->logger->addInfo("Acessando a atualização de questionários");
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraQuestionario($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->atualizar();
@@ -105,7 +77,7 @@ use \phputil\JSON;
 	});
 
 	$app->delete('/questionario/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
+		$this->logger->addInfo("Deletando a questionário de id ". $args['id'] . '.');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraQuestionario($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->remover($args['id']);
@@ -122,6 +94,14 @@ use \phputil\JSON;
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 
+	$app->get('/loja/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando listagem de lojas");	
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraLoja($req->getQueryParams(), $sessaoUsuario);
+		$response = $ctrl->comId($args['id']);
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+	});
+
 	$app->post('/loja', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 		$this->logger->addInfo("Acessando o cadastro de loja");
 		$sessaoUsuario = new Sessao($session);
@@ -132,7 +112,7 @@ use \phputil\JSON;
 	});
 
 	$app->put('/loja', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando a atualização de categorias");
+		$this->logger->addInfo("Acessando a atualização de lojas");
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraLoja($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->atualizar();
@@ -141,7 +121,7 @@ use \phputil\JSON;
 	});
 
 	$app->delete('/loja/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
+		$this->logger->addInfo("Deletando a loja de id ". $args['id'] . '.');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraLoja($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->remover($args['id']);
@@ -177,7 +157,7 @@ use \phputil\JSON;
 	});
 
 	$app->put('/questionamento', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando a atualização de categorias");
+		$this->logger->addInfo("Acessando a atualização de questionamentos");
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraQuestionamento($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->atualizar();
@@ -186,7 +166,7 @@ use \phputil\JSON;
 	});
 
 	$app->delete('/questionamentos/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
+		$this->logger->addInfo("Deletando a questionamento de id ". $args['id'] . '.');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraQuestionamento($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->remover($args['id']);
@@ -204,7 +184,7 @@ use \phputil\JSON;
 	});
 
 	$app->get('/checklist/questionamentos/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando listagem de tarefa");	
+		$this->logger->addInfo("Acessando listagem de checklist");	
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraChecklist($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->getQuestionamentosParaExecucao($args['id']);
@@ -212,7 +192,7 @@ use \phputil\JSON;
 	});
 
 	$app->put('/checklist', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando a atualização de tarefas");
+		$this->logger->addInfo("Acessando a atualização de checklists");
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraChecklist($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->atualizar();
@@ -221,7 +201,7 @@ use \phputil\JSON;
 	});
 
 	$app->post('/checklist', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando o cadastro de tarefa");
+		$this->logger->addInfo("Acessando o cadastro de checklist");
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraChecklist($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->adicionar();
@@ -230,7 +210,7 @@ use \phputil\JSON;
 	});
 
 	$app->get('/checklist/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando listagem de plano-acao");
+		$this->logger->addInfo("Acessando listagem de checklists");
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraChecklist($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->comId($args['id']);
@@ -239,7 +219,7 @@ use \phputil\JSON;
 	});
 
 	$app->delete('/checklist/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
+		$this->logger->addInfo("Deletando a checklist de id ". $args['id'] . '.');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraChecklist($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->remover($args['id']);
@@ -299,7 +279,7 @@ use \phputil\JSON;
 	});
 
 	$app->put('/plano-acao', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando a atualização de plano-acao");
+		$this->logger->addInfo("Acessando a atualização de plano de ação");
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraPlanoAcao($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->atualizar();
@@ -308,7 +288,7 @@ use \phputil\JSON;
 	});
 
 	$app->delete('/plano-acao/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
+		$this->logger->addInfo("Deletando a plano de ação de id ". $args['id'] . '.');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraPlanoAcao($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->remover($args['id']);
@@ -346,7 +326,7 @@ use \phputil\JSON;
 
 
 	$app->post('/pendencia', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando o cadastro de pendencia");
+		$this->logger->addInfo("Acessando o cadastro de pendência");
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraPendencia($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->adicionar();
@@ -354,7 +334,7 @@ use \phputil\JSON;
 	});
 
 	$app->post('/pendencia/confirmar-responsabilidade', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando o cadastro de pendencia");
+		$this->logger->addInfo("Acessando o cadastro de pendência");
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraPendencia($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->confirmarResponsabilidade();
@@ -362,7 +342,7 @@ use \phputil\JSON;
 	});
 
 	$app->get('/pendencia/executar/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando o cadastro de pendencia");
+		$this->logger->addInfo("Acessando o cadastro de pendência");
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraPendencia($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->executar($args['id']);
@@ -370,7 +350,7 @@ use \phputil\JSON;
 	});
 
 	$app->put('/pendencia', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando a atualização de pendencia");
+		$this->logger->addInfo("Acessando a atualização de pendência");
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraPendencia($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->atualizar();
@@ -379,7 +359,7 @@ use \phputil\JSON;
 	});
 
 	$app->delete('/pendencia/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Deletando a categoria de id ". $args['id'] . '.');
+		$this->logger->addInfo("Deletando a pendência de id ". $args['id'] . '.');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraPendencia($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->remover($args['id']);
@@ -555,6 +535,16 @@ use \phputil\JSON;
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 
 	});
+
+	$app->get('/grupo-usuario/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando listagem de Grupos de usuario");	
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraGrupoUsuario($req->getQueryParams(), $sessaoUsuario);
+		$response = $ctrl->comId($args['id']);
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+
+	});
+
 
 	$app->post('/grupo-usuario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 		$this->logger->addInfo("Acessando o cadastro de tarefa");

@@ -90,7 +90,7 @@
 						toastr.error(resposta.mensagem);
 					}
 
-				}).fail(window.erro);
+				}).fail(window.erro).always(terminado);
 			}; // submitHandler
 
 			return opcoes;
@@ -123,21 +123,9 @@
 					}));
 				});
 
-
-				var ids = Array();
-
-				if(_this.obj != null || _this.obj != undefined) {
-					for(var indice in _this.obj.colaborador.usuarios){
-						var atual =  _this.obj.colaborador.usuarios[indice];
-						ids.push(atual.id);
-					}
-					$('#usuarios').formSelect();
-				}
-				else{
-					$('#usuarios').formSelect();
-				}
-			
+				$('#usuarios').formSelect();
 			};
+			
 
 			var erro = function(resposta) {
 				var mensagem = jqXHR.responseText || 'Erro ao popular select de farmácias.';
@@ -177,13 +165,15 @@
 		_this.desenhar = function desenhar(resposta) {
 			_this.obj = resposta.conteudo;
 			$('#id').val(_this.obj.id).focus().blur();
-			$('#descricao').val(_this.obj.nome).focus().blur();
+			$('#nome').val(_this.obj.nome).focus().blur();
+			$('#descricao').val(_this.obj.descricao).focus().blur();
 
             if(resposta.conteudo.usuarios != null){
-                for (const index in resposta.conteudo.lojas) {
-                    var loja = resposta.conteudo.lojas[index];
+                for (const index in resposta.conteudo.usuarios) {
+					var usuario = resposta.conteudo.usuarios[index];
+					console.log(usuario);
                     $('#usuarios option').each(function (i, value) {
-                       if(parseInt($(this).val()) == loja.id) $(this).attr('selected', true); 
+                       if(parseInt($(this).val()) == usuario.id) $(this).attr('selected', true); 
                     });
                 }
                 $('#usuarios').trigger('click').focus().blur();
@@ -197,7 +187,7 @@
                 });
                 _this.formulario.find('#botoes').prepend(' <div class="col col-md-3 col-3 col-sm-3 col-lg-3 d-flex"><button type="button" id="editar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Editar</button></div>').promise().done(function(){
                     _this.formulario.find('#editar').on('click', function(event){
-                        router.navigate('/editar-colaborador/'+ _this.obj.id);
+                        router.navigate('/editar-grupo-de-usuario/'+ _this.obj.id);
                     });
                 });
 			
@@ -224,8 +214,8 @@
 		_this.remover = function remover(){
 			BootstrapDialog.show({
 				type	: BootstrapDialog.TYPE_DANGER,
-				title	: 'Deseja remover este colaborador?',
-				message	: 'Id: ' + _this.obj.id + '; Colaborador: ' + (_this.obj.nome + ' ' + _this.obj.sobrenome),
+				title	: 'Deseja remover este Grupo de Usuário?',
+				message	: 'Id: ' + _this.obj.id + '; Grupo de usuário: ' + (_this.obj.nome + '<br> Descrição : ' + _this.obj.descricao) + '!',
 				size	: BootstrapDialog.SIZE_LARGE,
 				buttons	: [ {
 						label	: '<u>S</u>im',
@@ -233,7 +223,7 @@
 						action	: function(dialog){
 							servicoGrupoDeUsuario.remover(_this.obj.id).done(function (resposta) {
 								if(resposta.status){
-									router.navigate('/colaboradores');
+									router.navigate('/grupos-de-usuario');
 									toastr.success('Colaborador removido com sucesso!');
 									dialog.close();
 
@@ -255,7 +245,6 @@
 				]
 			});
 		};
-		
 
 		// Configura os eventos do formulário
 		_this.configurar = function configurar() {

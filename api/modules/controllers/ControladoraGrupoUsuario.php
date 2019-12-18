@@ -100,23 +100,20 @@ class ControladoraGrupoUsuario {
 			DB::beginTransaction();
 
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
-
-			if(!$this->servicoLogin->eAdministrador()) throw new Exception("Usuário sem permissão para executar ação.");
-
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'nome','descricao'], $this->params);
 
-			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
-				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
-
-				throw new Exception($msg);
-			}
+			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) throw new Exception('Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes));
 
 			$usuarios = (isset($this->params['usuarios'])) ? $this->colecaoUsuario->todosComIds($this->params['usuarios']) : [];
-			$grupoDeUsuario = $this->colecaoGrupoUsuario->comId(\ParamUtil::value($this->params, 'id'));
+			$grupoDeUsuario = new GrupoUsuario(); $grupoDeUsuario->fromArray($this->colecaoGrupoUsuario->comId(\ParamUtil::value($this->params, 'id')));
+			if(!($grupoDeUsuario instanceof GrupoUsuario)) throw new Exception("Grupo de usuário não encontrado na base de dados!");
+			
 			$grupoDeUsuario->setNome(\ParamUtil::value($this->params, 'nome'));
-			$grupoDeUsuario-setDescricao(\ParamUtil::value($this->params), 'descricao');
+			$grupoDeUsuario->setDescricao(\ParamUtil::value($this->params, 'descricao'));
+			$grupoDeUsuario->setUsuarios($usuarios);
+			$this->colecaoGrupoUsuario->atualizar($grupoDeUsuario);
 
-			$resposta = ['grupoUsuario'=> RTTI::getAttributes($this->colecaoGrupoUsuario->atualizar($grupoUsuario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Grupo de usuário cadastrado com sucesso.']; 
+			$resposta = ['status' => true, 'mensagem'=> 'Grupo de usuário cadastrado com sucesso.']; 
 			
 			DB::commit();
 		}
@@ -151,6 +148,24 @@ class ControladoraGrupoUsuario {
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
 		}
 		
+		return $resposta;
+	}
+
+	function comId($id) {
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
+			
+			if (! is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
+
+			$grupoUsuario = new GrupoUsuario(); $grupoUsuario->fromArray($this->colecaoGrupoUsuario->comId($id));
+		
+			$resposta = ['conteudo'=> $grupoUsuario->toArray(), 'status' => true]; 
+		}
+		catch (\Exception $e) {
+			DB::rollback();
+			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()]; 
+		}
+
 		return $resposta;
 	}
 }

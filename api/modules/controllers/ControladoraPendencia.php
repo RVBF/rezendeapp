@@ -226,7 +226,7 @@ class ControladoraPendencia {
 
 			$status = ($idSetor > 0) ? $this->colecaoChecklist->removerComSetorId($id, $idSetor) :  $this->colecaoChecklist->remover($id);
 			
-			$resposta = ['status' => true, 'mensagem'=> 'Categoria removida com sucesso.']; 
+			$resposta = ['status' => true, 'mensagem'=> 'Pendência removida com sucesso.']; 
 			DB::commit();
 
 		}

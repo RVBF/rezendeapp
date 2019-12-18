@@ -2,6 +2,10 @@ a, a:hover {
    text-decoration: none;
 }
 
+span{
+    min-height: 33px !important;
+}
+
 .tabela_titulo {
     top: 0;
     position: sticky;

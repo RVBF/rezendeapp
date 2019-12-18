@@ -1,6 +1,8 @@
 <?php
 use Illuminate\Database\Capsule\Manager as DB;
 use \phputil\RTTI;
+use Carbon\Carbon;
+
 
 /**
  *	Coleção de Setor em Banco de Dados Relacional.
@@ -34,14 +36,7 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 	function remover($id) {
 		if($this->validarDeleteSetor($id)){
 			try {	
-				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-	
-				$removido = DB::table(self::TABELA)->where('id', $id)->delete();
-				
-				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-	
-				return $removido;
-	
+				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->update(['deleted_at'=> Carbon::now()->toDateTimeString()]);
 			}
 			catch (\Exception $e) {
 				throw new ColecaoException("Erro ao remover setor.", $e->getCode(), $e);
@@ -54,9 +49,9 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 			try {
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-				DB::table(self::TABELA)->where('id', $obj->getId())->update(['titulo' => $obj->getTitulo(),
+				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $obj->getId())->update(
+					['titulo' => $obj->getTitulo(),
 					'descricao'=> $obj->getDescricao(),
-					'categoria_id'=> $obj->getCategoria()->getId()
 				]);
 
 				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
@@ -72,9 +67,7 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 
 	function comId($id){
 		try {
-			$setor = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
-
-			return $setor;
+			return (DB::table(self::TABELA)->where('id', $id)->count()) ? $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->first()) : [];
 		}
 		catch (\Exception $e)
 		{
@@ -87,7 +80,7 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 	 */
 	function todos($limite = 0, $pulo = 0, $search = '') {
 		try {	
-			$query = DB::table(self::TABELA)->select(self::TABELA . '.*');
+			$query = DB::table(self::TABELA)->where('deleted_at', NULL)->select(self::TABELA . '.*');
 
 			if($search != '') {
 				$buscaCompleta = $search;
@@ -142,28 +135,26 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 	}
 	
 	private function validarSetor(&$obj) {
-		if(!is_string($obj->getTitulo())) {
-			throw new ColecaoException('Valor inválido para título.');
-		}
+		if(!is_string($obj->getTitulo()) and strlen($obj->getTitulo()) == 0) throw new ColecaoException('O campo título é obrigatório!');
 
-		$quantidade = DB::table(self::TABELA)->where('titulo', $obj->getTitulo())->where('id', '<>', $obj->getId())->count();
+
+		$quantidade = DB::table(self::TABELA)->where('deleted_at', NULL)->where('titulo', $obj->getTitulo())->where('id', '<>', $obj->getId())->count();
 
 		if($quantidade > 0){
 			throw new ColecaoException('Já exite um setor cadastrado com esse título');
 		}
 
-		if(strlen($obj->getTitulo()) <= Setor::TAM_MIN_TITUlO && strlen($obj->getTitulo()) > Setor::TAM_MAX_TITUlO) throw new ColecaoException('O titulo deve conter no mínimo '.  Setor::TAM_MIN_TITULO. ' e no máximo '. Categoria::TAM_MAX_TITUlO . '.');
+		if(strlen($obj->getTitulo()) <= Setor::TAM_MIN_TITUlO && strlen($obj->getTitulo()) > Setor::TAM_MAX_TITUlO) throw new ColecaoException('O titulo deve conter no mínimo '.  Setor::TAM_MIN_TITULO. ' e no máximo '. Setor::TAM_MAX_TITUlO . '.');
 
 		return true;
 	}
 
 	private function validarDeleteSetor($id) {
-		// $qtdReacionamento = DB::table(ColecaoChecklistEmBDR::TABELA)->where('setor_id', $id)->count();
-
-		// if($qtdReacionamento > 0){
-		// 	throw new ColecaoException('Essa categoria possue setores relacionados a ela! Exclua todos os setores cadastros e tente novamente.');
-		// }
-
+		$quantidadeSetor = DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->count();
+		
+		if($quantidadeSetor == 0) throw new ColecaoException('O setor selecionado para delete não foi encontrado');
+		if(DB::table(self::TABELA)->where('deleted_at', NULL)->count() == 1) throw new Exception("Não é possível excluir o setor quando há somente 1 setor cadastrado, porque é necesssário ao menos 1 setor cadastrado para que possa ter relação com outras depências do sistema.");
+		
 		return true;
 	}
 }

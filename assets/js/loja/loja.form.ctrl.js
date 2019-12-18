@@ -14,8 +14,23 @@
 		_this.alterar;
 		_this.formulario = $('#loja_form');
 		_this.botaoSubmissao = $('#salvar')
-		_this.cancelarModoEdicao = $('#cancelar_edicao')
 
+		var pegarId = function pegarId(url, palavra) {
+
+			// Terminando com "ID/palavra"
+			var regexS = palavra+'+\/[0-9]{1,}';
+
+			var regex = new RegExp(regexS);
+			var resultado = regex.exec(url);
+
+			if (!resultado || resultado.length < 1)
+			{
+				return 0;
+			}
+
+			var array = resultado[0].split('/');
+			return array[1];
+		};
 		// Cria as opções de validação do formulário
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
 			var opcoes = {
@@ -37,30 +52,32 @@
 			};
 			// Irá disparar quando a validação passar, após chamar o método validate().
 			opcoes.submitHandler = function submitHandler(form) {
-				var obj = _this.conteudo();
-
-				_this.formulario.desabilitar(true);
-								
-				var terminado = function() {
+                var obj = _this.conteudo();
+				var terminado = function terminado() {
 					_this.formulario.desabilitar(false);
 				};
 				
-				var jqXHR = _this.alterar ? servicoLoja.atualizar(obj) : servicoLoja.adicionar(obj);
-				jqXHR.done(function() {
-					router.navigate('/lojas');
-					toastr.success('Loja Adicionada com sucesso!')
-				}).fail(window.erro).always(terminado);
+				 _this.formulario.desabilitar(true);
+			
+				var jqXHR = (window.location.href.search('editar') != -1) ? servicoLoja.atualizar(obj) : servicoLoja.adicionar(obj);
+				
+				jqXHR.done(function(resposta) {
+					if(resposta.status){
+						router.navigate('/lojas');
+						toastr.success(resposta.mensagem);
+					}
+					else{
+						terminado();
+						$('body #msg').empty().removeClass('d-none').append(resposta.mensagem).focus();
+						toastr.error(resposta.mensagem);
+					}
 
-				if(_this.alterar){
-					$('.depende_selecao').each(function(){
-						$(this).prop('disabled', true);
-					});
-				}
+				}).fail(window.erro).always(terminado);
 			}; // submitHandler
 
 			return opcoes;
 		};
-        
+	
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
 			return servicoLoja.criar($('#id').val(), $('#razao_social').val(), $('#nome_fantasia').val());
@@ -68,59 +85,116 @@
 
 		_this.configurarBotoes = function configurarBotoes() {
 			_this.botaoSubmissao.on('click', _this.salvar);
-			_this.cancelarModoEdicao.on('click', _this.cancelar);
-		};
-
-		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro() {
-			_this.formulario.parents('#painel_formulario').removeClass('desabilitado').desabilitar(false);
-			_this.formulario.parents('#painel_formulario').removeClass('d-none');
-			
-			_this.formulario.parents('#painel_formulario').promise().done(function () {
-				_this.formulario.find('#tiulo').focus();
-				_this.configurarBotoes();	
+			$('#cep').on('change',function(){
+				var jqXHR = new app.ServicoEndereco();
+				jqXHR.consultarCepViaCEP($(this).val()).done(function (resposta) {
+					var elemento = JSON.parse(JSON.stringify(resposta));
+					$('#endereco').html(elemento.logradouro);
+					$('#cidade').html(elemento.localidade);
+					$('#bairro').html(elemento.bairro);
+					$('#estado').html(elemento.uf);
+				});
 			});
 		};
 
-		_this.iniciarFormularioModoEdicao = function iniciarFormularioModoEdicao() {
-			_this.iniciarFormularioModoCadastro();
-		};
-
-		_this.definirForm = function definirForm(status) {			
+		_this.definirForm = function definirForm() {			
 			_this.formulario.submit(false);
-			_this.alterar = status;
 
-		 	if(!_this.alterar) {
-				_this.iniciarFormularioModoCadastro();
-			}
-			else{
-				_this.iniciarFormularioModoEdicao();
-			}
+			_this.formulario.find('#razao_social').focus();
+			
+			_this.configurarBotoes();
+
+			if(window.location.href.search('visualizar') != -1) {
+                $('#msg').empty();
+                servicoLoja.comId(pegarId(window.location.href,'visualizar-loja')).done(_this.desenhar);
+            }
+			else  if(window.location.href.search('editar') != -1) {
+                $('#msg').empty();
+				servicoLoja.comId(pegarId(window.location.href,'editar-loja')).done(_this.desenhar);
+            }else{
+                _this.formulario.find('#botoes').prepend(' <div class="col col-md-3 col-3 col-sm-3 col-lg-3 d-flex"><button type="submit" id="cadastrar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Cadastrar</button></div>').promise().done(function(){
+                    $('#botoes').find('#cadastrar').on('click', _this.salvar);
+                });
+            }
 		}
 
 		// Desenha o objeto no formulário
-		_this.desenhar = function desenhar(obj) {
-			_this.formulario.find('#id').val(obj.id);
-			_this.formulario.find('#razao_social').val(obj.razaoSocial);
-			_this.formulario.find('#nome_fantasia').val(obj.nomeFantasia);
+		_this.desenhar = function desenhar(resposta) {
+			_this.obj = resposta.conteudo;
+			$('#razao_social').val(_this.obj.razaoSocial).focus().blur();
+			$('#nome_fantasia').val(_this.obj.nomeFantasia).focus().blur();
+
+            if(window.location.href.search('visualizar') != -1){
+                _this.formulario.desabilitar(true);
+				_this.formulario.find('#botoes').desabilitar(false);
+				_this.formulario.find('#botoes').prepend(' <div class="col col-md-3 col-3 col-sm-3 col-lg-3 d-flex"><button type="submit" id="renover" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-delete red-text text-darken-4"></i>Remover</button></div>').promise().done(function(){
+                    $('#botoes').find('#renover').on('click', _this.remover);
+                });
+                _this.formulario.find('#botoes').prepend(' <div class="col col-md-3 col-3 col-sm-3 col-lg-3 d-flex"><button type="button" id="editar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Editar</button></div>').promise().done(function(){
+                    _this.formulario.find('#editar').on('click', function(event){
+                        router.navigate('/editar-loja/'+ _this.obj.id);
+                    });
+                });
+			
+            } else if(window.location.href.search('editar') != -1){
+                _this.alterar = true;
+				var html = '';
+				html += '<div class="col col-md-3 col-3 col-sm-3 col-lg-3 d-flex">';
+				html += '<button id="salvar" type="submit" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">';
+				html += '<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 ">';
+				html += '</i>salvar</button>';
+				html += '</div>';
+
+				_this.formulario.find('#botoes').prepend(html).promise().done(function(){
+					$('#salvar').on('click', _this.salvar);
+				});
+            }
+
 		};
 
 		_this.salvar = function salvar() {
 			_this.formulario.validate(criarOpcoesValidacao());
-        };
+		};
 		
-		_this.cancelar = function cancelar(event) {
-			var contexto = _this.formulario.parents('#painel_formulario');
-			contexto.addClass('desabilitado');
-			_this.formulario.find('.msg').empty();
-			_this.formulario.find('.msg').parents('.row').addClass('d-none');
-			contexto.addClass('d-none');
-			contexto.desabilitar(true);
+		_this.remover = function remover(){
+			BootstrapDialog.show({
+				type	: BootstrapDialog.TYPE_DANGER,
+				title	: 'Deseja remover este Loja?',
+				message	: 'Id: ' + _this.obj.id + '; Título: ' + (_this.obj.razaoSocial + 'Nome fantasia : ' + _this.obj.nomeFantasia) + '!',
+				size	: BootstrapDialog.SIZE_LARGE,
+				buttons	: [ {
+						label	: '<u>S</u>im',
+						hotkey	: 'S'.charCodeAt(0),
+						action	: function(dialog){
+							servicoLoja.remover(_this.obj.id).done(function (resposta) {
+								if(resposta.status){
+									router.navigate('/lojas');
+									toastr.success(resposta.mensagem);
+									dialog.close();
 
+								}
+								else{
+									toastr.error(resposta.mensagem);
+
+									dialog.close();
+								}
+							});
+						}
+					}, {
+						label	: '<u>N</u>ão',
+						hotkey	: 'N'.charCodeAt(0),
+						action	: function(dialog){
+							dialog.close();
+						}
+					}
+				]
+			});
 		};
 
 		// Configura os eventos do formulário
-		_this.configurar = function configurar(status = false) {
-			_this.definirForm(status);
+		_this.configurar = function configurar() {
+			_this.definirForm();
+			
 		};
 	}; // ControladoraFormLoja
 

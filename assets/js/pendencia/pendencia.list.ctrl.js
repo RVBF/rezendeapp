@@ -73,7 +73,7 @@
 								if(data.status != 'Executado' ){
 									html += '<div class="col col-12 col-lg-4 col-md-4 col-sm-4 mb-0-dto">';
 									html += '<p class="mb-0-dto">';
-									html += '<a href="#" class="detalhes-dto executar_pe">';
+									html += '<a href="#" class="detalhes-dto '+((data.status != 'Executado') ? 'executar_pe' : '') + ' ">';
 									html += '<i class="mdi mdi-eye-outline orange-text text-accent-4 "></i>';
 									html += 'EXECUTAR';
 									html += '</a>';

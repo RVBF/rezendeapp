@@ -47,7 +47,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 			}
 			catch (\Exception $e)
 			{
-				throw new ColecaoException("Erro ao remover categoria.", $e->getCode(), $e);
+				throw new ColecaoException("Erro ao remover checklist.", $e->getCode(), $e);
 			}
 		}
 
@@ -76,6 +76,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 			}
 			catch (\Exception $e)
 			{
+				Util::printr($e->getMessage());
 				throw new ColecaoException("Erro ao atualizar plano de ação.", $e->getCode(), $e);
 			}
 		// }

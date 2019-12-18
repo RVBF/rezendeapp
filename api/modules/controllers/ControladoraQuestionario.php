@@ -126,16 +126,11 @@ class ControladoraQuestionario {
 
 				throw new Exception($msg);
 			}
-			$categoria = $this->colecaoCategoria->comId(\ParamUtil::value($this->params, 'categoria'));
-			if(!isset($categoria) and !($categoria instanceof Categoria)){
-				throw new Exception("Categoria não encontrada na base de dados.");
-			}
 			
 			$Questionario = new Questionario(
 				\ParamUtil::value($this->params, 'id'),
 				\ParamUtil::value($this->params, 'titulo'),
-				\ParamUtil::value($this->params, 'descricao'),
-				$categoria
+				\ParamUtil::value($this->params, 'descricao')
 			);
 			$resposta = ['Questionario'=> RTTI::getAttributes($this->colecaoQuestionario->atualizar($Questionario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Questionario atualizado com sucesso.']; 
 			DB::commit();

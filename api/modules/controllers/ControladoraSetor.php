@@ -17,7 +17,6 @@ class ControladoraSetor {
 
 	private $params;
 	private $colecaoSetor;
-	private $colecaoCategoria;
 	private $colecaoLoja;
 	private $servicoLogin;
 	
@@ -25,7 +24,6 @@ class ControladoraSetor {
 		$this->servicoLogin = new ServicoLogin($sessao);
 		$this->params = $params;
 		$this->colecaoSetor = Dice::instance()->create('ColecaoSetor');
-		$this->colecaoCategoria = Dice::instance()->create('ColecaoCategoria');
 		$this->colecaoLoja = Dice::instance()->create('ColecaoLoja');
 
 	}
@@ -74,7 +72,7 @@ class ControladoraSetor {
 			// 	throw new Exception("Usuário sem permissão para executar ação.");
 			// }
 
-			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo','descricao','categoria'], $this->params);
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo','descricao'], $this->params);
 			$resposta = [];
 
 			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
@@ -88,10 +86,11 @@ class ControladoraSetor {
 				\ParamUtil::value($this->params, 'titulo'),
 				\ParamUtil::value($this->params, 'descricao')
 			);
-			$resposta = ['setor'=> RTTI::getAttributes($this->colecaoSetor->adicionar($setor), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Setor cadastrado com sucesso.']; 
+			$this->colecaoSetor->adicionar($setor);
+
+			$resposta = ['status' => true, 'mensagem'=> 'Setor cadastrado com sucesso.']; 
 			
 			DB::commit();
-
 		}
 		catch (\Exception $e) {
 			DB::rollback();
@@ -109,10 +108,6 @@ class ControladoraSetor {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}		
-			
-			if(!$this->servicoLogin->eAdministrador()){
-				throw new Exception("Usuário sem permissão para executar ação.");
-			}
 
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo','descricao'], $this->params);
 			$resposta = [];
@@ -122,24 +117,41 @@ class ControladoraSetor {
 
 				throw new Exception($msg);
 			}
-			$categoria = $this->colecaoCategoria->comId(\ParamUtil::value($this->params, 'categoria'));
-			if(!isset($categoria) and !($categoria instanceof Categoria)){
-				throw new Exception("Categoria não encontrada na base de dados.");
-			}
 			
 			$setor = new Setor(
 				\ParamUtil::value($this->params, 'id'),
 				\ParamUtil::value($this->params, 'titulo'),
-				\ParamUtil::value($this->params, 'descricao'),
-				$categoria
+				\ParamUtil::value($this->params, 'descricao')
 			);
-			$resposta = ['setor'=> RTTI::getAttributes($this->colecaoSetor->atualizar($setor), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Setor atualizado com sucesso.']; 
+
+			$this->colecaoSetor->atualizar($setor);
+			
+			$resposta = ['status' => true, 'mensagem'=> 'Setor atualizado com sucesso.']; 
+			
 			DB::commit();
 		}
 		catch (\Exception $e) {
 			DB::rollback();
 
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+		}
+
+		return $resposta;
+	}
+
+	function comId($id) {
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
+			
+			if (! is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
+
+			$setor = new Setor(); $setor->fromArray($this->colecaoSetor->comId($id));
+		
+			$resposta = ['conteudo'=> $setor->toArray(), 'status' => true]; 
+		}
+		catch (\Exception $e) {
+			DB::rollback();
+			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()]; 
 		}
 
 		return $resposta;

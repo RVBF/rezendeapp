@@ -14,8 +14,7 @@ class ColecaoUsuarioEmBDR  implements ColecaoUsuario {
 	const VW_TABELA_COLABORADOR_USUARIO = 'vw_colaborador_usuario';
 	const TABELA_RELACIONAL = 'usuario_grupo_usuario';
 
-	function __construct(){
-	}
+	function __construct(){}
 
 	function adicionar(&$obj) {
 		if($this->validarUsuario($obj)) {
@@ -72,9 +71,7 @@ class ColecaoUsuarioEmBDR  implements ColecaoUsuario {
 
 	function comId($id){
 		try {	
-			$usuario = $this->construirObjeto(DB::table(self::TABELA)->select('id', 'login', 'administrador')->where('id', $id)->get()[0]);
-
-			return $usuario;
+			return (DB::table(self::TABELA)->where('id', $id)->count()) ? $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->first()) : [];
 		}
 		catch (\Exception $e)
 		{

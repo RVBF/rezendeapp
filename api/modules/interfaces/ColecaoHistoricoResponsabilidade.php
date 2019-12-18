@@ -1,7 +1,7 @@
 <?php
 
 /**
- *	Coleção de CAtegoria
+ *	Coleção de Histórico Reponsabilidade
  *
  *  @author		Rafael Vinicius Barros
  *  @version	1.0

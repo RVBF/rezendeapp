@@ -56,8 +56,7 @@ class ColecaoQuestionarioEmBDR implements ColecaoQuestionario {
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
 				DB::table(self::TABELA)->where('id', $obj->getId())->update(['titulo' => $obj->getTitulo(),
-					'descricao'=> $obj->getDescricao(),
-					'categoria_id'=> $obj->getCategoria()->getId()
+					'descricao'=> $obj->getDescricao()
 				]);
 
 				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
@@ -169,7 +168,7 @@ class ColecaoQuestionarioEmBDR implements ColecaoQuestionario {
 			throw new ColecaoException('Já exite um Questionario cadastrado com esse título');
 		}
 
-		if(strlen($obj->getTitulo()) <= Questionario::TAM_MIN_TITUlO && strlen($obj->getTitulo()) > Questionario::TAM_MAX_TITUlO) throw new ColecaoException('O titulo deve conter no mínimo '.  Questionario::TAM_MIN_TITULO. ' e no máximo '. Categoria::TAM_MAX_TITUlO . '.');
+		if(strlen($obj->getTitulo()) <= Questionario::TAM_MIN_TITUlO && strlen($obj->getTitulo()) > Questionario::TAM_MAX_TITUlO) throw new ColecaoException('O titulo deve conter no mínimo '.  Questionario::TAM_MIN_TITULO. ' e no máximo '. Questionario::TAM_MAX_TITUlO . '.');
 
 		return true;
 	}
