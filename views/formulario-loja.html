@@ -24,19 +24,48 @@
                                         <label for="nome_fantasia">*Nome Fantasia</label>
                                     </div>
                                 </div>    
-                            </div>
-
-							<div class="row form-row">
-								<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end">
-									<button type="submit" id="salvar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">
-										<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>
-											Finalizar<br>
-											plano de ação
-									</button>
-								</div>
+							</div>
 							
-								<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-start justify-content-md-start ">
-									<button class="waves-effect waves-light btn white grey-text text-darken-4 button-dto f-12-dto">
+							<section id="secao_endereco" class="opcao-selecionada">
+								<span class="card-title"><h5>Endereço</h5></span>
+
+								<div class="divisor-secao"></div>
+
+								<div class="row form-row">
+									<div class="col col-md-6 col-6 col-sm-6 col-lg-6">
+										<div class="input-field">
+											<input id="cep" type="text" class="validate form-control endereco-cep">
+											<label for="cep">CEP</label>
+										</div>
+									</div>
+
+									<div class="col col-md-6 col-6 col-sm-6 col-lg-6">
+										<label for="endereco">Endereço</label>
+										<span id="endereco" class="validate form-control endereco-logradouro"></span>
+									</div>
+								</div>
+
+								<div class="row form-row desabilitado">
+									<div class="col col-md-5 col-5 col-sm-5 col-lg-5">
+										<label for="bairro">Bairro</label>
+										<span id="bairro" class="validate form-control endereco-bairro"></span>
+									</div>
+
+									<div class="col col-md-4 col-4 col-sm-4 col-lg-4">
+										<label for="cidade">Cidade</label>
+										<span id="cidade" class="validate form-control endereco-cidade"></span>
+									</div>
+									
+									<div class="col col-md-2 col-2 col-sm-2 col-lg-2">
+										<label for="estado">Estado</label>
+										<span id="estado" class="validate form-control endereco-cidade"></span>
+									</div>
+								</div>
+							</section>
+						
+							<div class="row form-row" id="botoes">			
+								<div class="col col-md-3 col-3 col-sm-3 col-lg-3">
+									<button class="waves-effect waves-light btn white grey-text text-darken-4 button-dto f-12-dto setor_link">
 										<i class="mdi mdi-close-circle-outline yellow-text text-accent-4"></i>
 										Cancelar
 									</button>

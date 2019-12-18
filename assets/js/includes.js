@@ -142,22 +142,6 @@
          loader.script('vendor/moment/min/moment.min.js');
          loader.script('vendor/moment/locale/pt-br.js');
          // loader.script('vendor/jstree/dist/jstree.min.js');
-
-         // loader.script('vendor/datatables/media/js/jquery.dataTables.js');
-         // loader.script('vendor/datatables/media/js/dataTables.bootstrap4.min.js');
-         // loader.script('vendor/datatables/media/js/dataTables.bootstrap.js');
-         // loader.script('vendor/datatables/media/js/dataTables.dataTables.js');
-         // loader.script('vendor/datatables.net-responsive/js/dataTables.responsive.min.js');
-
-         // loader.script('vendor/datatables.net-responsive-dt/js/responsive.dataTables.min.js');
-         // loader.script('vendor/datatables.net-responsive-bs4/js/responsive.bootstrap4.js');
-         // loader.script('vendor/datatables.net-select/js/dataTables.select.min.js');
-         // loader.script('vendor/datatables.net-select-dt/js/select.dataTables.js');
-
-         // loader.script('vendor/pickadate/lib/compressed/picker.date.js');
-         // loader.script('vendor/pickadate/lib/compressed/picker.time.js');
-         // loader.script('vendor/select2/dist/js/select2.min.js');
-         // loader.script('vendor/piexifjs/piexif.js');
          loader.script('vendor/downloadjs/download.min.js');
 
          // Inicialização
@@ -168,6 +152,8 @@
          loader.script('assets/js/sessao/sessao.serv.js');
          loader.script('assets/js/rotas.js');
 
+         loader.script('assets/js/endereco/endereco.serv.js');
+
          loader.script('assets/js/usuario/usuario.serv.js');
          loader.script('assets/js/login/login.serv.js');
          loader.script('assets/js/logout/logout.serv.js');
@@ -175,10 +161,6 @@
 
          loader.script('assets/js/funcoesSistema.js');
          loader.script('assets/js/index.list.ctrl.js');
-
-         // loader.script('assets/js/categoria/categoria.serv.js');
-         // loader.script('assets/js/categoria/categoria.form.ctrl.js');
-         // loader.script('assets/js/categoria/categoria.list.ctrl.js');
 
          loader.script('assets/js/questionario/tipoquestionario.serv.js');
          loader.script('assets/js/questionario/questionario.serv.js');

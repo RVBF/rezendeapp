@@ -65,7 +65,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 				return $removido;
 			}
 			catch (\Exception $e) {
-				throw new ColecaoException("Erro ao remover categoria com o id do setor.", $e->getCode(), $e);
+				throw new ColecaoException("Erro ao remover checklist com o id do setor.", $e->getCode(), $e);
 			}
 		}
 
@@ -81,7 +81,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			}
 			catch (\Exception $e)
 			{
-				throw new ColecaoException("Erro ao remover categoria.", $e->getCode(), $e);
+				throw new ColecaoException("Erro ao remover checklist.", $e->getCode(), $e);
 			}
 		}
 
@@ -122,6 +122,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 		}
 		catch (\Exception $e) {
+			Util::printr($e->getMessage());
 			throw new ColecaoException("Erro ao atualizar Checklist ", $e->getCode(), $e);
 		}
 	}

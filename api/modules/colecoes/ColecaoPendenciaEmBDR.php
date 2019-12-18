@@ -46,7 +46,7 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 				return $removido;
 			}
 			catch (\Exception $e) {
-				throw new ColecaoException("Erro ao remover categoria com o id do setor.", $e->getCode(), $e);
+				throw new ColecaoException("Erro ao remover checklist com o id do setor.", $e->getCode(), $e);
 			}
 		}
 
@@ -62,7 +62,7 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 			}
 			catch (\Exception $e)
 			{
-				throw new ColecaoException("Erro ao remover categoria.", $e->getCode(), $e);
+				throw new ColecaoException("Erro ao remover checklist.", $e->getCode(), $e);
 			}
 		}
 

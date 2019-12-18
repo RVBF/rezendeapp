@@ -83,6 +83,7 @@
    router.get('/editar-checklist/:id', criarRotaPara('formulario-checklist.html'));
    router.get('/executar-checklist/:id', criarRotaPara('formulario-executarchecklist.html'));
    router.get('/checklist/perguntas/:id', criarRotaPara('questionamentos.html'));
+  
    router.get('/questionarios', criarRotaPara('questionarios.html'));
    router.get('/cadastrar-questionario', criarRotaPara('formulario-questionario.html'));
 
@@ -94,10 +95,14 @@
    router.get('/lojas', criarRotaPara('loja.html'));
    router.get('/cadastrar-loja', criarRotaPara('formulario-loja.html'));
    router.get('/editar-loja/:id', criarRotaPara('formulario-loja.html'));
+   router.get('/visualizar-loja/:id', criarRotaPara('formulario-loja.html'));
+
 
    router.get('/setores', criarRotaPara('setor.html'));
    router.get('/cadastrar-setor', criarRotaPara('formulario-setor.html'));
    router.get('/editar-setor/:id', criarRotaPara('formulario-setor.html'));
+   router.get('/visualizar-setor/:id', criarRotaPara('formulario-setor.html'));
+
 
    router.get('/plano-acao', criarRotaPara('pa-listagem.html'));
    router.get('/cadastrar-pa', criarRotaPara('formulario-pa.html'));
@@ -123,7 +128,8 @@
 
    router.get('/grupos-de-usuario', criarRotaPara('gruposdeusuario.html'));
    router.get('/cadastrar-grupo-de-usuario', criarRotaPara('formulario-grupodeusuario.html'));
-
+   router.get('/visualizar-grupo-de-usuario/:id', criarRotaPara('formulario-grupodeusuario.html'));
+   router.get('/editar-grupo-de-usuario/:id', criarRotaPara('formulario-grupodeusuario.html'));
 
    // 404
    router.get('/*', function (req, e) {
@@ -225,6 +231,10 @@
          html += '<span class="center local-dto">Visualizar Checklist</span>';
          html += '<a href="#/" class="left m16-dto checklist_link"><i class="material-icons">navigate_before</i></a>';
       }
+      else if (window.location.href.search('editar-checklist') != -1) {
+         html += '<span class="center local-dto">Editar Checklist</span>';
+         html += '<a href="#/" class="left m16-dto checklist_link"><i class="material-icons">navigate_before</i></a>';
+      }
       else if (window.location.href.search('perguntas') != -1) {
          html += '<span class="center local-dto">Perguntas</span>';
          html += '<a href="#/" class="left m16-dto checklist_link"><i class="material-icons">navigate_before</i></a>';
@@ -265,6 +275,27 @@
          html += '<span class="center local-dto">Cadastrar Grupo de Usuário</span>';
          html += '<a href="#/" class="left m16-dto grupousuario_link"><i class="material-icons">navigate_before</i></a>';
       }
+      else if (window.location.href.search('visualizar-grupo-de-usuario') != -1){
+         html += '<span class="center local-dto">Visualizar Grupo de Usuário</span>';
+         html += '<a href="#/" class="left m16-dto grupousuario_link"><i class="material-icons">navigate_before</i></a>';
+      }
+      else if(window.location.href.search('editar-grupo-de-usuario') != -1){
+         html += '<span class="center local-dto">Editar Grupo de Usuário</span>';
+         html += '<a href="#/" class="left m16-dto grupousuario_link"><i class="material-icons">navigate_before</i></a>';
+      }
+      else if(window.location.href.search('cadastrar-setor') != -1){
+         html += '<span class="center local-dto">Cadastrar Setor</span>';
+         html += '<a href="#/" class="left m16-dto setor_link"><i class="material-icons">navigate_before</i></a>';
+      } 
+      else if(window.location.href.search('visualizar-setor') != -1){
+         html += '<span class="center local-dto">Visualizar Setor</span>';
+         html += '<a href="#/" class="left m16-dto setor_link"><i class="material-icons">navigate_before</i></a>';
+      }
+      else if(window.location.href.search('visualizar-loja') != -1){
+         html += '<span class="center local-dto">Visualizar Loja</span>';
+         html += '<a href="#/" class="left m16-dto loja_link"><i class="material-icons">navigate_before</i></a>';
+      }
+
       html += '<a href="#/" class="right m16-dto exit-dto efetuar_logout"><i class="material-icons ">exit_to_app</i><span>Sair</span></a>';
 
       $('body').find('.topo-opcoes').empty().append(html);

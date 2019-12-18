@@ -1,5 +1,6 @@
 <?php
 use Illuminate\Database\Capsule\Manager as DB;
+use Carbon\Carbon;
 
 /**
  *	Coleção de Loja em Banco de Dados Relacional.
@@ -38,7 +39,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 		if($this->validarDeleteLoja($id)){
 
 			try {	
-				return DB::table(self::TABELA)->where('id', $id)->delete();
+				return DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->update(['deleted_at'=>Carbon::now()->toDateTimeString()]);
 			}
 			catch (\Exception $e)
 			{
@@ -51,7 +52,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 	function atualizar(&$obj) {
 		if($this->validarLoja($obj)){
 			try {	
-				DB::table(self::TABELA)->where('id', $obj->getId())->update(['razaoSocial' => $obj->getRazaoSocial(), 'nomeFantasia' => $obj->getNomeFantasia()]);
+				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $obj->getId())->update(['razaoSocial' => $obj->getRazaoSocial(), 'nomeFantasia' => $obj->getNomeFantasia()]);
 
 				return $obj;
 			}
@@ -65,9 +66,8 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 
 	function comId($id){
 		try {	
-			$loja = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
+			return (DB::table(self::TABELA)->where('id', $id)->count()) ? $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->first()) : [];
 
-			return $loja;
 		}
 		catch (\Exception $e)
 		{
@@ -78,7 +78,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 	function comColaboradorId($id){
 		try {
 
-			$lojas = DB::table(self::TABELA)->select(self::TABELA . '.*')
+			$lojas = DB::table(self::TABELA)->where('deleted_at', NULL)->select(self::TABELA . '.*')
 				->join(self::TABELA_RELACIONAL, self::TABELA_RELACIONAL . '.loja_id', '=', self::TABELA . '.id')
 				->where(self::TABELA_RELACIONAL . '.colaborador_id', $id)->get();
 				
@@ -102,7 +102,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 	function todos($limite = 0, $pulo = 0, $search = '') {
 		try {	
 
-			$query = DB::table(self::TABELA)->select(self::TABELA . '.*');
+			$query = DB::table(self::TABELA)->where('deleted_at', NULL)->select(self::TABELA . '.*');
 			
 			if($search != '') {
 				$buscaCompleta = $search;
@@ -155,7 +155,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 
 	function todosComIds($ids = []) {
 		try {	
-			$lojas = DB::table(self::TABELA)->whereIn('id', $ids)->get();
+			$lojas = DB::table(self::TABELA)->where('deleted_at', NULL)->whereIn('id', $ids)->get();
 			$lojasObjects = [];
 			foreach ($lojas as $loja) {
 				$lojasObjects[] =  $this->construirObjeto($loja);
@@ -184,7 +184,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 			throw new ColecaoException('Valor inválido para razão social.');
 		}
 
-		$quantidade = DB::table(self::TABELA)->where('razaoSocial', $obj->getRazaoSocial())->where('nomeFantasia', $obj->getNomeFantasia())->where('id', '<>', $obj->getId())->count();
+		$quantidade = DB::table(self::TABELA)->where('deleted_at', NULL)->where('razaoSocial', $obj->getRazaoSocial())->where('nomeFantasia', $obj->getNomeFantasia())->where('id', '<>', $obj->getId())->count();
 
 		if($quantidade > 0){
 			throw new ColecaoException('Já exite uma loja cadastrada com esses dados.');
@@ -209,12 +209,6 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 		// 	throw new ColecaoException('Essa loja possue usuários relacionados a ela! Exclua todos os usuários cadastros e tente novamente.');
 		// }
 
-		$qtdReacionamento = DB::table(self::TABELA)->where('id', $id)->count();
-		
-		if($qtdReacionamento == 0){
-			throw new ColecaoException('Loja Inexistente!');
-			return false;
-		}
 
 		return true;
 	}

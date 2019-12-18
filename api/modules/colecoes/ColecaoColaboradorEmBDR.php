@@ -127,7 +127,6 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 
 	function comId($id){
 		try {	
-
 			return (DB::table(self::TABELA)->where('id', $id)->count()) ? $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->first()) : [];
 		}
 		catch (\Exception $e)
@@ -138,7 +137,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 
 	function comUsuarioId($id){
 		try {	
-			return (DB::table(self::TABELA)->where('usuario_id', $id)->count()) ? $this->construirObjeto(DB::table(self::TABELA)->where('deleted_at', NULL)->where('usuario_id', $id)->first()) : [];
+			return (DB::table(self::TABELA)->where('usuario_id', $id)->count()) ? $this->construirObjeto(DB::table(self::TABELA)->where('usuario_id', $id)->first()) : [];
 		}
 		catch (\Exception $e)
 		{
