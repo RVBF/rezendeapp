@@ -74,9 +74,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 
 				return $obj;
 			}
-			catch (\Exception $e)
-			{
-				Util::printr($e->getMessage());
+			catch (\Exception $e) {
 				throw new ColecaoException("Erro ao atualizar plano de ação.", $e->getCode(), $e);
 			}
 		// }

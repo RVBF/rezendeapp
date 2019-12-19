@@ -51,7 +51,6 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			return $obj;
 		}
 		catch (\Exception $e) {
-			Util::printr($e->getMessage());
 			throw new ColecaoException("Erro ao adicionar Checklist ", $e->getCode(), $e);
 		}
 	}
@@ -122,7 +121,6 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 		}
 		catch (\Exception $e) {
-			Util::printr($e->getMessage());
 			throw new ColecaoException("Erro ao atualizar Checklist ", $e->getCode(), $e);
 		}
 	}

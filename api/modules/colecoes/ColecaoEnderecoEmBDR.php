@@ -16,7 +16,6 @@ class ColecaoEnderecoEmBDR implements ColecaoEndereco {
 	function adicionar(&$obj) {
 		if($this->validarEndereco($obj)) {
 			try {
-				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 				$id = DB::table(self::TABELA)->insertGetId([
 					'cep' => $obj->getCep(),
 					'logradouro' => $obj->getLogradouro(), 
@@ -39,6 +38,8 @@ class ColecaoEnderecoEmBDR implements ColecaoEndereco {
 	function atualizar(&$obj) {
 		if($this->validarEndereco($obj)){
 			try {	
+				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
 				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $obj->getId())->update([
 					'cep' => $obj->getCep(),
 					'logradouro' => $obj->getLogradouro(), 
@@ -48,6 +49,8 @@ class ColecaoEnderecoEmBDR implements ColecaoEndereco {
 					'bairro' => $obj->getBairro(),
 					'uf' => $obj->getUf()
 				]);
+
+				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 			}
 			catch (\Exception $e)
 			{
@@ -61,7 +64,7 @@ class ColecaoEnderecoEmBDR implements ColecaoEndereco {
 	function remover($id) {
 		if($this->validarDeleteEndereco($id)){
 			try {	
-				return DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->update(['deleted_at'=>Carbon::now()->toDateTimeString()]);
+				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->update(['deleted_at' =>Carbon::now()->toDateTimeString()]);
 			}
 			catch (\Exception $e) {
 				throw new ColecaoException("Erro ao remover endereço!", $e->getCode(), $e);
@@ -75,8 +78,6 @@ class ColecaoEnderecoEmBDR implements ColecaoEndereco {
 		try {
 			return (DB::table(self::TABELA)->where('id', $id)->count()) ? $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->first()) : [];
 		}catch(\Exception $e) {
-			Util::printr($e->getMessage());
-
 			throw new ColecaoException('Erro ao buscar endereço com referência de id!', $e->getCode(), $e);
 		}
 	}

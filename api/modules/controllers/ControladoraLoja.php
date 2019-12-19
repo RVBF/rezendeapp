@@ -189,6 +189,7 @@ class ControladoraLoja {
 
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
+			$resposta = [];
 
 			$loja = new Loja(); $loja->fromArray($this->colecaoLoja->comId($id));
 
@@ -197,15 +198,17 @@ class ControladoraLoja {
 			$this->colecaoLoja->remover($loja->getId());
 			$this->colecaoEndereco->remover($endereco->getId());
 
-			return ['status' => true, 'mensagem'=> 'Loja removida com sucesso.']; 
+			$resposta = ['status' => true, 'mensagem'=> 'Loja removida com sucesso.']; 
 			
 			DB::commit();
 		}
 		catch (\Exception $e) {
 			DB::rollback();
 
-			return ['status' => false, 'mensagem'=> $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()]; 
 		}
+
+		return $resposta;
 	}
 }
 ?>

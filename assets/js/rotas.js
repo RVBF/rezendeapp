@@ -299,6 +299,10 @@
          html += '<span class="center local-dto">Visualizar Loja</span>';
          html += '<a href="#/" class="left m16-dto loja_link"><i class="material-icons">navigate_before</i></a>';
       }
+      else if(window.location.href.search('editar-loja') != -1){
+         html += '<span class="center local-dto">Editar Loja</span>';
+         html += '<a href="#/" class="left m16-dto loja_link"><i class="material-icons">navigate_before</i></a>';
+      }
 
       html += '<a href="#/" class="right m16-dto exit-dto efetuar_logout"><i class="material-icons ">exit_to_app</i><span>Sair</span></a>';
 

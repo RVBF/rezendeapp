@@ -53,12 +53,9 @@ class ControladoraColaborador {
 			$erro = null;	
 
 			$objetos = $this->colecaoColaborador->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');	
-			// Util::printr($objetos);
 			$contagem = $this->colecaoUsuario->contagem();
 		}
-		catch (\Exception $e )
-		{
-			Util::printr($e->getMessage());
+		catch (\Exception $e ) {
 			throw new Exception("Erro ao listar colaboradores.");
 		}
 		$conteudo = new DataTablesResponse(

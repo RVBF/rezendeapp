@@ -32,7 +32,6 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 
 		}
 		catch (\Exception $e) {
-			Util::printr($e->getMessage());
 			throw new ColecaoException("Erro ao adicionar nova pendência", $e->getCode(), $e);
 		}
 	}

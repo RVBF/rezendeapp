@@ -42,8 +42,8 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 	function remover($id) {
 		if($this->validarDeleteLoja($id)){
 
-			try {	
-				return DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->update(['deleted_at'=>Carbon::now()->toDateTimeString()]);
+			try {
+				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->update(['deleted_at' =>Carbon::now()->toDateTimeString()]);
 			}
 			catch (\Exception $e)
 			{

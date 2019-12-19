@@ -356,6 +356,11 @@ button{
     .listagem-padrao .paginacao{
         text-align: center !important;
     }
+
+    form #botoes button{
+        padding: 0.5em !important;
+        font-size: 9px !important;
+    }
 }
 
 @media(min-width: 575px) and (max-width: 800px){
