@@ -1,6 +1,8 @@
 <section id="painel_formulario">
    <div class="row">
 		<div class="col-md-12 col-12 col-sm-12 col-lg-12">
+			<section id="msg" class="card-panel left-align text-danger msg d-none  desabilitado"></section>
+
 			<div class="card-panel left-align">
 				<div class="row">
 					<div class="col-12  col-sm-12 col-md-12 col-lg-12">
@@ -32,33 +34,55 @@
 								<div class="divisor-secao"></div>
 
 								<div class="row form-row">
-									<div class="col col-md-6 col-6 col-sm-6 col-lg-6">
+									<div class="col col-md-12 col-12 col-sm-12 col-lg-12">
 										<div class="input-field">
-											<input id="cep" type="text" class="validate form-control endereco-cep">
+											<input id="cep" name="cep" type="text" class="validate form-control endereco-cep">
 											<label for="cep">CEP</label>
 										</div>
 									</div>
+								</div>
 
-									<div class="col col-md-6 col-6 col-sm-6 col-lg-6">
-										<label for="endereco">Endereço</label>
-										<span id="endereco" class="validate form-control endereco-logradouro"></span>
+								<div class="row form-row">
+									<div class="col col-md-9 col-12 col-sm-9 col-lg-6">
+										<div class="input-field">
+											<input id="endereco" name="endereco" type="text" class="validate form-control endereco-logradouro">
+											<label for="endereco">Endereço</label>
+										</div>
+									</div>
+
+									<div class="col col-md-3 col-2 col-sm-3 col-lg-6">
+										<div class="input-field">
+											<input id="numero" name="numero" type="text" class="validate form-control endereco-numero">
+											<label for="numero">Nº</label>
+										</div>
+									</div>
+
+									<div class="col col-md-12 col-10 col-sm-12 col-lg-12">
+										<div class="input-field">
+											<input id="complemento" name="complemento" type="text" class="validate form-control endereco-complemento">
+											<label for="complemento">Complemento</label>
+										</div>
 									</div>
 								</div>
 
-								<div class="row form-row desabilitado">
-									<div class="col col-md-5 col-5 col-sm-5 col-lg-5">
-										<label for="bairro">Bairro</label>
-										<span id="bairro" class="validate form-control endereco-bairro"></span>
+								<div class="row form-row">
+									<div class="col col-md-5 col-12 col-sm-5 col-lg-5">
+										<div class="input-field">
+											<input id="bairro" name="bairro" type="text" class="validate form-control endereco-bairro">
+											<label for="bairro">Bairro</label>
+										</div>
 									</div>
 
-									<div class="col col-md-4 col-4 col-sm-4 col-lg-4">
-										<label for="cidade">Cidade</label>
-										<span id="cidade" class="validate form-control endereco-cidade"></span>
+									<div class="col col-md-4 col-10 col-sm-4 col-lg-4">
+										<div class="input-field">
+											<label for="cidade">Cidade</label>
+											<input id="cidade" name="cidade" type="text" class="validate form-control endereco-cidade">
+										</div>
 									</div>
 									
 									<div class="col col-md-2 col-2 col-sm-2 col-lg-2">
 										<label for="estado">Estado</label>
-										<span id="estado" class="validate form-control endereco-cidade"></span>
+										<span id="estado" class="validate form-control endereco-estado"></span>
 									</div>
 								</div>
 							</section>

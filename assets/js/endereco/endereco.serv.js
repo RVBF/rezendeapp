@@ -13,7 +13,6 @@
 		logradouro,
 		numero,
 		complemento,
-		referencia,
 		bairro,
 		cidade,
 		estado,
@@ -26,7 +25,6 @@
 		this.logradouro = logradouro || '';
 		this.numero = numero || '';
 		this.complemento = complemento || '';
-		this.referencia = referencia || '';
 		this.bairro = bairro || '';
 		this.cidade = cidade || '';
 		this.estado = estado || '';
@@ -45,7 +43,6 @@
 			logradouro,
 			numero,
 			complemento,
-			referencia,
 			bairro,
 			cidade,
 			estado,
@@ -59,7 +56,6 @@
 				logradouro : logradouro || '',
 				numero : numero || '',
 				complemento : complemento || '',
-				referencia : referencia || '',
 				bairro : bairro || '',
 				cidade : cidade || '',
 				estado : estado || '',
@@ -68,8 +64,7 @@
 			};
 		};
 
-		_this.consultarCepViaCEP = function consultarCepViaCEP(cep)
-		{
+		_this.consultarCepViaCEP = function consultarCepViaCEP(cep) {
 			return $.ajax({
 				url:'https://viacep.com.br/ws/'+cep+'/json/',
 				type:'get',

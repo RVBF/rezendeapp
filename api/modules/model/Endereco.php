@@ -17,28 +17,31 @@ class Endereco {
 	private $id;
 	private $cep;
 	private $logradouro;
-	private $latitude;
-	private $longitude;
-	private $codigoIbge;
-    private $bairro;
-    
+	private $numero;
+	private $complemento;
+	private $bairro;
+	private $cidade;
+    private $uf;
+	    
 	function __construct(
 		$id = 0,
 		$cep = '',
 		$logradouro = '',
-		$latitude = '',
-		$longitude = '',
-		$codigoIbge = '',
-		$bairro = ''
+		$numero = '',
+		$complemento = '',
+		$bairro = '',
+		$cidade = '',
+		$uf = ''
 	)
 	{
 		$this->id = (int) $id;
 		$this->cep = $cep;
 		$this->logradouro = $logradouro;
-		$this->latitude = (double) $latitude;
-		$this->longitude = (double) $longitude;
-		$this->codigoIbge = $codigoIbge;
+		$this->numero = $numero;
+		$this->complemento = $complemento;
 		$this->bairro = $bairro;
+		$this->cidade = $cidade;
+		$this->uf = $uf;
 	}
 }
 

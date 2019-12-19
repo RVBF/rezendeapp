@@ -14,6 +14,7 @@
 		_this.alterar;
 		_this.formulario = $('#loja_form');
 		_this.botaoSubmissao = $('#salvar')
+		_this.servicoEndereco = new app.ServicoEndereco();
 
 		var pegarId = function pegarId(url, palavra) {
 
@@ -36,7 +37,13 @@
 			var opcoes = {
 				rules: {
 					"razao_social": {required : true, rangelength : [2, 100] },
-					"nome_fantasia" :{required : true, rangelength : [2, 100] }
+					"nome_fantasia" :{required : true, rangelength : [2, 100] },
+					"cep" : {required : true, minlength : 9, maxlength  : 9},
+					"endereco" : {required: true},
+					"bairro" : {required : true},
+					"cidade" : {required : true},
+					"numero" : {required : true},
+					"complemento" : {required : true}
 				},
 
 				messages: {
@@ -47,7 +54,29 @@
 					"nome_fantasia": {
 						required    : "O campo lojas é obrigatório.",
 						rangelength: "o campo nome fantasia deve conter no mínimo {2} e  no máximo {100} caracteres."
-                    }				
+					},
+					"cep" : {
+						required : " O campo CEP é obrigatório.",
+						minlength : "O campo CEP deve ter no mínimo 8 caracteres.",
+						maxlength : "O campo CEP ter no máximo 8 caracteres.",
+					},		
+					"endereco" : {
+						required : "Campo endereço é obrigatório."
+					},
+					"bairro" : {
+						required : "Campo bairro é obrigatório."
+					},
+					"cidade" : {
+						required : "Campo cidade é obrigatório."
+					},
+
+					"numero" : {
+						required : "Campo bairro é obrigatório."
+					},
+
+					"complemento" : {
+						required : "Campo cidade é obrigatório."
+					}
                 }
 			};
 			// Irá disparar quando a validação passar, após chamar o método validate().
@@ -80,20 +109,39 @@
 	
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
-			return servicoLoja.criar($('#id').val(), $('#razao_social').val(), $('#nome_fantasia').val());
+			return servicoLoja.criar(
+				$('#id').val(), 
+				$('#razao_social').val(), 
+				$('#nome_fantasia').val(),
+				_this.servicoEndereco.criar(
+					0,
+					$('#cep').val(),
+					$('#endereco').val(),
+					$('#numero').val(),
+					$('#complemento').val(),
+					$('#bairro').val(),
+					$('#cidade').val(),
+					$('#estado').html()
+				)
+			);
 		};
 
 		_this.configurarBotoes = function configurarBotoes() {
 			_this.botaoSubmissao.on('click', _this.salvar);
-			$('#cep').on('change',function(){
-				var jqXHR = new app.ServicoEndereco();
-				jqXHR.consultarCepViaCEP($(this).val()).done(function (resposta) {
-					var elemento = JSON.parse(JSON.stringify(resposta));
-					$('#endereco').html(elemento.logradouro);
-					$('#cidade').html(elemento.localidade);
-					$('#bairro').html(elemento.bairro);
-					$('#estado').html(elemento.uf);
-				});
+			$('#cep').mask('00000-000');
+			$('#cep').on('change' ,function(){
+				if($(this).val().length == 9)
+				{
+					var jqXHR = _this.servicoEndereco.consultarCepViaCEP($(this).val());
+					jqXHR.done(function (resposta) {
+						var elemento = JSON.parse(JSON.stringify(resposta));
+						$('#endereco').val(elemento.logradouro).focus().blur();
+						$('#cidade').val(elemento.localidade).focus().blur();
+						$('#bairro').val(elemento.bairro).focus().blur();
+						$('#estado').html(elemento.uf);
+					});
+				}
+
 			});
 		};
 
@@ -121,8 +169,16 @@
 		// Desenha o objeto no formulário
 		_this.desenhar = function desenhar(resposta) {
 			_this.obj = resposta.conteudo;
+			$('#id').val(_this.obj.id);
 			$('#razao_social').val(_this.obj.razaoSocial).focus().blur();
 			$('#nome_fantasia').val(_this.obj.nomeFantasia).focus().blur();
+			$('#cep').val(_this.obj.endereco.cep).focus().blur();
+			$('#endereco').val(_this.obj.endereco.logradouro).focus().blur();
+			$('#numero').val(_this.obj.endereco.numero).focus().blur();
+			$('#complemento').val(_this.obj.endereco.complemento).focus().blur();
+			$('#bairro').val(_this.obj.endereco.bairro).focus().blur();
+			$('#cidade').val(_this.obj.endereco.cidade).focus().blur();
+			$('#cidade').html(_this.obj.endereco.uf);
 
             if(window.location.href.search('visualizar') != -1){
                 _this.formulario.desabilitar(true);

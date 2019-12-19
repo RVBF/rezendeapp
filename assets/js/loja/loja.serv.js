@@ -7,10 +7,11 @@
  {
 	'use strict';
 
-	function Loja(id, razaoSocial, nomeFantasia) {
+	function Loja(id, razaoSocial, nomeFantasia, endereco) {
 		this.id = id  || 0;
         this.razaoSocial = razaoSocial  || '';
-        this.nomeFantasia = nomeFantasia  || '';
+		this.nomeFantasia = nomeFantasia  || '';
+		this.endereco = endereco || '';
 	};
 
 	function ServicoLoja() { // Model
@@ -21,11 +22,12 @@
 		};
 
 		// Cria um objeto de categoria
-		this.criar = function criar(id, razaoSocial, nomeFantasia) {
+		this.criar = function criar(id, razaoSocial, nomeFantasia, endereco) {
  			return {
                 id : id  || 0,
                 razaoSocial : razaoSocial  || '',
-                nomeFantasia : nomeFantasia  || ''
+				nomeFantasia : nomeFantasia  || '',
+				endereco : endereco || ''
             };
 		};
 

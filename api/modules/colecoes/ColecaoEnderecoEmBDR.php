@@ -1,5 +1,6 @@
 <?php
-use phputil\TDateTime;
+use Illuminate\Database\Capsule\Manager as DB;
+use Carbon\Carbon;
 /**
  *	Coleção de Endereço em Banco de Dados Relacional.
  *
@@ -7,232 +8,135 @@ use phputil\TDateTime;
  *	@version	0.1
  */
 
-class ColecaoEnderecoEmBDR implements ColecaoEndereco
-{
-
+class ColecaoEnderecoEmBDR implements ColecaoEndereco {
 	const TABELA = 'endereco';
 
-	private $pdoW;
+	function __construct(){}
 
-	function __construct(PDOWrapper $pdoW)
-	{
-		$this->pdoW = $pdoW;
-	}
-
-	function adicionar(&$obj)
-	{
-		if($this->validarEndereco($obj))
-		{
-			try
-			{
-				$sql = 'INSERT INTO ' . self::TABELA . ' (cep, logradouro, latitude, longitude, codigo_ibge, bairro_id) VALUES (:cep, :logradouro, :latitude, :longitude, :codigo_ibge, :bairro);';
-
-				$this->pdoW->execute($sql, [
+	function adicionar(&$obj) {
+		if($this->validarEndereco($obj)) {
+			try {
+				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+				$id = DB::table(self::TABELA)->insertGetId([
 					'cep' => $obj->getCep(),
-					'logradouro' => $obj->getLogradouro(),
-					'latitude' => $obj->getLatitude(),
-					'longitude' => $obj->getLongitude(),
-					'codigo_ibge' => $obj->getCodigoIbge(),
-					'bairro' => $obj->getBairro()->getId()
+					'logradouro' => $obj->getLogradouro(), 
+					'numero' => $obj->getNumero(),
+					'complemento' => $obj->getComplemento(),
+					'cidade' => $obj->getCidade(),
+					'bairro' => $obj->getBairro(),
+					'uf' => $obj->getUf()
+
 				]);
 
-				$obj->setId($this->pdoW->lastInsertId());
+				$obj->setId($id);
 			}
-			catch (\Exception $e)
-			{
-				throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+			catch (\Exception $e) {
+				throw new ColecaoException("Erro ao cadastrar endereço!", $e->getCode(), $e);
 			}
 		}
 	}
 
-	function atualizar(&$obj)
-	{
-		if($this->validarEndereco($obj))
-		{
-			try
-			{
-				$sql  = 'SET foreign_key_checks = 0';
-				$this->pdoW->execute($sql);
-
-				$sql = 'UPDATE ' . self::TABELA . ' SET
-					cep := cep,
-					logradouro :=logradouro,
-					bairro_id := bairro
-				WHERE id = :id';
-
-				$this->pdoW->execute($sql, [
-					'cep' => $this->retirarCaracteresEspeciais($obj->getCep()),
-					'logradouro' => $obj->getLogradouro(),
-					'bairro' => $obj->getBairro()->getId(),
-					'id' => $obj->getId()
+	function atualizar(&$obj) {
+		if($this->validarEndereco($obj)){
+			try {	
+				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $obj->getId())->update([
+					'cep' => $obj->getCep(),
+					'logradouro' => $obj->getLogradouro(), 
+					'numero' => $obj->getNumero(),
+					'complemento' => $obj->getComplemento(),
+					'cidade' => $obj->getCidade(),
+					'bairro' => $obj->getBairro(),
+					'uf' => $obj->getUf()
 				]);
-
-				$sql  = 'SET foreign_key_checks = 1';
-				$this->pdoW->execute($sql);
-
 			}
 			catch (\Exception $e)
 			{
-				throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+
+				throw new ColecaoException("Erro ao atualizar endereco!", $e->getCode(), $e);
 			}
 		}
+		
 	}
 
-	function remover($id)
-	{
-		try
-		{
-			$sql  = 'SET foreign_key_checks = 0';
-			$this->pdoW->execute($sql);
-			if($this->pdoW->deleteWithId($id, self::TABELA))
-			{
-				$sql  = 'SET foreign_key_checks = 1';
-				$this->pdoW->execute($sql);
-				return true;
+	function remover($id) {
+		if($this->validarDeleteEndereco($id)){
+			try {	
+				return DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->update(['deleted_at'=>Carbon::now()->toDateTimeString()]);
 			}
-			else
-			{
-				return false;
+			catch (\Exception $e) {
+				throw new ColecaoException("Erro ao remover endereço!", $e->getCode(), $e);
 			}
-		}
-		catch(\Exception $e)
-		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
 		}
 	}
 
 	function comId($id)
 	{
-		try
-		{
-			return $this->pdoW->objectWithId([$this, 'construirObjeto'], $id, self::TABELA);
-		}catch(\Exception $e)
-		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+
+		try {
+			return (DB::table(self::TABELA)->where('id', $id)->count()) ? $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->first()) : [];
+		}catch(\Exception $e) {
+			Util::printr($e->getMessage());
+
+			throw new ColecaoException('Erro ao buscar endereço com referência de id!', $e->getCode(), $e);
 		}
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	function todos($limite = 0, $pulo = 0)
-	{
-		try
-		{
-			return $this->pdoW->allObjects([$this, 'construirObjeto'], self::TABELA, $limite, $pulo);
-		}
-		catch(\Exception $e)
-		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
-		}
+	function todos($limite = 0, $pulo = 0, $search = '') {
+		// try {	
+
+		// 	$query = DB::table(self::TABELA)->where('deleted_at', NULL)->select(self::TABELA . '.*');
+	
+		// 	return $lojasObjects;
+		// }
+		// catch (\Exception $e)
+		// {
+		// 	throw new ColecaoException("Erro ao listar lojas!", $e->getCode(), $e);
+		// }
 	}
 
-	function construirObjeto(array $row)
-	{
-		return new Endereco(
+	function construirObjeto(array $row) {
+		$endereco = new Endereco(
 			$row['id'],
 			$row['cep'],
 			$row['logradouro'],
-			$row['latitude'],
-			$row['longitude'],
-			$row['codigo_ibge'],
-			$row['bairro_id']
+			$row['numero'],
+			$row['complemento'],
+			$row['bairro'],
+			$row['cidade'],
+			$row['uf']
 		);
+
+		return $endereco->toArray();
 	}
 
-	function contagem()
-	{
-		try
-		{
-			return $this->pdoW->countRows(self::TABELA);
-		}
-		catch (\Exception $e)
-		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
-		}
+    function contagem() {
+		return DB::table(self::TABELA)->count();
 	}
 
-	public function comBairroECep( $cep, $bairroId)
-	{
-		try
-		{
-			$sql = 'SELECT *  FROM ' . self::TABELA .' as endereco join '. ColecaoBairroEmBDR::TABELA .' as bairro on endereco.bairro_id = bairro.id WHERE endereco.cep like "%'. $cep .'%" and bairro.id = :bairroId;';
-
-			return  $this->pdoW->queryObjects([$this, 'construirObjeto'], $sql, ['bairroId'=>$bairroId]);
-		}
-		catch (\Exception $e)
-		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
-		}
-	}
-
-	public function comLatitudeElongitude($latitude, $longitude)
-	{
-		try
-		{
-			$sql = 'SELECT * FROM ' . self::TABELA .' where (
-			6371 * acos(
-            cos(radians(:latitude)) *
-            cos(radians(latitude)) *
-            cos(radians(:longitude) - radians(longitude)) +
-            sin(radians(:latitude)) *
-            sin(radians(latitude))
-        )) <= 0.25;';
-
-			return  $this->pdoW->queryObjects([$this, 'construirObjeto'], $sql, ['latitude'=>$latitude, 'longitude'=> $longitude]);
-		}
-		catch (\Exception $e)
-		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
-		}
-	}
-
-	public function comCep($cep)
-	{
-		try
-		{
-			$sql = 'SELECT *  FROM ' . self::TABELA .' as endereco WHERE endereco.cep like "%'. $cep .'%" ;';
-
-			return  $this->pdoW->queryObjects([$this, 'construirObjeto'],$sql);
-		}
-		catch (\Exception $e)
-		{
-			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
-		}
-	}
 
 	/**
 	*  Valida o endereco, lançando uma exceção caso haja algo inválido.
 	*  @throws ColecaoException
 	*/
-	private function validarEndereco(&$obj)
-	{
-		if(!is_string($obj->getLogradouro()))
-		{
-			throw new ColecaoException('Valor inválido para bairro.');
-		}
+	private function validarEndereco(&$obj) {
+		if(!is_string($obj->getLogradouro()) || strlen($obj->getLogradouro()) == 0) throw new ColecaoException('O campo logradouro é obrigatório!');
+		if(!is_string($obj->getComplemento()) || strlen($obj->getComplemento()) == 0) throw new ColecaoException('O campo complemento é obrigatório!');
+		if(!is_string($obj->getBairro()) || strlen($obj->getBairro()) == 0) throw new ColecaoException('O campo bairro é obrigatório!');
+		if(!is_string($obj->getCidade()) || strlen($obj->getCidade()) == 0) throw new ColecaoException('O campo cidade é obrigatório!');
+		if(!is_string($obj->getUf()) || strlen($obj->getUf()) == 0) throw new ColecaoException('O campo uf é obrigatório!');
 
-		if($obj->getCep() != '') $this->validarCep($obj->getCep());
+		if(strlen($obj->getUf()) != 2) throw new ColecaoException('O campo uf deve conter no máximo 2 caracteres!');
 
-		$sql = 'select * from ' . self::TABELA .' where endereco.cep like "%' . $obj->getCep() . '%" and (
-			6371 * acos(
-            cos(radians(:latitude)) *
-            cos(radians(latitude)) *
-            cos(radians(:longitude) - radians(longitude)) +
-            sin(radians(:latitude)) *
-            sin(radians(latitude))
-        )) <= 0.25;';
-
-		$enderecoResposta = $this->pdoW->queryObjects([$this, 'construirObjeto'], $sql, ['latitude'=>$obj->getLatitude(), 'longitude'=> $obj->getLongitude()]);
-
-		if(!empty($enderecoResposta))
-		{
-			$enderecoResposta = $enderecoResposta[0];
-			$obj->setId($enderecoResposta->getId());
-			return false;
-		}
 		else return true;
 	}
-}
 
+	private function validarDeleteEndereco($id){
+
+		if(DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->count() == 0){
+			throw new ColecaoException('O endereço selecionado não foi encontrado na base de dados');
+		}
+		
+		return true;
+	}
+}
 ?>
