@@ -97,10 +97,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 				return $obj;
 			}
-			catch (\Exception $e)
-			{
-				Util::printr($e->getMessage());
-
+			catch (\Exception $e) {
 				throw new ColecaoException("Erro ao atualizar colaborador no banco de dados", $e->getCode(), $e);
 			}
 		}	
@@ -139,9 +136,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 		try {	
 			return (DB::table(self::TABELA)->where('usuario_id', $id)->count()) ? $this->construirObjeto(DB::table(self::TABELA)->where('usuario_id', $id)->first()) : [];
 		}
-		catch (\Exception $e)
-		{
-			Util::printr($e->getMessage());
+		catch (\Exception $e) {
 			throw new ColecaoException("Erro a buscar usuario com usando a referêrencia de colaborador no banco de dados!", $e->getCode(), $e);
 		}
 	}

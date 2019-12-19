@@ -104,7 +104,6 @@ class ControladoraQuestionamento {
 			}				
 
 			if($this->params['formularioResposta']['opcao'] != OpcoesRespostaEnumerada::BOM){
-				// Util::printr($this->params['planoAcao']);
 				if(isset($this->params['planoAcao']) || isset($this->params['pendencia'])){
 					if(!(((
 						strlen($this->params['pendencia']['descricao']) > 0 and

@@ -175,8 +175,6 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 			return $questionamentosObjects;
 		} 		
 		catch (\Exception $e) {
-			Util::printr($e->getMessage());
-
 			throw new ColecaoException("Erro ao buscar questionamentos com a referência de checklist!", $e->getCode(), $e);
 		}
 	}
