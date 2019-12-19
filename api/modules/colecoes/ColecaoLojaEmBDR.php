@@ -22,7 +22,11 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 		if($this->validarLoja($obj)){
 			try {	
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-				$id = DB::table(self::TABELA)->insertGetId(['razaoSocial' => $obj->getRazaoSocial(), 'nomeFantasia' => $obj->getNomeFantasia()]);
+				$id = DB::table(self::TABELA)->insertGetId([
+					'razaoSocial' => $obj->getRazaoSocial(), 
+					'nomeFantasia' => $obj->getNomeFantasia(),
+					'endereco_id' => $obj->getEndereco()->getId()
+				]);
 
 				$obj->setId($id);
 				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
@@ -67,7 +71,6 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 	function comId($id){
 		try {	
 			return (DB::table(self::TABELA)->where('id', $id)->count()) ? $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->first()) : [];
-
 		}
 		catch (\Exception $e)
 		{
@@ -170,13 +173,14 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 	}
 
 	function construirObjeto(array $row) {
+		$endereco =  ($row['endereco_id'] > 0) ? Dice::instance()->create('ColecaoEndereco')->comId($row['endereco_id']) : null;
 
-		$loja = new Loja($row['id'],$row['razaoSocial'], $row['nomeFantasia']);
+		$loja = new Loja($row['id'], $row['razaoSocial'], $row['nomeFantasia'], $endereco);
 		return $loja->toArray();
 	}	
 
     function contagem() {
-		return DB::table(self::TABELA)->count();
+		return DB::table(self::TABELA)->where('deleted_at', NULL)->count();
 	}
 
 	private function validarLoja(&$obj) {
@@ -184,8 +188,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 			throw new ColecaoException('Valor inválido para razão social.');
 		}
 
-		$quantidade = DB::table(self::TABELA)->where('deleted_at', NULL)->where('razaoSocial', $obj->getRazaoSocial())->where('nomeFantasia', $obj->getNomeFantasia())->where('id', '<>', $obj->getId())->count();
-
+		$quantidade = DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', '<>', $obj->getId())->where('razaoSocial', $obj->getRazaoSocial())->where('nomeFantasia', $obj->getNomeFantasia())->where('id', '<>', $obj->getId())->count();
 		if($quantidade > 0){
 			throw new ColecaoException('Já exite uma loja cadastrada com esses dados.');
 		}

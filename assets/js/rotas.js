@@ -291,6 +291,10 @@
          html += '<span class="center local-dto">Visualizar Setor</span>';
          html += '<a href="#/" class="left m16-dto setor_link"><i class="material-icons">navigate_before</i></a>';
       }
+      else if(window.location.href.search('cadastrar-loja') != -1){
+         html += '<span class="center local-dto">Cadastrar loja</span>';
+         html += '<a href="#/" class="left m16-dto loja_link"><i class="material-icons">navigate_before</i></a>';
+      }
       else if(window.location.href.search('visualizar-loja') != -1){
          html += '<span class="center local-dto">Visualizar Loja</span>';
          html += '<a href="#/" class="left m16-dto loja_link"><i class="material-icons">navigate_before</i></a>';

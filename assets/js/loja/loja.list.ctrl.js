@@ -38,6 +38,8 @@
 							html += '<div class="col co-lg-10 col-md-10 col-sm-10 col-8">';
 								html += '<p class="f-12-dto"><strong>Razão Social : </strong>'+ data.razaoSocial + '</p>';
 								html += '<p class="f-12-dto"><strong>Nome Fantasia : </strong>'+ data.nomeFantasia + '</p>';
+								html += '<p class="f-12-dto"><strong>Endereco : </strong>'+ data.endereco.logradouro +', '+ data.endereco.numero + '-' + data.endereco.complemento + ', '+ data.endereco.bairro + ', '+ data.endereco.cidade + '/' + data.endereco.uf + '-' + data.endereco.cep + '</p>';
+
 							html += '</div>';
 
 							html += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12 mb-0-dto opc_tabela">';
