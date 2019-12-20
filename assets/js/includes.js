@@ -141,7 +141,7 @@
          loader.script('vendor/pickerjs/dist/picker.min.js');
          loader.script('vendor/moment/min/moment.min.js');
          loader.script('vendor/moment/locale/pt-br.js');
-         // loader.script('vendor/jstree/dist/jstree.min.js');
+         loader.script('vendor/jstree/dist/jstree.min.js');
          loader.script('vendor/downloadjs/download.min.js');
 
          // Inicialização
