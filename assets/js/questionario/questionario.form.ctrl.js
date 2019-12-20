@@ -13,7 +13,24 @@
 
 		_this.alterar;
 		_this.formulario = $('#questionario_form');
-		_this.botaoSubmissao = $('#salvar')
+		_this.botaoSubmissao = $('#salvar');
+		
+		var pegarId = function pegarId(url, palavra) {
+
+			// Terminando com "ID/palavra"
+			var regexS = palavra+'+\/[0-9]{1,}';
+
+			var regex = new RegExp(regexS);
+			var resultado = regex.exec(url);
+
+			if (!resultado || resultado.length < 1)
+			{
+				return 0;
+			}
+
+			var array = resultado[0].split('/');
+			return array[1];
+		};
 
 		// Cria as opções de validação do formulário
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
@@ -40,18 +57,17 @@
 				};
 				
 				_this.formulario.desabilitar(true);
-			
-				var jqXHR = _this.alterar ? servicoQuestionario.atualizar(obj) : servicoQuestionario.adicionar(obj);
-				jqXHR.done(function() {
-					router.navigate('/questionarios');
-					toastr.success('Questionário Adicionado com sucesso!')
-				}).fail(window.erro).always(terminado);
+				var jqXHR = (window.location.href.search('editar') != -1) ? servicoQuestionario.atualizar(obj) : servicoQuestionario.adicionar(obj);
 
-				if(_this.alterar){
-					$('.depende_selecao').each(function(){
-						$(this).prop('disabled', true);
-					});
-				}
+				jqXHR.done(function(resposta) {
+					if(resposta.status){
+						router.navigate('/questionarios');
+						toastr.success(resposta.mensagem)
+					}else{
+						$('body #msg').empty().removeClass('d-none').append(resposta.mensagem).focus();
+						toastr.error(resposta.mensagem);
+					}
+				}).fail(window.erro).always(terminado);
 			}; // submitHandler
 
 			return opcoes;
@@ -132,51 +148,154 @@
 			
 			if(quantidade > 1) $(this).parents('.pergunta').remove();
 		};
+
 		_this.configurarBotoes = function configurarBotoes() {
+			_this.botaoSubmissao.on('click', _this.salvar);
+
 			$('body').find('.adicionar_pergunta').on('click', _this.adiconarPergunta);
 			$('.remover_pergunta:last').on('click', _this.removerPergunta);
-
-
-			_this.botaoSubmissao.on('click', _this.salvar);
-		};
-
-		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro() {
-			_this.formulario.find('#tiulo').focus();
-			_this.popularTiposDeQuestionarios();
-			_this.configurarBotoes();
-		};
-
-		_this.iniciarFormularioModoEdicao = function iniciarFormularioModoEdicao() {
-			_this.iniciarFormularioModoCadastro();
 		};
 
 		_this.definirForm = function definirForm(status) {			
 			_this.formulario.submit(false);
-			_this.alterar = status;
 
-		 	if(!_this.alterar) {
-				_this.iniciarFormularioModoCadastro();
-			}
-			else{
-				_this.iniciarFormularioModoEdicao();
-			}
+			_this.formulario.find('#titulo').focus();
+			
+			this.popularTiposDeQuestionarios();
+			_this.configurarBotoes();
+
+			if(window.location.href.search('visualizar') != -1) {
+                $('#msg').empty();
+                servicoQuestionario.comId(pegarId(window.location.href,'visualizar-questionario')).done(_this.desenhar);
+            }
+			else  if(window.location.href.search('editar') != -1) {
+                $('#msg').empty();
+				servicoQuestionario.comId(pegarId(window.location.href,'editar-questionario')).done(_this.desenhar);
+            }else{
+                _this.formulario.find('#botoes').prepend(' <div class="col col-md-2 col-4 col-sm-2 col-lg-2"><button type="submit" id="cadastrar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Cadastrar</button></div>').promise().done(function(){
+                    $('#botoes').find('#cadastrar').on('click', _this.salvar);
+                });
+            }
 		}
 
 		// Desenha o objeto no formulário
-		_this.desenhar = function desenhar(obj) {
-			_this.formulario.find('#id').val(obj.id);
-			_this.formulario.find('#titulo').val(obj.titulo);
-			_this.formulario.find('#descricao').val(obj.descricao);
+		_this.desenhar = function desenhar(resposta) {
+			_this.obj = resposta.conteudo;
+			$('#id').val(_this.obj.id).focus().blur();
+			$('#titulo').val(_this.obj.titulo).focus().blur();
+			$('#descricao').val(_this.obj.descricao).focus().blur();
+
+			for (var index in _this.obj.formulario.perguntas) {
+				var elemento = _this.obj.formulario.perguntas[index];
+				if(index == 0) {
+					$('#pergunta_1').val(elemento.pergunta).focus().blur();
+				}else{
+					var html  = '<div class="pergunta">';
+					html += '<input type= "hidden" class="ids"  name="pergunta_' + elemento.id + '" value ="'+ elemento.id +'">';
+					html += '<div class="row form-row">';
+					html += '<div class="col col-lg-9 col-md-9 col-sm-9 col-12">';
+					html += ' <div class="input-field">';
+					html += '<input type="text" class="form-control campo_obrigatorio" id="pergunta_' + elemento.id + '" name="pergunta_' + elemento.id + '" value="' + elemento.pergunta + '">';
+					html += '<label for="pergunta_' + elemento.id + '">Pergunta nº '+ elemento.id +':</label>';
+					html += '</div>';
+					html += '</div>';
+		
+		
+					html += '<div class="col col-lg-3 col-md-3 col-sm-3 col-12">';
+					html += '<div class="bnt_campoextra">';
+		
+					html += '<div class="col col-lg-6 col-md-6 col-sm-6 col-3">';
+					html += '<button aria-hidden="true" role="presentation" type="button" aria-label="Adicionar pergunta" class="btn bnt_opcoesformulario btn-sm red darken-4 adicionar_pergunta"><i class="fas fa-plus"></i></button>';
+					html += '</div>';
+		
+					html += '<div class="col col-lg-6 col-md-6 col-sm-6 col-9">';          
+					html += '<button aria-hidden="true" role="presentation" type="button" aria-label="Remover Pergunta" class="btn bnt_opcoesformulario btn-sm yellow accent-4 remover_pergunta"><i class="fas fa-minus"></i></button>';
+					html += '</div>';
+					
+					html += '</div>';
+					html += '</div>';
+					html += '</div>';
+					html += '</div>';
+		
+					_this.formulario.find('.perguntas').append(html).promise().done(function(){
+						$(this).find('.pergunta:last').find('#pergunta_'+ elemento.id).focus().blur();
+
+						$('.adicionar_pergunta:last').on('click',  _this.adiconarPergunta);
+						$('.remover_pergunta:last').on('click', _this.removerPergunta);
+					});
+				}
+
+			}
+
+			if(window.location.href.search('visualizar') != -1){
+                _this.formulario.desabilitar(true);
+				_this.formulario.find('#botoes').desabilitar(false);
+				_this.formulario.find('#botoes').prepend(' <div class="col col-md-2 col-4 col-sm-2 col-lg-2"><button type="submit" id="renover" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-delete red-text text-darken-4"></i>Remover</button></div>').promise().done(function(){
+                    $('#botoes').find('#renover').on('click', _this.remover);
+                });
+                _this.formulario.find('#botoes').prepend(' <div class="col col-md-2 col-4 col-sm-2 col-lg-2"><button type="button" id="editar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Editar</button></div>').promise().done(function(){
+                    _this.formulario.find('#editar').on('click', function(event){
+                        router.navigate('/editar-questionario/'+ _this.obj.id);
+                    });
+                });
+			
+            } else if(window.location.href.search('editar') != -1){
+                _this.alterar = true;
+				var html = '';
+				html += '<div class="col col-md-2 col-4 col-sm-2 col-lg-2">';
+				html += '<button id="salvar" type="submit" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">';
+				html += '<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 ">';
+				html += '</i>salvar</button>';
+				html += '</div>';
+
+				_this.formulario.find('#botoes').prepend(html).promise().done(function(){
+					$('#salvar').on('click', _this.salvar);
+				});
+            }
+
 		};
 
 		_this.salvar = function salvar() {
 			_this.formulario.validate(criarOpcoesValidacao());
-        };
+		};
+		
+		_this.remover = function remover(){
+			BootstrapDialog.show({
+				type	: BootstrapDialog.TYPE_DANGER,
+				title	: 'Deseja remover este Questionário?',
+				message	: 'Id: ' + _this.obj.id + '.<br> Título: ' + (_this.obj.titulo + '.<br> Descrição : ' + _this.obj.descricao) + '.',
+				size	: BootstrapDialog.SIZE_LARGE,
+				buttons	: [ {
+						label	: '<u>S</u>im',
+						hotkey	: 'S'.charCodeAt(0),
+						action	: function(dialog){
+							servicoQuestionario.remover(_this.obj.id).done(function (resposta) {
+								if(resposta.status){
+									router.navigate('/questionarios');
+									toastr.success(resposta.mensagem);
+									dialog.close();
+								}
+								else{
+									toastr.error(resposta.mensagem);
 
+									dialog.close();
+								}
+							});
+						}
+					}, {
+						label	: '<u>N</u>ão',
+						hotkey	: 'N'.charCodeAt(0),
+						action	: function(dialog){
+							dialog.close();
+						}
+					}
+				]
+			});
+		};
 
 		// Configura os eventos do formulário
-		_this.configurar = function configurar(status = false) {
-			_this.definirForm(status);
+		_this.configurar = function configurar() {
+			_this.definirForm();
 		};
 	}; // ControladoraFormQuestionario
 

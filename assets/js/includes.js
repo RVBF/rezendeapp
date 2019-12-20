@@ -135,7 +135,10 @@
 
          loader.script('vendor/jquery-validation/dist/jquery.validate.min.js');
          loader.script('vendor/jquery-validation/dist/additional-methods.min.js');
+         loader.script('vendor/jquery-mask-plugin/dist/jquery.mask.min.js');
+
          loader.script('assets/js/jquery.validate.file-master/jquery.validate.file.js');
+         
 
          loader.script('vendor/grapnel/dist/grapnel.min.js');
          loader.script('vendor/pickerjs/dist/picker.min.js');

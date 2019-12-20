@@ -373,7 +373,7 @@
 			BootstrapDialog.show({
 				type	: BootstrapDialog.TYPE_DANGER,
 				title	: 'Deseja remover este colaborador?',
-				message	: 'Id: ' + _this.obj.id + '; Colaborador: ' + (_this.obj.nome + ' ' + _this.obj.sobrenome),
+				message	: 'Id: ' + _this.obj.id + '.<br> Colaborador: ' + (_this.obj.nome + ' ' + _this.obj.sobrenome) + '.',
 				size	: BootstrapDialog.SIZE_LARGE,
 				buttons	: [ {
 						label	: '<u>S</u>im',

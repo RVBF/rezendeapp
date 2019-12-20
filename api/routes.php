@@ -58,6 +58,14 @@ use \phputil\JSON;
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 
+	$app->get('/questionario/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando listagem de questionarioes");	
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraQuestionario($req->getQueryParams(), $sessaoUsuario);
+		$response = $ctrl->comId($args['id']);
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+	});
+
 	$app->post('/questionario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 		$this->logger->addInfo("Acessando o cadastro de questionario");
 		$sessaoUsuario = new Sessao($session);

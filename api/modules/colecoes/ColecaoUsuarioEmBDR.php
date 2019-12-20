@@ -318,6 +318,11 @@ class ColecaoUsuarioEmBDR  implements ColecaoUsuario {
 	}
 
 	private function validarRemocaoUsuario($id){
+		$quantidadeUsuario = DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->count();
+
+		if($quantidadeUsuario == 0) throw new ColecaoException('O usuário selecionado para delete não foi encontrado!');
+		if(DB::table(self::TABELA)->where('deleted_at', NULL)->count() == 1) throw new Exception("Não é possível excluir o usuário quando há somente 1 usuário cadastrado, porque é necesssário ao menos 1 usuário cadastrado para que possa ter relação com outras depências do sistema.");
+
 		return true;
 	}
 }

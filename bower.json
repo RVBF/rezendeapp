@@ -21,7 +21,8 @@
     "jquery-mobile": "^1.4.5",
     "popper.js": "^1.16.0",
     "downloadjs": "1.4.8",
-    "jquery-mask-plugin": "^1.14.16"
+    "jquery-mask-plugin": "^1.14.16",
+    "jstree": "^3.3.8"
   },
   "devDependencies": {}
 }
