@@ -214,10 +214,11 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 	}
 
 	private function validarRemocaoColaborador($id){
-		// $quantidade = DB::table(ColecaoUsuarioEmBDR::TABELA)->where('deleted_at', NULL)->where('usuario_id', $id)->count();
+		$quantidadeUsuario = DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->count();
 
-		// if($quantidade > 0) throw new ColecaoException('Não foi possível excluir o colaborador por que ele possui um usuário relacionado a ele. Exclua todas o usuário relacionado e tente novamente.');
-		
+		if($quantidadeUsuario == 0) throw new ColecaoException('O colaborador selecionado para delete não foi encontrado!');
+		if(DB::table(self::TABELA)->where('deleted_at', NULL)->count() == 1) throw new Exception("Não é possível excluir o colaborador quando há somente 1 colaborador cadastrado, porque é necesssário ao menos 1 colaborador cadastrado para que possa ter relação com outras depências do sistema.");
+
 		return true;
 	}
 

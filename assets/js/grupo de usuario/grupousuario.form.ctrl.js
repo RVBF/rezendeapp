@@ -215,7 +215,7 @@
 			BootstrapDialog.show({
 				type	: BootstrapDialog.TYPE_DANGER,
 				title	: 'Deseja remover este Grupo de Usuário?',
-				message	: 'Id: ' + _this.obj.id + '; Grupo de usuário: ' + (_this.obj.nome + '<br> Descrição : ' + _this.obj.descricao) + '!',
+				message	: 'Id: ' + _this.obj.id + '. <br> Grupo de usuário: ' + (_this.obj.nome + '.<br> Descrição : ' + _this.obj.descricao) + '.',
 				size	: BootstrapDialog.SIZE_LARGE,
 				buttons	: [ {
 						label	: '<u>S</u>im',

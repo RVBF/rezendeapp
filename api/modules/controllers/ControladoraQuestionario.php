@@ -42,7 +42,6 @@ class ControladoraQuestionario {
 			$erro = null;
 
             $objetos = $this->colecaoQuestionario->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');
-		
 			$contagem = $this->colecaoQuestionario->contagem();
 		}
 		catch (\Exception $e )
@@ -106,39 +105,57 @@ class ControladoraQuestionario {
 		return $resposta;
 	}
 
+
 	function atualizar() {
 		DB::beginTransaction();
 
 		try {
-			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
-			}		
-			
-			if(!$this->servicoLogin->eAdministrador()){
-				throw new Exception("Usuário sem permissão para executar ação.");
-			}
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false)				throw new Exception("Erro ao acessar página.");				
 
-			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo','descricao'], $this->params);
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo','descricao','configuracao'], $this->params);
 			$resposta = [];
 
-			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
-				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
+			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) throw new Exception('Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes));
 
-				throw new Exception($msg);
-			}
-			
-			$Questionario = new Questionario(
-				\ParamUtil::value($this->params, 'id'),
-				\ParamUtil::value($this->params, 'titulo'),
-				\ParamUtil::value($this->params, 'descricao')
-			);
-			$resposta = ['Questionario'=> RTTI::getAttributes($this->colecaoQuestionario->atualizar($Questionario), RTTI::allFlags()), 'status' => true, 'mensagem'=> 'Questionario atualizado com sucesso.']; 
+			$formulario = json_encode($this->params['configuracao']);
+
+			$questionario = new Questionario(); $questionario->fromArray($this->colecaoQuestionario->comId(\ParamUtil::value($this->params, 'id')));
+			if(!($questionario instanceof Questionario)) throw new Exception("Questionário não econtrado na base de dados!");
+
+			$questionario->setTitulo(\ParamUtil::value($this->params, 'titulo'));
+			$questionario->setDescricao(\ParamUtil::value($this->params, 'descricao'));
+			$questionario->setTipoQuestionario(\ParamUtil::value($this->params, 'tipoQuestionario'));
+			$questionario->setFormulario($formulario);
+
+			$this->colecaoQuestionario->atualizar($questionario);
+
+			$resposta = ['status' => true, 'mensagem'=> 'Questionario atualizado com sucesso.']; 
+
 			DB::commit();
+
 		}
 		catch (\Exception $e) {
 			DB::rollback();
 
 			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+		}
+
+		return $resposta;
+	}
+	
+	function comId($id){
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
+			
+			if (! is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
+
+			$questionario = new Questionario(); $questionario->fromArray($this->colecaoQuestionario->comId($id));
+		
+			$resposta = ['conteudo'=> $questionario->toArray(), 'status' => true]; 
+		}
+		catch (\Exception $e) {
+			DB::rollback();
+			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()]; 
 		}
 
 		return $resposta;
@@ -151,16 +168,9 @@ class ControladoraQuestionario {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");				
 			}	
-
-			// if(!$this->servicoLogin->eAdministrador()){
-			// 	throw new Exception("Usuário sem permissão para executar ação.");
-			// }
-
-			$resposta = [];
-
 			$status = $this->colecaoQuestionario->remover($id);
 			
-			$resposta = ['status' => true, 'mensagem'=> 'Questionario removido com sucesso.']; 
+			$resposta = ['status' => true, 'mensagem'=> 'Questionário removido com sucesso.']; 
 			DB::commit();
 
 		}

@@ -216,7 +216,7 @@
 			BootstrapDialog.show({
 				type	: BootstrapDialog.TYPE_DANGER,
 				title	: 'Deseja remover este Loja?',
-				message	: 'Id: ' + _this.obj.id + '; Título: ' + (_this.obj.razaoSocial + 'Nome fantasia : ' + _this.obj.nomeFantasia) + '!',
+				message	: 'Id: ' + _this.obj.id + '.<br> Título: ' + (_this.obj.razaoSocial + '. <br> Nome fantasia : ' + _this.obj.nomeFantasia) + '. <br> Endereço: ' +  _this.obj.endereco.logradouro +', '+  _this.obj.endereco.numero + '-' +  _this.obj.endereco.complemento + ', '+  _this.obj.endereco.bairro + ', '+  _this.obj.endereco.cidade + '/' +  _this.obj.endereco.uf + '-' +  _this.obj.endereco.cep + '.',
 				size	: BootstrapDialog.SIZE_LARGE,
 				buttons	: [ {
 						label	: '<u>S</u>im',

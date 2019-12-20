@@ -157,8 +157,8 @@
 		_this.remover = function remover(){
 			BootstrapDialog.show({
 				type	: BootstrapDialog.TYPE_DANGER,
-				title	: 'Deseja remover este Setor?',
-				message	: 'Id: ' + _this.obj.id + '; Título: ' + (_this.obj.titulo + '<br> Descrição : ' + _this.obj.descricao) + '!',
+				title	: 'Deseja remover este setor?',
+				message	: 'Id: ' + _this.obj.id + '. <br> Título: ' + (_this.obj.titulo + '.<br> Descrição : ' + _this.obj.descricao) + '.',
 				size	: BootstrapDialog.SIZE_LARGE,
 				buttons	: [ {
 						label	: '<u>S</u>im',

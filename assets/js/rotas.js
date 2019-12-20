@@ -86,6 +86,9 @@
   
    router.get('/questionarios', criarRotaPara('questionarios.html'));
    router.get('/cadastrar-questionario', criarRotaPara('formulario-questionario.html'));
+   router.get('/visualizar-questionario/:id', criarRotaPara('formulario-questionario.html'));
+   router.get('/editar-questionario/:id', criarRotaPara('formulario-questionario.html'));
+
 
    router.get('/colaboradores', criarRotaPara('colaboradores.html'));
    router.get('/cadastrar-colaborador', criarRotaPara('formulario-colaborador.html'));
@@ -97,12 +100,10 @@
    router.get('/editar-loja/:id', criarRotaPara('formulario-loja.html'));
    router.get('/visualizar-loja/:id', criarRotaPara('formulario-loja.html'));
 
-
    router.get('/setores', criarRotaPara('setor.html'));
    router.get('/cadastrar-setor', criarRotaPara('formulario-setor.html'));
    router.get('/editar-setor/:id', criarRotaPara('formulario-setor.html'));
    router.get('/visualizar-setor/:id', criarRotaPara('formulario-setor.html'));
-
 
    router.get('/plano-acao', criarRotaPara('pa-listagem.html'));
    router.get('/cadastrar-pa', criarRotaPara('formulario-pa.html'));
@@ -303,7 +304,22 @@
          html += '<span class="center local-dto">Editar Loja</span>';
          html += '<a href="#/" class="left m16-dto loja_link"><i class="material-icons">navigate_before</i></a>';
       }
-
+      else if(window.location.href.search('cadastrar-questionario') != -1){
+         html += '<span class="center local-dto">Cadastrar Questionário</span>';
+         html += '<a href="#/" class="left m16-dto questionario_link"><i class="material-icons">navigate_before</i></a>';
+      }
+      else if(window.location.href.search('visualizar-questionario') != -1){
+         html += '<span class="center local-dto">Visualizar Questionário</span>';
+         html += '<a href="#/" class="left m16-dto questionario_link"><i class="material-icons">navigate_before</i></a>';
+      }
+      else if(window.location.href.search('editar-questionario') != -1){
+         html += '<span class="center local-dto">Editar Questionário</span>';
+         html += '<a href="#/" class="left m16-dto questionario_link"><i class="material-icons">navigate_before</i></a>';
+      }
+      else if(window.location.href.search('editar-setor') != -1){
+         html += '<span class="center local-dto">Editar Setor</span>';
+         html += '<a href="#/" class="left m16-dto setor_link"><i class="material-icons">navigate_before</i></a>';
+      }
       html += '<a href="#/" class="right m16-dto exit-dto efetuar_logout"><i class="material-icons ">exit_to_app</i><span>Sair</span></a>';
 
       $('body').find('.topo-opcoes').empty().append(html);

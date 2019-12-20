@@ -34,25 +34,36 @@
 			objeto.cadastrarLink = 'cadastrar_questionario_link';
 			objeto.columnDefs = function (data){
 				var html = '';
-					
-				html += '<div class="col co-lg-8 col-md-8 col-sm-8 col-12" >'
-				html += '<p class="f-12-dto"><strong>Título: </strong>'+ data.titulo + '</p>'
-                html += '<p class="f-12-dto"><strong>Descrição : </strong>'+ data.descricao + '</p>'
-				html += '<p class="f-12-dto"><strong>Tipo de QUestionário : </strong>'+ data.tipoQuestionario + '</p>'                
-				html += '</div>';
+				html += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12 mb-0-dto">';
+					html += '<div class="row mb-0-dto">';
+						html += '<div class="col co-lg-8 col-md-8 col-sm-8 col-12" >'
+							html += '<p class="f-12-dto"><strong>Título: </strong>'+ data.titulo + '</p>'
+							html += '<p class="f-12-dto"><strong>Descrição : </strong>'+ data.descricao + '</p>'
+							html += '<p class="f-12-dto"><strong>Tipo de QUestionário : </strong>'+ data.tipoQuestionario + '</p>'                
+						html += '</div>';
 
 
-				html += '<div class="col co-lg-4 col-md-4 col-sm-4 col-12 opcoes">';
-				html += '<div class="col col-4"><a class="f-12-dto grey lighten-4 btn editar_loja_link"><i class="mdi mdi-table-edit"></i> </a></div>';
-				html += '<div class="col col-4"><a class="f-12-dto grey lighten-4 btn visualizar_loja_link"><i class="mdi mdi-loupe"></i> </a></div>';
-				html += '<div class="col col-4"><a class="f-12-dto grey lighten-4 btn remover_questionario_link" id ="remover"><i class="mdi mdi-delete"> </i> </a></div>';
+						html += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12 mb-0-dto opc_tabela">';
+							html += '<p class="mb-0-dto">';
+							html += '<a href="#" class="detalhes-dto visualizar_questionario">';
+							html += '<i class="mdi mdi-eye-outline small orange-text text-accent-4"></i>';
+							html += 'VER DETALHES';
+							html += '</a>';
+							html += '</p>';
+						html += '</div>';
+					html += '</div>';
 				html += '</div>';
+
 
 				return html;
 			};
 
 			objeto.rowsCallback = function(resposta){
-				$('.remover_Questionario_link').on('click', _this.remover);
+				$('.visualizar_questionario').on('click',function(event){
+					event.preventDefault();
+					var objeto = _tabela.getObjetos()[$(this).parents('.listagem-padrao-item').index()];
+					router.navigate('/visualizar-questionario/'+ objeto.id);
+				});			
 			};
 
 			return objeto;
