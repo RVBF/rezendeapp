@@ -18,17 +18,17 @@ class ColecaoUsuarioEmBDR  implements ColecaoUsuario {
 
 	function adicionar(&$obj) {
 		if($this->validarUsuario($obj)) {
-			try {	
+			try {
 				$hash = HashSenha::instance();
 
-				$id = DB::table(self::TABELA)->insertGetId([ 
+				$id = DB::table(self::TABELA)->insertGetId([
 					'login' => $obj->getLogin(),
 					'senha' => $hash->gerarHashDeSenhaComSaltEmMD5($obj->getSenha()),
 					'administrador' => false
 				]);
-					
+
 				$obj->setId($id);
-					
+
 				return $obj;
 			}
 			catch (\Exception $e) {
@@ -38,7 +38,7 @@ class ColecaoUsuarioEmBDR  implements ColecaoUsuario {
 	}
 
 	function remover($id) {
-		try {	
+		try {
 			if($this->validarRemocaoUsuario($id)) DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->update(['deleted_at' => Carbon::now()->toDateTimeString()]);
 		}
 		catch (\Exception $e)
@@ -70,7 +70,7 @@ class ColecaoUsuarioEmBDR  implements ColecaoUsuario {
 	}
 
 	function comId($id){
-		try {	
+		try {
 			return (DB::table(self::TABELA)->where('id', $id)->count()) ? $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->first()) : [];
 		}
 		catch (\Exception $e)
@@ -80,13 +80,13 @@ class ColecaoUsuarioEmBDR  implements ColecaoUsuario {
 	}
 
 	function todos($limite = 0, $pulo = 0, $search = '') {
-		try {	
+		try {
 			$query = DB::table(self::TABELA)->where('deleted_at', NULL)->select(self::TABELA . '.id', self::TABELA . '.login', self::TABELA . '.administrador');
 
 			if($search != '') {
 				$buscaCompleta = $search;
 				$palavras = explode(' ', $buscaCompleta);
-				
+
 				$query->leftJoin(ColecaoColaboradorEmBDR::TABELA, ColecaoColaboradorEmBDR::TABELA . '.usuario_id', '=', self::TABELA . '.id');
 
 				$query->where(function($query) use ($buscaCompleta){
@@ -97,8 +97,8 @@ class ColecaoUsuarioEmBDR  implements ColecaoUsuario {
 					$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.email like "%' . $buscaCompleta . '%"');
 
 				});
-				
-				
+
+
 				if($query->count() == 0){
 					$query->where(function($query) use ($palavras){
 						foreach ($palavras as $key => $palavra) {
@@ -110,7 +110,7 @@ class ColecaoUsuarioEmBDR  implements ColecaoUsuario {
 								$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.email like "%' . $palavra . '%"');
 							}
 						}
-						
+
 					});
 				}
 				$query->groupBy(self::TABELA.'.id');
@@ -132,9 +132,9 @@ class ColecaoUsuarioEmBDR  implements ColecaoUsuario {
 			throw new ColecaoException("Erro ao buscar usuários!", $e->getCode(), $e);
 		}
 	}
-	
+
 	function todosComIds($ids = []) {
-		try {	
+		try {
 			$usuarios = DB::table(self::TABELA)->where('deleted_at', NULL)->select('id', 'login', 'administrador')->whereIn('id', $ids)->get();
 			$usuariosObjects = [];
 			foreach ($usuarios as $usuarios) {
@@ -145,28 +145,28 @@ class ColecaoUsuarioEmBDR  implements ColecaoUsuario {
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException("Erro ao buscar usuários com referẽncias!", $e->getCode(), $e);
+			throw new ColecaoException("Erro ao buscar usuários com referências!", $e->getCode(), $e);
 		}
 	}
-	
+
 	function construirObjeto(array $row) {
 		$usuario = new Usuario($row['id'], $row['login'], isset($row['senha']) ? $row['senha'] : '');
 		$usuario->setAdministrador($row['administrador']);
 
 		return $usuario->toArray();
 	}
-	
+
 	function comGrupoId($id){
 		try {
 
 			$grupos = DB::table(self::TABELA)->where('deleted_at', NULL)->select(self::TABELA . '.*')
 				->join(self::TABELA_RELACIONAL, self::TABELA_RELACIONAL . '.usuario_id', '=', self::TABELA . '.id')
 				->where(self::TABELA_RELACIONAL . '.grupo_usuario_id', $id)->get();
-				
+
 			$gruposObjects = [];
 
 			foreach ($grupos as $grupo) {
-				$gruposObjects[] = $this->construirObjeto($grupo);			
+				$gruposObjects[] = $this->construirObjeto($grupo);
 			}
 
 			return $gruposObjects;
@@ -207,10 +207,10 @@ class ColecaoUsuarioEmBDR  implements ColecaoUsuario {
 			catch (\Exception $e) {
 				throw new ColecaoException("Erro ao alterar a senha de  usuário!", $e->getCode(), $e);
 
-			}		
+			}
 		}
 	}
-	
+
 	private function validarUsuario($obj) {
 		$this->validarLogin($obj->getLogin());
 
@@ -272,12 +272,12 @@ class ColecaoUsuarioEmBDR  implements ColecaoUsuario {
 
 		if (preg_match($formato, $login))
 		{
-			return true;	
+			return true;
 		}
 		else
 		{
-			return false;	
-		}	
+			return false;
+		}
 	}
 
 	private function validarTrocaDeSenha($id, $senhaAtual, $novaSenha, $confirmacaoSenha) {

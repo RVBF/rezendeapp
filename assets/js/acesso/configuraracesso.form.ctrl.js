@@ -85,8 +85,6 @@
             });
          });
 
-         console.log(nohs);
-
          _this.arvoreDeAcessos.jstree({
             plugins: ['checkbox'],
             core: {

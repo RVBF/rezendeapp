@@ -10,28 +10,32 @@ use phputil\traits\FromArray;
  *  @version	1.0
  */
 class GrupoUsuario {
-    use GetterSetterWithBuilder;
-    use ToArray;
-    use FromArray;
+   use GetterSetterWithBuilder;
+   use ToArray;
+   use FromArray;
 
-    private $id;
-    private $nome;
-    private $descricao;
-    private $usuarios;
-    
-    function __construct($id = 0, $nome = '', $descricao = '', $usuarios = []) {
-        $this->id = $id;
-        $this->nome =  $nome;
-        $this->descricao = $descricao;
-        $this->usuarios = $usuarios;
-    }
+   private $id;
+   private $nome;
+   private $descricao;
+   private $usuarios;
 
-    public function addUsuario($usuario){
-        $this->usuarios[] = $usuario;
-    }
+   function __construct($id = 0, $nome = '', $descricao = '', $usuarios = []) {
+      $this->id = $id;
+      $this->nome =  $nome;
+      $this->descricao = $descricao;
+      $this->usuarios = $usuarios;
+   }
 
-    public function removerUsuario($usuario){
-        $key  = array_search($usuario, $this->usuarios);
-    }    
+   public function addUsuario($usuario){
+      $this->usuarios[] = $usuario;
+   }
+
+   public function removerUsuario($usuario){
+      $key  = array_search($usuario, $this->usuarios);
+   }
+
+   public static function criarAPartirDoArray($dados) {
+      return new self($dados['id'], $dados['nome'], $dados['descricao']);
+   }
 }
 ?>
