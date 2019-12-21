@@ -172,9 +172,7 @@ class ControladoraChecklist {
 					throw new Exception('O Questionário selecionado de id nº ' . $questionarioId . ' não foi encontrado na base de dados.');
 				}
 
-				$formulario = json_decode($questionario->getFormulario());
-
-				foreach ($formulario->perguntas as $pergunta) {
+				foreach ($questionario->getFormulario()->perguntas as $pergunta) {
 					$contador++;
 					$questionamentos[] = new Questionamento(
 						0,
@@ -290,7 +288,7 @@ class ControladoraChecklist {
 		return $resposta;
 	}
 
-	function remover($id, $idSetor = 0) {
+	function remover($id) {
 		DB::beginTransaction();
 
 		try {

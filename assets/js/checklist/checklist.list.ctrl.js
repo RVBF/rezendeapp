@@ -101,7 +101,7 @@
 									html += '</p>';
 								html += '</div>';
 
-								if(data.status != 'Executado' ){
+								if(!estaRespondido()){
 									html += '<div class="col col-12 col-lg-4 col-md-4 col-sm-4 mb-0-dto">';
 										html += '<p class="mb-0-dto">';
 										html += '<a href="#" class="detalhes-dto executar_checklist">';

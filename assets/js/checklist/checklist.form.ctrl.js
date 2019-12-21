@@ -18,6 +18,8 @@
 		_this.idSetor = window.location.href.split('#')[1].substring(1, url.length).split('/')[1];	
 		_this.dataLimite = '';
 		_this.horaLimite = '';
+		_this.obj = null;
+
 
 		var pegarId = function pegarId(url, palavra)
 		{
@@ -51,7 +53,7 @@
 				
 				_this.formulario.desabilitar(true);
 			
-				var jqXHR = _this.alterar ? servicoChecklist.atualizar(obj) : servicoChecklist.adicionar(obj);
+				var jqXHR =  (window.location.href.search('editar') != -1) ? servicoChecklist.atualizar(obj) : servicoChecklist.adicionar(obj);
 				jqXHR.done(function(resposta) {
 					if(resposta.status){
 						router.navigate('/checklist');
@@ -263,28 +265,7 @@
 			_this.formulario.submit(false);
 			_this.alterar = status;
 
-			if(window.location.href.search('visualizar') != -1) servicoChecklist.comId(pegarId(window.location.href,'visualizar-checklist')).done(_this.desenhar);
-			else  if(window.location.href.search('editar') != -1) servicoChecklist.comId(pegarId(window.location.href,'editar-checklist')).done(_this.desenhar);
-			else{
-				_this.formulario.parents('#painel_formulario').promise().done(function() {
-					_this.formulario.find('#titulo').focus();
-					_this.popularLojas();
-					_this.popularTiposDeChecklist();
-					_this.popularColaboradores();
-					_this.popularQuestionarios();
-					_this.popularSetores();
-					_this.configurarBotoes();
-					$('.card-title').html('<h3>Cadastrar Checklist</h3>');
-					_this.formulario.find('#botoes').prepend(' <div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end"><button type="submit" id="cadastrar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Cadastrar</button></div>').promise().done(function(){
-						$('#botoes').find('#cadastrar').on('click', _this.salvar);
-					});
-				});
-			}
-		}
-
-		// Desenha o objeto no formulário
-		_this.desenhar = function desenhar(obj) {
-			_this.objeto = obj.conteudo;
+			_this.formulario.find('#titulo').focus();
 			_this.popularLojas();
 			_this.popularTiposDeChecklist();
 			_this.popularColaboradores();
@@ -292,27 +273,46 @@
 			_this.popularSetores();
 			_this.configurarBotoes();
 
-			_this.formulario.find('#id').val(_this.objeto.id).focus().blur();
-			_this.formulario.find('#titulo').val(_this.objeto.descricao).focus().blur();
-			_this.formulario.find('#setor').val(_this.objeto.setor.id).focus().blur();
-			_this.formulario.find('#unidade').val(_this.objeto.loja.id).focus().blur();
+			if(window.location.href.search('visualizar') != -1) servicoChecklist.comId(pegarId(window.location.href,'visualizar-checklist')).done(_this.desenhar);
+			else  if(window.location.href.search('editar') != -1) servicoChecklist.comId(pegarId(window.location.href,'editar-checklist')).done(_this.desenhar);
+			else{
+				_this.formulario.parents('#painel_formulario').promise().done(function() {
+					_this.formulario.find('#botoes').prepend(' <div class="col col-md-2 col-4 col-sm-2 col-lg-2"><button type="submit" id="cadastrar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Cadastrar</button></div>').promise().done(function(){
+						$('#botoes').find('#cadastrar').on('click', _this.salvar);
+					});
+				});
+			}
+		}
 
-			var dataLimite = moment(_this.objeto.dataLimite);
+		// Desenha o objeto no formulário
+		_this.desenhar = function desenhar(resposta) {
+			_this.obj = resposta.conteudo;
+			_this.formulario.find('#id').val(_this.obj.id).focus().blur();
+			_this.formulario.find('#titulo').val(_this.obj.descricao).focus().blur();
+			_this.formulario.find('#setor').val(_this.obj.setor.id).focus().blur();
+			_this.formulario.find('#unidade').val(_this.obj.loja.id).focus().blur();
+
+			var dataLimite = moment(_this.obj.dataLimite);
+
 			$('#data').val(dataLimite.format('DD') + ' de ' + dataLimite.format('MMMM') + ' de ' + dataLimite.format('YYYY')).focus().blur();
 			$('#hora').val(dataLimite.format('HH') + ':' + dataLimite.format('mm')).focus().blur();
-			$('#descricao').val(_this.objeto.descricao).focus().blur();
+			$('#descricao').val(_this.obj.descricao).focus().blur();
+		
 			if(window.location.href.search('visualizar') != -1) {
 				_this.formulario.desabilitar(true);
 				_this.formulario.find('#botoes').desabilitar(false);
-				if(_this.objeto.status != 'Executado'){
-					_this.formulario.find('#botoes').prepend(' <div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end"><button type="button" id="editar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Editar</button></div>').promise().done(function(){
+				
+				_this.formulario.find('#botoes').prepend(' <div class="col col-md-2 col-4 col-sm-2 col-lg-2"><button type="submit" id="renover" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-delete red-text text-darken-4"></i>Remover</button></div>').promise().done(function(){
+                    $('#botoes').find('#renover').on('click', _this.remover);
+				});
+				
+				if(_this.obj.status != 'Executado'){
+					_this.formulario.find('#botoes').prepend(' <div class="col col-md-2 col-4 col-sm-2 col-lg-2"><button type="button" id="editar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Editar</button></div>').promise().done(function(){
 						_this.formulario.find('#editar').on('click', function(event){
-							router.navigate('/editar-checklist/'+ _this.objeto.id);
+							router.navigate('/editar-checklist/'+ _this.obj.id);
 						});
 					});
 				}
-			
-				$('.card-title').html('<h3>Visualizar Checklist</h3>');
 			}
 			else if(window.location.href.search('editar') != -1) {
 				_this.alterar = true;
@@ -320,7 +320,7 @@
 				_this.horaLimite.setDate(dataLimite.toDate());
 				_this.formulario.find('#questionarios').parents('.select-wrapper').desabilitar(true);
 				var html = '';
-				html += '<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end">';
+				html += '<div class="col col-md-2 col-4 col-sm-2 col-lg-2">';
 				html += '<button id="salvar" type="submit" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">';
 				html += '<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 ">';
 				html += '</i>salvar</button>';
@@ -330,13 +330,46 @@
 					$('#salvar').on('click', _this.salvar);
 
 				});
-
-				$('.card-title').html('<h3>Editar Checklist</h3>');
 			}
 		};
 		_this.salvar = function salvar() {
 			_this.formulario.validate(criarOpcoesValidacao());
-        };
+		};
+		
+		_this.remover = function remover(){
+			BootstrapDialog.show({
+				type	: BootstrapDialog.TYPE_DANGER,
+				title	: 'Deseja remover este Checklist?',
+				message	: 'Id: ' + _this.obj.id + '. <br> Título: ' +_this.obj.titulo + '.<br> Descrição : ' + _this.obj.descricao + '.',
+				size	: BootstrapDialog.SIZE_LARGE,
+				buttons	: [ {
+						label	: '<u>S</u>im',
+						hotkey	: 'S'.charCodeAt(0),
+						action	: function(dialog){
+							servicoSetor.remover(_this.obj.id).done(function (resposta) {
+								if(resposta.status){
+									router.navigate('/setores');
+									toastr.success(resposta.mensagem);
+									dialog.close();
+
+								}
+								else{
+									toastr.error(resposta.mensagem);
+
+									dialog.close();
+								}
+							});
+						}
+					}, {
+						label	: '<u>N</u>ão',
+						hotkey	: 'N'.charCodeAt(0),
+						action	: function(dialog){
+							dialog.close();
+						}
+					}
+				]
+			});
+		};
 		
 		// Configura os eventos do formulário
 		_this.configurar = function configurar(status = false) {
