@@ -13,7 +13,9 @@
 
 		_this.alterar;
 		_this.formulario = $('#setor_form');
-		_this.botaoSubmissao = $('#salvar')
+		_this.botaoSubmissao = $('#salvar');
+		_this.obj = null;
+
 		
 		var pegarId = function pegarId(url, palavra) {
 
@@ -100,13 +102,13 @@
 			_this.formulario.find('#titulo').focus();
 			
 			_this.configurarBotoes();
+		
+			$('#msg').empty();
 
 			if(window.location.href.search('visualizar') != -1) {
-                $('#msg').empty();
                 servicoSetor.comId(pegarId(window.location.href,'visualizar-setor')).done(_this.desenhar);
             }
 			else  if(window.location.href.search('editar') != -1) {
-                $('#msg').empty();
 				servicoSetor.comId(pegarId(window.location.href,'editar-setor')).done(_this.desenhar);
             }else{
                 _this.formulario.find('#botoes').prepend(' <div class="col col-md-2 col-4 col-sm-2 col-lg-2"><button type="submit" id="cadastrar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Cadastrar</button></div>').promise().done(function(){

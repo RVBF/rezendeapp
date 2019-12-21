@@ -376,7 +376,6 @@ use \phputil\JSON;
 	});
 // Fim das rotas para  pendencia
 
-
 // Início das rotas para acessos
 	$app->get('/acesso', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 		$this->logger->addInfo("Acessando listagem de acessos");	
