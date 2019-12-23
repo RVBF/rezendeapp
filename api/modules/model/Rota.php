@@ -15,12 +15,14 @@ class Rota {
 
    private $id;
    private $caminho;
+   private $metodo;
 
    const TABELA = 'rota';
 
-   function __construct($id = 0, $caminho = null) {
+   function __construct($id = 0, $caminho = null, $metodo = 'get') {
       $this->id = $id;
       $this->caminho = $caminho;
+      $this->metodo = $metodo;
    }
 }
 ?>
