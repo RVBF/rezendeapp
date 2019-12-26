@@ -296,13 +296,18 @@ class ControladoraChecklist {
 				throw new Exception("Erro ao acessar página.");				
 			}
 
-			if(!$this->servicoLogin->eAdministrador()){
-				throw new Exception("Usuário sem permissão para executar ação.");
-			}
+			$checklist = new Checklist(); $checklist->fromArray($this->colecaoChecklist->comId($id));
+			if(!($checklist instanceof Checklist)) throw new Exception("Erro ao buscar checklist no banco de dados.");
+			$this->colecaoChecklist->remover($checklist->getId());
 			
-			$resposta = [];
+			foreach ($checklist->getQuestionamentos() as $key => $questionamento) {
+				$questionamentoAtual = new Questionamento(); $questionamentoAtual->fromArray($questionamento);
+				if($questionamentoAtual->getPlanoAcao() instanceof PlanoAcao){
+					$planoAcao = new PlanoAcao(); $planoAcao->fromArray($questionamentoAtual->getPlanoAcao());
+					Util::printr($planoAcao);
+				}
 
-			$status = ($idSetor > 0) ? $this->colecaoChecklist->removerComSetorId($id, $idSetor) :  $this->colecaoChecklist->remover($id);
+			}
 			
 			$resposta = ['status' => true, 'mensagem'=> 'Checklist removido com sucesso.']; 
 			DB::commit();

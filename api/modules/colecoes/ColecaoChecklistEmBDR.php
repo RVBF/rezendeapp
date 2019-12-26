@@ -55,31 +55,12 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 		}
 	}
 
-	function removerComSetorId($id, $idSetor) {
-		if($this->validarRemocaoTarefa($id)){
+	function remover($id) {
+		if($this->validarRemocaoChecklist($id)){
 			try {	
-				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-				$removido = DB::table(self::TABELA)->where('id', $id)->where('setor_id', $idSetor)->delete();
-				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-				return $removido;
+				DB::table(self::TABELA)->where('deleted_at',NULL)->where('id', $id)->update(['deleted_at' => Carbon::now()->toDateTimeString()]);
 			}
 			catch (\Exception $e) {
-				throw new ColecaoException("Erro ao remover checklist com o id do setor.", $e->getCode(), $e);
-			}
-		}
-
-	}
-
-	function remover($id) {
-		if($this->validarRemocaoTarefa($id)){
-			try {	
-				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-				$removido = DB::table(self::TABELA)->where('id', $id)->delete();
-				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-				return $removido;
-			}
-			catch (\Exception $e)
-			{
 				throw new ColecaoException("Erro ao remover checklist.", $e->getCode(), $e);
 			}
 		}
@@ -88,9 +69,6 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 
 	function atualizar(&$obj) {
 		try {	
-			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-
 			$filds = [
 				'titulo' => $obj->getTitulo(),
 				'status' => $obj->getStatus(),
@@ -105,20 +83,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 				'questionador_id' => ($obj->getQuestionador() instanceof Colaborador) ? $obj->getQuestionador()->getId() : $obj->getQuestionador()['id'],
 			];
 
-			DB::table(self::TABELA)->where('id', $obj->getId())->update($filds);
-
-			// $questionariosInserts = [];
-
-			// foreach ($obj->getQuestionarios() as $questionario) {
-			// 	$questionariosInserts[] = [
-			// 		'checklist_id' => $obj->getId(),
-			// 		'questionario_id' => $questionario['id'],
-			// 	];
-			// }
-
-			// DB::table(self::TABELA_RELACIONAL)->insert($questionariosInserts);
-			
-			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+			DB::table(self::TABELA)->where('deleted_at',NULL)->where('id', $obj->getId())->update($filds);
 		}
 		catch (\Exception $e) {
 			throw new ColecaoException("Erro ao atualizar Checklist ", $e->getCode(), $e);
@@ -136,7 +101,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 
 	function todosComLojaIds($limite = 0, $pulo = 10, $search = '', $idsLojas = []){
 		try {	
-			$query = DB::table(self::TABELA)->selectRaw(self::TABELA . '.*, COUNT('.self::TABELA.'.id) as qtd')->whereIn('loja_id',$idsLojas);
+			$query = DB::table(self::TABELA)->where('deleted_at',NULL)->selectRaw(self::TABELA . '.*, COUNT('.self::TABELA.'.id) as qtd')->whereIn('loja_id',$idsLojas);
 			if($search != '') {
 				$buscaCompleta = $search;
 				$palavras = explode(' ', $buscaCompleta);
@@ -201,7 +166,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 	
 	function todos($limite = 0, $pulo = 0) {
 		try {	
-			$checklist = DB::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+			$checklist = DB::table(self::TABELA)->where('deleted_at',NULL)->offset($limite)->limit($pulo)->get();
 			$checklistObjects = [];
 
 			foreach ($checklist as $key => $checklist) {
@@ -217,7 +182,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 	
 	function listagemTemporalcomLojasIds($pageHome = 0, $pageLength = 10,$search = '', $idsLojas = []){
 		try {	
-			$checklists = DB::table(self::TABELA)->whereIn('loja_id',$idsLojas)->where('status',StatusChecklistEnumerado::AGUARDANDO_EXECUCAO)->orderBy('data_limite', 'ASC')->offset($pageHome)->limit($pageLength)->get();
+			$checklists = DB::table(self::TABELA)->where('deleted_at',NULL)->whereIn('loja_id',$idsLojas)->where('status',StatusChecklistEnumerado::AGUARDANDO_EXECUCAO)->orderBy('data_limite', 'ASC')->offset($pageHome)->limit($pageLength)->get();
 
 			$checklistsObjects = [];
 			foreach ($checklists as $key => $checklist) {
@@ -233,7 +198,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 	
 	function todosComId($ids = []) {
 		try {	
-			$tarefas = DB::table(self::TABELA)->whereIn('id', $ids)->get();
+			$tarefas = DB::table(self::TABELA)->where('deleted_at',NULL)->whereIn('id', $ids)->get();
 			$tarefasObjects = [];
 
 			foreach ($tarefas as $tarefa) {
@@ -276,7 +241,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 	}	
 
     function contagem($idsLojas = []) {
-		return (count($idsLojas) > 0) ?  DB::table(self::TABELA)->whereIn('loja_id', $idsLojas)->count() : DB::table(self::TABELA)->count();
+		return (count($idsLojas) > 0) ?  DB::table(self::TABELA)->where('deleted_at',NULL)->whereIn('loja_id', $idsLojas)->count() : DB::table(self::TABELA)->where('deleted_at',NULL)->count();
 	}
 
 	function temPendencia($idChecklist = 0){
@@ -356,10 +321,10 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 		return true;
 	}
 
-	private function validarRemocaoTarefa($id){
-		$quantidade = DB::table(ColecaoPerguntaEmBDR::TABELA)->where('tarefa_id', $id)->count();
+	private function validarRemocaoChecklist($id){
+		// $quantidade = DB::table(ColecaoPerguntaEmBDR::TABELA)->where('tarefa_id', $id)->count();
 
-		if($quantidade > 0)throw new ColecaoException('Não foi possível excluir a tarefa por que ela possui perguntas relacionadas a ela. Exclua todas as perguntas relacionadas e tente novamente.');
+		// if($quantidade > 0)throw new ColecaoException('Não foi possível excluir a tarefa por que ela possui perguntas relacionadas a ela. Exclua todas as perguntas relacionadas e tente novamente.');
 		return true;
 	}
 }

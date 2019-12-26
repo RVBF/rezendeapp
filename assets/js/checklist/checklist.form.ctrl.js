@@ -346,7 +346,7 @@
 						label	: '<u>S</u>im',
 						hotkey	: 'S'.charCodeAt(0),
 						action	: function(dialog){
-							servicoSetor.remover(_this.obj.id).done(function (resposta) {
+							servicoChecklist.remover(_this.obj.id).done(function (resposta) {
 								if(resposta.status){
 									router.navigate('/setores');
 									toastr.success(resposta.mensagem);
