@@ -31,6 +31,9 @@ class Recurso {
    }
 
    public static function todosOsRecursosERotas() {
+      // Último ID usado para recursos: 15
+      // Último ID usado para rotas: 18
+
       return [
          ['id'=> 1, 'nome'=> 'Visualizar Checklists', 'model'=> 'Checklist', 'rotas'=> [
             ['id'=> 1, 'caminho'=> '/checklist', 'metodo'=> 'get'],
