@@ -17,7 +17,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 	function __construct(){}
 
 	function adicionar(&$obj) {
-		if($this->validarTarefa($obj)){
+		if($this->validarQuestionamento($obj)){
 			try {	
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
@@ -66,7 +66,6 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
     
     function adicionarTodos($objetos = []){
         try {	
-            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
             $inserts = [];
 
             foreach($objetos as $obj) {
@@ -80,10 +79,6 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 			}
 
             DB::table(self::TABELA)->insert($inserts);
-            
-            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-            return true;
         }
         catch (\Exception $e) {
             throw new ColecaoException("Erro ao adicionar tarefa ", $e->getCode(), $e);
@@ -91,15 +86,11 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
     }
 
 	function remover($id) {
-		if($this->validarRemocaoTarefa($id)){
+		if($this->validarDeleteQuestionamento($id)){
 			try {	
-				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-				$removido = DB::table(self::TABELA)->where('id', $id)->delete();
-				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-				return $removido;
+				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->update(['deleted_at'=>Carbon::now()->toDateTimeString()]);
 			}
-			catch (\Exception $e)
-			{
+			catch (\Exception $e) {
 				throw new ColecaoException("Erro ao remover Questionamento.", $e->getCode(), $e);
 			}
 		}
@@ -107,9 +98,8 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 	}
 
 	function atualizar(&$obj) {
-		// if($this->validarTarefa($obj)) {
+		// if($this->validarQuestionamento($obj)) {
 			try {
-				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 				$filds = [ 
 					'status' => $obj->getStatus(),
                     'formulariopergunta' => is_object($obj->getFormularioPergunta()) ? json_encode($obj->getFormularioPergunta()) : $obj->getFormularioPergunta(),
@@ -120,11 +110,8 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 				if($obj->getChecklist() instanceof Checklist || isset($obj->getChecklist()['id'])) $filds['checklist_id'] =  ($obj->getChecklist() instanceof Checklist)  ? $obj->getChecklist()->getId() : $obj->getChecklist()['id'];
 				if($obj->getPlanoAcao() instanceof PlanoAcao || isset($obj->getPlanoAcao()['id'])) $filds['planoacao_id'] =  ($obj->getPlanoAcao() instanceof PlanoAcao)  ? $obj->getPlanoAcao()->getId() : $obj->getPlanoAcao()['id'];
 
-				DB::table(self::TABELA)->where('id', $obj->getId())->update($filds);
+				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $obj->getId())->update($filds);
 
-				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-
-				return $obj;
 			}
 			catch (\Exception $e)
 			{
@@ -135,9 +122,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 
 	function comId($id){
 		try {	
-			$tarefa = $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->get()[0]);
-
-			return $tarefa;
+			return (DB::table(self::TABELA)->where('id', $id)->count()) ? $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->first()) : [];
 		}
 		catch (\Exception $e)
 		{
@@ -148,7 +133,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 	function questionamentosParaExecucao($checklistId){
 		try {	
 
-			$questionamentos = DB::table(self::TABELA)->where('checklist_id', $checklistId)->where('status', TipoQuestionamentoEnumerado::NAO_RESPONDIDO)->get();
+			$questionamentos = DB::table(self::TABELA)->where('deleted_at', NULL)->where('checklist_id', $checklistId)->where('status', TipoQuestionamentoEnumerado::NAO_RESPONDIDO)->get();
 			$questionamentosObjects = [];
 
 			foreach ($questionamentos as $key => $questionamento) {
@@ -166,7 +151,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 
 	function questionamentosComChecklistId($checklistId = 0){
 		try {
-			$questionamentos = DB::table(self::TABELA)->where('checklist_id', $checklistId)->get();
+			$questionamentos = DB::table(self::TABELA)->where('deleted_at', NULL)->where('checklist_id', $checklistId)->get();
 			$questionamentosObjects = [];
 			foreach ($questionamentos as $key => $questionamento) {
 				$questionamentosObjects[] = $this->construirObjeto($questionamento);
@@ -201,7 +186,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 
 	function questionamentosComStatus($status = []){
 		try {
-			$questionamentos = DB::table(self::TABELA)->whereIn('status', $status)->get();
+			$questionamentos = DB::table(self::TABELA)->where('deleted_at', NULL)->whereIn('status', $status)->get();
 			$questionamentoObjects = [];
 			foreach ($questionamentos as $key => $questionamento) {
 				$questionamentosObjects[] = $this->construirObjeto($questionamento);
@@ -218,7 +203,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 	function todosComChecklistId($pageHome = 0, $pageLength = 10,  $search = '', $checklistId  = 0){
 		try {	
 
-			$query = DB::table(self::TABELA)->select(self::TABELA . '.*')->where('checklist_id', $checklistId);
+			$query = DB::table(self::TABELA)->where('deleted_at', NULL)->select(self::TABELA . '.*')->where('checklist_id', $checklistId);
 				
 			if($search != '') {
 				$buscaCompleta = $search;
@@ -280,7 +265,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 
 	function todos($limite = 0, $pulo = 0) {
 		try {	
-			$tarefas = DB::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+			$tarefas = DB::table(self::TABELA)->where('deleted_at', NULL)->offset($limite)->limit($pulo)->get();
 			$tarefasObjects = [];
 
 			foreach ($tarefas as $key => $tarefa) {
@@ -297,7 +282,7 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 	
 	function todosComId($ids = []) {
 		try {	
-			$questionamento = DB::table(self::TABELA)->whereIn('id', $ids)->get();
+			$questionamento = DB::table(self::TABELA)->where('deleted_at', NULL)->whereIn('id', $ids)->get();
 			$questionamentoObjects = [];
 
 			foreach ($questionamento as $questionamento) {
@@ -313,7 +298,6 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 	}
 
 	function construirObjeto(array $row) {
-		// $checklist = ($row['checklist_id'] > 0) ? Dice::instance()->create('ColecaoChecklist')->comId($row['checklist_id']) : null;
 		$planoAcao = ($row['planoacao_id'] > 0) ? Dice::instance()->create('ColecaoPlanoAcao')->comId($row['planoacao_id']) : null;
 		$pendencia = ($row['pendencia_id'] > 0) ? Dice::instance()->create('ColecaoPendencia')->comId($row['pendencia_id']) : null;
 		$anexos = Dice::instance()->create('ColecaoAnexo')->comQuestionamentoId($row['id']);
@@ -335,14 +319,14 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 	}	
 
     function contagem($checklistId = 0, $status = []) {
-		return (count($status) > 0) ? DB::table(self::TABELA)->where('checklist_id', $checklistId)->whereIn('status',$status)->count() : DB::table(self::TABELA)->where('checklist_id', $checklistId)->count();
+		return (count($status) > 0) ? DB::table(self::TABELA)->where('deleted_at', NULL)->where('checklist_id', $checklistId)->whereIn('status',$status)->count() : DB::table(self::TABELA)->where('checklist_id', $checklistId)->where('deleted_at', NULL)->count();
 	}
 
 	function contagemPorColuna($valor = 0, $coluna = 'id') {
-		return DB::table(self::TABELA)->where($coluna, $valor)->count();
+		return DB::table(self::TABELA)->where('deleted_at', NULL)->where($coluna, $valor)->count();
 	}
 
-	private function validarTarefa(&$obj) {
+	private function validarQuestionamento(&$obj) {
 		if(!is_string($obj->getTitulo())) throw new ColecaoException('Valor inválido para titulo.');
 		
 		if(!is_string($obj->getDescricao())) throw new ColecaoException('Valor inválido para a descrição.');
@@ -375,10 +359,11 @@ class ColecaoQuestionamentoEmBDR implements ColecaoQuestionamento {
 		return true;
 	}
 
-	private function validarRemocaoTarefa($id){
-		$quantidade = DB::table(ColecaoPerguntaEmBDR::TABELA)->where('tarefa_id', $id)->count();
-
-		if($quantidade > 0)throw new ColecaoException('Não foi possível excluir a tarefa por que ela possui perguntas relacionadas a ela. Exclua todas as perguntas relacionadas e tente novamente.');
+	private function validarDeleteQuestionamento($id) {
+		$quantidadeQuestionamento = DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->count();
+		
+		if($quantidadeQuestionamento == 0) throw new ColecaoException('O questionamento selecionado para delete não foi encontrado.');
+		
 		return true;
 	}
 }

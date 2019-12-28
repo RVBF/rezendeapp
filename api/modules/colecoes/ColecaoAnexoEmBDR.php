@@ -1,5 +1,6 @@
 <?php
 use Illuminate\Database\Capsule\Manager as DB;
+use Carbon\Carbon;
 /**
  *	Coleção de Anexo em Banco de Dados Relacional.
  *
@@ -16,8 +17,6 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 
 	function adicionar(&$obj) {
 		try {	
-			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
 			$id = DB::table(self::TABELA)->insertGetId([ 
 				'caminho' => $obj->getPatch(),
 				'tipo' => $obj->getTipo(),
@@ -25,12 +24,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 				'planoacao_id' => ($obj->getPlanoAcao() instanceof PlanoAcao) ? $obj->getPlanoAcao()->getId() : 0,
 
 			]);
-            
-			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-
 			$obj->setId($id);
-
-			return $obj;
 		}
 		catch (\Exception $e) {
 			throw new ColecaoException('Erro ao adicionar Anexo!');
@@ -39,26 +33,16 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 
 	function remover($id) {
 		try {	
-			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-			$removido = DB::table(self::TABELA)->where('id', $id)->delete();
-			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-			return $removido;
+			DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->update(['deleted_at' => Carbon::now()->toDateTimeString()]);
 		}
-		catch (\Exception $e)
-		{
+		catch (\Exception $e) {
 			throw new ColecaoException("Erro ao remover anexo!", $e->getCode(), $e);
 		}
 	}
 
 	function atualizar(&$obj) {
 		try {
-			
-			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-			DB::table(self::TABELA)->where('id', $obj->getId())->update([ 'caminho' => $obj->getPatch(), 'tipo' => $obj->getTipo(), 'questionamento_id' => $obj->geQuestionamento()->getId()]);
-
-			DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-			return $obj;
+			DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $obj->getId())->update([ 'caminho' => $obj->getPatch(), 'tipo' => $obj->getTipo(), 'questionamento_id' => $obj->geQuestionamento()->getId()]);
 		}
 		catch (\Exception $e) {
 			throw new ColecaoException("Erro ao atualizar anexo no banco de dados!", $e->getCode(), $e);
@@ -79,7 +63,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 	public function comQuestionamentoId($id){
 		try {	
 
-			$anexos = DB::table(self::TABELA)->where('questionamento_id', $id)->get();
+			$anexos = DB::table(self::TABELA)->where('deleted_at', NULL)->where('questionamento_id', $id)->get();
 			$anexosObjects = [];
 			foreach ($anexos as $anexo) {
 				$anexosObjects[] =  $this->construirObjeto($anexo);
@@ -95,7 +79,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 	public function comPlanoAcaoId($id){
 		try {	
 
-			$anexos = DB::table(self::TABELA)->where('planoacao_id', $id)->get();
+			$anexos = DB::table(self::TABELA)->where('deleted_at', NULL)->where('planoacao_id', $id)->get();
 
 			$anexosObjects = [];
 			foreach ($anexos as $anexo) {
@@ -113,7 +97,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 	 */
 	function todos($limite = 0, $pulo = 0) {
 		try {	
-			$anexos = DB::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+			$anexos = DB::table(self::TABELA)->where('deleted_at', NULL)->offset($limite)->limit($pulo)->get();
 
 			$anexosObjects = [];
 			foreach ($anexos as $pergunta) {
@@ -144,7 +128,7 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 	}	
 
     function contagem() {
-		return DB::table(self::TABELA)->count();
+		return DB::table(self::TABELA)->where('deleted_at', NULL)->count();
 	}
 }
 
