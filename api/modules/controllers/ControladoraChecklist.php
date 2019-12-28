@@ -25,6 +25,9 @@ class ControladoraChecklist {
 	private $colecaoLoja;
 	private $colecaoQuestionario;
 	private $colecaoQuestionamento;
+	private $colecaoAnexo;
+	private $colecaoPlanoAcao;
+	private $colecaoPendencia;
 
 	function __construct($params,  Sessao $sessao) {
 		$this->params = $params;
@@ -36,6 +39,9 @@ class ControladoraChecklist {
 		$this->colecaoLoja = Dice::instance()->create('ColecaoLoja');
 		$this->colecaoQuestionario = Dice::instance()->create('ColecaoQuestionario');
 		$this->colecaoQuestionamento = Dice::instance()->create('ColecaoQuestionamento');
+		$this->colecaoAnexo = Dice::instance()->create('ColecaoAnexo');
+		$this->colecaoPlanoAcao = Dice::instance()->create('ColecaoPlanoAcao');
+		$this->colecaoPendencia = Dice::instance()->create('ColecaoPendencia');
 	}
 
 	function todos() {
@@ -303,11 +309,27 @@ class ControladoraChecklist {
 			foreach ($checklist->getQuestionamentos() as $key => $questionamento) {
 				$questionamentoAtual = new Questionamento(); $questionamentoAtual->fromArray($questionamento);
 				if($questionamentoAtual->getPlanoAcao() instanceof PlanoAcao){
+					foreach ($planoAcao->getAnexos() as $anexo) {
+						$anexoAtual = new Anexo(); $anexoAtual->fromArray($anexo);
+						$this->colecaoAnexo->remover($anexoAtual->getId());
+					}
+
 					$planoAcao = new PlanoAcao(); $planoAcao->fromArray($questionamentoAtual->getPlanoAcao());
-					Util::printr($planoAcao);
+					$this->colecaoPlanoAcao->remover($planoAcao->getId());
+				}
+				if($questionamentoAtual->geColecaoAnexoEmBDRtPendencia() instanceof Pendencia){
+					$pendencia = new Pendencia(); $pendencia->fromArray($questionamentoAtual->getPlanoAcao());
+					$this->colecaoPedencia->remover($pendencia->getId());
 				}
 
+				foreach ($questionamentoAtual->getAnexos() as $anexo) {
+					$anexoAtual = new Anexo(); $anexoAtual->fromArray($anexo);
+					$this->colecaoAnexo->remover($anexoAtual->getId());
+				}
+
+				$this->colecaoQuestionamento->remover($questionamentoAtual->getId());
 			}
+			
 			
 			$resposta = ['status' => true, 'mensagem'=> 'Checklist removido com sucesso.']; 
 			DB::commit();

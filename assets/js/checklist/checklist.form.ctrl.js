@@ -348,7 +348,7 @@
 						action	: function(dialog){
 							servicoChecklist.remover(_this.obj.id).done(function (resposta) {
 								if(resposta.status){
-									router.navigate('/setores');
+									router.navigate('/checklist');
 									toastr.success(resposta.mensagem);
 									dialog.close();
 
