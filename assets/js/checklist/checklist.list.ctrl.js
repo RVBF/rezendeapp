@@ -130,7 +130,6 @@
 			};
 
 			objeto.rowsCallback = function(resposta){
-				$('.remover_setor_link').on('click', _this.remover);
 				$('.executar_checklist').on('click', _this.executar);
 				$('.pas_pendentes').on('click', function () {
 					event.preventDefault();
@@ -192,33 +191,6 @@
 		_this.atualizar = function atualizar(){
 			_tabela.atualizarTabela();
 		};
-
-		_this.remover = function remover(event){
-			var objeto = _tabela.getObjetos()[$(this).parents('.listagem-padrao-item').index()];
-			BootstrapDialog.show({
-				type	: BootstrapDialog.TYPE_DANGER,
-				title	: 'Deseja remover este Stor?',
-				message	: 'Título: ' + objeto.titulo + '<br> Descrição :' + objeto.descricao,
-				size	: BootstrapDialog.SIZE_LARGE,
-				buttons	: [ {
-						label	: '<u>S</u>im',
-						hotkey	: 'S'.charCodeAt(0),
-						action	: function(dialog){
-							servicoChecklist.remover(objeto.id).done(window.sucessoPadrao).fail(window.erro);
-							_this.atualizar();
-
-							dialog.close();
-						}
-					}, {
-						label	: '<u>N</u>ão',
-						hotkey	: 'N'.charCodeAt(0),
-						action	: function(dialog){
-							dialog.close();
-						}
-					}
-				]
-			});
-		}; // remover
 
 		_this.configurar = function configurar() {
 			_tabela = _this.idTabela.listar(_this.opcoesDaTabela());

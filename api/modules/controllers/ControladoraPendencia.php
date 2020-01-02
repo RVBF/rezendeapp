@@ -210,7 +210,7 @@ class ControladoraPendencia {
 		return $resposta;
 	}
 
-	function remover($id, $idSetor = 0) {
+	function remover($id) {
 		DB::beginTransaction();
 
 		try {
@@ -218,15 +218,56 @@ class ControladoraPendencia {
 				throw new Exception("Erro ao acessar página.");				
 			}
 
-			if(!$this->servicoLogin->eAdministrador()){
-				throw new Exception("Usuário sem permissão para executar ação.");
-			}
-			
-			$resposta = [];
+			$pendencia = new Pendencia(); $pendencia->fromArray($this->colecaoPendencia->comId($id));
 
-			$status = ($idSetor > 0) ? $this->colecaoChecklist->removerComSetorId($id, $idSetor) :  $this->colecaoChecklist->remover($id);
+			if(!($pendencia instanceof Pendencia)) throw new ColecaoException("Erro ao buscar plano de ação.");
+		
+			if($this->colecaoQuestionamento->contagemPorColuna($pendencia->getId(), 'pendencia_id') > 0){
+				$questionamento = new Questionamento(); $questionamento->fromArray($this->colecaoQuestionamento->comPlanodeAcaoid($pendencia->getId(), 'id'));
+				if(!isset($questionamento) and !($questionamento instanceof Questionamento)) throw new Exception("Questionamento não encontrado na base de dados.");
 			
-			$resposta = ['status' => true, 'mensagem'=> 'Pendência removida com sucesso.']; 
+				$checklist = new Checklist(); $checklist->fromArray($this->colecaoChecklist->comId($questionamento->getChecklist()));
+				if($checklist instanceof Checklist){
+					foreach ($checklist->getQuestionamentos() as $key => $questionamento) {
+						$questionamentoAtual = new Questionamento(); $questionamentoAtual->fromArray($questionamento);
+						$planoAcao = $pendencia = [];
+		
+						if(!empty($questionamentoAtual->getPlanoAcao())){
+							$planoAcao = new PlanoAcao(); $planoAcao->fromArray($questionamentoAtual->getPlanoAcao());
+						}
+						if(!empty($questionamentoAtual->getPendencia())){
+							$pendencia = new Pendencia(); $pendencia->fromArray($questionamentoAtual->getPendencia());
+						}
+		
+						if($planoAcao instanceof PlanoAcao){
+							foreach ($planoAcao->getAnexos() as $anexo) {
+								$anexoAtual = new Anexo(); $anexoAtual->fromArray($anexo);
+								$this->colecaoAnexo->remover($anexoAtual->getId());
+							}
+		
+							$this->colecaoPlanoAcao->remover($planoAcao->getId());
+						}
+		
+						if($pendencia instanceof Pendencia){
+							$this->colecaoPendencia->remover($pendencia->getId());
+						}
+		
+						foreach ($questionamentoAtual->getAnexos() as $anexo) {
+							$anexoAtual = new Anexo(); $anexoAtual->fromArray($anexo);
+							$this->colecaoAnexo->remover($anexoAtual->getId());
+						}
+		
+						$this->colecaoQuestionamento->remover($questionamentoAtual->getId());
+					}				
+				}	
+
+				$this->colecaoChecklist->remover($checklist->getId());
+			}
+		
+			$this->colecaoPendencia->remover($id);
+			
+			$resposta = ['status' => true, 'mensagem'=> 'Pêndencia removida com sucesso.']; 
+			
 			DB::commit();
 
 		}

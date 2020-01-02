@@ -34,14 +34,14 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 	}
 
 	function remover($id) {
-		if($this->validarRemocaoTarefa($id)){
+		// if($this->validarRemocaoTarefa($id)){
 			try {	
 				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->update(['deleted_at' => Carbon::now()->toDateTimeString()]);
 			}
 			catch (\Exception $e) {
 				throw new ColecaoException("Erro ao remover checklist.", $e->getCode(), $e);
 			}
-		}
+		// }
 	}
 
 	function atualizar(&$obj) {
@@ -144,10 +144,12 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 
 	function todosComChecklistId($limite = 0, $pulo = 10, $search = '', $colaboradorId = 0, $checklistId = 0){
 		try {	
-			$query = DB::table(self::TABELA)->where('deleted_at', NULL)->select(self::TABELA .'.*')->where(self::TABELA .'.responsavel_id', $colaboradorId);
+			$query = DB::table(self::TABELA)->where(self::TABELA .'.deleted_at', NULL)->select(self::TABELA .'.*')->where(self::TABELA .'.responsavel_id', $colaboradorId);
+
 			$query->leftJoin(ColecaoQuestionamentoEmBDR::TABELA, ColecaoQuestionamentoEmBDR::TABELA. '.planoacao_id', '=', self::TABELA .'.id');
 			$query->leftJoin(ColecaoChecklistEmBDR::TABELA, ColecaoQuestionamentoEmBDR::TABELA. '.checklist_id', '=', ColecaoChecklistEmBDR::TABELA .'.id');
 			$query->where(ColecaoChecklistEmBDR::TABELA .'.id', $checklistId);
+
 			if($search != '') {
 				$buscaCompleta = $search;
 				$palavras = explode(' ', $buscaCompleta);

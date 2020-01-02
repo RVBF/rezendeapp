@@ -305,21 +305,29 @@ class ControladoraChecklist {
 			$checklist = new Checklist(); $checklist->fromArray($this->colecaoChecklist->comId($id));
 			if(!($checklist instanceof Checklist)) throw new Exception("Erro ao buscar checklist no banco de dados.");
 			$this->colecaoChecklist->remover($checklist->getId());
-			
+
 			foreach ($checklist->getQuestionamentos() as $key => $questionamento) {
 				$questionamentoAtual = new Questionamento(); $questionamentoAtual->fromArray($questionamento);
-				if($questionamentoAtual->getPlanoAcao() instanceof PlanoAcao){
+				$planoAcao = $pendencia = [];
+
+				if(!empty($questionamentoAtual->getPlanoAcao())){
+					$planoAcao = new PlanoAcao(); $planoAcao->fromArray($questionamentoAtual->getPlanoAcao());
+				}
+				if(!empty($questionamentoAtual->getPendencia())){
+					$pendencia = new Pendencia(); $pendencia->fromArray($questionamentoAtual->getPendencia());
+				}
+
+				if($planoAcao instanceof PlanoAcao){
 					foreach ($planoAcao->getAnexos() as $anexo) {
 						$anexoAtual = new Anexo(); $anexoAtual->fromArray($anexo);
 						$this->colecaoAnexo->remover($anexoAtual->getId());
 					}
 
-					$planoAcao = new PlanoAcao(); $planoAcao->fromArray($questionamentoAtual->getPlanoAcao());
 					$this->colecaoPlanoAcao->remover($planoAcao->getId());
 				}
-				if($questionamentoAtual->geColecaoAnexoEmBDRtPendencia() instanceof Pendencia){
-					$pendencia = new Pendencia(); $pendencia->fromArray($questionamentoAtual->getPlanoAcao());
-					$this->colecaoPedencia->remover($pendencia->getId());
+
+				if($pendencia instanceof Pendencia){
+					$this->colecaoPendencia->remover($pendencia->getId());
 				}
 
 				foreach ($questionamentoAtual->getAnexos() as $anexo) {
@@ -330,10 +338,8 @@ class ControladoraChecklist {
 				$this->colecaoQuestionamento->remover($questionamentoAtual->getId());
 			}
 			
-			
 			$resposta = ['status' => true, 'mensagem'=> 'Checklist removido com sucesso.']; 
 			DB::commit();
-
 		}
 		catch (\Exception $e) {
 			DB::rollback();

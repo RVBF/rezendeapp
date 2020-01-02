@@ -25,6 +25,7 @@ class ControladoraPlanoAcao {
 	private $colecaoLoja;
 	private $colecaoPlanoAcao;
 	private $colecaoQuestionamento;
+	private $colecaoPendencia;
 	private $servicoArquivo;
 	private $colecaoAnexo;
 	private $colecaoHistorico;
@@ -42,8 +43,8 @@ class ControladoraPlanoAcao {
 		$this->colecaoQuestionamento = Dice::instance()->create('ColecaoQuestionamento');
 		$this->servicoArquivo = ServicoArquivo::instance();
 		$this->colecaoAnexo = Dice::instance()->create('ColecaoAnexo');
+		$this->colecaoPendencia = Dice::instance()->create('ColecaoPendencia');
 		$this->colecaoHistorico = Dice::instance()->create('ColecaoHistoricoResponsabilidade');
-
 	}
 
 	function todos() {
@@ -62,7 +63,7 @@ class ControladoraPlanoAcao {
 			$contagem = $this->colecaoPlanoAcao->contagem($colaborador->getId());
 		}
 		catch (\Exception $e ) {
-			throw new Exception("Erro ao listar checklists");
+			throw new Exception("Erro ao listar planos de ação.");
 		}
 
 		$conteudo = new DataTablesResponse(
@@ -94,7 +95,7 @@ class ControladoraPlanoAcao {
 			$contagem = $this->colecaoPlanoAcao->contagem($colaborador->getId());
 		}
 		catch (\Exception $e ) {
-			throw new Exception("Erro ao listar checklists");
+			throw new Exception("Erro ao listar planos de ação.");
 		}
 
 		$conteudo = new DataTablesResponse(
@@ -239,7 +240,7 @@ class ControladoraPlanoAcao {
 		return $resposta;
 	}
 
-	function remover($id, $idSetor = 0) {
+	function remover($id) {
 		DB::beginTransaction();
 
 		try {
@@ -247,15 +248,56 @@ class ControladoraPlanoAcao {
 				throw new Exception("Erro ao acessar página.");				
 			}
 
-			if(!$this->servicoLogin->eAdministrador()){
-				throw new Exception("Usuário sem permissão para executar ação.");
-			}
-			
-			$resposta = [];
+			$planoAcao = new PlanoAcao(); $planoAcao->fromArray($this->colecaoPlanoAcao->comId($id));
 
-			$status = ($idSetor > 0) ? $this->colecaoChecklist->removerComSetorId($id, $idSetor) :  $this->colecaoChecklist->remover($id);
+			if(!($planoAcao instanceof PlanoAcao)) throw new ColecaoException("Erro ao buscar plano de ação.");
+		
+			if($this->colecaoQuestionamento->contagemPorColuna($planoAcao->getId(), 'planoacao_id') > 0){
+				$questionamento = new Questionamento(); $questionamento->fromArray($this->colecaoQuestionamento->comPlanodeAcaoid($planoAcao->getId(), 'id'));
+				if(!isset($questionamento) and !($questionamento instanceof Questionamento)) throw new Exception("Questionamento não encontrado na base de dados.");
 			
-			$resposta = ['status' => true, 'mensagem'=> 'PLano de ação removida com sucesso.']; 
+				$checklist = new Checklist(); $checklist->fromArray($this->colecaoChecklist->comId($questionamento->getChecklist()));
+				if($checklist instanceof Checklist){
+					foreach ($checklist->getQuestionamentos() as $key => $questionamento) {
+						$questionamentoAtual = new Questionamento(); $questionamentoAtual->fromArray($questionamento);
+						$planoAcao = $pendencia = [];
+		
+						if(!empty($questionamentoAtual->getPlanoAcao())){
+							$planoAcao = new PlanoAcao(); $planoAcao->fromArray($questionamentoAtual->getPlanoAcao());
+						}
+						if(!empty($questionamentoAtual->getPendencia())){
+							$pendencia = new Pendencia(); $pendencia->fromArray($questionamentoAtual->getPendencia());
+						}
+		
+						if($planoAcao instanceof PlanoAcao){
+							foreach ($planoAcao->getAnexos() as $anexo) {
+								$anexoAtual = new Anexo(); $anexoAtual->fromArray($anexo);
+								$this->colecaoAnexo->remover($anexoAtual->getId());
+							}
+		
+							$this->colecaoPlanoAcao->remover($planoAcao->getId());
+						}
+		
+						if($pendencia instanceof Pendencia){
+							$this->colecaoPendencia->remover($pendencia->getId());
+						}
+		
+						foreach ($questionamentoAtual->getAnexos() as $anexo) {
+							$anexoAtual = new Anexo(); $anexoAtual->fromArray($anexo);
+							$this->colecaoAnexo->remover($anexoAtual->getId());
+						}
+		
+						$this->colecaoQuestionamento->remover($questionamentoAtual->getId());
+					}				
+				}	
+
+				$this->colecaoChecklist->remover($checklist->getId());
+			}
+		
+			$this->colecaoPlanoAcao->remover($id);
+			
+			$resposta = ['status' => true, 'mensagem'=> 'Plano de ação removida com sucesso.']; 
+			
 			DB::commit();
 
 		}

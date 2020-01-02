@@ -258,9 +258,7 @@ use \phputil\JSON;
 		$ctrl = new ControladoraPlanoAcao($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->comId($args['id']);
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
-
 	});
-
 
 	$app->post('/plano-acao', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 		$this->logger->addInfo("Acessando o cadastro de plano-acao");

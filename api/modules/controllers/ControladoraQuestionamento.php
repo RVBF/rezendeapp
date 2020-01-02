@@ -75,10 +75,6 @@ class ControladoraQuestionamento {
 
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");		
-			
-			// if(!$this->servicoLogin->eAdministrador()){
-			// 	throw new Exception("Usuário sem permissão para executar ação.");
-			// }
 
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'status','formularioPergunta', 'formularioResposta'], $this->params);
 			$resposta = [];
@@ -105,33 +101,55 @@ class ControladoraQuestionamento {
 
 			if($this->params['formularioResposta']['opcao'] != OpcoesRespostaEnumerada::BOM){
 				if(isset($this->params['planoAcao']) || isset($this->params['pendencia'])){
-					if(!(((
-						strlen($this->params['pendencia']['descricao']) > 0 and
-						strlen($this->params['pendencia']['dataLimite']) > 0 and
-						strlen($this->params['pendencia']['solucao']) > 0 and
-						$this->params['pendencia']['responsavel'] > 0
-					) and !(
-						strlen($this->params['planoAcao']['descricao']) > 0 and
-						strlen($this->params['planoAcao']['dataLimite']) > 0 and
-						count($this->params['planoAcao']['solucao']) > 0 and
-						$this->params['planoAcao']['responsavel'] > 0
-					)) || (!(
-						strlen($this->params['pendencia']['descricao']) > 0 and
-						strlen($this->params['pendencia']['dataLimite']) > 0 and
-						strlen($this->params['pendencia']['solucao']) > 0 and
-						$this->params['pendencia']['responsavel'] > 0
-					) and (
-						strlen($this->params['planoAcao']['descricao']) > 0 and
-						strlen($this->params['planoAcao']['dataLimite']) > 0 and
-						count($this->params['planoAcao']['solucao']) > 0 and
-						$this->params['planoAcao']['responsavel'] > 0
-					)))) 	throw new Exception("É necessário cadastrar um plano de ação ou uma pendência para questionamentos com resposta inferior a " . strtolower(OpcoesRespostaEnumerada::BOM) .'!');
-
+					if(!(
+						(
+							(
+								strlen($this->params['pendencia']['descricao']) > 0 and
+								strlen($this->params['pendencia']['dataLimite']) > 0 and
+								strlen($this->params['pendencia']['solucao']) > 0 and
+								$this->params['pendencia']['responsavel'] > 0
+							) and 
+							!(
+								strlen($this->params['planoAcao']['descricao']) > 0 and
+								strlen($this->params['planoAcao']['dataLimite']) > 0 and
+								!empty($this->params['planoAcao']['solucao']) and
+								$this->params['planoAcao']['responsavel'] > 0
+							)
+						) || 
+						(
+							!(
+								strlen($this->params['pendencia']['descricao']) > 0 and
+								strlen($this->params['pendencia']['dataLimite']) > 0 and
+								strlen($this->params['pendencia']['solucao']) > 0 and
+								$this->params['pendencia']['responsavel'] > 0
+							) and 
+							(
+								strlen($this->params['planoAcao']['descricao']) > 0 and
+								strlen($this->params['planoAcao']['dataLimite']) > 0 and
+								!empty($this->params['planoAcao']['solucao']) and
+								$this->params['planoAcao']['responsavel'] > 0
+							)
+						) || 
+						(
+							(
+								strlen($this->params['pendencia']['descricao']) > 0 and
+								strlen($this->params['pendencia']['dataLimite']) > 0 and
+								strlen($this->params['pendencia']['solucao']) > 0 and
+								$this->params['pendencia']['responsavel'] > 0
+							) and 
+							(
+								strlen($this->params['planoAcao']['descricao']) > 0 and
+								strlen($this->params['planoAcao']['dataLimite']) > 0 and
+								!empty($this->params['planoAcao']['solucao']) and
+								$this->params['planoAcao']['responsavel'] > 0
+							)
+						)
+					)) 	throw new Exception("É necessário cadastrar um plano de ação ou uma pendência para questionamentos com resposta inferior a " . strtolower(OpcoesRespostaEnumerada::BOM) .'!');
 				
 					if(
 						strlen($this->params['planoAcao']['descricao']) > 0 and
 						strlen($this->params['planoAcao']['dataLimite']) > 0 and
-						count($this->params['planoAcao']['solucao']) > 0 and
+						!empty($this->params['planoAcao']['solucao']) and
 						$this->params['planoAcao']['responsavel'] > 0
 					){
 
