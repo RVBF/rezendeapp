@@ -204,7 +204,15 @@
          html += '<span class="center local-dto">Pendências pendente</span>';
          html += '<a href="#/" class="left m16-dto checklist_link"><i class="material-icons">navigate_before</i></a>';
       }
-      else if (window.location.href.search('Visualizar-Pendência') != -1) {
+      else if (window.location.href.search('cadastrar-pendencia') != -1) {
+         html += '<span class="center local-dto">Cadastrar Pendência</span>';
+         html += '<a href="#/" class="left m16-dto pendencia_link"><i class="material-icons">navigate_before</i></a>';
+      }      
+      else if (window.location.href.search('editar-pendencia') != -1) {
+         html += '<span class="center local-dto">Editar Pendência</span>';
+         html += '<a href="#/" class="left m16-dto pendencia_link"><i class="material-icons">navigate_before</i></a>';
+      }
+      else if (window.location.href.search('visualizar-pendencia') != -1) {
          html += '<span class="center local-dto">Visualizar Pendência</span>';
          html += '<a href="#/" class="left m16-dto pendencia_link"><i class="material-icons">navigate_before</i></a>';
       }

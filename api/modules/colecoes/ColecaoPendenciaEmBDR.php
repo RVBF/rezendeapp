@@ -16,7 +16,6 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 
 	function adicionar(&$obj) {
 		try {	
-			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 			$id = DB::table(self::TABELA)->insertGetId([
 					'status' => $obj->getStatus(),
 					'descricao' => $obj->getDescricao(),
@@ -27,50 +26,27 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 			);
 			
 			$obj->setId($id);	
-	
-			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
 		}
 		catch (\Exception $e) {
 			throw new ColecaoException("Erro ao adicionar nova pendência", $e->getCode(), $e);
 		}
-	}
-
-	function removerComSetorId($id, $idSetor) {
-		if($this->validarRemocaoTarefa($id)){
-			try {	
-				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-				$removido = DB::table(self::TABELA)->where('id', $id)->where('setor_id', $idSetor)->delete();
-				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-				return $removido;
-			}
-			catch (\Exception $e) {
-				throw new ColecaoException("Erro ao remover checklist com o id do setor.", $e->getCode(), $e);
-			}
-		}
-
+	
 	}
 
 	function remover($id) {
-		if($this->validarRemocaoTarefa($id)){
+		// if($this->validarRemocaoTarefa($id)){
 			try {	
-				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-				$removido = DB::table(self::TABELA)->where('id', $id)->delete();
-				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-				return $removido;
+				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->update(['deleted_at' => Carbon::now()->toDateTimeString()]);
 			}
-			catch (\Exception $e)
-			{
+			catch (\Exception $e) {
 				throw new ColecaoException("Erro ao remover checklist.", $e->getCode(), $e);
 			}
-		}
-
+		// }
 	}
 
 	function atualizar(&$obj) {
 			try {
 				
-				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 				$filds = [ 'status' => $obj->getStatus(),
 					'descricao' => $obj->getDescricao(),
 					'descricaosolucao' => $obj->getSolucao(),
@@ -79,9 +55,7 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 					'responsavel_id' => ($obj->getResponsavel() instanceof Colaborador) ? $obj->getResponsavel()->getId() : $obj->getResponsavel()['id']
 				];
 				
-				DB::table(self::TABELA)->where('id', $obj->getId())->update($filds);
-
-				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $obj->getId())->update($filds);
 
 				return $obj;
 			}
@@ -104,7 +78,7 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 
 	function todosComResponsavelId($limite = 0, $pulo = 0, $search = '', $responsavelId = 0){
 		try {	
-			$query = DB::table(self::TABELA)->select(self::TABELA . '.*')->where('responsavel_id', $responsavelId);
+			$query = DB::table(self::TABELA)->where(self::TABELA . '.deleted_at', NULL)->select(self::TABELA . '.*')->where('responsavel_id', $responsavelId);
 
 			if($search != '') {
 				$buscaCompleta = $search;
@@ -172,7 +146,7 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 	function todosComLojaIds($limite = 0, $pulo = 0, $search = '', $idsLojas = []){
 		try {	
 
-			$query = DB::table(self::TABELA)->select(self::TABELA . '.*')->whereIn('loja_id', $idsLojas);
+			$query = DB::table(self::TABELA)->where(self::TABELA . '.deleted_at', NULL)->select(self::TABELA . '.*')->whereIn('loja_id', $idsLojas);
 				
 			if($search != '') {
 				$buscaCompleta = $search;
@@ -234,7 +208,7 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 
 	function todos($limite = 0, $pulo = 0, $search = '') {
 		try {	
-			$tarefas = DB::table(self::TABELA)->offset($limite)->limit($pulo)->get();
+			$tarefas = DB::table(self::TABELA)->where('deleted_at', NULL)->offset($limite)->limit($pulo)->get();
 			$tarefasObjects = [];
 
 			foreach ($tarefas as $key => $tarefa) {
@@ -252,7 +226,7 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 
 	function todosComChecklistId($limite = 0, $pulo = 10, $search = '', $colaboradorId = 0, $checklistId = 0){
 		try {	
-			$query = DB::table(self::TABELA)->select(self::TABELA .'.*')->where(self::TABELA .'.responsavel_id', $colaboradorId);
+			$query = DB::table(self::TABELA)->where(self::TABELA . '.deleted_at', NULL)->select(self::TABELA .'.*')->where(self::TABELA .'.responsavel_id', $colaboradorId);
 			$query->leftJoin(ColecaoQuestionamentoEmBDR::TABELA, ColecaoQuestionamentoEmBDR::TABELA. '.pendencia_id', '=', self::TABELA .'.id');
 			$query->leftJoin(ColecaoChecklistEmBDR::TABELA, ColecaoQuestionamentoEmBDR::TABELA. '.checklist_id', '=', ColecaoChecklistEmBDR::TABELA .'.id');
 
@@ -323,7 +297,7 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 	}
 	function todosComId($ids = []) {
 		try {	
-			$tarefas = DB::table(self::TABELA)->whereIn('id', $ids)->get();
+			$tarefas = DB::table(self::TABELA)->where(self::TABELA. '.deleted_at', NULL)->whereIn('id', $ids)->get();
 			$tarefasObjects = [];
 
 			foreach ($tarefas as $tarefa) {

@@ -13,10 +13,9 @@
 
 		_this.alterar = false;
 		_this.formulario = $('#pendencia_form');
-		_this.botaoSubmissao = $('#editar');
 		_this.dataLimite = '';
 		_this.horaLimite = '';
-		_this.objeto =  null;
+		_this.obj =  null;
 
 		// Cria as opções de validação do formulário
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
@@ -91,49 +90,44 @@
 		};
 
 		_this.configurarEventos = function configurarEventos() {
-			if(window.location.href.search('visualizar') != -1){
+			_this.dataLimite =new Picker($('#data_limite').get()[0], {
+				format : 'DD de MMMM de YYYY',
+				controls: true,
+				inline: true,
+				container: '.date-panel',					
+				text : {
+					title: 'Selecione a data',
+					cancel: 'Cancelar',
+					confirm: 'OK',
+					year: 'Ano',
+					month: 'Mês',
+					day: 'Dia',
+					hour: 'Hora',
+					minute: 'Minuto',
+					second: 'Segundo',
+					millisecond: 'Milissegundos',
+				},
+				headers : true,
+				months : ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+				monthsShort : ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+			});
 
-			}else{
-				_this.dataLimite =new Picker($('#data_limite').get()[0], {
-					format : 'DD de MMMM de YYYY',
-					controls: true,
-					inline: true,
-					container: '.date-panel',					
-					text : {
-						title: 'Selecione a data',
-						cancel: 'Cancelar',
-						confirm: 'OK',
-						year: 'Ano',
-						month: 'Mês',
-						day: 'Dia',
-						hour: 'Hora',
-						minute: 'Minuto',
-						second: 'Segundo',
-						millisecond: 'Milissegundos',
-					},
-					headers : true,
-					months : ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-					monthsShort : ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
-				});
-	
-				_this.horaLimite = new Picker($('#hora_limite').get()[0], {
-					format: 'HH:mm',
-					headers: true,
-					controls: true,
-					inline: true,
-					container: '.time-panel',	
-					text : {
-						title: 'Selecione a hora',
-						cancel: 'Cancelar',
-						confirm: 'OK',
-						hour: 'Hora',
-						minute: 'Minuto',
-						second: 'Segundo',
-						millisecond: 'Milissegundos',
-					},
-				});
-			}
-
+			_this.horaLimite = new Picker($('#hora_limite').get()[0], {
+				format: 'HH:mm',
+				headers: true,
+				controls: true,
+				inline: true,
+				container: '.time-panel',	
+				text : {
+					title: 'Selecione a hora',
+					cancel: 'Cancelar',
+					confirm: 'OK',
+					hour: 'Hora',
+					minute: 'Minuto',
+					second: 'Segundo',
+					millisecond: 'Milissegundos',
+				},
+			});
 		};
 
 		_this.definirForm = function definirForm(status = false) {
@@ -155,27 +149,32 @@
 
 		// Desenha o objeto no formulário
 		_this.desenhar = function desenhar(resposta) {
-			_this.objeto = resposta.conteudo;
+			_this.obj = resposta.conteudo;
 
 			_this.configurarEventos();
 			_this.popularColaboradores();
 			_this.popularLojas();
-			_this.formulario.find('#id').val(_this.objeto.id).focus().blur();
-			_this.formulario.find('#nao-conformidade').val(_this.objeto.descricao).focus().blur();
-			_this.formulario.find('#descricao').val(_this.objeto.solucao).focus().blur();
-			_this.formulario.find('#responsavel').val(_this.objeto.responsavel.id).focus().blur();
+			_this.formulario.find('#id').val(_this.obj.id).focus().blur();
+			_this.formulario.find('#nao-conformidade').val(_this.obj.descricao).focus().blur();
+			_this.formulario.find('#descricao').val(_this.obj.solucao).focus().blur();
+			_this.formulario.find('#responsavel').val(_this.obj.responsavel.id).focus().blur();
 			$("#responsavel").formSelect();
-			var dataLimite = moment(_this.objeto.dataLimite);
+			var dataLimite = moment(_this.obj.dataLimite);
 			$('#data_limite').val(dataLimite.format('DD') + ' de ' + dataLimite.format('MMMM') + ' de ' + dataLimite.format('YYYY')).focus().blur();
 			$('#hora_limite').val(dataLimite.format('HH') + ':' + dataLimite.format('mm')).focus().blur();
 
 			if(window.location.href.search('visualizar') != -1) {
 				_this.formulario.desabilitar(true);
 				_this.formulario.find('#botoes').desabilitar(false);
-				if(_this.objeto.status != 'Executado'){
-					_this.formulario.find('#botoes').prepend(' <div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end"><button type="button" id="editar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Editar</button></div>').promise().done(function(){
+
+				_this.formulario.find('#botoes').prepend(' <div class="col col-md-2 col-4 col-sm-2 col-lg-2"><button type="submit" id="remover" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-delete red-text text-darken-4"></i>Remover</button></div>').promise().done(function(){
+                    $('#botoes').find('#remover').on('click', _this.remover);
+				});
+
+				if(_this.obj.status != 'Executado'){
+					_this.formulario.find('#botoes').prepend(' <div class="col col-md-2 col-4 col-sm-2 col-lg-2"><button type="button" id="editar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Editar</button></div>').promise().done(function(){
 						_this.formulario.find('#editar').on('click', function(event){
-							router.navigate('/editar-pendencia/'+ _this.objeto.id);
+							router.navigate('/editar-pendencia/'+ _this.obj.id);
 						});
 					});
 				}
@@ -258,8 +257,41 @@
 		_this.salvar = function salvar() {
 			_this.formulario.validate(criarOpcoesValidacao());
         };
-		
 
+		_this.remover = function remover(){
+			BootstrapDialog.show({
+				type	: BootstrapDialog.TYPE_DANGER,
+				title	: 'Deseja remover esta Pendência?',
+				message	: 'Id: ' + _this.obj.id + '. <br> Descrição : ' +_this.obj.descricao + '.<br> Solução:'  + _this.obj.solucao + '.',
+				size	: BootstrapDialog.SIZE_LARGE,
+				buttons	: [ {
+						label	: '<u>S</u>im',
+						hotkey	: 'S'.charCodeAt(0),
+						action	: function(dialog){
+							servicoPedencia.remover(_this.obj.id).done(function (resposta) {
+								if(resposta.status){
+									router.navigate('/pendencia');
+									toastr.success(resposta.mensagem);
+									dialog.close();
+
+								}
+								else{
+									toastr.error(resposta.mensagem);
+
+									dialog.close();
+								}
+							});
+						}
+					}, {
+						label	: '<u>N</u>ão',
+						hotkey	: 'N'.charCodeAt(0),
+						action	: function(dialog){
+							dialog.close();
+						}
+					}
+				]
+			});
+		};
 		// Configura os eventos do formulário
 		_this.configurar = function configurar(status = false) {
 			_this.definirForm(status);
