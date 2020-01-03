@@ -379,7 +379,15 @@ use \phputil\JSON;
 		$this->logger->addInfo("Acessando listagem de acessos");
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraAcesso($req->getQueryParams(), $sessaoUsuario);
-		$response = $ctrl->todos();
+		$response = $ctrl->todosParaArvore();
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+	});
+
+   $app->get('/acesso/{acessanteTipo}/{acessanteId}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Acessando listagem de acessos");
+		$sessaoUsuario = new Sessao($session);
+		$ctrl = new ControladoraAcesso($req->getQueryParams(), $sessaoUsuario);
+		$response = $ctrl->comAcessanteParaArvore($args['acessanteTipo'], $args['acessanteId']);
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 
@@ -420,8 +428,8 @@ use \phputil\JSON;
 	$app->get('/recurso', function(Request $req,  Response $res, $args = []) use ($app, $session) {
 		$this->logger->addInfo("Acessando listagem de recursos");
 		$sessaoUsuario = new Sessao($session);
-		$ctrl = new ControladoraAcesso($req->getQueryParams(), $sessaoUsuario);
-		$response = $ctrl->todos();
+		$ctrl = new ControladoraRecurso($req->getQueryParams(), $sessaoUsuario);
+		$response = $ctrl->todosParaArvore();
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 // Fim das rotas para recursos

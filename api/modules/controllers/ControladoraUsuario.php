@@ -40,7 +40,7 @@ class ControladoraUsuario {
 	function todos() {
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
+				throw new Exception("Erro ao acessar página.");
 			}
 
 			// if(!$this->servicoLogin->eAdministrador()){
@@ -50,10 +50,10 @@ class ControladoraUsuario {
 			$dtr = new DataTablesRequest($this->params);
 			$contagem = 0;
 			$objetos = [];
-			$erro = null;	
+			$erro = null;
 
 			$objetos = $this->colecaoUsuario->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');
-			
+
 			foreach ($objetos as $key => $obj) {
 				$colaborador = $this->colecaoColaborador->comUsuarioId($obj['id']);
 
@@ -64,7 +64,7 @@ class ControladoraUsuario {
 				$objetos[$key] = $colaborador;
 			}
 
-			
+
 			$contagem = $this->colecaoUsuario->contagem();
 		}
 		catch (\Exception $e )
@@ -80,27 +80,27 @@ class ControladoraUsuario {
 		);
 
 		return  RTTI::getAttributes($conteudo, RTTI::allFlags());
-    }
+   }
 
-	function remover($id) {
+   function remover($id) {
 		DB::beginTransaction();
 
 		try {
-			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
-			
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");
+
 			if(!$this->servicoLogin->eAdministrador()) throw new Exception("Usuário sem permissão para executar ação.");
 
 			if (! is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
-			
+
 			if(!$this->colecaoUsuario->remover($id)) throw new Exception("Erro ao remover usuário.");
-			
+
 			DB::commit();
 
-			$resposta = ['status' => true, 'mensagem'=> 'Usuário removido com sucesso.']; 
+			$resposta = ['status' => true, 'mensagem'=> 'Usuário removido com sucesso.'];
 		}
 		catch (\Exception $e) {
 			DB::rollback();
-			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()];
 		}
 
 		return $resposta;
@@ -108,19 +108,19 @@ class ControladoraUsuario {
 
 	function comId($id) {
 		try {
-			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
-			
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");
+
 			if (! is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
 
 			$usuario = new Usuario(); $usuario->fromArray($this->colecaoUsuario->comId($id));
-			
+
 			$usuario->setGruposUsuarios($this->colecaoGrupoDeUsuario->comUsuarioId($usuario->getId()));
 
-			$resposta = ['conteudo'=> $usuario->toArray(), 'status' => true, 'mensagem'=> 'Usuário removido com sucesso.']; 
+			$resposta = ['conteudo'=> $usuario->toArray(), 'status' => true, 'mensagem'=> 'Usuário removido com sucesso.'];
 		}
 		catch (\Exception $e) {
 			DB::rollback();
-			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()];
 		}
 
 		return $resposta;
@@ -130,15 +130,15 @@ class ControladoraUsuario {
 		DB::beginTransaction();
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
+				throw new Exception("Erro ao acessar página.");
 			}
-			
+
 			$inexistentes = \ArrayUtil::nonExistingKeys(['senha', 'novaSenha', 'confirmacaoSenha'], $this->params);
 			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
 				throw new Exception($msg);
-			}	
+			}
 			$usuario = new Usuario(); $usuario->fromArray($this->colecaoUsuario->comId($this->servicoLogin->getIdUsuario()));
 			if(empty($usuario)) throw new Exception("Usuário não encontrado.");
 
@@ -149,15 +149,14 @@ class ControladoraUsuario {
 				\ParamUtil::value($this->params, 'confirmacaoSenha')
 			);
 
-			$resposta = ['status' => true, 'mensagem'=> 'Senha atualizada com sucesso.']; 
+			$resposta = ['status' => true, 'mensagem'=> 'Senha atualizada com sucesso.'];
 		}
 		catch (\Exception $e) {
 			DB::rollback();
-			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()];
 		}
 
 		return $resposta;
 	}
 }
 ?>
-				

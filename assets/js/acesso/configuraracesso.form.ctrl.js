@@ -1,7 +1,7 @@
 /**
- *  PlanoAcao.form.ctrl.js
+ *  configuraracesso.form.ctrl.js
  *
- *  @author  Rafael Vinicius Barros Ferreira
+ *  @author Leonardo Carvalhães Bernardo
  *	 @version 1.0
  */
 (function (window, app, $, toastr) {
@@ -16,47 +16,28 @@
       _this.acessos = null;
       _this.recursos = null;
 
+      _this.acessanteTipo = function () {
+         var parametros = window.location.hash.split('/');
+
+         return parametros[2];
+      }();
+
+      _this.acessanteId = function () {
+         var parametros = window.location.hash.split('/');
+
+         return parametros[3];
+      }();
+
       _this.obterAcessos = function obterAcessos() {
-         // servicoAcesso.todos().done(_this.desenhar);
-
-         _this.acessos = [
-            { id: 1, recursoId: 1, acao: 'Permitir', usuarioId: 1 },
-            { id: 2, recursoId: 2, acao: 'Permitir', usuarioId: 1 },
-            { id: 3, recursoId: 3, acao: 'Permitir', usuarioId: 1 },
-            { id: 4, recursoId: 6, acao: 'Permitir', usuarioId: 1 },
-            { id: 5, recursoId: 7, acao: 'Permitir', usuarioId: 1 },
-            { id: 6, recursoId: 11, acao: 'Permitir', usuarioId: 1 },
-            { id: 7, recursoId: 12, acao: 'Permitir', usuarioId: 1 },
-            { id: 8, recursoId: 15, acao: 'Permitir', usuarioId: 1 },
-         ];
-
-         return _this.acessos;
+         servicoAcesso.acessosDoAcessante(_this.acessanteTipo, _this.acessanteId).done(function (resposta) {
+            _this.acessos = resposta.data;
+         });
       }
 
       _this.obterRecursos = function obterRecursos() {
-         // servicoAcesso.todos().done(_this.desenhar);
-
-         _this.recursos = [
-            { id: 1, nome: 'Visualizar Checklists', model: 'Checklist' },
-            { id: 2, nome: 'Cadastrar Checklists', model: 'Checklist' },
-            { id: 3, nome: 'Editar Checklists', model: 'Checklist' },
-            { id: 4, nome: 'Executar Checklists', model: 'Checklist' },
-            { id: 5, nome: 'Remover Checklists', model: 'Checklist' },
-
-            { id: 6, nome: 'Visualizar PAs', model: 'PA' },
-            { id: 7, nome: 'Cadastrar PAs', model: 'PA' },
-            { id: 8, nome: 'Editar PAs', model: 'PA' },
-            { id: 9, nome: 'Executar PAs', model: 'PA' },
-            { id: 10, nome: 'Remover PAs', model: 'PA' },
-
-            { id: 11, nome: 'Visualizar PEs', model: 'PE' },
-            { id: 12, nome: 'Cadastrar PEs', model: 'PE' },
-            { id: 13, nome: 'Editar PEs', model: 'PE' },
-            { id: 14, nome: 'Executar PEs', model: 'PE' },
-            { id: 15, nome: 'Remover PEs', model: 'PE' },
-         ];
-
-         return _this.acessos;
+         servicoAcesso.todosOsRecursos().done(function (resposta) {
+            _this.recursos = resposta.data;
+         });
       }
 
       // Cria a árvore de recursos
@@ -71,6 +52,7 @@
 
             $.each(recursos, function (indice, recurso) {
                nohsDeRecursos.push({
+                  id: recurso.id,
                   text: recurso.nome,
                   state: { selected: acessosPorRecursos[recurso.id] != undefined },
                   icon: false
@@ -85,7 +67,13 @@
             });
          });
 
-         _this.arvoreDeAcessos.jstree({
+         _this.arvoreDeAcessos.on('select_node.jstree', function (evento, dados) {
+            console.log(dados);
+
+            servicoAcesso.adicionar(servicoAcesso.criar(undefined, 'Permitir', dados.node.id, _this.acessanteTipo, _this.acessanteId)).done(function (resposta) {
+               console.log(resposta);
+            });
+         }).jstree({
             plugins: ['checkbox'],
             core: {
                data: nohs,
