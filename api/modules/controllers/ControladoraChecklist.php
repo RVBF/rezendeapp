@@ -60,10 +60,10 @@ class ControladoraChecklist {
 
 			if(!isset($this->params['listagemTemporal'])){
 				$dtr = new DataTablesRequest($this->params);
+
 				$contagem = 0;
 				$objetos = [];
 				$erro = null;
-
 				$objetos = $this->colecaoChecklist->todosComLojaIds($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $idsLojas);
 				$contagem = $this->colecaoChecklist->contagem($idsLojas);
 				$conteudo = new DataTablesResponse(

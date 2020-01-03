@@ -9,7 +9,8 @@
 		_this.recordsTotal = null;
 		_this.paginacao = {};
 		_this.objetos = {'objetos' :[]};
-
+		_this.pesquisaTimeOut;
+		_this.caixaPesquisa = '';
 		_this.definirEventosTabela = function definirEventosTabela(){
 			listagemPadrao.find('.atualizar').on('click', _this.atualizarTabela);
 			listagemPadrao.on('click', '.paginate_button',function () {
@@ -44,6 +45,17 @@
 						}
 						else if(_this.recordsTotal != null) _this.renderizarRegistrosTabelaTemporal();
 					}
+				});
+			}
+
+			if(opcoes.searching){
+				listagemPadrao.find('#pesquisar_itens').on('keyup change', function() {
+					_this.caixaPesquisa =  $(this).val();
+					
+					clearTimeout(_this.pesquisaTimeOut);
+					_this.pesquisaTimeOut = setTimeout(function() {
+						_this.atualizarTabela();
+					}, opcoes.searchDelay);
 				});
 			}
 		};
@@ -88,6 +100,8 @@
 						start : _this.inicioDaPagina(),
 						length : parseInt($('#qtd_resultados').val())
 					};
+
+					if(_this.caixaPesquisa != '' && _this.caixaPesquisa.length >= 3) _this.paginacao.search= {value :_this.caixaPesquisa};
 					return _this.paginacao;
 
 				}
