@@ -83,7 +83,7 @@
    router.get('/editar-checklist/:id', criarRotaPara('formulario-checklist.html'));
    router.get('/executar-checklist/:id', criarRotaPara('formulario-executarchecklist.html'));
    router.get('/checklist/perguntas/:id', criarRotaPara('questionamentos.html'));
-  
+
    router.get('/questionarios', criarRotaPara('questionarios.html'));
    router.get('/cadastrar-questionario', criarRotaPara('formulario-questionario.html'));
    router.get('/visualizar-questionario/:id', criarRotaPara('formulario-questionario.html'));
@@ -94,7 +94,7 @@
    router.get('/cadastrar-colaborador', criarRotaPara('formulario-colaborador.html'));
    router.get('/visualizar-colaborador/:id', criarRotaPara('formulario-colaborador.html'));
    router.get('/editar-colaborador/:id', criarRotaPara('formulario-colaborador.html'));
-  
+
    router.get('/lojas', criarRotaPara('loja.html'));
    router.get('/cadastrar-loja', criarRotaPara('formulario-loja.html'));
    router.get('/editar-loja/:id', criarRotaPara('formulario-loja.html'));
@@ -123,7 +123,7 @@
    router.get('/notificacao', criarRotaPara('notificacoes.html'));
    router.get('/rd', criarRotaPara('rd.html'));
    router.get('/configuracao', criarRotaPara('configuracoes.html'));
-   router.get('/configurar-acessos', criarRotaPara('configurar-acessos.html'));
+   router.get('/configurar-acessos/:acessanteTipo/:acessanteId', criarRotaPara('configurar-acessos.html'));
    router.get('/login', criarRotaPara('login.html'));
    router.get('/alterar-senha', criarRotaPara('formulario-alterarsenha.html'));
 
@@ -264,59 +264,59 @@
          html += '<span class="center local-dto">Visualizar Colaborador</span>';
          html += '<a href="#/" class="left m16-dto colaboradores_link"><i class="material-icons">navigate_before</i></a>';
       }
-      else if (window.location.href.search('editar-colaborador') != -1){
+      else if (window.location.href.search('editar-colaborador') != -1) {
          html += '<span class="center local-dto">Editar Colaboradores</span>';
          html += '<a href="#/" class="left m16-dto colaboradores_link"><i class="material-icons">navigate_before</i></a>';
       }
-      else if (window.location.href.search('grupos-de-usuario') != -1){
+      else if (window.location.href.search('grupos-de-usuario') != -1) {
          html += '<span class="center local-dto">Grupos de Usuário</span>';
          html += '<a href="#/" class="left m16-dto configuracao_link"><i class="material-icons">navigate_before</i></a>';
       }
-      else if (window.location.href.search('cadastrar-grupo-de-usuario') != -1){
+      else if (window.location.href.search('cadastrar-grupo-de-usuario') != -1) {
          html += '<span class="center local-dto">Cadastrar Grupo de Usuário</span>';
          html += '<a href="#/" class="left m16-dto grupousuario_link"><i class="material-icons">navigate_before</i></a>';
       }
-      else if (window.location.href.search('visualizar-grupo-de-usuario') != -1){
+      else if (window.location.href.search('visualizar-grupo-de-usuario') != -1) {
          html += '<span class="center local-dto">Visualizar Grupo de Usuário</span>';
          html += '<a href="#/" class="left m16-dto grupousuario_link"><i class="material-icons">navigate_before</i></a>';
       }
-      else if(window.location.href.search('editar-grupo-de-usuario') != -1){
+      else if (window.location.href.search('editar-grupo-de-usuario') != -1) {
          html += '<span class="center local-dto">Editar Grupo de Usuário</span>';
          html += '<a href="#/" class="left m16-dto grupousuario_link"><i class="material-icons">navigate_before</i></a>';
       }
-      else if(window.location.href.search('cadastrar-setor') != -1){
+      else if (window.location.href.search('cadastrar-setor') != -1) {
          html += '<span class="center local-dto">Cadastrar Setor</span>';
          html += '<a href="#/" class="left m16-dto setor_link"><i class="material-icons">navigate_before</i></a>';
-      } 
-      else if(window.location.href.search('visualizar-setor') != -1){
+      }
+      else if (window.location.href.search('visualizar-setor') != -1) {
          html += '<span class="center local-dto">Visualizar Setor</span>';
          html += '<a href="#/" class="left m16-dto setor_link"><i class="material-icons">navigate_before</i></a>';
       }
-      else if(window.location.href.search('cadastrar-loja') != -1){
+      else if (window.location.href.search('cadastrar-loja') != -1) {
          html += '<span class="center local-dto">Cadastrar loja</span>';
          html += '<a href="#/" class="left m16-dto loja_link"><i class="material-icons">navigate_before</i></a>';
       }
-      else if(window.location.href.search('visualizar-loja') != -1){
+      else if (window.location.href.search('visualizar-loja') != -1) {
          html += '<span class="center local-dto">Visualizar Loja</span>';
          html += '<a href="#/" class="left m16-dto loja_link"><i class="material-icons">navigate_before</i></a>';
       }
-      else if(window.location.href.search('editar-loja') != -1){
+      else if (window.location.href.search('editar-loja') != -1) {
          html += '<span class="center local-dto">Editar Loja</span>';
          html += '<a href="#/" class="left m16-dto loja_link"><i class="material-icons">navigate_before</i></a>';
       }
-      else if(window.location.href.search('cadastrar-questionario') != -1){
+      else if (window.location.href.search('cadastrar-questionario') != -1) {
          html += '<span class="center local-dto">Cadastrar Questionário</span>';
          html += '<a href="#/" class="left m16-dto questionario_link"><i class="material-icons">navigate_before</i></a>';
       }
-      else if(window.location.href.search('visualizar-questionario') != -1){
+      else if (window.location.href.search('visualizar-questionario') != -1) {
          html += '<span class="center local-dto">Visualizar Questionário</span>';
          html += '<a href="#/" class="left m16-dto questionario_link"><i class="material-icons">navigate_before</i></a>';
       }
-      else if(window.location.href.search('editar-questionario') != -1){
+      else if (window.location.href.search('editar-questionario') != -1) {
          html += '<span class="center local-dto">Editar Questionário</span>';
          html += '<a href="#/" class="left m16-dto questionario_link"><i class="material-icons">navigate_before</i></a>';
       }
-      else if(window.location.href.search('editar-setor') != -1){
+      else if (window.location.href.search('editar-setor') != -1) {
          html += '<span class="center local-dto">Editar Setor</span>';
          html += '<a href="#/" class="left m16-dto setor_link"><i class="material-icons">navigate_before</i></a>';
       }

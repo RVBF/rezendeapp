@@ -25,7 +25,7 @@ class Dice {
             self::$singleton = new Dice;
 			return self::$singleton;
         }
-        
+
 		return self::$singleton;
 	}
 
@@ -49,11 +49,13 @@ class Dice {
 		DI::config(DI::let('ColecaoColaborador')->create('ColecaoColaboradorEmBDR'));
 		DI::config(DI::let('ColecaoPermissaoAdministrativa')->create('ColecaoPermissaoAdministrativaEmBDR'));
 		DI::config(DI::let('ColecaoQuestionario')->create('ColecaoQuestionarioEmBDR'));
-		DI::config(DI::let('ColecaoQuestionamento')->create('ColecaoQuestionamentoEmBDR'));	
-		DI::config(DI::let('ColecaoPlanoAcao')->create('ColecaoPlanoAcaoEmBDR'));		
+		DI::config(DI::let('ColecaoQuestionamento')->create('ColecaoQuestionamentoEmBDR'));
+		DI::config(DI::let('ColecaoPlanoAcao')->create('ColecaoPlanoAcaoEmBDR'));
 		DI::config(DI::let('ColecaoPendencia')->create('ColecaoPendenciaEmBDR'));
-		DI::config(DI::let('ColecaoHistoricoResponsabilidade')->create('ColecaoHistoricoResponsabilidadeEmBDR'));	
+		DI::config(DI::let('ColecaoHistoricoResponsabilidade')->create('ColecaoHistoricoResponsabilidadeEmBDR'));
 		DI::config(DI::let('ColecaoEndereco')->create('ColecaoEnderecoEmBDR'));
+		DI::config(DI::let('ColecaoAcesso')->create('ColecaoAcessoEmBDR'));
+		DI::config(DI::let('ColecaoRecurso')->create('ColecaoRecursoEmBDR'));
 	}
 }
 
