@@ -15,18 +15,53 @@ use Illuminate\Database\Capsule\Manager as DB;
 class ControladoraAcesso {
 
 	private $params;
-	private $colecaoAcesso;
+   private $colecaoAcesso;
+   private $servicoLogin;
 
 	function __construct($params, Sessao $sessao) {
 		$this->params = $params;
 		$this->colecaoAcesso = Dice::instance()->create('ColecaoAcesso');
-		$this->sessao = $sessao;
+		$this->servicoLogin = new ServicoLogin($sessao);
+   }
+
+   function adicionar() {
+		DB::beginTransaction();
+
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception('Erro ao acessar página.');
+			}
+
+			if(!$this->servicoLogin->eAdministrador()){
+				throw new Exception('Usuário sem permissão para executar ação.');
+			}
+
+			$acesso = [
+				'acao'=> \ParamUtil::value($this->params, 'acao'),
+				'recursoId'=> \ParamUtil::value($this->params, 'recursoId'),
+				'acessanteTipo'=> \ParamUtil::value($this->params, 'acessanteTipo'),
+				'acessanteId'=> \ParamUtil::value($this->params, 'acessanteId')
+         ];
+
+			$this->colecaoAcesso->adicionar($acesso);
+
+			$resposta = ['status' => true, 'mensagem'=> 'Acesso salvo com sucesso.'];
+
+         DB::commit();
+		}
+		catch (\Exception $e) {
+			DB::rollback();
+
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()];
+		}
+
+		return $resposta;
 	}
 
 	function todos() {
 		try {
-			if($this->servicoLogin->verificarSeAcessoEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception('Erro ao acessar página.');
 			}
 
 			$dtr = new DataTablesRequest($this->params);
@@ -48,23 +83,75 @@ class ControladoraAcesso {
 		}
 		catch (\Exception $e )
 		{
-			throw new Exception("Erro ao listar lojas.");
+			throw new Exception('Erro ao listar acessos.');
       }
 
 		return  RTTI::getAttributes($conteudo, RTTI::allFlags());
-    }
+   }
+
+	function todosParaArvore() {
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception('Erro ao acessar página.');
+         }
+
+			$objetos = [];
+
+			$objetos = $this->colecaoAcesso->todos();
+
+         $conteudo = new DataTablesResponse(
+            null,
+            count($objetos),
+            $objetos,
+            null,
+            null
+         );
+		}
+		catch (\Exception $e )
+		{
+			throw new Exception($e->getMessage());
+      }
+
+		return  RTTI::getAttributes($conteudo, RTTI::allFlags());
+   }
+
+   function comAcessanteParaArvore($acessanteTipo, $acessanteId) {
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception('Erro ao acessar página.');
+         }
+
+			$objetos = [];
+
+			$objetos = $this->colecaoAcesso->comAcessante($acessanteTipo, $acessanteId);
+
+         $conteudo = new DataTablesResponse(
+            null,
+            count($objetos),
+            $objetos,
+            null,
+            null
+         );
+		}
+		catch (\Exception $e )
+		{
+			throw new Exception($e->getMessage());
+      }
+
+		return  RTTI::getAttributes($conteudo, RTTI::allFlags());
+   }
 
 	function remover($id) {
 		DB::beginTransaction();
 
 		try {
-			if($this->servicoLogin->verificarSeAcessoEstaLogado() == false) throw new Exception("Erro ao acessar página.");
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception('Erro ao acessar página.');
 
-			if(!$this->servicoLogin->eAdministrador()) throw new Exception("Usuário sem permissão para executar ação.");
+			if(!$this->servicoLogin->eAdministrador()) throw new Exception('Usuário sem permissão para executar ação.');
 
 			if (! is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
 
-			if(!$this->colecaoAcesso->remover($id)) throw new Exception("Erro ao remover usuário.");
+			if(!$this->colecaoAcesso->remover($id)) throw new Exception('Erro ao remover usuário.');
 
 			DB::commit();
 
@@ -80,7 +167,7 @@ class ControladoraAcesso {
 
 	function comId($id) {
 		try {
-			if($this->servicoLogin->verificarSeAcessoEstaLogado() == false) throw new Exception("Erro ao acessar página.");
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception('Erro ao acessar página.');
 
 			if (! is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
 
@@ -101,8 +188,8 @@ class ControladoraAcesso {
 	function atualizarSenha() {
 		DB::beginTransaction();
 		try {
-			if($this->servicoLogin->verificarSeAcessoEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception('Erro ao acessar página.');
 			}
 
 			$inexistentes = \ArrayUtil::nonExistingKeys(['senha', 'novaSenha', 'confirmacaoSenha'], $this->params);
@@ -112,7 +199,7 @@ class ControladoraAcesso {
 				throw new Exception($msg);
 			}
 			$usuario = new Acesso(); $usuario->fromArray($this->colecaoAcesso->comId($this->servicoLogin->getIdAcesso()));
-			if(empty($usuario)) throw new Exception("Usuário não encontrado.");
+			if(empty($usuario)) throw new Exception('Usuário não encontrado.');
 
 			$this->colecaoAcesso->novaSenha(
 				$usuario->getId(),

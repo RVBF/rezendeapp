@@ -92,7 +92,7 @@
 
          $(evento.target).on('click', '.configurar_acessos_link', function (event) {
             event.preventDefault();
-            router.navigate('/configurar-acessos');
+            router.navigate('/configurar-acessos/' + $(this).attr('parametros'));
          });
 
          $(evento.target).on('click', '.cadastrar_checklist_link', function (event) {
@@ -198,7 +198,7 @@
       moment.locale('pt-BR');
       $(window).scroll(function () {
 
-         //Display or hide scroll to top button 
+         //Display or hide scroll to top button
          if ($(this).scrollTop() > 100) {
             $('.scrollup').fadeIn();
          } else {
