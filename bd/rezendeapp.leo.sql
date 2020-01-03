@@ -32,8 +32,8 @@ CREATE TABLE IF NOT EXISTS `acesso` (
   `acessanteId` INT NULL,
   `acao` VARCHAR(45) NULL DEFAULT 'Permitir',
   PRIMARY KEY (`id`),
-  INDEX `recurso` USING BTREE (`recursoId`) VISIBLE,
-  INDEX `acessante` (`acessanteTipo` ASC, `acessanteId` ASC) VISIBLE);
+  INDEX `recurso` USING BTREE (`recursoId`),
+  INDEX `acessante` (`acessanteTipo` ASC, `acessanteId` ASC));
 
 SHOW WARNINGS;
 
@@ -307,7 +307,7 @@ CREATE TABLE IF NOT EXISTS `recurso` (
   `nome` VARCHAR(255) NOT NULL,
   `model` VARCHAR(80) NULL,
   PRIMARY KEY (`id`),
-  INDEX `model` USING BTREE (`model`) VISIBLE);
+  INDEX `model` USING BTREE (`model`));
 
 SHOW WARNINGS;
 
@@ -323,7 +323,7 @@ CREATE TABLE IF NOT EXISTS `rota` (
   `metodo` VARCHAR(20) NULL,
   `recursoId` INT NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `recurso` (`recursoId` ASC) VISIBLE);
+  INDEX `recurso` (`recursoId` ASC));
 
 SHOW WARNINGS;
 

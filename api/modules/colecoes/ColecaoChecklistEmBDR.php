@@ -101,16 +101,18 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 
 	function todosComLojaIds($limite = 0, $pulo = 10, $search = '', $idsLojas = []){
 		try {	
-			$query = DB::table(self::TABELA)->where('deleted_at',NULL)->selectRaw(self::TABELA . '.*, COUNT('.self::TABELA.'.id) as qtd')->whereIn('loja_id',$idsLojas);
+
+			$query = DB::table(self::TABELA)->selectRaw(self::TABELA . '.*, COUNT('.self::TABELA.'.id) as qtd')->where(self::TABELA . '.deleted_at',NULL)->whereIn(self::TABELA. '.loja_id',$idsLojas);
 			if($search != '') {
+
 				$buscaCompleta = $search;
 				$palavras = explode(' ', $buscaCompleta);
 
 				$query->leftJoin(ColecaoLojaEmBDR::TABELA, ColecaoLojaEmBDR::TABELA. '.id', '=', self::TABELA .'.loja_id');
-				$query->leftJoin(ColecaoUsuarioEmBDR::TABELA, ColecaoUsuarioEmBDR::TABELA. '.id', '=', self::TABELA .'.questionador_id');
-				$query->leftJoin(ColecaoColaboradorEmBDR::TABELA, ColecaoColaboradorEmBDR::TABELA. '.usuario_id', '=', ColecaoUsuarioEmBDR::TABELA .'.id');
+				$query->leftJoin(ColecaoColaboradorEmBDR::TABELA. ' as c1', 'c1.id', '=', self::TABELA . '.questionador_id');
+				$query->leftJoin(ColecaoColaboradorEmBDR::TABELA . ' as c2', 'c2.id', '=', self::TABELA . '.responsavel_id');
 				$query->leftJoin(ColecaoSetorEmBDR::TABELA, ColecaoSetorEmBDR::TABELA. '.id', '=', self::TABELA .'.setor_id');
-				
+
 				$query->where(function($query) use($buscaCompleta){
 					$query->whereRaw(self::TABELA . '.id like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw(self::TABELA . '.titulo like "%' . $buscaCompleta . '%"');
@@ -118,8 +120,10 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 					$query->orWhereRaw(ColecaoLojaEmBDR::TABELA . '.razaoSocial like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw(ColecaoLojaEmBDR::TABELA . '.nomeFantasia like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw(ColecaoSetorEmBDR::TABELA . '.titulo like "%' . $buscaCompleta . '%"');
-					$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.nome like "%' . $buscaCompleta . '%"');
-					$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.sobrenome like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw('c1.nome like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw('c2.nome like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw('c1.sobrenome like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw('c2.sobrenome like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw('DATE_FORMAT('. self::TABELA .'.data_limite, "%d/%m/%Y") like "%' . $buscaCompleta . '%"');
 				});
 
@@ -134,18 +138,20 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 								$query->orWhereRaw(ColecaoLojaEmBDR::TABELA . '.razaoSocial like "%' . $palavra . '%"');
 								$query->orWhereRaw(ColecaoLojaEmBDR::TABELA . '.nomeFantasia like "%' . $palavra . '%"');
 								$query->orWhereRaw(ColecaoSetorEmBDR::TABELA . '.titulo like "%' . $palavra . '%"');
-								$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.nome like "%' . $palavra . '%"');
-								$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.sobrenome like "%' . $palavra . '%"');
+								$query->orWhereRaw('c1.nome like "%' . $palavra . '%"');
+								$query->orWhereRaw('c2.nome like "%' . $palavra . '%"');
+								$query->orWhereRaw('c1.sobrenome like "%' . $palavra . '%"');
+								$query->orWhereRaw('c2.sobrenome like "%' . $palavra . '%"');
 								$query->orWhereRaw('DATE_FORMAT('. self::TABELA .'.data_limite, "%d/%m/%Y") like "%' . $palavra . '%"');
 							}
 						}
 						
 					});
 				}
-				$query->groupBy(self::TABELA.'.id');
+				// $query->groupBy(self::TABELA.'.id');
 			}
 			
-			$checklists = $query->groupBy('id','status', 'titulo','descricao', 'data_limite', 'tipoChecklist', 'data_cadastro', 'encerrado', 'questionador_id', 'responsavel_id', 'setor_id', 'checklist_id', 'loja_id')
+			$checklists = $query->groupBy(self::TABELA . '.id', self::TABELA . '.status', 'titulo','descricao', 'data_limite', 'tipoChecklist', 'data_cadastro', 'encerrado', 'questionador_id', 'responsavel_id', 'setor_id', 'checklist_id', 'loja_id')
 								->orderByRaw(self::TABELA . '.status = "' . StatusChecklistEnumerado::EXECUTADO . '" ASC , '. self::TABELA.'.data_limite ASC')
 								->offset($limite)
 								->limit($pulo)
@@ -160,6 +166,8 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			return $checklistsObjects;
 		}
 		catch (\Exception $e) {	
+			Util::printr($e->getMessage());
+
 			throw new ColecaoException("Erro ao listar checklists.", $e->getCode(), $e);
 		}
 	}

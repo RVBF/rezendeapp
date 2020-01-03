@@ -26,7 +26,6 @@
 			objeto.carregando = true;
 			objeto.pageLength = 10;
 			objeto.lengthMenu =  [10, 30, 40, 100];
-			objeto.searching= true;
 			objeto.ordering= true;
 			objeto.searching = true;
 			objeto.searchDelay = 600;	
