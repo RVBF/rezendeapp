@@ -105,15 +105,24 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 	function todos($limite = 0, $pulo = 0, $search = '') {
 		try {	
 
-			$query = DB::table(self::TABELA)->where('deleted_at', NULL)->select(self::TABELA . '.*');
-			
+			$query = DB::table(self::TABELA)->selectRaw(self::TABELA . '.*, COUNT('.self::TABELA.'.id) as qtd')->where( self::TABELA . '.deleted_at', NULL);
 			if($search != '') {
 				$buscaCompleta = $search;
 				$palavras = explode(' ', $buscaCompleta);
+
+				$query->leftJoin(ColecaoEnderecoEmBDR::TABELA , ColecaoEnderecoEmBDR::TABELA . '.id', '=', self::TABELA . '.endereco_id');
+
 				$query->where(function($query) use ($buscaCompleta){
 					$query->whereRaw(self::TABELA . '.id like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw(self::TABELA . '.razaoSocial like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw(self::TABELA . '.nomeFantasia like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(ColecaoEnderecoEmBDR::TABELA . '.cep like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(ColecaoEnderecoEmBDR::TABELA . '.logradouro like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(ColecaoEnderecoEmBDR::TABELA . '.numero like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(ColecaoEnderecoEmBDR::TABELA . '.complemento like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(ColecaoEnderecoEmBDR::TABELA . '.bairro like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(ColecaoEnderecoEmBDR::TABELA . '.cidade like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(ColecaoEnderecoEmBDR::TABELA . '.uf like "%' . $buscaCompleta . '%"');
 				});
 				
 				
@@ -124,25 +133,26 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 								$query->whereRaw(self::TABELA . '.id like "%' . $palavra . '%"');
 								$query->orWhereRaw(self::TABELA . '.razaoSocial like "%' . $palavra . '%"');
 								$query->orWhereRaw(self::TABELA . '.nomeFantasia like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoEnderecoEmBDR::TABELA . '.cep like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoEnderecoEmBDR::TABELA . '.logradouro like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoEnderecoEmBDR::TABELA . '.numero like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoEnderecoEmBDR::TABELA . '.complemento like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoEnderecoEmBDR::TABELA . '.bairro like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoEnderecoEmBDR::TABELA . '.cidade like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoEnderecoEmBDR::TABELA . '.uf like "%' . $palavra . '%"');
 							}
 						}
 						
 					});
 				}
 
-				if($query->count() == 0){
-					foreach ($buscaCompleta as $key => $caracterer) {
-						$query->where(function($query) use ($caracterer){
-							$query->whereRaw(self::TABELA . '.id like "%' . $caracterer . '%"');
-							$query->orWhereRaw(self::TABELA . '.razaoSocial like "%' . $caracterer . '%"');
-							$query->orWhereRaw(self::TABELA . '.nomeFantasia like "%' . $caracterer . '%"');
-						});
-					}
-				}
 				$query->groupBy(self::TABELA.'.id');
 			}
 
-			$lojas = $query->offset($limite)->limit($pulo)->get();
+			$lojas = $query->groupBy(self::TABELA . '.id', self::TABELA . '.razaoSocial', self::TABELA . '.nomeFantasia',  self::TABELA . '.deleted_at', self::TABELA . '.endereco_id') 
+						->offset($limite)
+						->limit($pulo)
+						->get();
 			$lojasObjects = [];
 			foreach ($lojas as $loja) {
 				$lojasObjects[] =  $this->construirObjeto($loja);
@@ -150,8 +160,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 
 			return $lojasObjects;
 		}
-		catch (\Exception $e)
-		{
+		catch (\Exception $e) {
 			throw new ColecaoException("Erro ao listar lojas!", $e->getCode(), $e);
 		}
 	}

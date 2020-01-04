@@ -144,10 +144,56 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 	/**
 	 * @inheritDoc
 	 */
-	function todos($limite = 0, $pulo = 0) {
+	function todos($limite = 0, $pulo = 0, $search = '') {
 		try {	
-			$colaboradores = DB::table(self::TABELA)->where('deleted_at', NULL)->offset($limite)->limit($pulo)->get();
+			$query = DB::table(self::TABELA)->selectRaw(self::TABELA . '.*, COUNT('.self::TABELA.'.id) as qtd')->where(self::TABELA .'.deleted_at', NULL);
+			
+			if($search != '') {
+				$buscaCompleta = $search;
+				$palavras = explode(' ', $buscaCompleta);
 
+				$query->leftJoin(ColecaoGrupoUsuarioEmBDR::TABELA_RELACIONAL, ColecaoGrupoUsuarioEmBDR::TABELA_RELACIONAL . '.usuario_id', '=', self::TABELA .'.usuario_id');
+				$query->leftJoin(ColecaoGrupoUsuarioEmBDR::TABELA, ColecaoGrupoUsuarioEmBDR::TABELA . '.id', '=', ColecaoGrupoUsuarioEmBDR::TABELA_RELACIONAL .'.grupo_usuario_id');
+				$query->leftJoin(self::TABELA_RELACIONAL, self::TABELA_RELACIONAL . '.colaborador_id', '=', self::TABELA .'.id');
+				$query->leftJoin(ColecaoLojaEmBDR::TABELA, ColecaoLojaEmBDR::TABELA . '.id', '=', self::TABELA_RELACIONAL .'.loja_id');
+				$query->leftJoin(ColecaoSetorEmBDR::TABELA, ColecaoSetorEmBDR::TABELA . '.id', '=', self::TABELA .'.setor_id');
+
+
+				$query->where(function($query)  use ($buscaCompleta){
+					$query->whereRaw(self::TABELA . '.id like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(self::TABELA . '.nome like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(self::TABELA . '.sobrenome like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(self::TABELA . '.email like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(ColecaoLojaEmBDR::TABELA . '.nomeFantasia like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(ColecaoLojaEmBDR::TABELA . '.razaoSocial like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(ColecaoGrupoUsuarioEmBDR::TABELA . '.nome like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(ColecaoSetorEmBDR::TABELA . '.titulo like "%' . $buscaCompleta . '%"');
+				});
+
+				if($query->count() == 0){
+					$query->where(function($query) use ($palavras){
+						foreach ($palavras as $key => $palavra) {
+							if($palavra != " "){
+								$query->whereRaw(self::TABELA . '.id like "%' . $palavra . '%"');
+								$query->orWhereRaw(self::TABELA . '.nome like "%' . $palavra . '%"');
+								$query->orWhereRaw(self::TABELA . '.sobrenome like "%' . $palavra . '%"');
+								$query->orWhereRaw(self::TABELA . '.email like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoLojaEmBDR::TABELA . '.nomeFantasia like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoLojaEmBDR::TABELA . '.razaoSocial like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoGrupoUsuarioEmBDR::TABELA . '.nome like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoSetorEmBDR::TABELA . '.titulo like "%' . $palavra . '%"');
+							}
+						}
+						
+					});
+				}
+
+				$query->groupBy(self::TABELA.'.id');
+			}
+
+			$colaboradores = $query->groupBy(self::TABELA . '.id', self::TABELA . '.nome', self::TABELA . '.sobrenome', self::TABELA . '.email', self::TABELA . '.deleted_at', self::TABELA . '.usuario_id', self::TABELA . '.setor_id', self::TABELA . '.avatar_id')
+									->offset($limite)
+									->limit($pulo)->get();
             $colaboradoresObjects = [];
 
 			foreach($colaboradores as $usuario) {
@@ -157,8 +203,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 
 			return $colaboradoresObjects;
 		}
-		catch (\Exception $e)
-		{
+		catch (\Exception $e) {
 			throw new ColecaoException("Erro ao listar colaboradores", $e->getCode(), $e);
 		}
 	}

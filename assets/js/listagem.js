@@ -49,10 +49,13 @@
 			}
 
 			if(opcoes.searching){
-				listagemPadrao.find('#pesquisar_itens').on('keyup change', function() {
+				listagemPadrao.find('.pesquisar').on('click', 'a', function() {
+					$('#pesquisar_itens').trigger('change');
+				});
+
+				listagemPadrao.find('#pesquisar_itens').on('keyup', function() {
 					_this.caixaPesquisa =  $(this).val();
 					
-					clearTimeout(_this.pesquisaTimeOut);
 					_this.pesquisaTimeOut = setTimeout(function() {
 						_this.atualizarTabela();
 					}, opcoes.searchDelay);
@@ -73,7 +76,7 @@
 		};
 
 		_this.inicioDaPagina = function inicioDaPagina() {
-			let limiteResultadosExibidos = parseInt($('#qtd_resultados').val());
+			let limiteResultadosExibidos = parseInt($('.listagem-padrao-item').val();
 
 			return (listagemPadrao.find('.linhas').find('.listagem-padrao-item').length == 0) ? 0 : _this.tamanhoPagina() - limiteResultadosExibidos;
 		};
@@ -238,8 +241,7 @@
 					html += '</div>';
 
 					html += '<div class="col col-md-7 col-lg-7 col-sm-10 col-9 input-field">';
-						html += '<input class="validate f-12-dto" type="search" name="pesquisar_itens" id="pesquisar_itens"/>';
-						html += '<label for="pesquisar_itens">Pesquisar</label>';
+						html += '<input class="validate f-12-dto" type="search" name="pesquisar_itens" placeholder="Pesquisar" id="pesquisar_itens"/>';
 					html += '</div>';
 
 					html += '<div class="col col-md-2 col-lg-2 col-sm-2 col-3 sem-espacamentos">';

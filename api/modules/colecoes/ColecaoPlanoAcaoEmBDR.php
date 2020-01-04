@@ -77,27 +77,29 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 	function todosComResponsavelId($limite = 0, $pulo = 0, $search = '', $responsavelId = 0){
 		try {	
 
-			$query = DB::table(self::TABELA)->where('deleted_at', NULL)->select(self::TABELA . '.*')->where('responsavel_id', $responsavelId);
+			$query = DB::table(self::TABELA)->select(self::TABELA . '.*')->where(self::TABELA . '.deleted_at', NULL)->where(self::TABELA . '.responsavel_id', $responsavelId);
 
 			if($search != '') {
 				$buscaCompleta = $search;
 				$palavras = explode(' ', $buscaCompleta);
 
 				$query->leftJoin(ColecaoLojaEmBDR::TABELA, ColecaoLojaEmBDR::TABELA. '.id', '=', self::TABELA .'.loja_id');
-				$query->leftJoin(ColecaoUsuarioEmBDR::TABELA, ColecaoUsuarioEmBDR::TABELA. '.id', '=', self::TABELA .'.questionador_id');
-				$query->leftJoin(ColecaoColaboradorEmBDR::TABELA, ColecaoColaboradorEmBDR::TABELA. '.usuario_id', '=', ColecaoUsuarioEmBDR::TABELA .'.id');
-				$query->leftJoin(ColecaoSetorEmBDR::TABELA, ColecaoSetorEmBDR::TABELA. '.id', '=', self::TABELA .'.setor_id');
-				
+				$query->leftJoin(ColecaoColaboradorEmBDR::TABELA . ' as responsavel', 'responsavel.id', '=', self::TABELA . '.responsavel_id');
+
 				$query->where(function($query) use($buscaCompleta){
 					$query->whereRaw(self::TABELA . '.id like "%' . $buscaCompleta . '%"');
-					$query->orWhereRaw(self::TABELA . '.titulo like "%' . $buscaCompleta . '%"');
-					$query->orWhereRaw(self::TABELA . '.descricao like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(self::TABELA . '.status like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(self::TABELA . '.descricaonaoconformidade like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(self::TABELA . '.descricaosolucao like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw(ColecaoLojaEmBDR::TABELA . '.razaoSocial like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw(ColecaoLojaEmBDR::TABELA . '.nomeFantasia like "%' . $buscaCompleta . '%"');
-					$query->orWhereRaw(ColecaoSetorEmBDR::TABELA . '.titulo like "%' . $buscaCompleta . '%"');
-					$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.nome like "%' . $buscaCompleta . '%"');
-					$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.sobrenome like "%' . $buscaCompleta . '%"');
-					$query->orWhereRaw('DATE_FORMAT('. self::TABELA .'.data_limite, "%d/%m/%Y") like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw('responsavel.nome like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw('responsavel.sobrenome like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw('DATE_FORMAT('. self::TABELA .'.datalimite, "%d/%m/%Y") like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw('DATE_FORMAT('. self::TABELA .'.dataexecucao, "%d/%m/%Y") like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw('DATE_FORMAT('. self::TABELA .'.datacadastro, "%d/%m/%Y") like "%' . $buscaCompleta . '%"');
+
+
 				});
 
 			
@@ -106,14 +108,16 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 						foreach ($palavras as $key => $palavra) {
 							if($palavra != " "){
 								$query->whereRaw(self::TABELA . '.id like "%' . $palavra . '%"');
-								$query->orWhereRaw(self::TABELA . '.titulo like "%' . $palavra . '%"');
-								$query->orWhereRaw(self::TABELA . '.descricao like "%' . $palavra . '%"');
+								$query->orWhereRaw(self::TABELA . '.status like "%' . $palavra . '%"');
+								$query->orWhereRaw(self::TABELA . '.descricaonaoconformidade like "%' . $palavra . '%"');
+								$query->orWhereRaw(self::TABELA . '.descricaosolucao like "%' . $palavra . '%"');
 								$query->orWhereRaw(ColecaoLojaEmBDR::TABELA . '.razaoSocial like "%' . $palavra . '%"');
 								$query->orWhereRaw(ColecaoLojaEmBDR::TABELA . '.nomeFantasia like "%' . $palavra . '%"');
-								$query->orWhereRaw(ColecaoSetorEmBDR::TABELA . '.titulo like "%' . $palavra . '%"');
-								$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.nome like "%' . $palavra . '%"');
-								$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.sobrenome like "%' . $palavra . '%"');
-								$query->orWhereRaw('DATE_FORMAT('. self::TABELA .'.data_limite, "%d/%m/%Y") like "%' . $palavra . '%"');
+								$query->orWhereRaw('responsavel.nome like "%' . $palavra . '%"');
+								$query->orWhereRaw('responsavel.sobrenome like "%' . $palavra . '%"');
+								$query->orWhereRaw('DATE_FORMAT('. self::TABELA .'.datalimite, "%d/%m/%Y") like "%' . $palavra . '%"');
+								$query->orWhereRaw('DATE_FORMAT('. self::TABELA .'.dataexecucao, "%d/%m/%Y") like "%' . $palavra . '%"');
+								$query->orWhereRaw('DATE_FORMAT('. self::TABELA .'.datacadastro, "%d/%m/%Y") like "%' . $palavra . '%"');
 							}
 						}
 						
