@@ -43,10 +43,6 @@ class ControladoraColaborador {
 				throw new Exception("Erro ao acessar página.");				
 			}
 
-			// if(!$this->servicoLogin->eAdministrador()){
-			// 	throw new Exception("Usuário sem permissão para executar ação.");
-			// }
-
 			$dtr = new DataTablesRequest($this->params);
 			$contagem = 0;
 			$objetos = [];

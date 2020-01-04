@@ -74,17 +74,17 @@ class ColecaoQuestionarioEmBDR implements ColecaoQuestionario {
 	 */
 	function todos($limite = 0, $pulo = 0, $search = '') {
 		try {	
-			$query = DB::table(self::TABELA)->where('deleted_at', NULL)->select(self::TABELA . '.*');
+			$query = DB::table(self::TABELA)->select(self::TABELA . '.*')->where(self::TABELA .'.deleted_at', NULL);
 
 			if($search != '') {
 				$buscaCompleta = $search;
 				$palavras = explode(' ', $buscaCompleta);
-				
+
 				$query->where(function($query) use ($buscaCompleta){
 					$query->whereRaw(self::TABELA . '.id like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw(self::TABELA . '.titulo like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw(self::TABELA . '.descricao like "%' . $buscaCompleta . '%"');
-
+					$query->orWhereRaw(self::TABELA . '.tipoQuestionario like "%' . $buscaCompleta . '%"');
 				});
 				
 				
@@ -94,7 +94,8 @@ class ColecaoQuestionarioEmBDR implements ColecaoQuestionario {
 							if($palavra != " "){
 								$query->whereRaw(self::TABELA . '.id like "%' . $palavra . '%"');
 								$query->orWhereRaw(self::TABELA . '.titulo like "%' . $palavra . '%"');
-								$query->orWhereRaw(self::TABELA . '.descricao like "%' . $buscaCompleta . '%"');
+								$query->orWhereRaw(self::TABELA . '.descricao like "%' . $palavra . '%"');
+								$query->orWhereRaw(self::TABELA . '.tipoQuestionario like "%' . $palavra . '%"');
 							}
 						}
 						
@@ -103,7 +104,7 @@ class ColecaoQuestionarioEmBDR implements ColecaoQuestionario {
 				$query->groupBy(self::TABELA.'.id');
 			}
 
-			$questionarios = $query->offset($limite)->limit($pulo)->get();
+			$questionarios = $query->groupBy(self::TABELA . '.id', self::TABELA . '.titulo',  self::TABELA . '.descricao')->offset($limite)->limit($pulo)->get();
 
 			$questionarioObjects = [];
 			foreach ($questionarios as $questionario) {

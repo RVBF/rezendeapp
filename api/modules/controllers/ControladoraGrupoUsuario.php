@@ -35,7 +35,6 @@ class ControladoraGrupoUsuario {
 			$contagem = 0;
 			$objetos = [];
 			$erro = null;	
-
 			$objetos = $this->colecaoGrupoUsuario->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');	
 			$contagem = $this->colecaoGrupoUsuario->contagem();
 		}

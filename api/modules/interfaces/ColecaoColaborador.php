@@ -9,5 +9,7 @@
 
 interface ColecaoColaborador extends Colecao {
     function atualizarAvatar(&$obj);
+    function todos($limite = 0, $pulo = 0, $search = '');
+
 }
 ?>

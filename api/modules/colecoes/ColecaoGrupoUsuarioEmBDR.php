@@ -116,19 +116,26 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario {
 	*/
 	function todos($limite = 0, $pulo = 0, $search = '') {
 		try {	
-			$query = DB::table(self::TABELA)->where('deleted_at', NULL)->select(self::TABELA . '.*');
-			
+			$query = DB::table(self::TABELA)->where(self::TABELA . '.deleted_at', NULL)->select(self::TABELA . '.*');
+
 			if($search != '') {
 				$buscaCompleta = $search;
 				$palavras = explode(' ', $buscaCompleta);
+
+				$query->leftJoin(self::TABELA_RELACIONAL, self::TABELA_RELACIONAL . '.grupo_usuario_id', '=', self::TABELA .'.id');
+				$query->leftJoin(ColecaoUsuarioEmBDR::TABELA, ColecaoUsuarioEmBDR::TABELA . '.id', '=', self::TABELA_RELACIONAL .'.usuario_id');
+				$query->leftJoin(ColecaoColaboradorEmBDR::TABELA, ColecaoColaboradorEmBDR::TABELA . '.usuario_id', '=', ColecaoUsuarioEmBDR::TABELA .'.id');
+
 
 				$query->where(function($query)  use ($buscaCompleta){
 					$query->whereRaw(self::TABELA . '.id like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw(self::TABELA . '.nome like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw(self::TABELA . '.descricao like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(ColecaoUsuarioEmBDR::TABELA . '.login like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.nome like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.sobrenome like "%' . $buscaCompleta . '%"');
 				});
 
-				
 				if($query->count() == 0){
 					$query->where(function($query) use ($palavras){
 						foreach ($palavras as $key => $palavra) {
@@ -136,25 +143,18 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario {
 								$query->whereRaw(self::TABELA . '.id like "%' . $palavra . '%"');
 								$query->orWhereRaw(self::TABELA . '.nome like "%' . $palavra . '%"');
 								$query->orWhereRaw(self::TABELA . '.descricao like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoUsuarioEmBDR::TABELA . '.login like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.nome like "%' . $palavra . '%"');
+								$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.sobrenome like "%' . $palavra . '%"');
 							}
 						}
 						
 					});
 				}
 
-				if($query->count() == 0){
-					foreach ($buscaCompleta as $key => $caracterer) {
-						$query->where(function($query) use ($caracterer){
-							$query->whereRaw(self::TABELA . '.id like "%' . $caracterer . '%"');
-							$query->orWhereRaw(self::TABELA . '.nome like "%' . $caracterer . '%"');
-							$query->orWhereRaw(self::TABELA . '.descricao like "%' . $caracterer . '%"');
-						});
-					}
-				}
-
 				$query->groupBy(self::TABELA.'.id');
 			}
-			
+
 			$grupoDeusuarios = $query->offset($limite)->limit($pulo)->get();
 
             $grupoDeusuariosObjects = [];
@@ -166,8 +166,7 @@ class ColecaoGrupoUsuarioEmBDR implements ColecaoGrupoUsuario {
 
 			return $grupoDeusuariosObjects;
 		}
-		catch (\Exception $e)
-		{
+		catch (\Exception $e) {
 			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
 		}
 	}

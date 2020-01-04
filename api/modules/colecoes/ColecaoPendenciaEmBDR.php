@@ -85,20 +85,22 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 				$palavras = explode(' ', $buscaCompleta);
 
 				$query->leftJoin(ColecaoLojaEmBDR::TABELA, ColecaoLojaEmBDR::TABELA. '.id', '=', self::TABELA .'.loja_id');
-				$query->leftJoin(ColecaoUsuarioEmBDR::TABELA, ColecaoUsuarioEmBDR::TABELA. '.id', '=', self::TABELA .'.questionador_id');
-				$query->leftJoin(ColecaoColaboradorEmBDR::TABELA, ColecaoColaboradorEmBDR::TABELA. '.usuario_id', '=', ColecaoUsuarioEmBDR::TABELA .'.id');
-				$query->leftJoin(ColecaoSetorEmBDR::TABELA, ColecaoSetorEmBDR::TABELA. '.id', '=', self::TABELA .'.setor_id');
-				
+				$query->leftJoin(ColecaoColaboradorEmBDR::TABELA . ' as responsavel', 'responsavel.id', '=', self::TABELA . '.responsavel_id');
+
 				$query->where(function($query) use($buscaCompleta){
 					$query->whereRaw(self::TABELA . '.id like "%' . $buscaCompleta . '%"');
-					$query->orWhereRaw(self::TABELA . '.titulo like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(self::TABELA . '.status like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw(self::TABELA . '.descricao like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw(self::TABELA . '.descricaosolucao like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw(ColecaoLojaEmBDR::TABELA . '.razaoSocial like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw(ColecaoLojaEmBDR::TABELA . '.nomeFantasia like "%' . $buscaCompleta . '%"');
-					$query->orWhereRaw(ColecaoSetorEmBDR::TABELA . '.titulo like "%' . $buscaCompleta . '%"');
-					$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.nome like "%' . $buscaCompleta . '%"');
-					$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.sobrenome like "%' . $buscaCompleta . '%"');
-					$query->orWhereRaw('DATE_FORMAT('. self::TABELA .'.data_limite, "%d/%m/%Y") like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw('responsavel.nome like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw('responsavel.sobrenome like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw('DATE_FORMAT('. self::TABELA .'.datalimite, "%d/%m/%Y") like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw('DATE_FORMAT('. self::TABELA .'.dataexecucao, "%d/%m/%Y") like "%' . $buscaCompleta . '%"');
+					$query->orWhereRaw('DATE_FORMAT('. self::TABELA .'.datacadastro, "%d/%m/%Y") like "%' . $buscaCompleta . '%"');
+
+
 				});
 
 			
@@ -107,14 +109,16 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 						foreach ($palavras as $key => $palavra) {
 							if($palavra != " "){
 								$query->whereRaw(self::TABELA . '.id like "%' . $palavra . '%"');
-								$query->orWhereRaw(self::TABELA . '.titulo like "%' . $palavra . '%"');
+								$query->orWhereRaw(self::TABELA . '.status like "%' . $palavra . '%"');
 								$query->orWhereRaw(self::TABELA . '.descricao like "%' . $palavra . '%"');
+								$query->orWhereRaw(self::TABELA . '.descricaosolucao like "%' . $palavra . '%"');
 								$query->orWhereRaw(ColecaoLojaEmBDR::TABELA . '.razaoSocial like "%' . $palavra . '%"');
 								$query->orWhereRaw(ColecaoLojaEmBDR::TABELA . '.nomeFantasia like "%' . $palavra . '%"');
-								$query->orWhereRaw(ColecaoSetorEmBDR::TABELA . '.titulo like "%' . $palavra . '%"');
-								$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.nome like "%' . $palavra . '%"');
-								$query->orWhereRaw(ColecaoColaboradorEmBDR::TABELA . '.sobrenome like "%' . $palavra . '%"');
-								$query->orWhereRaw('DATE_FORMAT('. self::TABELA .'.data_limite, "%d/%m/%Y") like "%' . $palavra . '%"');
+								$query->orWhereRaw('responsavel.nome like "%' . $palavra . '%"');
+								$query->orWhereRaw('responsavel.sobrenome like "%' . $palavra . '%"');
+								$query->orWhereRaw('DATE_FORMAT('. self::TABELA .'.datalimite, "%d/%m/%Y") like "%' . $palavra . '%"');
+								$query->orWhereRaw('DATE_FORMAT('. self::TABELA .'.dataexecucao, "%d/%m/%Y") like "%' . $palavra . '%"');
+								$query->orWhereRaw('DATE_FORMAT('. self::TABELA .'.datacadastro, "%d/%m/%Y") like "%' . $palavra . '%"');
 							}
 						}
 						
@@ -137,7 +141,8 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 
 			return $pendenciaObjects;
 		}
-		catch (\Exception $e){			
+		catch (\Exception $e){
+			Util::printr($e->getMessage());			
 			throw new ColecaoException("Erro ao listar pendência com responsável.", $e->getCode(), $e);
 		}
 	}
