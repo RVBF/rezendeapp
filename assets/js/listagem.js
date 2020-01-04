@@ -76,7 +76,7 @@
 		};
 
 		_this.inicioDaPagina = function inicioDaPagina() {
-			let limiteResultadosExibidos = parseInt($('.listagem-padrao-item').val();
+			let limiteResultadosExibidos = parseInt($('#qtd_resultados').val());
 
 			return (listagemPadrao.find('.linhas').find('.listagem-padrao-item').length == 0) ? 0 : _this.tamanhoPagina() - limiteResultadosExibidos;
 		};
