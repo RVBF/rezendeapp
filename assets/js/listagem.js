@@ -56,6 +56,7 @@
 				listagemPadrao.find('#pesquisar_itens').on('keyup', function() {
 					_this.caixaPesquisa =  $(this).val();
 					
+					clearTimeout(_this.pesquisaTimeOut)
 					_this.pesquisaTimeOut = setTimeout(function() {
 						_this.atualizarTabela();
 					}, opcoes.searchDelay);
