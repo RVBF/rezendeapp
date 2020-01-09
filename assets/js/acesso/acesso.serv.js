@@ -79,10 +79,10 @@
          });
       };
 
-      _this.remover = function remover(id) {
+      _this.remover = function remover(recursoId, acessanteTipo, acessanteId) {
          return $.ajax({
             type: "DELETE",
-            url: _this.rota() + '/' + id
+            url: _this.rota() + '/' + recursoId + '/' + acessanteTipo + '/' + acessanteId
          });
       };
 
