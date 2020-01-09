@@ -415,11 +415,11 @@ use \phputil\JSON;
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 
-	$app->delete('/acesso/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Deletando a acesso de id ". $args['id'] . '.');
+	$app->delete('/acesso/{recursoId}/{acessanteTipo}/{acessanteId}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+		$this->logger->addInfo("Deletando a acesso de recurso ID ". $args['recursoId'] . ', acessante tipo ' . $args['acessanteTipo'] . ' e acessante ID ' . $args['acessanteId'] . '.');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraAcesso($req->getParsedBody(), $sessaoUsuario);
-		$response = $ctrl->remover($args['id']);
+		$response = $ctrl->remover($args['recursoId'], $args['acessanteTipo'], $args['acessanteId']);
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 // Fim das rotas para acessos

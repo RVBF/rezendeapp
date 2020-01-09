@@ -34,11 +34,21 @@ class ColecaoAcessoEmBDR  implements ColecaoAcesso {
 
 	function remover($id) {
 		try {
-			if($this->validarRemocaoAcesso($id)) DB::table(Acesso::TABELA)->where('id', $id)->update(['deleted_at' => Carbon::now()->toDateTimeString()]);
+			DB::table(Acesso::TABELA)->where('id', $id)->delete();
 		}
 		catch (\Exception $e)
 		{
-			throw new ColecaoException("Erro ao remover acesso com id.", $e->getCode(), $e);
+			throw new ColecaoException("Erro ao remover acesso.", $e->getCode(), $e);
+		}
+	}
+
+	function removerComRecursoEAcessante($recursoId, $acessanteTipo, $acessanteId) {
+		try {
+			DB::table(Acesso::TABELA)->where('recursoId', $recursoId)->where('acessanteTipo', $acessanteTipo)->where('acessanteId', $acessanteId)->delete();
+		}
+		catch (\Exception $e)
+		{
+			throw new ColecaoException("Erro ao remover acesso.", $e->getCode(), $e);
 		}
 	}
 

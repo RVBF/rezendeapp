@@ -60,6 +60,7 @@
             });
 
             nohs.push({
+               id: modelNome,
                text: modelNome,
                state: { opened: true },
                children: nohsDeRecursos,
@@ -67,22 +68,47 @@
             });
          });
 
-         _this.arvoreDeAcessos.on('select_node.jstree', function (evento, dados) {
-            console.log(dados);
-
-            servicoAcesso.adicionar(servicoAcesso.criar(undefined, 'Permitir', dados.node.id, _this.acessanteTipo, _this.acessanteId)).done(function (resposta) {
+         var aoSelecionar = function (evento, dados) {
+            var processarRetorno = function (resposta) {
                console.log(resposta);
-            });
-         }).jstree({
+            };
+
+            if ($.isNumeric(dados.node.id) && !dados.node.children.length) {
+               servicoAcesso.adicionar(servicoAcesso.criar(undefined, 'Permitir', dados.node.id, _this.acessanteTipo, _this.acessanteId)).done(processarRetorno);
+            } else if (dados.node.children.length) {
+               $.each(dados.node.children, function (indice, recursoId) {
+                  servicoAcesso.adicionar(servicoAcesso.criar(undefined, 'Permitir', recursoId, _this.acessanteTipo, _this.acessanteId)).done(processarRetorno);
+               });
+            }
+         };
+
+         var aoDesselecionar = function (evento, dados) {
+            var processarRetorno = function (resposta) {
+               console.log(resposta);
+            };
+
+            if ($.isNumeric(dados.node.id) && !dados.node.children.length) {
+               servicoAcesso.remover(dados.node.id, _this.acessanteTipo, _this.acessanteId).done(processarRetorno);
+            } else if (dados.node.children.length) {
+               $.each(dados.node.children, function (indice, recursoId) {
+                  servicoAcesso.remover(recursoId, _this.acessanteTipo, _this.acessanteId).done(processarRetorno);
+               });
+            }
+         };
+
+         var configuracoes = {
             plugins: ['checkbox'],
             core: {
                data: nohs,
                multiple: true,
                themes: {
                   variant: 'large'
-               }
+               },
+               strings: { 'Loading ...': 'Carregando...' }
             }
-         });
+         };
+
+         _this.arvoreDeAcessos.on('select_node.jstree', aoSelecionar).on('deselect_node.jstree', aoDesselecionar).jstree(configuracoes);
       };
 
       _this.salvar = function salvar() {
