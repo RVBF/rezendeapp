@@ -1,5 +1,5 @@
 /**
- *  endereco.serv.js
+ *  dashboard.serv.js
  *
  *  @author	Rafael Vinicius Barros Ferreira
  */
@@ -7,48 +7,18 @@
  {
 	'use strict';
 
-	function Endereco(
-		id,
-		cep,
-		logradouro,
-		numero,
-		complemento,
-		bairro,
-		cidade,
-		estado,
-		latitude,
-		longitude
-	)
+	function Relatorio(dados)
 	{
 		this.id = id || 0;
-		this.cep = cep || '';
-		this.logradouro = logradouro || '';
-		this.numero = numero || '';
-		this.complemento = complemento || '';
-		this.bairro = bairro || '';
-		this.cidade = cidade || '';
-		this.estado = estado || '';
-		this.latitude = latitude || '';
-		this.longitude = longitude || '';
+		this.dados = dados || '';
 	};
 
-	function ServicoEndereco()
+	function ServicoRelatorio()
 	{ // Model
 		var _this = this;
 
 		// Cria um objeto de Endereco
-		this.criar = function criar(
-			id,
-			cep,
-			logradouro,
-			numero,
-			complemento,
-			bairro,
-			cidade,
-			estado,
-			latitude,
-			longitude
-		)
+		this.criar = function criar(dados)
 		{
  			return {
 				id : id  || undefined,
