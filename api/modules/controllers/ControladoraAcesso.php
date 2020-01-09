@@ -141,7 +141,7 @@ class ControladoraAcesso {
 		return  RTTI::getAttributes($conteudo, RTTI::allFlags());
    }
 
-	function remover($id) {
+	function remover($recursoId, $acessanteTipo, $acessanteId) {
 		DB::beginTransaction();
 
 		try {
@@ -149,13 +149,14 @@ class ControladoraAcesso {
 
 			if(!$this->servicoLogin->eAdministrador()) throw new Exception('Usuário sem permissão para executar ação.');
 
-			if (! is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
+			if(!is_numeric($recursoId)) return $this->geradoraResposta->erro('O recurso ID informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
+			if(!is_numeric($acessanteId)) return $this->geradoraResposta->erro('O acessante ID informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
 
-			if(!$this->colecaoAcesso->remover($id)) throw new Exception('Erro ao remover usuário.');
+			$this->colecaoAcesso->removerComRecursoEAcessante($recursoId, $acessanteTipo, $acessanteId);
 
 			DB::commit();
 
-			$resposta = ['status' => true, 'mensagem'=> 'Usuário removido com sucesso.'];
+			$resposta = ['status' => true, 'mensagem'=> 'Acesso removido com sucesso.'];
 		}
 		catch (\Exception $e) {
 			DB::rollback();
