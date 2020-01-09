@@ -1,0 +1,12 @@
+
+<section class="dashboard" id="dashboard"></section>
+	
+<script>
+	$(document).ready(function() {
+		var servicoDasboard = new app.ServicoDasboard();
+		var crltDashboard = new app.ControladoraListagemDashboard(servicoDasboard);
+
+		crltDashboard.configurar();
+	});
+</script> 
+	

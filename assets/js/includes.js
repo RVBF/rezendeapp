@@ -146,7 +146,7 @@
          loader.script('vendor/moment/locale/pt-br.js');
          loader.script('vendor/jstree/dist/jstree.min.js');
          loader.script('vendor/downloadjs/download.min.js');
-
+         loader.script('https://www.gstatic.com/charts/loader.js');
          // Inicialização
          loader.script('assets/js/listagem.js');
          loader.script('assets/js/materialize.js');
