@@ -8,7 +8,7 @@ $debug = true;
 if($debug) echo PHP_EOL . 'Obtendo os dados de recursos e rotas...' . PHP_EOL;
 
 $recursosMatriz = Recurso::todosOsRecursosERotas();
-
+// Util::printr(Recurso::todosOsRecursosERotas());
 if($debug) echo PHP_EOL . 'Esvaziando as tabelas de recursos e rotas...' . PHP_EOL;
 
 DB::table('recurso')->truncate();
