@@ -83,8 +83,8 @@
       }
 
       _this.configurar = function configurar() {
-         _this.renderizarOpcoesHTML();
-         _this.renderizarAtividadesUsuario();
+         // _this.renderizarOpcoesHTML();
+         // _this.renderizarAtividadesUsuario();
          _this.renderizarDadosUsuario();
          router.trigger('navigate');
       };
