@@ -70,7 +70,7 @@
 
          var aoSelecionar = function (evento, dados) {
             var processarRetorno = function (resposta) {
-               console.log(resposta);
+               if (!resposta.sucesso) console.log(resposta);
             };
 
             if ($.isNumeric(dados.node.id) && !dados.node.children.length) {
@@ -84,7 +84,7 @@
 
          var aoDesselecionar = function (evento, dados) {
             var processarRetorno = function (resposta) {
-               console.log(resposta);
+               if (!resposta.sucesso) console.log(resposta);
             };
 
             if ($.isNumeric(dados.node.id) && !dados.node.children.length) {
