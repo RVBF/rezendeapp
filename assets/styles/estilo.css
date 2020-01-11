@@ -170,7 +170,7 @@ form img.avatar,
 }
 
 
-form .quebra-linha{
+.quebra-linha{
     word-wrap: break-word;
     white-space: initial;
 
