@@ -376,7 +376,7 @@ use \phputil\JSON;
 
 // Início das rotas para acessos
 	$app->get('/acesso', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando listagem de acessos");
+		$this->logger->addInfo('Acessando listagem de acessos');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraAcesso($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->todosParaArvore();
@@ -384,7 +384,7 @@ use \phputil\JSON;
 	});
 
    $app->get('/acesso/{acessanteTipo}/{acessanteId}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando listagem de acessos");
+		$this->logger->addInfo('Acessando listagem de acessos');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraAcesso($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->comAcessanteParaArvore($args['acessanteTipo'], $args['acessanteId']);
@@ -392,31 +392,15 @@ use \phputil\JSON;
 	});
 
 	$app->post('/acesso', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando o cadastro de acesso");
+		$this->logger->addInfo('Acessando o cadastro de acesso');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraAcesso($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->adicionar();
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
 
-	$app->put('/acesso', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando a atualização de acesso.");
-		$sessaoUsuario = new Sessao($session);
-		$ctrl = new ControladoraAcesso($req->getParsedBody(), $sessaoUsuario);
-		$response = $ctrl->atualizar();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
-	});
-
-	$app->put('/acesso/atualizar-senha', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando a atualização de acesso.");
-		$sessaoUsuario = new Sessao($session);
-		$ctrl = new ControladoraAcesso($req->getParsedBody(), $sessaoUsuario);
-		$response = $ctrl->atualizarSenha();
-		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
-	});
-
 	$app->delete('/acesso/{recursoId}/{acessanteTipo}/{acessanteId}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Deletando a acesso de recurso ID ". $args['recursoId'] . ', acessante tipo ' . $args['acessanteTipo'] . ' e acessante ID ' . $args['acessanteId'] . '.');
+		$this->logger->addInfo('Deletando a acesso de recurso ID '. $args['recursoId'] . ', acessante tipo ' . $args['acessanteTipo'] . ' e acessante ID ' . $args['acessanteId'] . '.');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraAcesso($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->remover($args['recursoId'], $args['acessanteTipo'], $args['acessanteId']);
@@ -426,7 +410,7 @@ use \phputil\JSON;
 
 // Início das rotas para recursos
 	$app->get('/recurso', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando listagem de recursos");
+		$this->logger->addInfo('Acessando listagem de recursos');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraRecurso($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->todosParaArvore();
@@ -436,7 +420,7 @@ use \phputil\JSON;
 
 // Início das rotas para usuario
 	$app->get('/usuario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando listagem de usuario");
+		$this->logger->addInfo('Acessando listagem de usuario');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraUsuario($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->todos();
@@ -444,7 +428,7 @@ use \phputil\JSON;
 	});
 
 	$app->post('/usuario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando o cadastro de usuario");
+		$this->logger->addInfo('Acessando o cadastro de usuario');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraUsuario($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->adicionar();
@@ -453,7 +437,7 @@ use \phputil\JSON;
 	});
 
 	$app->put('/usuario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando a atualização de usuario.");
+		$this->logger->addInfo('Acessando a atualização de usuario.');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraUsuario($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->atualizar();
@@ -462,7 +446,7 @@ use \phputil\JSON;
 	});
 
 	$app->put('/usuario/atualizar-senha', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando a atualização de usuario.");
+		$this->logger->addInfo('Acessando a atualização de usuario.');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraUsuario($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->atualizarSenha();
@@ -471,7 +455,7 @@ use \phputil\JSON;
 	});
 
 	$app->delete('/usuario/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Deletando a usuario de id ". $args['id'] . '.');
+		$this->logger->addInfo('Deletando a usuario de id '. $args['id'] . '.');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraUsuario($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->remover($args['id']);
@@ -481,7 +465,7 @@ use \phputil\JSON;
 
 // Início das rotas para colaborador
 	$app->get('/colaborador', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando listagem de colaborador!");
+		$this->logger->addInfo('Acessando listagem de colaborador!');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraColaborador($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->todos();
@@ -489,7 +473,7 @@ use \phputil\JSON;
 	});
 
 	$app->get('/colaborador/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando listagem de colaborador!");
+		$this->logger->addInfo('Acessando listagem de colaborador!');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraColaborador($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->comId($args['id']);
@@ -497,7 +481,7 @@ use \phputil\JSON;
 	});
 
 	$app->post('/colaborador', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando o cadastro de colaborador");
+		$this->logger->addInfo('Acessando o cadastro de colaborador');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraColaborador($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->adicionar();
@@ -506,7 +490,7 @@ use \phputil\JSON;
 	});
 
 	$app->put('/colaborador', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando a atualização de colaboradorusuario.");
+		$this->logger->addInfo('Acessando a atualização de colaboradorusuario.');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraColaborador($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->atualizar();
@@ -515,7 +499,7 @@ use \phputil\JSON;
 	});
 
 	$app->delete('/colaborador/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Deletando a colaborador de id ". $args['id'] . '.');
+		$this->logger->addInfo('Deletando a colaborador de id '. $args['id'] . '.');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraColaborador($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->remover($args['id']);
@@ -551,7 +535,7 @@ use \phputil\JSON;
 
 // Início das rotas para grupos de usuário
 	$app->get('/grupo-usuario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando listagem de Grupos de usuario");
+		$this->logger->addInfo('Acessando listagem de Grupos de usuario');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraGrupoUsuario($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->todos();
@@ -560,7 +544,7 @@ use \phputil\JSON;
 	});
 
 	$app->get('/grupo-usuario/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando listagem de Grupos de usuario");
+		$this->logger->addInfo('Acessando listagem de Grupos de usuario');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraGrupoUsuario($req->getQueryParams(), $sessaoUsuario);
 		$response = $ctrl->comId($args['id']);
@@ -568,9 +552,8 @@ use \phputil\JSON;
 
 	});
 
-
 	$app->post('/grupo-usuario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando o cadastro de tarefa");
+		$this->logger->addInfo('Acessando o cadastro de tarefa');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraGrupoUsuario($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->adicionar();
@@ -579,7 +562,7 @@ use \phputil\JSON;
 	});
 
 	$app->put('/grupo-usuario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando a atualização de tarefas");
+		$this->logger->addInfo('Acessando a atualização de tarefas');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraGrupoUsuario($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->atualizar();
@@ -588,7 +571,7 @@ use \phputil\JSON;
 	});
 
 	$app->delete('/grupo-usuario/{id}', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Deletando o grupo de usuário de id ". $args['id'] . '.');
+		$this->logger->addInfo('Deletando o grupo de usuário de id '. $args['id'] . '.');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraGrupoUsuario($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->remover($args['id']);
@@ -598,7 +581,7 @@ use \phputil\JSON;
 
 // Início para permissoes
 	$app->post('/permissoes', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando o cadastro de tarefa");
+		$this->logger->addInfo('Acessando o cadastro de tarefa');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraPermissaoAdministrativa($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->configurar();
@@ -606,7 +589,7 @@ use \phputil\JSON;
 	});
 
 	$app->get('/permissoes', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando o cadastro de tarefa");
+		$this->logger->addInfo('Acessando o cadastro de tarefa');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraPermissaoAdministrativa($req->getParsedBody(), $sessaoUsuario);
 		$response = $ctrl->todosComPermissao();
@@ -614,7 +597,7 @@ use \phputil\JSON;
 	});
 
 	$app->get('/index/tem-permissao', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando o cadastro de tarefa");
+		$this->logger->addInfo('Acessando o cadastro de tarefa');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraUsuario($req->getParsedBody(), $sessaoUsuario);
 
@@ -641,12 +624,12 @@ use \phputil\JSON;
 	});
 
 	$app->get('/index/atividades-usuario', function(Request $req,  Response $res, $args = []) use ($app, $session) {
-		$this->logger->addInfo("Acessando o cadastro de tarefa");
+		$this->logger->addInfo('Acessando o cadastro de tarefa');
 		$sessaoUsuario = new Sessao($session);
 		$ctrl = new ControladoraUsuario($req->getParsedBody(), $sessaoUsuario);
 		$resposta = $ctrl->comId($sessaoUsuario->idUsuario());
 
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($resposta);
 	});
-// Início para permissoes
+// Fim das permissoes
 ?>

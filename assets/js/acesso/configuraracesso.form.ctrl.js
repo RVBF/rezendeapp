@@ -62,7 +62,7 @@
             nohs.push({
                id: modelNome,
                text: modelNome,
-               state: { opened: true },
+               state: { opened: false },
                children: nohsDeRecursos,
                icon: false
             });
@@ -101,8 +101,10 @@
             core: {
                data: nohs,
                multiple: true,
+               dblclick_toggle: false,
                themes: {
-                  variant: 'large'
+                  variant: 'large',
+                  dots: true
                },
                strings: { 'Loading ...': 'Carregando...' }
             }
