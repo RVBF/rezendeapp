@@ -31,8 +31,8 @@ class Recurso {
    }
 
    public static function todosOsRecursosERotas() {
-      // Último ID usado para recursos: 53
-      // Último ID usado para rotas: 48
+      // Último ID usado para recursos: 57
+      // Último ID usado para rotas: 44
 
       return [
          ['id'=> 1, 'nome'=> 'Visualizar Checklists', 'model'=> 'Checklist', 'rotas'=> [
@@ -181,23 +181,13 @@ class Recurso {
             ['id'=> 53, 'caminho'=> '/grupo-usuario', 'metodo'=> 'delete']
          ]],
 
-         ['id'=> 44, 'nome'=> 'Visualizar Recursos', 'model'=> 'Recurso', 'rotas'=> [
-            ['id'=> 54, 'caminho'=> '/recurso', 'metodo'=> 'delete']
+         ['id'=> 44, 'nome'=> 'Configurar Acessos', 'model'=> 'Acesso', 'rotas'=> [
+            ['id'=> 54, 'caminho'=> '/acesso', 'metodo'=> 'get'],
+            ['id'=> 55, 'caminho'=> '/acesso/{acessanteTipo}/{acessanteId}', 'metodo'=> 'get'],
+            ['id'=> 56, 'caminho'=> '/acesso', 'metodo'=> 'post'],
+            ['id'=> 57, 'caminho'=> '/acesso/{recursoId}/{acessanteTipo}/{acessanteId}', 'metodo'=> 'delete']
          ]],
-         
-         ['id'=> 45, 'nome'=> 'Visualizar Acessos', 'model'=> 'Acesso', 'rotas'=> [
-            ['id'=> 49, 'caminho'=> '/acesso', 'metodo'=> 'get'],
-            ['id'=> 50, 'caminho'=> '/acesso/{acessanteTipo}/{acessanteId}', 'metodo'=> 'get']
-         ]],
-         ['id'=> 46, 'nome'=> 'Cadastrar Acessos', 'model'=> 'Acesso', 'rotas'=> [
-            ['id'=> 51, 'caminho'=> '/acesso', 'metodo'=> 'post']
-         ]],
-         ['id'=> 47, 'nome'=> 'Editar Acessos', 'model'=> 'Acesso', 'rotas'=> [
-            ['id'=> 52, 'caminho'=> '/acesso', 'metodo'=> 'put']
-         ]],
-         ['id'=> 48, 'nome'=> 'Remover Acessos', 'model'=> 'Acesso', 'rotas'=> [
-            ['id'=> 53, 'caminho'=> '/acesso', 'metodo'=> 'delete']
-         ]],
+
       ];
    }
 }

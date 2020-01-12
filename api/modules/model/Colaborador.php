@@ -11,20 +11,20 @@ use phputil\traits\FromArray;
  */
 class Colaborador {
 	use GetterSetterWithBuilder;
-    use ToArray;
-    use FromArray;
-    
-    private $id;
-    private $nome;
-    private $sobrenome;
-    private $email;
-    private $usuario;
-    private $lojas;
-    private $setor;
-    private $avatar;
+   use ToArray;
+   use FromArray;
 
-    const TAM_TEXT_MIM = 3;
-    const TAM_TEXT_MAX = 50;
+   private $id;
+   private $nome;
+   private $sobrenome;
+   private $email;
+   private $usuario;
+   private $lojas;
+   private $setor;
+   private $avatar;
+
+   const TAM_TEXT_MIM = 3;
+   const TAM_TEXT_MAX = 50;
 	const CAMINHO_IMAGEM = 'colaboradores';
 
 

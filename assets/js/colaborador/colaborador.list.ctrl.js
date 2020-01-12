@@ -56,7 +56,7 @@
             html += '<i class="mdi mdi-eye-outline small orange-text text-accent-4"></i>';
             html += 'VER DETALHES';
             html += '</a>';
-            html += '<a href="#" parametros="Colaborador/' + data.id + '" class="detalhes-dto configurar_acessos_link">';
+            html += '<a href="#" parametros="Usuario/' + data.usuario.id + '" class="detalhes-dto configurar_acessos_link">';
             html += '<i class="mdi mdi-key small orange-text text-accent-4"></i>';
             html += 'ACESSOS';
             html += '</a>';

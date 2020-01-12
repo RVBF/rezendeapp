@@ -92,7 +92,7 @@ span{
 }
 
 .listagem-padrao-item .opcoes{
-    border-left: 1px solid #bfbfbf !important; 
+    border-left: 1px solid #bfbfbf !important;
     padding : 1rem;
 }
 
@@ -166,7 +166,7 @@ form img.avatar,
     overflow-y: auto;
     height: 45em;
     padding-top: 0 !important;
-    margin-top: 0 !important;    
+    margin-top: 0 !important;
 }
 
 
@@ -209,7 +209,7 @@ form img.avatar,
     height: auto;
     width: 0;
   }
-  
+
 
 .divisor-secao {
     height: 0;
@@ -264,7 +264,7 @@ button{
     height: 2em;
     justify-content: center;
 }
- 
+
 .element i span{
     margin: 10px;
     cursor: pointer;
@@ -308,13 +308,13 @@ button{
 
 @media(min-width:100px) and (max-width: 575px) {
     .listagem-padrao-item .opcoes{
-        border-left: 0px !important; 
+        border-left: 0px !important;
     }
 
     .listagem-padrao .informacao_exibicao{
         text-align: center !important;
     }
-    
+
     .listagem-padrao .paginacao{
         text-align: center !important;
     }
@@ -346,13 +346,13 @@ button{
 @media(max-width: 400px){
     .listagem-padrao-item img.avatar {
         margin-bottom: 8em;
-    
+
     }
 
     .listagem-padrao .informacao_exibicao{
         text-align: center !important;
     }
-    
+
     .listagem-padrao .paginacao{
         text-align: center !important;
     }
@@ -365,22 +365,36 @@ button{
 
 @media(min-width: 575px) and (max-width: 800px){
     .listagem-padrao-item .opcoes{
-        border-left: 0px !important; 
+        border-left: 0px !important;
     }
 
     .listagem-padrao .informacao_exibicao{
         text-align: center !important;
     }
-    
+
     .listagem-padrao .paginacao{
         text-align: center !important;
     }
 }
 
+/* Personalizações estruturais */
+@media only screen and (max-width: 600px) {
+   .container {
+      width: 100% !important;
+   }
+}
+
+.card-panel {
+   border-radius: 15px;
+}
+/* Personalizações estruturais */
+
 /* Personalização do jsTree */
    .jstree-anchor {
       padding-left: 5px;
       padding-right: 12px;
+      border-radius: 10px !important;
+      border: 1px solid #e0e0e0;
    }
 
    .jstree-anchor:not(.jstree-clicked) .jstree-icon {
