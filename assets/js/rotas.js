@@ -132,6 +132,8 @@
    router.get('/visualizar-grupo-de-usuario/:id', criarRotaPara('formulario-grupodeusuario.html'));
    router.get('/editar-grupo-de-usuario/:id', criarRotaPara('formulario-grupodeusuario.html'));
 
+   router.get('/dashboard',criarRotaPara('dashboard.html'));
+
    // 404
    router.get('/*', function (req, e) {
       if (!e.parent()) {
@@ -328,6 +330,11 @@
          html += '<span class="center local-dto">Editar Setor</span>';
          html += '<a href="#/" class="left m16-dto setor_link"><i class="material-icons">navigate_before</i></a>';
       }
+      else if (window.location.href.search('dashboard') != -1) {
+         html += '<span class="center local-dto">Dashboard</span>';
+         html += '<a href="#/" class="left m16-dto setor_link"><i class="material-icons">navigate_before</i></a>';
+      }
+      
       html += '<a href="#/" class="right m16-dto exit-dto efetuar_logout"><i class="material-icons ">exit_to_app</i><span>Sair</span></a>';
 
       $('body').find('.topo-opcoes').empty().append(html);

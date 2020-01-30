@@ -216,6 +216,8 @@
 
          loader.script('assets/js/acesso/acesso.serv.js');
          loader.script('assets/js/acesso/configuraracesso.form.ctrl.js');
+
+         loader.script('assets/js/dashboard/dashboard.serv.js')
       }
    });
    var loader = new window.Loader();

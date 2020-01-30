@@ -176,6 +176,11 @@
             event.preventDefault();
             router.navigate('/cadastrar-grupo-de-usuario');
          });
+
+         $(evento.target).on('click', '.dashboard_link', function (event) {
+            event.preventDefault();
+            router.navigate('/dashboard');
+         });
       }
    };
 

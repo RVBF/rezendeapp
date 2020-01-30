@@ -1,60 +1,44 @@
 <section class="container login">
-		<section class="logo">
+	<section class="logo">
+		<div class="row">
+			<div class="col col-sm-8 offset-2 offset-sm-4 col-md-6 offset-m3 col-lg-4 offset-lg-3">
+				<img class="responsive-img" style="width: 250px;" src="../assets/images/logo.png" />
+			</div>
+		</div>
+	</section>
+
+	<section class="login">		
+		<form class="col col-sm-8 col-lg-6 col-md-8 offset-lg-3 offset-md-3 offset-sm-3" accept-charset="UTF-8" role="form" id="form_login" name="form_login" method="post">
 			<div class="row">
-				<div class="col s8 offset-s2 m6 offset-m3 l4 offset-l3">
-					<img class="responsive-img" style="width: 250px;" src="assets/images/loog-rezende.jpg" />
+				<div class="col col-12 col-md-12 col-sm-12 col-lg-12">
+					<div class="input-field">
+						<i class="prefix mdi mdi-account-circle"></i>
+						<input class="validate" type="text" name="login" id="login" />
+						<label for="login">Login</label>
+					</div>
+					
+					<div class="input-field">
+						<i class="prefix mdi mdi-lock"></i>
+						<input class="validate" type="password" name="password" id="senha" name="senha"/>
+						<label for="password">Senha</label>
+					</div>
+					
+					<label style="float: right;">
+						<a class="orange-text text-accent-4" href="#!"><b>Esqueci minha senha</b></a>
+					</label>
 				</div>
 			</div>
-		</section>
 
-		<section class="login">
-		
-			<div class="container">
-				<div class="row">
-		
-				<form class="col s12 l8 m10 offset-l1 offset-m1" accept-charset="UTF-8" role="form" id="form_login" name="form_login" method="post">
-					<div class="row">
-						<div class="col s8">
-						</div>
-					</div>
-		
-					<div class="row">
-						<div class="col s12">
-							<div class="input-field">
-								<i class="prefix mdi mdi-account-circle"></i>
-								<input class="validate" type="text" name="login" id="login" />
-								<label for="login">Login</label>
-							</div>
-							
-							<div class="input-field">
-								<i class="prefix mdi mdi-lock"></i>
-								<input class="validate" type="password" name="password" id="senha" name="senha"/>
-								<label for="password">Senha</label>
-							</div>
-							
-							<label style="float: right;">
-								<a class="orange-text text-accent-4" href="#!"><b>Esqueci minha senha</b></a>
-							</label>
-						</div>
-					</div>
+			<section id="msg" class="card-panel left-align text-danger msg d-none  desabilitado"></section>
 
-					<div class="row">
-						<div class="col s12">
-							<button type ="submit" class="col s12 btn btn-large waves-effect yellow accent-3 grey-text text-darken-4" id="entrar">Entrar</button>
-						</div>
-					</div>
 
-					<!-- <div class="row">
-						<div class="col s12">
-							<button type="submit" name="btn_login" style="float: none" class="col s12 btn btn-large waves-effect yellow accent-3 grey-text text-darken-4">Cadastre-se</button>
-						</div>
-					</div> -->
-		
-				</form>
+			<div class="row">
+				<div class="col col-12 com-md-12 col-lg-12 col-sm-12 d-flex justify-content-start">
+					<button type ="submit" class="btn btn-sm col-12 waves-effect yellow accent-3 grey-text text-darken-4" id="entrar">Entrar</button>
+				</div>
 			</div>
-		</div>
-		
-		</div>
+		</form>
+	</div>		
 </section>
 
 		
