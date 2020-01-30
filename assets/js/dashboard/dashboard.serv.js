@@ -7,7 +7,7 @@
  {
 	'use strict';
 
-	function ServicoDasboard()
+	function ServicoDashboard()
 	{ // Model
 		var _this = this;
 
@@ -22,13 +22,19 @@
 
 		_this.rota = function rota()
 		{
-			return app.API + '/dashboard';
+			return app.api + '/dashboard';
 		};
 
+		_this.contadores = function contadores(){
+			// console.log(_this.rota())
+			return $.ajax({
+				type: "GET",
+				url: _this.rota() + '/contadores',
+			});
+		}
 	
 	}; // ServicoDashboard
 
 	// Registrando
 	app.ServicoDashboard = ServicoDashboard;
-
 })(app, $);
