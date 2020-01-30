@@ -6,47 +6,115 @@
 (function (window, app, $, toastr) {
    'use strict';
 
-   function ControladoraIndex(servicoIndex) {
+   function ControladoraListagemDashboard(servicoDashboard) {
       var _this = this;
 
-      _this.renderizarOpcoesHTML = function renderizarOpcoesHTMLname() {
+      _this.renderizarContadores = function renderizarContadores() {
          var sucesso = function (resposta) {
+            var html = '';
+            html += '<div class="row contadores">'
+            html += '<div class="col col-md-4 col-sm-3 col-lg-3 col-12">';
+            html += '<div class="card-panel center-align text-white blue darken-2">'
+            html += '<p class="font-weight-bold">Total de Checklists</p>'
+            html += '<p class="font-weight-bold">'+ resposta.resposta['contagemChecklist'] +'</p>'
+            html += '</div>';
+            html += '</div>';
+
+            html += '<div class="col col-md-4 col-sm-3 col-lg-3 col-12">';
+            html += '<div class="card-panel center-align text-white teal darken-4">'
+            html += '<p class="font-weight-bold">Total de Pendências</p>'
+            html += '<p class="font-weight-bold">'+ resposta.resposta['contagemPendencia'] +'</p>'
+            html += '</div>';
+            html += '</div>';
+
+            html += '<div class="col col-md-4 col-sm-3 col-lg-3 col-12">';
+            html += '<div class="card-panel center-align text-white yellow darken-2">'
+            html += '<p class="font-weight-bold">Total de Planos de Ação</p>'
+            html += '<p class="font-weight-bold">'+ resposta.resposta['contagemPlanoAcao'] +'</p>'
+            html += '</div>';
+            html += '</div>';
+
+            html += '</div>';
+            $('.dashboard').prepend(html);
+
+            google.charts.load('current', {'packages':['corechart']});
+            google.charts.setOnLoadCallback(drawChart);
+      
+            function drawChart() {
+
+               var contagemLoja = new Array();
+               contagemLoja.push(['Loja', 'Quantidade']);
+               for (const key in resposta.resposta.contagemPorLoja) {
+                  const elemento = resposta.resposta.contagemPorLoja[key];
+                  contagemLoja.push([ elemento.Loja, parseInt(elemento.Quantidade)]);
+               }
+
+               var data = google.visualization.arrayToDataTable(contagemLoja);
+               console.log(data);
+
+               var options = {
+                title: 'Checklist por loja',
+                is3D: true,
+              };
+            //   $('<div></div>').attr("class","grafico_loja").attr("id","grafico_loja").append(".dashboard").promise().done(function () {
+
+            //   });
+
+              var chart = new google.visualization.PieChart(document.getElementById('grafico_loja'));
+      
+              chart.draw(data, options);
+           
+            }
          };
 
-         var jqXHR = servicoIndex.temPermissao();
+         var jqXHR = servicoDashboard.contadores();
          jqXHR.done(sucesso);
       };
 
-      _this.renderizarAtividadesUsuario = function renderizarAtividadesUsuario() {
-
+      _this.renderizarGraficoChecklistsPorLoja = function renderizarGraficoChecklistsPorLoja() {
          var sucesso = function (resposta) {
+              var html = '<div class="row">';
+              html += '<div class="col col-md-12 col-12 col-sm-6 col-lg-12">';
+              html += '<div class="grafico_loja" id="grafico_loja"></div>';
+              html += '</div>';
+              html += '</div>';
+
+              $(".dashboard").append(html).promise().done(function () {
+               google.charts.load('current', {'packages':['corechart']});
+               google.charts.setOnLoadCallback(drawChart);
+         
+               function drawChart() {
+                  var contagemLoja = new Array();
+                  contagemLoja.push(['Loja', 'Quantidade']);
+                  for (const key in resposta.resposta.contagemPorLoja) {
+                     const elemento = resposta.resposta.contagemPorLoja[key];
+                     contagemLoja.push([ elemento.Loja, parseInt(elemento.Quantidade)]);
+                  }
+   
+                  var data = google.visualization.arrayToDataTable(contagemLoja);
+                  console.log(data);
+   
+                  var options = {
+                   title: 'Checklist por loja',
+                   is3D: true,
+                 };
+
+                  var chart = new google.visualization.PieChart(document.getElementById('grafico_loja'));
+                  chart.draw(data, options);
+              }
+            });
          };
 
-         var jqXHR = servicoIndex.carregarListagemDeAtividades();
+         var jqXHR = servicoDashboard.contadores();
          jqXHR.done(sucesso);
       };
-
-      _this.renderizarDadosUsuario = function renderizarDadosUsuario() {
-         var sessao = new app.Sessao();
-         if (sessao != null) {
-            $('body').find('.nome_usuario').each(function () {
-               $(this).empty().html(JSON.parse(sessao.getSessao()).nome);
-            });
-
-            $('body').find('.setor_usuario').each(function () {
-               $(this).empty().html(JSON.parse(sessao.getSessao()).setor);
-            });
-         }
-      }
 
       _this.configurar = function configurar() {
-         // _this.renderizarOpcoesHTML();
-         // _this.renderizarAtividadesUsuario();
-         _this.renderizarDadosUsuario();
-         router.trigger('navigate');
+         _this.renderizarContadores();
+         _this.renderizarGraficoChecklistsPorLoja();
       };
-   } // ControladoraIndex
+   } // ControladoraListagemDashboard
 
    // Registrando
-   app.ControladoraIndex = ControladoraIndex;
+   app.ControladoraListagemDashboard = ControladoraListagemDashboard;
 })(window, app, jQuery, toastr);

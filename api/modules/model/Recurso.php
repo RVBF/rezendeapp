@@ -187,7 +187,6 @@ class Recurso {
             ['id'=> 56, 'caminho'=> '/acesso', 'metodo'=> 'post'],
             ['id'=> 57, 'caminho'=> '/acesso/{recursoId}/{acessanteTipo}/{acessanteId}', 'metodo'=> 'delete']
          ]],
-
       ];
    }
 }
