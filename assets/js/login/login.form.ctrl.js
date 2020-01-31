@@ -64,6 +64,9 @@
 							router.navigate('/');
 							location.reload();
 						});
+					}else{
+						$('body #msg').empty().removeClass('d-none').append(data.mensagem).focus();
+						toastr.error(data.mensagem);
 					}
 				};
 

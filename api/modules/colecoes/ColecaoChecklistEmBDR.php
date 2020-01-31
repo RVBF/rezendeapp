@@ -345,6 +345,24 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 		// if($quantidade > 0)throw new ColecaoException('Não foi possível excluir a tarefa por que ela possui perguntas relacionadas a ela. Exclua todas as perguntas relacionadas e tente novamente.');
 		return true;
 	}
+
+	function contagemPorLoja(){
+		try {	
+			$query = DB::table(self::TABELA)
+											->selectRAW('l.nomeFantasia as Loja, COUNT('. self::TABELA . '.id) as Quantidade')
+											->where(self::TABELA . '.deleted_at',NULL)
+											->leftJoin(ColecaoLojaEmBDR::TABELA .' as l', 'l.id', '=', self::TABELA . '.loja_id')
+											->distinct()->groupBy('Loja');
+
+			return $query->get();
+		}
+		catch (\Exception $e)
+		{
+			Util::printr($e->getMessage());
+
+			throw new ColecaoException("Erro ao buscar checklists no banco de dados!", $e->getCode(), $e);
+		}
+	}
 }
 
 ?>

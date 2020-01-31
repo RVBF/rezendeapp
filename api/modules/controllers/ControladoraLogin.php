@@ -29,9 +29,10 @@ class ControladoraLogin {
 				$msg = 'Os seguintes campos não foram enviados: ' . implode(', ', $inexistentes);
 				throw new Exception($msg);
 			}
-	
+			
 			$usuario = $this->servico->login(\ParamUtil::value($this->params, 'login'), \ParamUtil::value($this->params, 'senha'));
 			$colaborador = new Colaborador();
+
 			$colaborador->fromArray($this->colecaoColaborador->comUsuarioId($usuario->getId()));
 			$setor = new Setor();
 			$setor->fromArray($colaborador->getSetor());
