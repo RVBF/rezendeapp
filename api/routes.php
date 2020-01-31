@@ -128,8 +128,7 @@ use \phputil\JSON;
       } else {
          $response = [
             'acessoNegado'=> true,
-            'metodo'=> $metodo,
-            'data'=> []
+            'metodo'=> $metodo
          ];
       }
 

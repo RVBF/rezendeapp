@@ -386,6 +386,17 @@ button{
    .container {
       width: 100% !important;
    }
+
+   #toast-container {
+      top: 0;
+      right: 0;
+      left: 0;
+   }
+
+   .toast {
+      margin: auto !important;
+      margin-top: 10px !important;
+   }
 }
 
 .card-panel {
