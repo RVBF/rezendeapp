@@ -1,6 +1,7 @@
 var app = {
    isLoading: true,
-   api: '/api'
+   api: '/api',
+   acessoNegado: false
 };
 
 (function (app, document, $, toastr, window, BootstrapDialog) {
@@ -85,6 +86,7 @@ var app = {
 
    window.mostrarTelaDeCarregamento = function mostrarTelaDeCarregamento() {
       loader.find('.loader').removeClass('d-none');
+
       $('body').css('overflow', 'hidden');
 
       loader.find('.loaderPageLeft').animate({ 'width': '60%' }, tempoDeAnimacao);
@@ -98,4 +100,19 @@ var app = {
       loader.find('.loaderPageLeft').animate({ 'width': '0px' }, tempoDeAnimacao);
       loader.find('.loaderPageRight').animate({ 'width': '0px' }, tempoDeAnimacao);
    }
+
+   $(document).ajaxComplete(function (evento, requisicao) {
+      var resposta = requisicao.responseJSON;
+
+      if (resposta != undefined && resposta.acessoNegado == true) {
+         app.acessoNegado = true;
+
+         if (resposta.metodo == 'get') {
+            app.acessoNegado = false;
+            window.history.back();
+         }
+
+         toastr.error(resposta.mensagem);
+      }
+   });
 })(app, document, jQuery, toastr, window, BootstrapDialog);

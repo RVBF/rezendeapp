@@ -29,5 +29,9 @@ class Acesso {
       $this->acessante = $acessante;
       $this->acao = $acao;
    }
+
+   public static function vericarAcesso($usuarioId, $caminho, $metodo) {
+      return false;
+   }
 }
 ?>

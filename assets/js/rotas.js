@@ -10,22 +10,33 @@
    var router = new Grapnel();
    var conteudo = $('#app');
 
+   function esperar(tempo) {
+      return new Promise(resolve => setTimeout(resolve, tempo));
+   }
+
    var carregarPagina = function carregarPagina(pagina) {
       var sessao = new app.Sessao();
 
       mostrarTelaDeCarregamento();
 
       var sucesso = function sucesso(data, textStatus, jqXHR) {
-         tirarTelaDeCarregamento();
-
-         if ('login.html' == pagina) $('body').empty().load('views/' + pagina);
+         if ('login.html' == pagina) $('body').empty().load('views/' + pagina, function () {
+            tirarTelaDeCarregamento();
+         });
          else {
             if (conteudo.length > 0) {
-               conteudo.empty().load('views/' + pagina);
+               conteudo.empty().load('views/' + pagina, async function () {
+                  await esperar(100);
+
+                  if (!app.acessoNegado) tirarTelaDeCarregamento();
+                  else app.acessoNegado = false;
+               });
             }
             else {
                $('body').empty().load('index.html', function () {
                   router.navigate('/');
+
+                  tirarTelaDeCarregamento();
                });
             }
          }
@@ -207,7 +218,7 @@
       else if (window.location.href.search('cadastrar-pendencia') != -1) {
          html += '<span class="center local-dto">Cadastrar Pendência</span>';
          html += '<a href="#/" class="left m16-dto pendencia_link"><i class="material-icons">navigate_before</i></a>';
-      }      
+      }
       else if (window.location.href.search('editar-pendencia') != -1) {
          html += '<span class="center local-dto">Editar Pendência</span>';
          html += '<a href="#/" class="left m16-dto pendencia_link"><i class="material-icons">navigate_before</i></a>';
@@ -332,6 +343,7 @@
 
       $('body').find('.topo-opcoes').empty().append(html);
    });
+
    // Registra como global
    window.router = router;
    app.verficarLogin = verficarLogin;

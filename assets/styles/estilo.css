@@ -440,7 +440,7 @@ button{
 
 /* Página de carrgeamento - Início */
    .loaderPageLeft, .loaderPageRight {
-      position: absolute;
+      position: fixed;
       width: 100%;
       height: 100%;
       top: 0;
@@ -464,7 +464,7 @@ button{
       color: #ff6d00;
       font-size: 11px;
       text-indent: -99999em;
-      position: absolute;
+      position: fixed;
       width: 110px;
       height: 110px;
       top: calc(50% - 55px);
@@ -475,6 +475,12 @@ button{
       -ms-transform: translateZ(0);
       transform: translateZ(0);
       z-index: 9999999;
+      opacity: 1;
+      transition: opacity 300ms;
+   }
+
+   .loader.d-none {
+      opacity: 0;
    }
 
    .loader:before,
