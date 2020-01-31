@@ -336,7 +336,7 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 
     function contagem($idsLojas = []) {
 		if(is_array($idsLojas))
-        return (count() > 0) ?  DB::table(self::TABELA)->whereIn('loja_id',
+        return (count($idsLojas) > 0) ?  DB::table(self::TABELA)->whereIn('loja_id',
          $idsLojas)->count() : DB::table(self::TABELA)->count();
 	}
 }

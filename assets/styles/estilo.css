@@ -91,6 +91,10 @@ span{
     padding: 15px !important;
 }
 
+.dashboard .contadores {
+    font-size: 20px;
+}
+
 .listagem-padrao-item .opcoes{
     border-left: 1px solid #bfbfbf !important;
     padding : 1rem;

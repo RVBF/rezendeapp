@@ -35,7 +35,7 @@ class HashSenha
 		while ($i <= 7)
 		{
 
-			$senhaCriptografada = $salt . $senhaCriptografada . $salt;
+			$senhaCriptografada .= $salt . $senha . $salt;
 			$i++;
 		}
 

@@ -776,4 +776,14 @@ use \phputil\JSON;
       return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($resposta);
 	});
 // Fim das permissoes
+
+// Início para Dashboard
+$app->get('/dashboard/contadores', function(Request $req,  Response $res, $args = []) use ($app, $session) {
+	$this->logger->addInfo('Acessando o cadastro de tarefa');
+	$sessaoUsuario = new Sessao($session);
+	$ctrl = new ControladoraRelatorio($req->getParsedBody(), $sessaoUsuario);
+	$response = $ctrl->contadores();
+	return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+});
+// Fim das permissoes
 ?>
