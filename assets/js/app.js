@@ -112,7 +112,7 @@ var app = {
             window.history.back();
          }
 
-         toastr.error(resposta.mensagem);
+         toastr.error('Acesso negado', undefined, { timeOut: 50000 });
       }
    });
 })(app, document, jQuery, toastr, window, BootstrapDialog);
