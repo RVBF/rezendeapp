@@ -151,7 +151,7 @@
             html += '</div>';
          }
          if (typeof opcoes.columnDefs == 'function') {
-            if (data.length > 0) {
+            if (data != undefined && data.length > 0) {
                for (let indice in data) {
                   html += '<div class="row listagem-padrao-item ' + opcoes.classesDesignerTabela + '">';
                   html += opcoes.columnDefs(data[indice]);

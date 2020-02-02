@@ -47,7 +47,7 @@ class ControladoraChecklist {
 	function todos() {
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
+				throw new Exception("Erro ao acessar página.");
 			}
 
 			$colaborador = $this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario());
@@ -64,7 +64,7 @@ class ControladoraChecklist {
 				$contagem = 0;
 				$objetos = [];
 				$erro = null;
-				$objetos = $this->colecaoChecklist->todosComLojaIds($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $idsLojas);
+				$objetos = $this->colecaoChecklist->todosComLojaIds($dtr->length, $dtr->start, (isset($dtr->search->value)) ? $dtr->search->value : '', $idsLojas);
 				$contagem = $this->colecaoChecklist->contagem($idsLojas);
 				$conteudo = new DataTablesResponse(
 					$contagem,
@@ -90,18 +90,18 @@ class ControladoraChecklist {
 		}
 		catch (\Exception $e ) {
 			throw new Exception("Erro ao listar checklist");
-		}	
-		
+		}
+
 		return RTTI::getAttributes($conteudo,  RTTI::allFlags());
 	}
-	
+
 	function adicionar() {
 		DB::beginTransaction();
 		try {
 			$resposta = [];
 
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
+				throw new Exception("Erro ao acessar página.");
 			}
 
 			// if(!$this->servicoLogin->eAdministrador()){
@@ -112,17 +112,17 @@ class ControladoraChecklist {
 
 			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
-	
+
 				throw new Exception($msg);
 			}
-			
+
 			$setor = new Setor(); $setor->fromArray($this->colecaoSetor->comId(($this->params['setor'] > 0) ? $this->params['setor'] : \ParamUtil::value($this->params, 'setor')));
 
 			if(!isset($setor) and !($setor instanceof Setor)){
 				throw new Exception("Setor não encontrado na base de dados.");
 			}
 
-				
+
 			$loja = new Loja(); $loja->fromArray($this->colecaoLoja->comId((\ParamUtil::value($this->params, 'loja')> 0) ? \ParamUtil::value($this->params, 'loja') : \ParamUtil::value($this->params, 'loja')));
 
 			if(!isset($loja) and !($loja instanceof Loja)){
@@ -163,7 +163,7 @@ class ControladoraChecklist {
 				$questionador,
 				$responsavel,
 				$questionarios
-			);			
+			);
 
 			$this->colecaoChecklist->adicionar($checklist);
 
@@ -196,15 +196,15 @@ class ControladoraChecklist {
 
 			$this->colecaoQuestionamento->adicionarTodos($questionamentos);
 
-			$resposta = ['status' => true, 'mensagem'=> 'Checklist cadastrado  com sucesso.']; 
-			
+			$resposta = ['status' => true, 'mensagem'=> 'Checklist cadastrado  com sucesso.'];
+
 			DB::commit();
 
 		}
 		catch (\Exception $e) {
 			DB::rollback();
 
-			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()];
 		}
 
 		return $resposta;
@@ -216,7 +216,7 @@ class ControladoraChecklist {
 			$resposta = [];
 
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
+				throw new Exception("Erro ao acessar página.");
 			}
 
 			// if(!$this->servicoLogin->eAdministrador()){
@@ -227,17 +227,17 @@ class ControladoraChecklist {
 
 			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
-	
+
 				throw new Exception($msg);
 			}
-			
+
 			$setor = new Setor(); $setor->fromArray($this->colecaoSetor->comId(($this->params['setor'] > 0) ? $this->params['setor'] : \ParamUtil::value($this->params, 'setor')));
 
 			if(!isset($setor) and !($setor instanceof Setor)){
 				throw new Exception("Setor não encontrado na base de dados.");
 			}
 
-				
+
 			$loja = new Loja(); $loja->fromArray($this->colecaoLoja->comId((\ParamUtil::value($this->params, 'loja')> 0) ? \ParamUtil::value($this->params, 'loja') : \ParamUtil::value($this->params, 'loja')));
 
 			if(!isset($loja) and !($loja instanceof Loja)){
@@ -281,14 +281,14 @@ class ControladoraChecklist {
 
 			$this->colecaoChecklist->atualizar($checklist);
 
-			$resposta = ['status' => true, 'mensagem'=> 'Checklist cadastrado  com sucesso.']; 
-			
+			$resposta = ['status' => true, 'mensagem'=> 'Checklist cadastrado  com sucesso.'];
+
 			DB::commit();
 		}
 		catch (\Exception $e) {
 			DB::rollback();
 
-			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()];
 		}
 
 		return $resposta;
@@ -299,7 +299,7 @@ class ControladoraChecklist {
 
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
+				throw new Exception("Erro ao acessar página.");
 			}
 
 			$checklist = new Checklist(); $checklist->fromArray($this->colecaoChecklist->comId($id));
@@ -337,14 +337,14 @@ class ControladoraChecklist {
 
 				$this->colecaoQuestionamento->remover($questionamentoAtual->getId());
 			}
-			
-			$resposta = ['status' => true, 'mensagem'=> 'Checklist removido com sucesso.']; 
+
+			$resposta = ['status' => true, 'mensagem'=> 'Checklist removido com sucesso.'];
 			DB::commit();
 		}
 		catch (\Exception $e) {
 			DB::rollback();
 
-			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()];
 		}
 
 		return $resposta;
@@ -353,35 +353,35 @@ class ControladoraChecklist {
 	function getQuestionamentosParaExecucao($checklistId){
 		try {
 
-			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
-			
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");
+
 			if (! is_numeric($checklistId)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
 
 			$questionamentos = $this->colecaoQuestionamento->questionamentosParaExecucao($checklistId);
 
-			$resposta = ['conteudo'=> $questionamentos, 'status' => true, 'mensagem'=> 'ok.']; 
+			$resposta = ['conteudo'=> $questionamentos, 'status' => true, 'mensagem'=> 'ok.'];
 		}
 		catch (\Exception $e) {
-			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()];
 		}
 
-		
+
 
 		return $resposta;
 	}
 
 	function comId($id) {
 		try {
-			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
-			
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");
+
 			if (! is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
 
 			$checklist = $this->colecaoChecklist->comId($id);
 
-			$resposta = ['conteudo'=> $checklist, 'status' => true, 'mensagem'=> 'Checklist encontrado com sucesso.']; 
+			$resposta = ['conteudo'=> $checklist, 'status' => true, 'mensagem'=> 'Checklist encontrado com sucesso.'];
 		}
 		catch (\Exception $e) {
-			$resposta = ['status' => false, 'mensagem'=>  "Erro ao encontrar checklist com o id."]; 
+			$resposta = ['status' => false, 'mensagem'=>  "Erro ao encontrar checklist com o id."];
 		}
 
 		return $resposta;

@@ -183,9 +183,10 @@ class Recurso {
 
          ['id'=> 44, 'nome'=> 'Configurar Acessos', 'model'=> 'Acesso', 'rotas'=> [
             ['id'=> 54, 'caminho'=> '/acesso', 'metodo'=> 'get'],
-            ['id'=> 55, 'caminho'=> '/acesso/{acessanteTipo}/{acessanteId}', 'metodo'=> 'get'],
-            ['id'=> 56, 'caminho'=> '/acesso', 'metodo'=> 'post'],
-            ['id'=> 57, 'caminho'=> '/acesso/{recursoId}/{acessanteTipo}/{acessanteId}', 'metodo'=> 'delete']
+            ['id'=> 55, 'caminho'=> '/recurso', 'metodo'=> 'get'],
+            ['id'=> 56, 'caminho'=> '/acesso/{acessanteTipo}/{acessanteId}', 'metodo'=> 'get'],
+            ['id'=> 57, 'caminho'=> '/acesso', 'metodo'=> 'post'],
+            ['id'=> 58, 'caminho'=> '/acesso/{recursoId}/{acessanteTipo}/{acessanteId}', 'metodo'=> 'delete']
          ]],
       ];
    }

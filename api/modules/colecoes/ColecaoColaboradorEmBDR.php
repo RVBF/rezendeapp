@@ -21,17 +21,17 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 
 	function adicionar(&$obj) {
 		if($this->validarColaborador($obj)) {
-			try {	
+			try {
 
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-				$id = DB::table(self::TABELA)->insertGetId([ 
+				$id = DB::table(self::TABELA)->insertGetId([
 					'nome' => $obj->getNome() ,
 					'sobrenome' => $obj->getSobrenome(),
 					'email' => $obj->getEmail(),
 					'usuario_id' => $obj->getUsuario()->getId(),
 					'setor_id'	=> $obj->getSetor()->getId()
 				]);
-				
+
 				$atuacoesLojas = [];
 
 				foreach($obj->getLojas() as $loja){
@@ -39,9 +39,9 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 
 					$atuacoesLojas[] = ['loja_id' => $lojaAtual->getId(), 'colaborador_id' =>  $id];
 				}
-				
+
 				DB::table(self::TABELA_RELACIONAL)->insert($atuacoesLojas);
-				
+
 				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
 				$obj->setId($id);
@@ -49,7 +49,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 				return $obj;
 			}
 			catch (\Exception $e)
-			{	
+			{
 				throw new ColecaoException("Erro ao adicionar colaborador.", $e->getCode(), $e);
 			}
 		}
@@ -57,22 +57,22 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 
 	function remover($id) {
 		if($this->validarRemocaoColaborador($id)) {
-			try {	
+			try {
 				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->update(['deleted_at' =>Carbon::now()->toDateTimeString()]);
 			}
 			catch (\Exception $e)
 			{
 				throw new ColecaoException("Erro ao remover colaborador no banco de dados!", $e->getCode(), $e);
 			}
-		}		
+		}
 	}
 
 	function atualizar(&$obj) {
 		if($this->validarColaborador($obj)) {
 			try {
-			
+
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $obj->getId())->update([ 
+				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $obj->getId())->update([
 					'nome' => $obj->getNome() ,
 					'sobrenome' => $obj->getSobrenome(),
 					'email' => $obj->getEmail(),
@@ -83,24 +83,24 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 				DB::table(self::TABELA_RELACIONAL)->where('colaborador_id', $obj->getId())->delete();
 				if(is_array($obj->getLojas()) ? count($obj->getLojas()) : false){
 					$atuacoesLojas = [];
-					
+
 					DB::table(self::TABELA_RELACIONAL)->where('colaborador_id', $obj->getId())->delete();
 
 					foreach($obj->getLojas() as $loja){
 						$lojaAtual = new Loja(); $lojaAtual->fromArray($loja);
 						$atuacoesLojas[] = ['loja_id' => $lojaAtual->getId(), 'colaborador_id' =>  $obj->getId()];
 					}
-					
+
 					DB::table(self::TABELA_RELACIONAL)->insert($atuacoesLojas);
 				}
-			
+
 				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 				return $obj;
 			}
 			catch (\Exception $e) {
 				throw new ColecaoException("Erro ao atualizar colaborador no banco de dados", $e->getCode(), $e);
 			}
-		}	
+		}
 	}
 
 	function atualizarAvatar(&$obj){
@@ -111,7 +111,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $obj->getId())->update([
 					'avatar_id' => ($obj->getAvatar() instanceof Anexo) ? $obj->getAvatar()->getId() : 0
 				]);
-				
+
 				DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
 			}
@@ -123,7 +123,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 	}
 
 	function comId($id){
-		try {	
+		try {
 			return (DB::table(self::TABELA)->where('id', $id)->count()) ? $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->first()) : [];
 		}
 		catch (\Exception $e)
@@ -133,7 +133,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 	}
 
 	function comUsuarioId($id){
-		try {	
+		try {
 			return (DB::table(self::TABELA)->where('usuario_id', $id)->count()) ? $this->construirObjeto(DB::table(self::TABELA)->where('usuario_id', $id)->first()) : [];
 		}
 		catch (\Exception $e) {
@@ -144,10 +144,10 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 	/**
 	 * @inheritDoc
 	 */
-	function todos($limite = 0, $pulo = 0, $search = '') {
-		try {	
+	function todos($limite = 10, $pulo = 0, $search = '') {
+		try {
 			$query = DB::table(self::TABELA)->selectRaw(self::TABELA . '.*, COUNT('.self::TABELA.'.id) as qtd')->where(self::TABELA .'.deleted_at', NULL);
-			
+
 			if($search != '') {
 				$buscaCompleta = $search;
 				$palavras = explode(' ', $buscaCompleta);
@@ -184,32 +184,33 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 								$query->orWhereRaw(ColecaoSetorEmBDR::TABELA . '.titulo like "%' . $palavra . '%"');
 							}
 						}
-						
+
 					});
 				}
 
 				$query->groupBy(self::TABELA.'.id');
 			}
 
-			$colaboradores = $query->groupBy(self::TABELA . '.id', self::TABELA . '.nome', self::TABELA . '.sobrenome', self::TABELA . '.email', self::TABELA . '.deleted_at', self::TABELA . '.usuario_id', self::TABELA . '.setor_id', self::TABELA . '.avatar_id')
-									->offset($limite)
-									->limit($pulo)->get();
-            $colaboradoresObjects = [];
+         if($pulo) $query->skip($pulo);
+         if($limite) $query->take($limite);
 
-			foreach($colaboradores as $usuario) {
+         $query->groupBy(self::TABELA . '.id', self::TABELA . '.nome', self::TABELA . '.sobrenome', self::TABELA . '.email', self::TABELA . '.deleted_at', self::TABELA . '.usuario_id', self::TABELA . '.setor_id', self::TABELA . '.avatar_id');
 
-				$colaboradoresObjects[] =  $this->construirObjeto($usuario);
-			}
+			$colaboradores = $query->get();
+
+         $colaboradoresObjects = [];
+
+			foreach($colaboradores as $usuario) $colaboradoresObjects[] =  $this->construirObjeto($usuario);
 
 			return $colaboradoresObjects;
 		}
 		catch (\Exception $e) {
-			throw new ColecaoException("Erro ao listar colaboradores", $e->getCode(), $e);
+			throw new ColecaoException('Erro ao listar colaboradores.', $e->getCode(), $e);
 		}
 	}
-	
+
 	function todosComId($ids = []) {
-		try {	
+		try {
 			$colaboradores = DB::table(self::TABELA)->where('deleted_at', NULL)->whereIn('id', $ids)->get();
 			$colaboradoresObjects = [];
 
@@ -233,7 +234,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 		$colaborador = new Colaborador($row['id'], $row['nome'], $row['sobrenome'], $row['email'], $usuario, $setor, (is_array($lojas)) ? $lojas : [], $avatar);
 
 		return $colaborador->toArray();
-	}	
+	}
 
     function contagem() {
 		return DB::table(self::TABELA)->count();
@@ -241,7 +242,7 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 
 	private function validarColaborador(&$obj) {
 		if(!is_string($obj->getNome())) throw new ColecaoException('Valor inválido para nome!');
-		
+
 		if(!is_string($obj->getSobrenome())) throw new ColecaoException('Valor inválido para a sobrenome!');
 		if(!is_string($obj->getEmail())) throw new ColecaoException('Valor inválido para a e-mail!');
 
@@ -249,9 +250,9 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 		if(strlen($obj->getSobrenome()) <= Colaborador::TAM_TEXT_MIM && strlen($obj->getSobrenome()) > Colaborador::TAM_TEXT_MAX) throw new ColecaoException('O nome deve conter no mínimo '. Colaborador::TAM_TEXT_MIM . ' e no máximo '. Colaborador::TAM_TEXT_MAX . '.');
 
 		if($this->validarFormatoDeEmail($obj->getEmail())) throw new Exception("Formato de e-mail inválido!");
-		
+
 		$quantidade = DB::table(self::TABELA)->where('email', $obj->getEmail())->where('id', '!=', $obj->getId())->count();
-		
+
 		if($quantidade > 0){
 			throw new ColecaoException('Já exite uma colaborador cadastrado com esse email.');
 		}
@@ -273,13 +274,13 @@ class ColecaoColaboradorEmBDR implements ColecaoColaborador {
 	*/
 	private function validarFormatoDeEmail($email) {
 		if (preg_match('"/^([[:alnum:]_.-]){3,}@([[:lower:][:digit:]_.-]{3,})(.[[:lower:]]{2,3})(.[[:lower:]]{2})?$/"', $email)) {
-			return true;	
+			return true;
 		}
 		else
 		{
-			return false;	
-		}	
+			return false;
+		}
 	}
-	
+
 }
 ?>

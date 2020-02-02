@@ -19,6 +19,9 @@ class GrupoUsuario {
    private $descricao;
    private $usuarios;
 
+   const TABELA = 'grupo_usuario';
+   const TABELA_RELACAO_USUARIO = 'usuario_grupo_usuario';
+
    function __construct($id = 0, $nome = '', $descricao = '', $usuarios = []) {
       $this->id = $id;
       $this->nome =  $nome;

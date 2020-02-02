@@ -20,7 +20,7 @@ class ControladoraLoja {
 	private $colecaoLoja;
 	private $servicoLogin;
 	private $colecaoEndereco;
-	
+
 	function __construct($params,  Sessao $sessao) {
 		$this->params = $params;
 		$this->colecaoLoja = Dice::instance()->create('ColecaoLoja');
@@ -31,9 +31,9 @@ class ControladoraLoja {
 	function todos() {
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
+				throw new Exception("Erro ao acessar página.");
 			}
-			
+
 			$dtr = new DataTablesRequest($this->params);
 			$contagem = 0;
 			$objetos = [];
@@ -57,14 +57,34 @@ class ControladoraLoja {
 		return RTTI::getAttributes($conteudo, RTTI::allFlags() );
 	}
 
+   function todosOpcoes() {
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");
+			}
+
+			$resposta['contagem'] = 0;
+			$resposta['objetos'] = [];
+			$resposta['erro'] = null;
+			$resposta['data'] = $this->colecaoLoja->todosOpcoes();
+			$resposta['contagem'] = $this->colecaoLoja->contagem();
+		}
+		catch (\Exception $e )
+		{
+			throw new Exception($e->getMessage());
+		}
+
+		return $resposta;
+	}
+
 	function adicionar() {
 		DB::beginTransaction();
 
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
+				throw new Exception("Erro ao acessar página.");
 			}
-			
+
 			if(!$this->servicoLogin->eAdministrador()){
 				throw new Exception("Usuário sem permissão para executar ação.");
 			}
@@ -96,17 +116,17 @@ class ControladoraLoja {
 				\ParamUtil::value($this->params, 'nomeFantasia'),
 				$endereco
 			);
-		
+
 			$this->colecaoLoja->adicionar($loja);
 
-			$resposta = ['status' => true, 'mensagem'=> 'Loja cadastrada com sucesso.']; 
+			$resposta = ['status' => true, 'mensagem'=> 'Loja cadastrada com sucesso.'];
 			DB::commit();
 
 		}
 		catch (\Exception $e) {
 			DB::rollback();
 
-			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()];
 		}
 
 		return $resposta;
@@ -117,13 +137,13 @@ class ControladoraLoja {
 
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
+				throw new Exception("Erro ao acessar página.");
 			}
-			
+
 			if(!$this->servicoLogin->eAdministrador()){
 				throw new Exception("Usuário sem permissão para executar ação.");
 			}
-			
+
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'razaoSocial','nomeFantasia', 'endereco'], $this->params);
 			$resposta = [];
 
@@ -153,13 +173,13 @@ class ControladoraLoja {
 
 			$this->colecaoEndereco->atualizar($endereco);
 
-			$resposta = ['status' => true, 'mensagem'=> 'Loja atualizada com sucesso.']; 
-		
+			$resposta = ['status' => true, 'mensagem'=> 'Loja atualizada com sucesso.'];
+
 			DB::commit();
 		}
 		catch (\Exception $e) {
 			DB::rollback();
-			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()];
 		}
 
 		return $resposta;
@@ -167,28 +187,28 @@ class ControladoraLoja {
 
 	function comId($id) {
 		try {
-			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
-			
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");
+
 			if (! is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
 
 			$loja = new Loja(); $loja->fromArray($this->colecaoLoja->comId($id));
-		
-			$resposta = ['conteudo'=> $loja->toArray(), 'status' => true]; 
+
+			$resposta = ['conteudo'=> $loja->toArray(), 'status' => true];
 		}
 		catch (\Exception $e) {
 			DB::rollback();
-			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()];
 		}
 
 		return $resposta;
 	}
 
-	
+
 	function remover($id) {
 		DB::beginTransaction();
 
 		try {
-			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");
 			$resposta = [];
 
 			$loja = new Loja(); $loja->fromArray($this->colecaoLoja->comId($id));
@@ -198,14 +218,14 @@ class ControladoraLoja {
 			$this->colecaoLoja->remover($loja->getId());
 			$this->colecaoEndereco->remover($endereco->getId());
 
-			$resposta = ['status' => true, 'mensagem'=> 'Loja removida com sucesso.']; 
-			
+			$resposta = ['status' => true, 'mensagem'=> 'Loja removida com sucesso.'];
+
 			DB::commit();
 		}
 		catch (\Exception $e) {
 			DB::rollback();
 
-			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()];
 		}
 
 		return $resposta;

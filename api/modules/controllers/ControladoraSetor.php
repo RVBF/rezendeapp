@@ -19,7 +19,7 @@ class ControladoraSetor {
 	private $colecaoSetor;
 	private $colecaoLoja;
 	private $servicoLogin;
-	
+
 	function __construct($params,  Sessao $sessao) {
 		$this->servicoLogin = new ServicoLogin($sessao);
 		$this->params = $params;
@@ -32,7 +32,7 @@ class ControladoraSetor {
 		try
 		{
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
+				throw new Exception("Erro ao acessar página.");
 			}
 
 			$dtr = new DataTablesRequest($this->params);
@@ -42,7 +42,7 @@ class ControladoraSetor {
 			$erro = null;
 
 			$objetos = $this->colecaoSetor->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');
-		
+
 			$contagem = $this->colecaoSetor->contagem();
 		}
 		catch (\Exception $e )
@@ -58,6 +58,26 @@ class ControladoraSetor {
 		);
 
 		return  RTTI::getAttributes($conteudo, RTTI::allFlags());
+   }
+
+   function todosOpcoes() {
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");
+			}
+
+			$resposta['contagem'] = 0;
+			$resposta['objetos'] = [];
+			$resposta['erro'] = null;
+			$resposta['data'] = $this->colecaoSetor->todosOpcoes();
+			$resposta['contagem'] = $this->colecaoSetor->contagem();
+		}
+		catch (\Exception $e )
+		{
+			throw new Exception($e->getMessage());
+		}
+
+		return $resposta;
 	}
 
 	function adicionar() {
@@ -65,7 +85,7 @@ class ControladoraSetor {
 
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
+				throw new Exception("Erro ao acessar página.");
 			}
 
 			// if(!$this->servicoLogin->eAdministrador()){
@@ -88,14 +108,14 @@ class ControladoraSetor {
 			);
 			$this->colecaoSetor->adicionar($setor);
 
-			$resposta = ['status' => true, 'mensagem'=> 'Setor cadastrado com sucesso.']; 
-			
+			$resposta = ['status' => true, 'mensagem'=> 'Setor cadastrado com sucesso.'];
+
 			DB::commit();
 		}
 		catch (\Exception $e) {
 			DB::rollback();
 
-			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()];
 		}
 
 		return $resposta;
@@ -106,8 +126,8 @@ class ControladoraSetor {
 
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
-			}		
+				throw new Exception("Erro ao acessar página.");
+			}
 
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo','descricao'], $this->params);
 			$resposta = [];
@@ -117,7 +137,7 @@ class ControladoraSetor {
 
 				throw new Exception($msg);
 			}
-			
+
 			$setor = new Setor(
 				\ParamUtil::value($this->params, 'id'),
 				\ParamUtil::value($this->params, 'titulo'),
@@ -125,15 +145,15 @@ class ControladoraSetor {
 			);
 
 			$this->colecaoSetor->atualizar($setor);
-			
-			$resposta = ['status' => true, 'mensagem'=> 'Setor atualizado com sucesso.']; 
-			
+
+			$resposta = ['status' => true, 'mensagem'=> 'Setor atualizado com sucesso.'];
+
 			DB::commit();
 		}
 		catch (\Exception $e) {
 			DB::rollback();
 
-			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()];
 		}
 
 		return $resposta;
@@ -141,17 +161,17 @@ class ControladoraSetor {
 
 	function comId($id) {
 		try {
-			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
-			
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");
+
 			if (! is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
 
 			$setor = new Setor(); $setor->fromArray($this->colecaoSetor->comId($id));
-		
-			$resposta = ['conteudo'=> $setor->toArray(), 'status' => true]; 
+
+			$resposta = ['conteudo'=> $setor->toArray(), 'status' => true];
 		}
 		catch (\Exception $e) {
 			DB::rollback();
-			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()];
 		}
 
 		return $resposta;
@@ -162,8 +182,8 @@ class ControladoraSetor {
 
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
-			}	
+				throw new Exception("Erro ao acessar página.");
+			}
 
 			// if(!$this->servicoLogin->eAdministrador()){
 			// 	throw new Exception("Usuário sem permissão para executar ação.");
@@ -172,15 +192,15 @@ class ControladoraSetor {
 			$resposta = [];
 
 			$status = $this->colecaoSetor->remover($id);
-			
-			$resposta = ['status' => true, 'mensagem'=> 'Setor removido com sucesso.']; 
+
+			$resposta = ['status' => true, 'mensagem'=> 'Setor removido com sucesso.'];
 			DB::commit();
 
 		}
 		catch (\Exception $e) {
 			DB::rollback();
 
-			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()];
 		}
 
 		return $resposta;

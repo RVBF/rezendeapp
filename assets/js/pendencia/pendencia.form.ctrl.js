@@ -30,9 +30,9 @@
 				var terminado = function() {
 					_this.formulario.desabilitar(false);
 				};
-				
+
 				_this.formulario.desabilitar(true);
-			
+
 				var jqXHR = _this.alterar ? servicoPedencia.atualizar(obj) : servicoPedencia.adicionar(obj);
 				jqXHR.done(function(resposta) {
 					if(resposta.status){
@@ -41,7 +41,7 @@
 					}
 					else{
 						$('body #msg').empty().removeClass('d-none').append(resposta.mensagem);
-						toastr.error(resposta.mensagem);
+						if(resposta != undefined && resposta.mensagem) toastr.error(resposta.mensagem);
 					}
 				}).fail(window.erro).always(terminado);
 
@@ -73,7 +73,7 @@
 			return array[1];
 		};
 
-        
+
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
 			var dataLimite = moment(_this.dataLimite.getDate()).format('YYYY-MM-DD');
@@ -94,7 +94,7 @@
 				format : 'DD de MMMM de YYYY',
 				controls: true,
 				inline: true,
-				container: '.date-panel',					
+				container: '.date-panel',
 				text : {
 					title: 'Selecione a data',
 					cancel: 'Cancelar',
@@ -117,7 +117,7 @@
 				headers: true,
 				controls: true,
 				inline: true,
-				container: '.time-panel',	
+				container: '.time-panel',
 				text : {
 					title: 'Selecione a hora',
 					cancel: 'Cancelar',
@@ -178,7 +178,7 @@
 						});
 					});
 				}
-			
+
 				$('.card-title').html('<h3>Visualizar Pendência</h3>');
 			}
 			else if(window.location.href.search('editar') != -1) {
@@ -253,7 +253,7 @@
 			var  jqXHR = servicoUsuario.todos();
 			jqXHR.done(sucesso).fail(erro);
 		};
-	
+
 		_this.salvar = function salvar() {
 			_this.formulario.validate(criarOpcoesValidacao());
         };
@@ -276,7 +276,7 @@
 
 								}
 								else{
-									toastr.error(resposta.mensagem);
+									if(resposta != undefined && resposta.mensagem) toastr.error(resposta.mensagem);
 
 									dialog.close();
 								}

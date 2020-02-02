@@ -133,6 +133,22 @@ class ColecaoUsuarioEmBDR  implements ColecaoUsuario {
 		}
 	}
 
+	function todosOpcoes() {
+		try {
+			$query = DB::table(self::TABELA)
+							->selectRaw('distinct ' . self::TABELA . '.id, ' . Colaborador::TABELA . '.nome, ' . Colaborador::TABELA . '.sobrenome, COUNT('.self::TABELA.'.id) as qtd')
+							->join(Colaborador::TABELA, Colaborador::TABELA . '.usuario_id', '=', self::TABELA . '.id')
+							->where(self::TABELA . '.deleted_at', NULL);
+
+			$usuarios = $query->get();
+
+			return $usuarios;
+		}
+		catch (\Exception $e) {
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		}
+	}
+
 	function todosComIds($ids = []) {
 		try {
 			$usuarios = DB::table(self::TABELA)->where('deleted_at', NULL)->select('id', 'login', 'administrador')->whereIn('id', $ids)->get();

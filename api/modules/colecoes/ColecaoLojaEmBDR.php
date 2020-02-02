@@ -20,10 +20,10 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 
 	function adicionar(&$obj) {
 		if($this->validarLoja($obj)){
-			try {	
+			try {
 				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 				$id = DB::table(self::TABELA)->insertGetId([
-					'razaoSocial' => $obj->getRazaoSocial(), 
+					'razaoSocial' => $obj->getRazaoSocial(),
 					'nomeFantasia' => $obj->getNomeFantasia(),
 					'endereco_id' => $obj->getEndereco()->getId()
 				]);
@@ -50,12 +50,12 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 				throw new ColecaoException("Erro ao remover loja!", $e->getCode(), $e);
 			}
 		}
-		
+
 	}
 
 	function atualizar(&$obj) {
 		if($this->validarLoja($obj)){
-			try {	
+			try {
 				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $obj->getId())->update(['razaoSocial' => $obj->getRazaoSocial(), 'nomeFantasia' => $obj->getNomeFantasia()]);
 
 				return $obj;
@@ -65,11 +65,11 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 				throw new ColecaoException("Erro ao atualizar loja!", $e->getCode(), $e);
 			}
 		}
-		
+
 	}
 
 	function comId($id){
-		try {	
+		try {
 			return (DB::table(self::TABELA)->where('id', $id)->count()) ? $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->first()) : [];
 		}
 		catch (\Exception $e)
@@ -84,11 +84,11 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 			$lojas = DB::table(self::TABELA)->where('deleted_at', NULL)->select(self::TABELA . '.*')
 				->join(self::TABELA_RELACIONAL, self::TABELA_RELACIONAL . '.loja_id', '=', self::TABELA . '.id')
 				->where(self::TABELA_RELACIONAL . '.colaborador_id', $id)->get();
-				
+
 			$lojasObjects = [];
 
 			foreach ($lojas as $loja) {
-				$lojasObjects[] = $this->construirObjeto($loja);			
+				$lojasObjects[] = $this->construirObjeto($loja);
 			}
 
 			return $lojasObjects;
@@ -103,7 +103,7 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 	 * @inheritDoc
 	 */
 	function todos($limite = 0, $pulo = 0, $search = '') {
-		try {	
+		try {
 
 			$query = DB::table(self::TABELA)->selectRaw(self::TABELA . '.*, COUNT('.self::TABELA.'.id) as qtd')->where( self::TABELA . '.deleted_at', NULL);
 			if($search != '') {
@@ -124,8 +124,8 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 					$query->orWhereRaw(ColecaoEnderecoEmBDR::TABELA . '.cidade like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw(ColecaoEnderecoEmBDR::TABELA . '.uf like "%' . $buscaCompleta . '%"');
 				});
-				
-				
+
+
 				if($query->count() == 0){
 					$query->where(function($query) use ($palavras){
 						foreach ($palavras as $key => $palavra) {
@@ -142,14 +142,14 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 								$query->orWhereRaw(ColecaoEnderecoEmBDR::TABELA . '.uf like "%' . $palavra . '%"');
 							}
 						}
-						
+
 					});
 				}
 
 				$query->groupBy(self::TABELA.'.id');
 			}
 
-			$lojas = $query->groupBy(self::TABELA . '.id', self::TABELA . '.razaoSocial', self::TABELA . '.nomeFantasia',  self::TABELA . '.deleted_at', self::TABELA . '.endereco_id') 
+			$lojas = $query->groupBy(self::TABELA . '.id', self::TABELA . '.razaoSocial', self::TABELA . '.nomeFantasia',  self::TABELA . '.deleted_at', self::TABELA . '.endereco_id')
 						->offset($limite)
 						->limit($pulo)
 						->get();
@@ -165,8 +165,21 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 		}
 	}
 
+   function todosOpcoes() {
+		try {
+			$query = DB::table(self::TABELA)->selectRaw(self::TABELA . '.id, ' . self::TABELA . '.razaoSocial, ' . self::TABELA . '.nomeFantasia, ' . 'COUNT('.self::TABELA.'.id) as qtd')->where( self::TABELA . '.deleted_at', NULL);
+
+			$lojas = $query->groupBy(self::TABELA . '.id', self::TABELA . '.razaoSocial', self::TABELA . '.nomeFantasia',  self::TABELA . '.deleted_at', self::TABELA . '.endereco_id')->get();
+
+			return $lojas;
+		}
+		catch (\Exception $e) {
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		}
+	}
+
 	function todosComIds($ids = []) {
-		try {	
+		try {
 			$lojas = DB::table(self::TABELA)->where('deleted_at', NULL)->whereIn('id', $ids)->get();
 			$lojasObjects = [];
 			foreach ($lojas as $loja) {
@@ -186,9 +199,9 @@ class ColecaoLojaEmBDR implements ColecaoLoja
 
 		$loja = new Loja($row['id'], $row['razaoSocial'], $row['nomeFantasia'], $endereco);
 		return $loja->toArray();
-	}	
+	}
 
-    function contagem() {
+   function contagem() {
 		return DB::table(self::TABELA)->where('deleted_at', NULL)->count();
 	}
 

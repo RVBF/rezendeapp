@@ -18,7 +18,7 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 
 	function adicionar(&$obj) {
 		if($this->validarSetor($obj)){
-			try {	
+			try {
 
 				$id = DB::table(self::TABELA)->insertGetId(['titulo' => $obj->getTitulo(), 'descricao'=> $obj->getDescricao()]);
 
@@ -35,7 +35,7 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 
 	function remover($id) {
 		if($this->validarDeleteSetor($id)){
-			try {	
+			try {
 				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->update(['deleted_at'=> Carbon::now()->toDateTimeString()]);
 			}
 			catch (\Exception $e) {
@@ -62,7 +62,7 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 				throw new ColecaoException("Erro ao atualizar setor.", $e->getCode(), $e);
 			}
 		}
-		
+
 	}
 
 	function comId($id){
@@ -79,20 +79,19 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 	 * @inheritDoc
 	 */
 	function todos($limite = 0, $pulo = 0, $search = '') {
-		try {	
+		try {
 			$query = DB::table(self::TABELA)->select(self::TABELA . '.*')->where(self::TABELA . '.deleted_at', NULL);
+
 			if($search != '') {
 				$buscaCompleta = $search;
 				$palavras = explode(' ', $buscaCompleta);
-				
+
 				$query->where(function($query) use ($buscaCompleta){
 					$query->whereRaw(self::TABELA . '.id like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw(self::TABELA . '.titulo like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw(self::TABELA . '.descricao like "%' . $buscaCompleta . '%"');
-
 				});
-				
-				
+
 				if($query->count() == 0){
 					$query->where(function($query) use ($palavras){
 						foreach ($palavras as $key => $palavra) {
@@ -102,7 +101,7 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 								$query->orWhereRaw(self::TABELA . '.descricao like "%' . $palavra . '%"');
 							}
 						}
-						
+
 					});
 				}
 				$query->groupBy(self::TABELA.'.id');
@@ -122,16 +121,29 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 		}
 	}
 
+	function todosOpcoes() {
+		try {
+			$query = DB::table(self::TABELA)->selectRaw(self::TABELA . '.id, ' . self::TABELA . '.titulo, COUNT('.self::TABELA.'.id) as qtd')->where( self::TABELA . '.deleted_at', NULL);
+
+			$setores = $query->get();
+
+			return $setores;
+		}
+		catch (\Exception $e) {
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		}
+	}
+
 	function construirObjeto(array $row) {
 		$setor = new Setor($row['id'],$row['titulo'], $row['descricao']);
 
 		return $setor->toArray();
 	}
 
-    function contagem() {
+	 function contagem() {
 		return DB::table(self::TABELA)->count();
 	}
-	
+
 	private function validarSetor(&$obj) {
 		if(!is_string($obj->getTitulo()) and strlen($obj->getTitulo()) == 0) throw new ColecaoException('O campo título é obrigatório!');
 
@@ -149,10 +161,10 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 
 	private function validarDeleteSetor($id) {
 		$quantidadeSetor = DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->count();
-		
+
 		if($quantidadeSetor == 0) throw new ColecaoException('O setor selecionado para delete não foi encontrado');
 		if(DB::table(self::TABELA)->where('deleted_at', NULL)->count() == 1) throw new Exception("Não é possível excluir o setor quando há somente 1 setor cadastrado, porque é necesssário ao menos 1 setor cadastrado para que possa ter relação com outras depências do sistema.");
-		
+
 		return true;
 	}
 }
