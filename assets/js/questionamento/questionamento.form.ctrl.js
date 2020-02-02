@@ -58,7 +58,7 @@
 						});
 					}else{
 						_this.formulario.find('#msg').empty().removeClass('d-none').append(resposta.mensagem);
-						if(!resposta.status)toastr.error(resposta.mensagem);
+						if(!resposta.status)if(resposta != undefined && resposta.mensagem) toastr.error(resposta.mensagem);
 						if(_this.questionamentos.length == 0 & resposta.status) {
 							router.navigate('/checklist');
 							toastr.success(resposta.mensagem);
@@ -76,7 +76,7 @@
 
 			return opcoes;
 		};
-        
+
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
 			var dataLimitePa = moment(_this.dataLimitePa.getDate()).format('YYYY-MM-DD');
@@ -152,7 +152,7 @@
 				format : 'DD de MMMM de YYYY',
 				controls: true,
 				inline: true,
-				container: '.date-panel-pa',					
+				container: '.date-panel-pa',
 				text : {
 					title: 'Selecione a data',
 					cancel: 'Cancelar',
@@ -175,7 +175,7 @@
 				headers: true,
 				controls: true,
 				inline: true,
-				container: '.time-panel-pa',	
+				container: '.time-panel-pa',
 				text : {
 					title: 'Selecione a hora',
 					cancel: 'Cancelar',
@@ -191,7 +191,7 @@
 				format : 'DD de MMMM de YYYY',
 				controls: true,
 				inline: true,
-				container: '.date-panel-pe',					
+				container: '.date-panel-pe',
 				text : {
 					title: 'Selecione a data',
 					cancel: 'Cancelar',
@@ -214,7 +214,7 @@
 				headers: true,
 				controls: true,
 				inline: true,
-				container: '.time-panel-pe',	
+				container: '.time-panel-pe',
 				text : {
 					title: 'Selecione a hora',
 					cancel: 'Cancelar',
@@ -258,7 +258,7 @@
 				if(elemento.hasClass('d-none') && elemento.hasClass('desabilitado')) elemento.desabilitar(true);
 			});
 		};
-		
+
 		_this.iniciarFormularioModoCadastro = function iniciarFormularioModoCadastro() {
 			_this.popularColaboradores();
 			_this.buscarQuestionamentos();
@@ -318,27 +318,27 @@
 										html += '<i class="mdi mdi-information-outline white-text"></i>';
 										html += '</a>';
 								html += '</div>';
-								
+
 								html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2">';
 										html += '<a class="list-group-item list-group-item-action orange accent-4 subicon-dto element" data-toggle="tooltip" title="Nenhum arquivo selecionado.">';
 										html += '<i class="mdi mdi-microphone white-text"></i>';
 										html += '<input class="d-none form-control arquivos_audio tamanhoArquivosPadrao" type="file" name="pergunta_audio" id="pergunta_audio" accept="audio/mpeg,audio/x-pn-realaudio">';
 										html += '</a>';
 								html += '</div>';
-								
+
 								html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2">';
 										html += '<a class="list-group-item list-group-item-action orange accent-4 subicon-dto element" data-toggle="tooltip" title="Nenhum arquivo selecionado.">';
 										html += '<i class="mdi mdi-camera-outline white-text"></i>';
 										html += '<input class="d-none form-control arquivos_imagem tamanhoArquivosPadrao" type="file" ref="file"  name="pergunta_camera" id="pergunta_camera" accept="image/*" >';
 										html += '</a>';
 								html += '</div>';
-						
+
 								html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2">';
 									html += '<a class="list-group-item list-group-item-action  orange accent-4 subicon-dto element active" data-target="#comentarios">';
 									html += '<i class="mdi mdi-lead-pencil white-text"></i>';
 									html += '</a>';
 								html += '</div>';
-								
+
 								html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2">';
 									html += '<a class=" list-group-item list-group-item-action  orange accent-4 subicon-dto element" data-target="#secao_PA">';
 									html += '<span class="white-text">P.A.</span>';
@@ -357,8 +357,8 @@
 					html += '</div>';
 				html += '</div>';
 			html += '</div>';
-			
-					
+
+
 			_this.formulario.find('.perguntas').empty().append(html).promise().done(function () {
 				if(_this.questionamentos.length == 1){
 					$('body #botoes_execucao').append('<button type="submit" id="salvar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Salvar e Sair</button>');
@@ -406,15 +406,15 @@
 					reader.onload = function () {
 						_this.anexos.push({'nome': nomeArquivo,'arquivo': reader.result, 'tipo' : file.type});
 					};
-					
+
 					reader.readAsDataURL(file);
 				});
 
 				_this.formulario.find('.opcoes_questionamento').on('click', 'a', function (event) {
 					let elemento = $(this);
-					let destino = $(elemento.attr('data-target'));	
+					let destino = $(elemento.attr('data-target'));
 					let elementoAtivo = elemento.parents('.opcoes_questionamento').find('.active');
-					let destinoAnterior = $(elementoAtivo.attr('data-target'));	
+					let destinoAnterior = $(elementoAtivo.attr('data-target'));
 
  					if(destino.hasClass('d-none') && destino.hasClass('desabilitado')){
 						destino.removeClass('d-none');
@@ -434,7 +434,7 @@
 				_this.formulario.find('i').on('click', function (event) {
 					$(this).next("input[type='file']").trigger('click');
 				});
-		
+
 				// _this.formulario.find('input[type="file"]').on('change', function() {
 				// 	var val = $(this).val().split('\\');
 				// 	val = val[val.length -1];
@@ -464,7 +464,7 @@
 						$('.modal').find('#nome-categoria').html(_this.objetoAtual.checklist.titulo);
 						$('.modal').modal();
 
-						let destino = $(_this.formulario.find('.opcoes_questionamento').find('.active').attr('data-target'));	
+						let destino = $(_this.formulario.find('.opcoes_questionamento').find('.active').attr('data-target'));
 
 						if(destino.hasClass('d-none') && destino.hasClass('desabilitado')){
 							destino.removeClass('d-none');
@@ -488,9 +488,9 @@
 						html += '<i class="mdi mdi-checkbox-marked-circle-outline teal-text text-accent-4"></i>';
 						html += 'Terminar';
 						html += '</button>';
-	
+
 						$('body #botoes_execucao').find('#proximo').remove().promise().done(function(){
-							
+
 							if($('body #terminar').length ==0){
 								$('body #botoes_execucao').prepend(html).promise().done(function () {
 									$('body #terminar').on('click', _this.salvar);
@@ -563,7 +563,7 @@
 			});
 		};
 
-		_this.definirForm = function definirForm(status) {			
+		_this.definirForm = function definirForm(status) {
 			_this.formulario.submit(false);
 			_this.alterar = status;
 
@@ -577,13 +577,13 @@
 
 		// Desenha o objeto no formulário
 		_this.desenhar = function desenhar(obj) {
-		
+
 		};
 
 		_this.salvar = function salvar() {
 			_this.formulario.validate(criarOpcoesValidacao());
 		};
-		
+
 		_this.proximo = function proximo(){
 			_this.formulario.validate(criarOpcoesValidacao());
 		}

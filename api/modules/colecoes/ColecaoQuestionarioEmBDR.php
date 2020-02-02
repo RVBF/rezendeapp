@@ -16,7 +16,7 @@ class ColecaoQuestionarioEmBDR implements ColecaoQuestionario {
 
 	function adicionar(&$obj) {
 		if($this->validarQuestionario($obj)){
-			try {	
+			try {
 				$id = DB::table(self::TABELA)->insertGetId([
 					'titulo' => $obj->getTitulo(),
 					'descricao'=> $obj->getDescricao(),
@@ -34,7 +34,7 @@ class ColecaoQuestionarioEmBDR implements ColecaoQuestionario {
 
 	function remover($id) {
 		if($this->validarDeleteQuestionario($id)){
-			try {	
+			try {
 				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $id)->update(['deleted_at' => Carbon::now()->toDateTimeString()]);
 			}
 			catch (\Exception $e) {
@@ -57,7 +57,7 @@ class ColecaoQuestionarioEmBDR implements ColecaoQuestionario {
 				throw new ColecaoException("Erro ao atualizar Questionario.", $e->getCode(), $e);
 			}
 		}
-		
+
 	}
 
 	function comId($id){
@@ -73,7 +73,7 @@ class ColecaoQuestionarioEmBDR implements ColecaoQuestionario {
 	 * @inheritDoc
 	 */
 	function todos($limite = 0, $pulo = 0, $search = '') {
-		try {	
+		try {
 			$query = DB::table(self::TABELA)->select(self::TABELA . '.*')->where(self::TABELA .'.deleted_at', NULL);
 
 			if($search != '') {
@@ -86,8 +86,8 @@ class ColecaoQuestionarioEmBDR implements ColecaoQuestionario {
 					$query->orWhereRaw(self::TABELA . '.descricao like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw(self::TABELA . '.tipoQuestionario like "%' . $buscaCompleta . '%"');
 				});
-				
-				
+
+
 				if($query->count() == 0){
 					$query->where(function($query) use ($palavras){
 						foreach ($palavras as $key => $palavra) {
@@ -98,7 +98,7 @@ class ColecaoQuestionarioEmBDR implements ColecaoQuestionario {
 								$query->orWhereRaw(self::TABELA . '.tipoQuestionario like "%' . $palavra . '%"');
 							}
 						}
-						
+
 					});
 				}
 				$query->groupBy(self::TABELA.'.id');
@@ -118,8 +118,23 @@ class ColecaoQuestionarioEmBDR implements ColecaoQuestionario {
 		}
 	}
 
+	function todosOpcoes() {
+		try {
+			$query = DB::table(self::TABELA)
+							->selectRaw(self::TABELA . '.id, ' . self::TABELA . '.titulo, COUNT('.self::TABELA.'.id) as qtd')
+							->where(self::TABELA . '.deleted_at', NULL);
+
+			$questionarios = $query->get();
+
+			return $questionarios;
+		}
+		catch (\Exception $e) {
+			throw new ColecaoException($e->getMessage(), $e->getCode(), $e);
+		}
+	}
+
 	function todosComId($ids = []) {
-		try {	
+		try {
 			$tarefas = DB::table(self::TABELA)->where('deleted_at', NULL)->whereIn('id', $ids)->get();
 			$tarefasObjects = [];
 
@@ -140,7 +155,7 @@ class ColecaoQuestionarioEmBDR implements ColecaoQuestionario {
 			$row['id'],
 			$row['titulo'],
 			$row['descricao'],
-			$row['tipoQuestionario'], 
+			$row['tipoQuestionario'],
 			json_decode($row['formulario'])
 		);
 
@@ -150,7 +165,7 @@ class ColecaoQuestionarioEmBDR implements ColecaoQuestionario {
     function contagem() {
 		return DB::table(self::TABELA)->where('deleted_at', NULL)->count();
 	}
-	
+
 	private function validarQuestionario(&$obj) {
 		if(!is_string($obj->getTitulo()) and strlen($obj->getTitulo()) ==  0) throw new ColecaoException('O campo título é obrigatório.');
 

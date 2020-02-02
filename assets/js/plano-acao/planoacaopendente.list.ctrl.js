@@ -45,7 +45,7 @@
 			objeto.searching= true;
 			objeto.ordering= true;
 			objeto.searching = true;
-			objeto.searchDelay = 600;	
+			objeto.searchDelay = 600;
 			objeto.cadastrarLink = 'cadastrar_planoacao_link';
 			objeto.columnDefs = function (data){
 				var html = '';
@@ -77,7 +77,7 @@
 
 							for (const index in data.solucao.acoes) {
 								var acao =  data.solucao.acoes[index];
-	
+
 								html += acao.acao + ((parseInt(index)+1 == data.solucao.acoes.length) ? '.' : ',');
 							}
 						}
@@ -100,7 +100,7 @@
 									html += '<div class="col col-12 col-lg-3 col-md-3 col-sm-3 mb-0-dto">';
 										html += '<a href="anexos.html" class="anexos detalhes-dto"><i class="mdi mdi-paperclip orange-text"></i>ANEXOS</a>';
 									html += '</div>';
-								}	
+								}
 								if(data.status != 'Executado' ) {
 									html += '<div class="col col-12 col-lg-3 col-md-3 col-sm-3 mb-0-dto">';
 										html += '<p class="mb-0-dto">';
@@ -127,19 +127,19 @@
 					html += '</div>';
 				html += '</div>';
 
-				
+
 				html += '</div>';
-												
+
 				return html;
 			};
-			
+
 			objeto.rowsCallback = function(resposta){
 				$('.remover_setor_link').on('click', _this.remover);
 				$('.executar_pa').on('click', _this.executar);
 				$('.visualizar_pa').on('click', _this.visualizar);
 				$('.confirmar_responsabilidade').on('click', _this.confirmarResponsabilidade);
 				$('.devolver_responsabilidade').on('click', _this.devolverResponsabilidade);
-				
+
 				$('.anexos').on('click', function (event) {
 					event.preventDefault();
 					var objeto = _tabela.getObjetos()[$(this).parents('.listagem-padrao-item').index()];
@@ -193,7 +193,7 @@
 
 				}
 				else{
-					toastr.error(resposta.mensagem);
+					if(resposta != undefined && resposta.mensagem) toastr.error(resposta.mensagem);
 				}
 			});
 		}

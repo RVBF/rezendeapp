@@ -32,7 +32,7 @@
 				_this.formulario.desabilitar(true);
 
 				var jqXHR = servicoPlanoAcao.executar(obj);
-			
+
 				jqXHR.done(function(resposta) {
 					if(resposta.status){
 						router.navigate('/plano-acao');
@@ -40,7 +40,7 @@
 					}
 					else{
 						_this.formulario.find('#msg').empty().removeClass('d-none').append(resposta.mensagem);
-						toastr.error(resposta.mensagem);
+						if(resposta != undefined && resposta.mensagem) toastr.error(resposta.mensagem);
 					}
 				}).always(terminado).fail(window.erro);
 
@@ -53,7 +53,7 @@
 
 			return opcoes;
 		};
-        
+
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
 			return servicoPlanoAcao.criar(
@@ -112,7 +112,7 @@
 				reader.onload = function () {
 					_this.anexos.push({'nome': nomeArquivo,'arquivo': reader.result, 'tipo' : file.type});
 				};
-				
+
 				reader.readAsDataURL(file);
 			});
 
@@ -179,7 +179,7 @@
 		_this.salvar = function salvar() {
 			_this.formulario.validate(criarOpcoesValidacao());
 		};
-		
+
 		// Configura os eventos do formulário
 		_this.configurar = function configurar() {
 			_this.definirForm();

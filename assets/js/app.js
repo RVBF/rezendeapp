@@ -105,14 +105,16 @@ var app = {
       var resposta = requisicao.responseJSON;
 
       if (resposta != undefined && resposta.acessoNegado == true) {
-         app.acessoNegado = true;
-
          if (resposta.metodo == 'get') {
-            app.acessoNegado = false;
-            window.history.back();
+            if (!resposta.naoRedirecionar) {
+               app.acessoNegado = true;
+               window.history.back();
+            }
+
+            window.setTimeout(() => app.acessoNegado = false, 150);
          }
 
-         toastr.error('Acesso negado', undefined, { timeOut: 50000 });
+         toastr.error('Acesso negado');
       }
    });
 })(app, document, jQuery, toastr, window, BootstrapDialog);

@@ -47,7 +47,7 @@
 			objeto.searching= true;
 			objeto.ordering= true;
 			objeto.searching = true;
-			objeto.searchDelay = 600;	
+			objeto.searchDelay = 600;
 			objeto.cadastrarLink = 'cadastrar_pendencia_link';
 			objeto.columnDefs = function (data){
 				var html = '';
@@ -69,7 +69,7 @@
 
 						'<span class="info_checklist orange darken-4 btn-small">PA Pendente</span>';
 						'<span class="info_checklist grey darken-1 btn-small">Pendência Pendente</span>';
-						
+
 						// html += '<p><i class="mdi mdi-map-marker-radius orange-text text-accent-4"></i> <strong>' + data.loja.razaoSocial + '</strong> ' + data.loja.nomeFantasia + '</p>';
 						if(data.status != 'Executado'){
 							html += '<a href="#" class="executar_pe"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.descricao + '</strong></p></a>';
@@ -103,9 +103,9 @@
 					html += '</div>';
 				html += '</div>';
 
-				
+
 				html += '</div>';
-												
+
 				return html;
 			};
 			objeto.rowsCallback = function(resposta){
@@ -137,7 +137,7 @@
 
 				}
 				else{
-					toastr.error(resposta.mensagem);
+					if(resposta != undefined && resposta.mensagem) toastr.error(resposta.mensagem);
 				}
 			});
 		}

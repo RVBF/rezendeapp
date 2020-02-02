@@ -40,20 +40,21 @@ class ControladoraColaborador {
 	function todos() {
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
+				throw new Exception("Erro ao acessar página.");
 			}
 
 			$dtr = new DataTablesRequest($this->params);
 			$contagem = 0;
 			$objetos = [];
-			$erro = null;	
+         $erro = null;
 
-			$objetos = $this->colecaoColaborador->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');	
+			$objetos = $this->colecaoColaborador->todos($dtr->length, $dtr->start, (isset($dtr->search->value)) ? $dtr->search->value : '');
 			$contagem = $this->colecaoUsuario->contagem();
 		}
 		catch (\Exception $e ) {
-			throw new Exception("Erro ao listar colaboradores.");
-		}
+			throw new Exception('Erro ao listar colaboradores.');
+      }
+
 		$conteudo = new DataTablesResponse(
 			$contagem,
 			count($objetos), //count($objetos ),
@@ -64,28 +65,28 @@ class ControladoraColaborador {
 
 		return  RTTI::getAttributes($conteudo, RTTI::allFlags());
     }
-    
+
     function adicionar() {
 		DB::beginTransaction();
 
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
+				throw new Exception("Erro ao acessar página.");
 			}
 
 			// if(!$this->servicoLogin->eAdministrador()){
 			// 	throw new Exception("Usuário sem permissão para executar ação.");
 			// }
-			
+
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'nome', 'sobrenome', 'email', 'usuario', 'lojas', 'setor'], $this->params);
 			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
 				throw new Exception($msg);
-			}			
+			}
 
 			$setor = new Setor(); $setor->fromArray($this->colecaoSetor->comId($this->params['setor']));
-	
+
 			if(!isset($setor) and !($setor instanceof Setor)){
 				throw new Exception("Setor não encontrada na base de dados.");
 			}
@@ -95,19 +96,19 @@ class ControladoraColaborador {
 			if(!isset($lojas) and !($lojas instanceof Loja)){
 				throw new Exception("Loja não encontrada na base de dados.");
 			}
-			$usuario = new Usuario( 
-				0, 
-				\ParamUtil::value($this->params['usuario'], 'login'), 
+			$usuario = new Usuario(
+				0,
+				\ParamUtil::value($this->params['usuario'], 'login'),
 				\ParamUtil::value($this->params['usuario'], 'senha')
 			);
 
 			$this->colecaoUsuario->adicionar($usuario);
 
 			$colaborador = new Colaborador(
-				0, 
-				\ParamUtil::value($this->params, 'nome'), 
-				\ParamUtil::value($this->params, 'sobrenome'), 
-				\ParamUtil::value($this->params, 'email'), 
+				0,
+				\ParamUtil::value($this->params, 'nome'),
+				\ParamUtil::value($this->params, 'sobrenome'),
+				\ParamUtil::value($this->params, 'email'),
 				$usuario,
 				$setor,
 				$lojas
@@ -129,16 +130,16 @@ class ControladoraColaborador {
 				$this->colecaoAnexo->adicionar($avatar);
 				$colaborador->setAvatar($avatar);
 				$this->colecaoColaborador->atualizarAvatar($colaborador);
-	
+
 			}
 
 			DB::commit();
 
-			$resposta = ['status' => true, 'mensagem'=> 'Usuário cadastrado com sucesso.']; 
+			$resposta = ['status' => true, 'mensagem'=> 'Usuário cadastrado com sucesso.'];
 		}
 		catch (\Exception $e) {
 			DB::rollback();
-			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()];
 		}
 
 		return $resposta;
@@ -149,20 +150,20 @@ class ControladoraColaborador {
 
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
+				throw new Exception("Erro ao acessar página.");
 			}
 
 			// if(!$this->servicoLogin->eAdministrador()){
 			// 	throw new Exception("Usuário sem permissão para executar ação.");
 			// }
-			
+
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'nome', 'sobrenome', 'email', 'usuario', 'lojas', 'setor'], $this->params);
 			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
 				throw new Exception($msg);
-			}			
-			
+			}
+
 			$setor = new Setor(); $setor->fromArray($this->colecaoSetor->comId($this->params['setor']));
 			if(!isset($setor) and !($setor instanceof Setor)){
 				throw new Exception("Setor não encontrada na base de dados.");
@@ -175,14 +176,14 @@ class ControladoraColaborador {
             }
             $colaborador  = new Colaborador(); $colaborador->fromArray($this->colecaoColaborador->comId(\ParamUtil::value($this->params, 'id')));
             if(!isset($colaborador) and !($colaborador instanceof Colaborador)) throw new Exception("Colaborador não encontrado!");
-		  
+
 			$usuario = new Usuario(); $usuario->fromArray($colaborador->getUsuario());
-			
+
 			$usuario->setLogin(\ParamUtil::value($this->params['usuario'], 'login'));
             $usuario->setSenha(\ParamUtil::value($this->params['usuario'], 'senha'));
-            $this->colecaoUsuario->atualizar($usuario); 
+            $this->colecaoUsuario->atualizar($usuario);
 
-            $colaborador->setNome(\ParamUtil::value($this->params, 'nome'));           
+            $colaborador->setNome(\ParamUtil::value($this->params, 'nome'));
             $colaborador->setSobrenome(\ParamUtil::value($this->params, 'sobrenome'));
             $colaborador->setEmail(\ParamUtil::value($this->params, 'email'));
             $colaborador->setUsuario($usuario);
@@ -214,11 +215,11 @@ class ControladoraColaborador {
 
 			DB::commit();
 
-			$resposta = ['status' => true, 'mensagem'=> 'Usuário cadastrado com sucesso.']; 
+			$resposta = ['status' => true, 'mensagem'=> 'Usuário cadastrado com sucesso.'];
 		}
 		catch (\Exception $e) {
 			DB::rollback();
-			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()];
 		}
 
 		return $resposta;
@@ -228,22 +229,22 @@ class ControladoraColaborador {
 		DB::beginTransaction();
 
 		try {
-			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
-			
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");
+
 			if (!is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
 			$colaborador = new Colaborador(); $colaborador->fromArray($this->colecaoColaborador->comId($id));
 			if(!($colaborador instanceof Colaborador)) throw new Exception("Colaborador não encontrado!");
 			$usuario = new Usuario(); $usuario->fromArray($colaborador->getUsuario());
 			$this->colecaoUsuario->remover($usuario->getId());
 			$this->colecaoColaborador->remover($id);
-			
+
 			DB::commit();
 
-			$resposta = ['status' => true, 'mensagem'=> 'Usuário removido com sucesso.']; 
+			$resposta = ['status' => true, 'mensagem'=> 'Usuário removido com sucesso.'];
 		}
 		catch (\Exception $e) {
 			DB::rollback();
-			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()];
 		}
 
 		return $resposta;
@@ -251,17 +252,17 @@ class ControladoraColaborador {
 
 	function comId($id) {
 		try {
-			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
-			
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");
+
 			if (! is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
 
 			$usuario = new Colaborador(); $usuario->fromArray($this->colecaoColaborador->comId($id));
-		
-			$resposta = ['conteudo'=> $usuario->toArray(), 'status' => true]; 
+
+			$resposta = ['conteudo'=> $usuario->toArray(), 'status' => true];
 		}
 		catch (\Exception $e) {
 			DB::rollback();
-			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()];
 		}
 
 		return $resposta;
@@ -271,15 +272,15 @@ class ControladoraColaborador {
 		DB::beginTransaction();
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
+				throw new Exception("Erro ao acessar página.");
 			}
-			
+
 			$inexistentes = \ArrayUtil::nonExistingKeys(['senha', 'novaSenha', 'confirmacaoSenha'], $this->params);
 			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
 
 				throw new Exception($msg);
-			}	
+			}
 			$usuario = new Usuario(); $usuario->fromArray($this->colecaoUsuario->comId($this->servicoLogin->getIdUsuario()));
 			if(empty($usuario)) throw new Exception("Usuário não encontrado.");
 
@@ -290,15 +291,14 @@ class ControladoraColaborador {
 				\ParamUtil::value($this->params, 'confirmacaoSenha')
 			);
 
-			$resposta = ['status' => true, 'mensagem'=> 'Senha atualizada com sucesso.']; 
+			$resposta = ['status' => true, 'mensagem'=> 'Senha atualizada com sucesso.'];
 		}
 		catch (\Exception $e) {
 			DB::rollback();
-			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()];
 		}
 
 		return $resposta;
 	}
 }
 ?>
-				

@@ -32,7 +32,7 @@
 				_this.formulario.desabilitar(true);
 
 				var jqXHR = servicoPendencia.executar(obj.id);
-			
+
 				jqXHR.done(function(resposta) {
 					if(resposta.status){
 						router.navigate('/pendencia');
@@ -40,7 +40,7 @@
 					}
 					else{
 						_this.formulario.find('#msg').empty().removeClass('d-none').append(resposta.mensagem);
-						toastr.error(resposta.mensagem);
+						if(resposta != undefined && resposta.mensagem) toastr.error(resposta.mensagem);
 					}
 				}).always(terminado).fail(window.erro);
 
@@ -53,7 +53,7 @@
 
 			return opcoes;
 		};
-        
+
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
 			return servicoPendencia.criar(
@@ -118,7 +118,7 @@
 		_this.salvar = function salvar() {
 			_this.formulario.validate(criarOpcoesValidacao());
 		};
-		
+
 		// Configura os eventos do formulário
 		_this.configurar = function configurar() {
 			_this.definirForm();

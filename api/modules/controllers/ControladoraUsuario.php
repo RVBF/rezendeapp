@@ -80,7 +80,27 @@ class ControladoraUsuario {
 		);
 
 		return  RTTI::getAttributes($conteudo, RTTI::allFlags());
-   }
+	}
+
+	function todosOpcoes() {
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");
+			}
+
+			$resposta['contagem'] = 0;
+			$resposta['objetos'] = [];
+			$resposta['erro'] = null;
+			$resposta['data'] = $this->colecaoUsuario->todosOpcoes();
+			$resposta['contagem'] = $this->colecaoUsuario->contagem();
+		}
+		catch (\Exception $e )
+		{
+			throw new Exception($e->getMessage());
+		}
+
+		return $resposta;
+	}
 
    function remover($id) {
 		DB::beginTransaction();

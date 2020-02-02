@@ -19,7 +19,7 @@ class ControladoraQuestionario {
 	private $colecaoQuestionario;
 	private $colecaoLoja;
 	private $servicoLogin;
-	
+
 	function __construct($params,  Sessao $sessao) {
 		$this->servicoLogin = new ServicoLogin($sessao);
 		$this->params = $params;
@@ -32,22 +32,23 @@ class ControladoraQuestionario {
 		try
 		{
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
-            }
-            
+				throw new Exception("Erro ao acessar página.");
+			}
+
 			$dtr = new DataTablesRequest($this->params);
 
 			$contagem = 0;
 			$objetos = [];
 			$erro = null;
 
-            $objetos = $this->colecaoQuestionario->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');
+			$objetos = $this->colecaoQuestionario->todos($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '');
 			$contagem = $this->colecaoQuestionario->contagem();
 		}
 		catch (\Exception $e )
 		{
 			throw new Exception("Erro ao listar questionário.");
 		}
+
 		$conteudo = new DataTablesResponse(
 			$contagem,
 			count($objetos), //count($objetos ),
@@ -59,12 +60,32 @@ class ControladoraQuestionario {
 		return  RTTI::getAttributes($conteudo, RTTI::allFlags());
 	}
 
+	function todosOpcoes() {
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
+				throw new Exception("Erro ao acessar página.");
+			}
+
+			$resposta['contagem'] = 0;
+			$resposta['objetos'] = [];
+			$resposta['erro'] = null;
+			$resposta['data'] = $this->colecaoQuestionario->todosOpcoes();
+			$resposta['contagem'] = $this->colecaoQuestionario->contagem();
+		}
+		catch (\Exception $e )
+		{
+			throw new Exception($e->getMessage());
+		}
+
+		return $resposta;
+	}
+
 	function adicionar() {
 		DB::beginTransaction();
 
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
+				throw new Exception("Erro ao acessar página.");
 			}
 
 			// if(!$this->servicoLogin->eAdministrador()){
@@ -79,6 +100,7 @@ class ControladoraQuestionario {
 
 				throw new Exception($msg);
 			}
+
 			$formulario = json_encode($this->params['configuracao']);
 
 			$questionario = new Questionario(
@@ -91,7 +113,7 @@ class ControladoraQuestionario {
 
 			$this->colecaoQuestionario->adicionar($questionario);
 
-			$resposta = ['status' => true, 'mensagem'=> 'Questionario cadastrado com sucesso.']; 
+			$resposta = ['status' => true, 'mensagem'=> 'Questionario cadastrado com sucesso.'];
 
 			DB::commit();
 
@@ -99,18 +121,17 @@ class ControladoraQuestionario {
 		catch (\Exception $e) {
 			DB::rollback();
 
-			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()];
 		}
 
 		return $resposta;
 	}
 
-
 	function atualizar() {
 		DB::beginTransaction();
 
 		try {
-			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false)				throw new Exception("Erro ao acessar página.");				
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false)				throw new Exception("Erro ao acessar página.");
 
 			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'titulo','descricao','configuracao'], $this->params);
 			$resposta = [];
@@ -129,7 +150,7 @@ class ControladoraQuestionario {
 
 			$this->colecaoQuestionario->atualizar($questionario);
 
-			$resposta = ['status' => true, 'mensagem'=> 'Questionario atualizado com sucesso.']; 
+			$resposta = ['status' => true, 'mensagem'=> 'Questionario atualizado com sucesso.'];
 
 			DB::commit();
 
@@ -137,25 +158,25 @@ class ControladoraQuestionario {
 		catch (\Exception $e) {
 			DB::rollback();
 
-			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()];
 		}
 
 		return $resposta;
 	}
-	
+
 	function comId($id){
 		try {
-			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");				
-			
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");
+
 			if (! is_numeric($id)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
 
 			$questionario = new Questionario(); $questionario->fromArray($this->colecaoQuestionario->comId($id));
-		
-			$resposta = ['conteudo'=> $questionario->toArray(), 'status' => true]; 
+
+			$resposta = ['conteudo'=> $questionario->toArray(), 'status' => true];
 		}
 		catch (\Exception $e) {
 			DB::rollback();
-			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=>  $e->getMessage()];
 		}
 
 		return $resposta;
@@ -166,18 +187,18 @@ class ControladoraQuestionario {
 
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
-				throw new Exception("Erro ao acessar página.");				
-			}	
+				throw new Exception("Erro ao acessar página.");
+			}
 			$status = $this->colecaoQuestionario->remover($id);
-			
-			$resposta = ['status' => true, 'mensagem'=> 'Questionário removido com sucesso.']; 
+
+			$resposta = ['status' => true, 'mensagem'=> 'Questionário removido com sucesso.'];
 			DB::commit();
 
 		}
 		catch (\Exception $e) {
 			DB::rollback();
 
-			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()]; 
+			$resposta = ['status' => false, 'mensagem'=> $e->getMessage()];
 		}
 
 		return $resposta;

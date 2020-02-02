@@ -30,9 +30,9 @@
 				var terminado = function() {
 					_this.formulario.desabilitar(false);
 				};
-				
+
 				_this.formulario.desabilitar(true);
-			
+
 				var jqXHR = _this.alterar ? servicoPlanoAcao.atualizar(obj) : servicoPlanoAcao.adicionar(obj);
 				jqXHR.done(function(resposta) {
 					if(resposta.status){
@@ -42,7 +42,7 @@
 					}
 					else{
 						$('body #msg').empty().removeClass('d-none').append(resposta.mensagem);
-						toastr.error(resposta.mensagem);
+						if(resposta != undefined && resposta.mensagem) toastr.error(resposta.mensagem);
 					}
 				}).fail(window.erro).always(terminado);
 
@@ -84,7 +84,7 @@
 				});
 			}
 
-			
+
 			return servicoPlanoAcao.criar(
 				$('#id').val(),
 				$('#nao-conformidade-pa').val(),
@@ -101,7 +101,7 @@
 				format : 'DD de MMMM de YYYY',
 				controls: true,
 				inline: true,
-				container: '.date-panel-pa',					
+				container: '.date-panel-pa',
 				text : {
 					title: 'Selecione a data',
 					cancel: 'Cancelar',
@@ -118,13 +118,13 @@
 				months : ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
 				monthsShort : ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
 			});
-	
+
 			_this.horaLimite = new Picker($('#hora_limitepa').get()[0], {
 					format: 'HH:mm',
 					headers: true,
 					controls: true,
 					inline: true,
-					container: '.time-panel-pa',	
+					container: '.time-panel-pa',
 					text : {
 						title: 'Selecione a hora',
 						cancel: 'Cancelar',
@@ -184,7 +184,7 @@
 				html += '</div>';
 
 				_this.formulario.find('.acoes').append(html);
-				
+
 				if(window.location.href.search('editar') != -1){
 					$('.remover_acao:last').on('click', function () {
 						$(this).parents('.acao').remove();
@@ -204,7 +204,7 @@
 			if(window.location.href.search('visualizar') != -1) {
 				_this.formulario.desabilitar(true);
 				_this.formulario.find('#botoes').desabilitar(false);
-				
+
 				_this.formulario.find('#botoes').prepend(' <div class="col col-md-2 col-4 col-sm-2 col-lg-2"><button type="submit" id="remover" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-delete red-text text-darken-4"></i>Remover</button></div>').promise().done(function(){
                     $('#botoes').find('#remover').on('click', _this.remover);
 				});
@@ -216,7 +216,7 @@
 						});
 					});
 				}
-			
+
 				$('.card-title').html('<h3>Visualizar PA</h3>');
 			}
 			else if(window.location.href.search('editar') != -1) {
@@ -291,7 +291,7 @@
 			var  jqXHR = servicoUsuario.todos();
 			jqXHR.done(sucesso).fail(erro);
 		};
-		
+
 		_this.adiconarAcao = function adiconarAcao(){
 			var quantidade = $(this).parents('form').find('.acoes').find('.acao').length + 1;
 			var html  = '';
@@ -335,7 +335,7 @@
 
 								}
 								else{
-									toastr.error(resposta.mensagem);
+									if(resposta != undefined && resposta.mensagem) toastr.error(resposta.mensagem);
 
 									dialog.close();
 								}
@@ -351,7 +351,7 @@
 				]
 			});
 		};
-		
+
 		// Configura os eventos do formulário
 		_this.configurar = function configurar(status = false) {
 			_this.definirForm(status);

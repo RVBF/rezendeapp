@@ -17,10 +17,10 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 	function __construct(){}
 
 	function adicionar(&$obj) {
-		try {	
+		try {
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-			
-			$id = DB::table(self::TABELA)->insertGetId([ 
+
+			$id = DB::table(self::TABELA)->insertGetId([
 				'titulo' => $obj->getTitulo(),
 				'status' => $obj->getStatus(),
 				'tipoChecklist' => $obj->getTipoChecklist(),
@@ -44,7 +44,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			}
 
 			DB::table(self::TABELA_RELACIONAL)->insert($questionariosInserts);
-			
+
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
 
@@ -57,7 +57,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 
 	function remover($id) {
 		if($this->validarRemocaoChecklist($id)){
-			try {	
+			try {
 				DB::table(self::TABELA)->where('deleted_at',NULL)->where('id', $id)->update(['deleted_at' => Carbon::now()->toDateTimeString()]);
 			}
 			catch (\Exception $e) {
@@ -68,7 +68,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 	}
 
 	function atualizar(&$obj) {
-		try {	
+		try {
 			$filds = [
 				'titulo' => $obj->getTitulo(),
 				'status' => $obj->getStatus(),
@@ -91,7 +91,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 	}
 
 	function comId($id){
-		try {	
+		try {
 			return (DB::table(self::TABELA)->where('id', $id)->count() >0 ) ? $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->first()) : [];
 		}
 		catch (\Exception $e){
@@ -99,8 +99,8 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 		}
 	}
 
-	function todosComLojaIds($limite = 0, $pulo = 10, $search = '', $idsLojas = []){
-		try {	
+	function todosComLojaIds($limite = 10, $pulo = 0, $search = '', $idsLojas = []){
+		try {
 
 			$query = DB::table(self::TABELA)->selectRaw(self::TABELA . '.*, COUNT('.self::TABELA.'.id) as qtd')->where(self::TABELA . '.deleted_at',NULL)->whereIn(self::TABELA. '.loja_id',$idsLojas);
 			if($search != '') {
@@ -134,7 +134,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 
 				});
 
-			
+
 				if($query->count() == 0){
 					$query->where(function($query) use ($palavras){
 						foreach ($palavras as $key => $palavra) {
@@ -142,7 +142,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 								$query->whereRaw(self::TABELA . '.id like "%' . $palavra . '%"');
 								$query->orWhereRaw(self::TABELA . '.status like "%' . $palavra . '%"');
 								$query->orWhereRaw(self::TABELA . '.tipoChecklist like "%' . $palavra . '%"');
-			
+
 								$query->orWhereRaw(self::TABELA . '.titulo like "%' . $palavra . '%"');
 								$query->orWhereRaw(self::TABELA . '.descricao like "%' . $palavra . '%"');
 								$query->orWhereRaw(ColecaoLojaEmBDR::TABELA . '.razaoSocial like "%' . $palavra . '%"');
@@ -157,16 +157,16 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 								$query->orWhereRaw('DATE_FORMAT('. self::TABELA .'.data_cadastro, "%d/%m/%Y") like "%' . $palavra . '%"');
 							}
 						}
-						
+
 					});
 				}
 				$query->groupBy(self::TABELA.'.id');
 			}
-			
+
 			$checklists = $query->groupBy(self::TABELA . '.id', self::TABELA . '.status', self::TABELA . '.titulo', self::TABELA . '.descricao', self::TABELA . '.data_limite', self::TABELA . '.tipoChecklist', self::TABELA . '.data_cadastro', self::TABELA . '.encerrado', self::TABELA . '.questionador_id', self::TABELA . '.responsavel_id', self::TABELA . '.setor_id', self::TABELA . '.checklist_id', self::TABELA . '.loja_id')
 								->orderByRaw(self::TABELA . '.status = "' . StatusChecklistEnumerado::EXECUTADO . '" ASC , '. self::TABELA.'.data_limite ASC')
-								->offset($limite)
-								->limit($pulo)
+								->offset($pulo)
+								->limit($limite)
 								->get();
 
 			$checklistsObjects = [];
@@ -177,13 +177,13 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 
 			return $checklistsObjects;
 		}
-		catch (\Exception $e) {	
+		catch (\Exception $e) {
 			throw new ColecaoException("Erro ao listar checklists.", $e->getCode(), $e);
 		}
 	}
-	
+
 	function todos($limite = 0, $pulo = 0) {
-		try {	
+		try {
 			$checklist = DB::table(self::TABELA)->where('deleted_at',NULL)->offset($limite)->limit($pulo)->get();
 			$checklistObjects = [];
 
@@ -197,9 +197,9 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			throw new ColecaoException("Erro ao listar checklists.", $e->getCode(), $e);
 		}
 	}
-	
+
 	function listagemTemporalcomLojasIds($pageHome = 0, $pageLength = 10,$search = '', $idsLojas = []){
-		try {	
+		try {
 			$checklists = DB::table(self::TABELA)->where('deleted_at',NULL)->whereIn('loja_id',$idsLojas)->where('status',StatusChecklistEnumerado::AGUARDANDO_EXECUCAO)->orderBy('data_limite', 'ASC')->offset($pageHome)->limit($pageLength)->get();
 
 			$checklistsObjects = [];
@@ -213,9 +213,9 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			throw new ColecaoException("Erro ao listar checklists.", $e->getCode(), $e);
 		}
 	}
-	
+
 	function todosComId($ids = []) {
-		try {	
+		try {
 			$checklists = DB::table(self::TABELA)->where('deleted_at',NULL)->whereIn('id', $ids)->get();
 			$checklistsObjects = [];
 
@@ -235,40 +235,40 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 		$setor = ($row['setor_id'] > 0) ? Dice::instance()->create('ColecaoSetor')->comId($row['setor_id']) : '';
 		$loja = ($row['loja_id'] > 0) ? Dice::instance()->create('ColecaoLoja')->comId($row['loja_id']) : '';
 		$questionador = ($row['questionador_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comUsuarioId($row['questionador_id']) : '';
-		$responsavel = ($row['responsavel_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comUsuarioId($row['responsavel_id']) : '';		
+		$responsavel = ($row['responsavel_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comUsuarioId($row['responsavel_id']) : '';
 		$questionamentos = ($row['id'] > 0) ? Dice::instance()->create('ColecaoQuestionamento')->questionamentosComChecklistId($row['id']) : '';
 
 
 		$checklist = new Checklist(
 			$row['id'],
-			$row['status'], 
+			$row['status'],
 			$row['titulo'],
-			$row['descricao'], 
-			$row['data_limite'], 
-			$row['data_cadastro'], 			
-			$row['tipoChecklist'], 			
+			$row['descricao'],
+			$row['data_limite'],
+			$row['data_cadastro'],
+			$row['tipoChecklist'],
 			$setor,
 			$loja,
-			$questionador, 
+			$questionador,
 			$responsavel,
 			null,
 			$questionamentos
 		);
 
 		return $checklist->toArray();
-	}	
+	}
 
     function contagem($idsLojas = []) {
 		return (count($idsLojas) > 0) ?  DB::table(self::TABELA)->where('deleted_at',NULL)->whereIn('loja_id', $idsLojas)->count() : DB::table(self::TABELA)->where('deleted_at',NULL)->count();
 	}
 
 	function temPendencia($idChecklist = 0){
-		try {	
+		try {
 			$questionamentos = Dice::instance()->create('ColecaoQuestionamento')->questionamentosComChecklistId($idChecklist);
 
 			foreach($questionamentos as $questionamento){
 				$questionamentoAtual = new Questionamento(); $questionamentoAtual->fromArray($questionamento);
-				
+
 				if($questionamentoAtual->getStatus() != TipoQuestionamentoEnumerado::RESPONDIDO) {
 					return true;
 				}
@@ -276,7 +276,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 
 			foreach($questionamentos as $questionamento){
 				$questionamentoAtual = new Questionamento(); $questionamentoAtual->fromArray($questionamento);
-				
+
 				if($questionamentoAtual->getPlanoAcao()){
 					$planoAcao = new PlanoAcao(); $planoAcao->fromArray($questionamentoAtual->getPlanoAcao());
 
@@ -288,7 +288,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 
 			foreach($questionamentos as $questionamento){
 				$questionamentoAtual = new Questionamento(); $questionamentoAtual->fromArray($questionamento);
-				
+
 				if($questionamentoAtual->getPendencia()){
 
 					$pendencia = new Pendencia(); $pendencia->fromArray($questionamentoAtual->getPendencia());
@@ -308,7 +308,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 
 	private function validarChecklist(&$obj) {
 		// if(!is_string($obj->getTitulo())) throw new ColecaoException('Valor inválido para titulo.');
-		
+
 		// if(!is_string($obj->getDescricao())) throw new ColecaoException('Valor inválido para a descrição.');
 
 		// if($obj->getQuestionador() instanceof Usuario){
@@ -316,18 +316,18 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 
 		// 	if($quantidade == 0) throw new ColecaoException('O usuário questionador não foi encontrado na base de dados.');
 		// }
-		
+
 
 		// $quantidade = DB::table(ColecaoSetorEmBDR::TABELA)->where('id', $obj->getSetor()->getId())->count();
 
 		// if($quantidade == 0)throw new ColecaoException('Setor não foi encontrado na base de dados.');
 
 		// if(strlen($obj->getTitulo()) <= Checklist::TAM_TITULO_MIM && strlen($obj->getTitulo()) > Checklist::TAM_TITULO_MAX) throw new ColecaoException('O título deve conter no mínimo '. Checklist::TAM_TITULO_MIM . ' e no máximo '. Checklist::TAM_TITULO_MAX . '.');
-		
+
 		// if(strlen($obj->getdescricao()) > 255 and $obj->getdescricao() <> '') throw new ColecaoException('A descrição  deve conter no máximo '. 255 . ' caracteres.');
 
 		// $quantidade = DB::table(self::TABELA)->whereRaw('titulo like  "%'. $obj->getTitulo() . '%"')->where('setor_id', $obj->getSetor()->getId())->where(self::TABELA . '.id', '<>', $obj->getId())->count();
-		
+
 		// if($quantidade > 0){
 		// 	throw new ColecaoException('Já exite uma tarefa cadastrada com esse título.');
 		// }
@@ -335,7 +335,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 		// if($obj->getDataLimite() instanceof Carbon){
 		// 	if($obj->getDataLimite() < Carbon::now() and $obj->getId() == 0) throw new Exception("A data Limite deve ser maior que a atual.");
 		// }
-		
+
 		return true;
 	}
 
@@ -347,7 +347,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 	}
 
 	function contagemPorLoja(){
-		try {	
+		try {
 			$query = DB::table(self::TABELA)
 											->selectRAW('l.nomeFantasia as Loja, COUNT('. self::TABELA . '.id) as Quantidade')
 											->where(self::TABELA . '.deleted_at',NULL)

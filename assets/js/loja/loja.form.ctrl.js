@@ -95,8 +95,8 @@
                }
                else {
                   terminado();
-                  $('body #msg').empty().removeClass('d-none').append(resposta.mensagem).focus();
-                  toastr.error(resposta.mensagem);
+                  if (resposta != undefined && resposta.mensagem) $('body #msg').empty().removeClass('d-none').append(resposta.mensagem).focus();
+                  if (resposta != undefined && resposta.mensagem) toastr.error(resposta.mensagem);
                }
 
             }).fail(window.erro).always(terminado);
@@ -227,7 +227,7 @@
                         dialog.close();
                      }
                      else {
-                        toastr.error(resposta.mensagem);
+                        if (resposta != undefined && resposta.mensagem) toastr.error(resposta.mensagem);
 
                         dialog.close();
                      }
