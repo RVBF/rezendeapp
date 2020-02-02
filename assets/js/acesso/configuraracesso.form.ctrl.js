@@ -12,6 +12,7 @@
 
       _this.alterar = false;
       _this.arvoreDeAcessos = $('#arvoreDeAcessos');
+      _this.campoDeBusca = $('#campoDeBusca');
       _this.botaoSubmissao = $('#pronto');
       _this.acessos = null;
       _this.recursos = null;
@@ -97,7 +98,7 @@
          };
 
          var configuracoes = {
-            plugins: ['checkbox'],
+            plugins: ['checkbox', 'search'],
             core: {
                data: nohs,
                multiple: true,
@@ -111,6 +112,14 @@
          };
 
          _this.arvoreDeAcessos.on('select_node.jstree', aoSelecionar).on('deselect_node.jstree', aoDesselecionar).jstree(configuracoes);
+
+         var esperarEBuscar = false;
+
+         _this.campoDeBusca.keyup(function () {
+            if (esperarEBuscar) window.clearTimeout(esperarEBuscar);
+
+            esperarEBuscar = window.setTimeout(() => _this.arvoreDeAcessos.jstree(true).search(_this.campoDeBusca.val()), 250);
+         });
       };
 
       _this.salvar = function salvar() {
