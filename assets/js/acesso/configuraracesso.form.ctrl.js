@@ -48,6 +48,20 @@
 
          var nohs = [];
 
+         var traduzirClasseParaExibicao = function (modelNome) {
+            let nomesMapa = {
+               'Usuario': 'Usuário',
+               'GrupoDeUsuario': 'Grupo de usuários',
+               'Questionario': 'Questionário'
+            };
+
+            var nomeTraduzido = modelNome;
+
+            if (nomesMapa[modelNome] != undefined) nomeTraduzido = nomesMapa[modelNome];
+
+            return nomeTraduzido;
+         };
+
          $.each(modelsComRecursos, function (modelNome, recursos) {
             var nohsDeRecursos = [];
 
@@ -62,7 +76,7 @@
 
             nohs.push({
                id: modelNome,
-               text: modelNome,
+               text: traduzirClasseParaExibicao(modelNome),
                state: { opened: false },
                children: nohsDeRecursos,
                icon: false

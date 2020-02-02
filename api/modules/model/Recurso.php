@@ -167,17 +167,17 @@ class Recurso {
             ['id'=> 48, 'caminho'=> '/usuario', 'metodo'=> 'delete']
          ]],
 
-         ['id'=> 40, 'nome'=> 'Visualizar Grupos de Usuário', 'model'=> 'GrupoDeUsuario', 'rotas'=> [
+         ['id'=> 40, 'nome'=> 'Visualizar Grupos de Usuários', 'model'=> 'GrupoDeUsuario', 'rotas'=> [
             ['id'=> 49, 'caminho'=> '/grupo-usuario', 'metodo'=> 'get'],
             ['id'=> 50, 'caminho'=> '/grupo-usuario/{id}', 'metodo'=> 'get']
          ]],
-         ['id'=> 41, 'nome'=> 'Cadastrar Grupos de Usuário', 'model'=> 'GrupoDeUsuario', 'rotas'=> [
+         ['id'=> 41, 'nome'=> 'Cadastrar Grupos de Usuários', 'model'=> 'GrupoDeUsuario', 'rotas'=> [
             ['id'=> 51, 'caminho'=> '/grupo-usuario', 'metodo'=> 'post']
          ]],
-         ['id'=> 42, 'nome'=> 'Editar Grupos de Usuário', 'model'=> 'GrupoDeUsuario', 'rotas'=> [
+         ['id'=> 42, 'nome'=> 'Editar Grupos de Usuários', 'model'=> 'GrupoDeUsuario', 'rotas'=> [
             ['id'=> 52, 'caminho'=> '/grupo-usuario', 'metodo'=> 'put']
          ]],
-         ['id'=> 43, 'nome'=> 'Remover Grupos de Usuário', 'model'=> 'GrupoDeUsuario', 'rotas'=> [
+         ['id'=> 43, 'nome'=> 'Remover Grupos de Usuários', 'model'=> 'GrupoDeUsuario', 'rotas'=> [
             ['id'=> 53, 'caminho'=> '/grupo-usuario', 'metodo'=> 'delete']
          ]],
 
