@@ -138,7 +138,7 @@ class ColecaoUsuarioEmBDR  implements ColecaoUsuario {
 			$query = DB::table(self::TABELA)
 							->selectRaw('distinct ' . self::TABELA . '.id, ' . Colaborador::TABELA . '.nome, ' . Colaborador::TABELA . '.sobrenome, COUNT('.self::TABELA.'.id) as qtd')
 							->join(Colaborador::TABELA, Colaborador::TABELA . '.usuario_id', '=', self::TABELA . '.id')
-							->where(self::TABELA . '.deleted_at', NULL);
+							->where(self::TABELA . '.deleted_at', NULL)->groupBy(self::TABELA . '.id', Colaborador::TABELA . '.nome',  Colaborador::TABELA . '.sobrenome');
 
 			$usuarios = $query->get();
 
