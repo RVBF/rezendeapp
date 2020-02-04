@@ -74,6 +74,7 @@ class ControladoraSetor {
 		}
 		catch (\Exception $e )
 		{
+			Util::printr($e->getMessage());
 			throw new Exception($e->getMessage());
 		}
 

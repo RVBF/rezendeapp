@@ -123,10 +123,9 @@ class ColecaoSetorEmBDR implements ColecaoSetor {
 
 	function todosOpcoes() {
 		try {
-			$query = DB::table(self::TABELA)->selectRaw(self::TABELA . '.id, ' . self::TABELA . '.titulo, COUNT('.self::TABELA.'.id) as qtd')->where( self::TABELA . '.deleted_at', NULL);
+			$query = DB::table(self::TABELA)->selectRaw(self::TABELA . '.id, ' . self::TABELA . '.titulo, COUNT('.self::TABELA.'.id) as qtd')->where( self::TABELA . '.deleted_at', NULL)->groupBy(self::TABELA . '.id', self::TABELA . '.titulo');
 
 			$setores = $query->get();
-
 			return $setores;
 		}
 		catch (\Exception $e) {

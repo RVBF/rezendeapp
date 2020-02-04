@@ -523,6 +523,7 @@
 			var sucesso = function (resposta) {
 				_this.resetarForm();
 				_this.questionamentos = resposta.conteudo;
+				console.log(_this.questionamentos);
 				_this.popularQuestao();
 
 			};
