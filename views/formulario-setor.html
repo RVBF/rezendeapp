@@ -46,8 +46,10 @@
 
 <script>
     $(document).ready(function() {
+		window.mostrarTelaDeCarregamento();
+
         var servicoSetor = new app.ServicoSetor();
         var crltSetor = new app.ControladoraFormSetor(servicoSetor);
         crltSetor.configurar();
-    });
+    }).promise().done(window.tirarTelaDeCarregamento);
 </script>

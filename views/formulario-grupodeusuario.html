@@ -53,8 +53,9 @@
 
 <script>
     $(document).ready(function() {
+		window.mostrarTelaDeCarregamento();
         var servicoGrupoDeUsuario = new app.ServicoGrupoUsuario();
         var crltGrupoDeUsuario = new app.ControladoraFormGrupoDeUsuario(servicoGrupoDeUsuario);
-        crltGrupoDeUsuario.configurar();
-    });
+		crltGrupoDeUsuario.configurar();
+    }).promise().done(window.tirarTelaDeCarregamento);
 </script>

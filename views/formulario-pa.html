@@ -87,8 +87,9 @@
 
 <script>
     $(document).ready(function() {
+        window.mostrarTelaDeCarregamento();
         var servicoPlanoDeAcao = new app.ServicoPlanoAcao();
         var crltPlanoDeAcao = new app.ControladoraFormPlanoAcao(servicoPlanoDeAcao);
         crltPlanoDeAcao.configurar();
-    });
+    }).promise().done(window.tirarTelaDeCarregamento);
 </script>

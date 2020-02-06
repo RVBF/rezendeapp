@@ -79,8 +79,9 @@
 
 <script>
     $(document).ready(function() {
+        window.mostrarTelaDeCarregamento();
         var servicoQuestionario = new app.ServicoQuestionario();
         var crltQuestionario = new app.ControladoraFormQuestionario(servicoQuestionario);
         crltQuestionario.configurar();
-    });
+    }).promise().done(window.tirarTelaDeCarregamento);
 </script>

@@ -44,10 +44,11 @@
 		
 <script>
 	$(document).ready(function() {
+		window.mostrarTelaDeCarregamento();
 		var servicoLogin = new app.ServicoLogin();
 		var crltLogin = new app.ControladoraFormLogin(servicoLogin);
 		crltLogin.configurar();  
-	});
+    }).promise().done(window.tirarTelaDeCarregamento);
 </script>
 	
 	  

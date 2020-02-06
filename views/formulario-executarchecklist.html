@@ -170,9 +170,9 @@
 				</div>							
 			</section>
 
-			<div class="row form-row">
-				<div class="col col-md-12 col-12 col-sm-12 col-lg-12 d-flex justify-content-sm-end justify-content-md-end justify-content-center" id="botoes_execucao">
-					<button id="cancelar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto f-12-dto checklist_link">
+			<div class="row form-row botoes" id="botoes">			
+				<div class="col col-md-3 col-12 col-sm-4 col-lg-3">
+					<button id="cancelar" class="waves-effect waves-light btn white grey-text text-darken-4 col-12 checklist_link">
 						<i class="mdi mdi-close-circle-outline yellow-text text-accent-4"></i>
 						Cancelar
 					</button>
@@ -184,9 +184,10 @@
 
 <script>
 	$(document).ready(function() {
+		window.mostrarTelaDeCarregamento();
 		var servicoQuestionamento = new app.ServicoQuestionamento();
 		var crltQuestionamentoExecucao = new app.ControladoraFormQuestionamentoExecucao(servicoQuestionamento);
 		crltQuestionamentoExecucao.configurar();
-	});
+    }).promise().done(window.tirarTelaDeCarregamento);
 </script>
 	
