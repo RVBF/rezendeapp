@@ -144,7 +144,7 @@ body{
 .agenda-dto .card-panel{
   padding: 15px;
 }
-.button-dto{
+/* .button-dto{
   height: 100%;
   line-height: normal;
   padding: 1rem;
@@ -152,7 +152,7 @@ body{
 .button-dto i{
   display: block;
   font-size: 4em;
-}
+} */
 .p-relative{
   position: relative;
 }

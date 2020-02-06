@@ -32,7 +32,7 @@ class Recurso {
 
    public static function todosOsRecursosERotas() {
       // Último ID usado para recursos: 59
-      // Último ID usado para rotas: 44
+      // Último ID usado para rotas: 45
 
       return [
          ['id'=> 1, 'nome'=> 'Visualizar Checklists', 'model'=> 'Checklist', 'rotas'=> [
@@ -51,7 +51,8 @@ class Recurso {
 
          ['id'=> 6, 'nome'=> 'Visualizar PAs', 'model'=> 'PA', 'rotas'=> [
             ['id'=> 6, 'caminho'=> '/plano-acao', 'metodo'=> 'get'],
-            ['id'=> 17, 'caminho'=> '/plano-acao/{id}', 'metodo'=> 'get']
+            ['id'=> 17, 'caminho'=> '/plano-acao/{id}', 'metodo'=> 'get'],
+            ['id' => 45, 'caminho' => '/plano-acao/pendentes/{id}', 'metodo'=>'get']
          ]],
          ['id'=> 7, 'nome'=> 'Cadastrar PAs', 'model'=> 'PA', 'rotas'=> [
             ['id'=> 7, 'caminho'=> '/plano-acao', 'metodo'=> 'post']

@@ -3,6 +3,8 @@
 
    function ListagemPadrao(elemento, opcoes) {
       var _this = this;
+      var loader = $('#mainLoadertable');
+      let tempoDeAnimacao = 250;
       var listagemPadrao = elemento;
       var ultimaResposta = null;
       _this.recordsTotal = null;
@@ -10,6 +12,23 @@
       _this.objetos = { 'objetos': [] };
       _this.pesquisaTimeOut;
       _this.caixaPesquisa = '';
+
+      _this.mostrarTelaDeCarregamento = function mostrarTelaDeCarregamento() {
+         loader.find('.loadertable').removeClass('d-none');
+
+         $('body .listagem-padrao .card-panel').css('overflow', 'hidden');
+
+         loader.find('.loadertablePageLeft').animate({ 'width': '60%' }, tempoDeAnimacao);
+         loader.find('.loadertablePageRight').animate({ 'width': '60%' }, tempoDeAnimacao);
+      }
+
+      _this.tirarTelaDeCarregamento = function tirarTelaDeCarregamento() {
+         loader.find('.loadertable').addClass('d-none');
+         $('body .listagem-padrao .card-panel').css('overflow', 'auto');
+
+         loader.find('.loadertablePageLeft').animate({ 'width': '0px' }, tempoDeAnimacao);
+         loader.find('.loadertablePageRight').animate({ 'width': '0px' }, tempoDeAnimacao);
+      }
       _this.definirEventosTabela = function definirEventosTabela() {
          listagemPadrao.find('.atualizar').on('click', _this.atualizarTabela);
          listagemPadrao.on('click', '.paginate_button', function () {
@@ -167,6 +186,7 @@
       };
 
       _this.renderizarRegistros = function () {
+         _this.mostrarTelaDeCarregamento();
          var sucesso = function (resposta) {
             if (resposta.data != undefined) {
                ultimaResposta = resposta;
@@ -175,6 +195,7 @@
 
                if (typeof opcoes.rowsCallback == 'function') opcoes.rowsCallback(resposta);
             }
+            _this.tirarTelaDeCarregamento();
          };
 
          var erro = function (resposta) {
@@ -288,6 +309,16 @@
 
          return html;
       };
+      _this.rendererizarCarregamento = function rendererizarCarregamento() {
+         var html = '';
+         html += '<div class="loadertablePage" id="mainLoadertable">';
+			html += '<div class="loadertablePageLeft"></div>';
+			html += '<div class="loadertablePageRight"></div>';
+			html += '<div class="loadertable"></div>';
+         html += ' </div>';
+         
+         listagemPadrao.find('.card-panel').append(html);
+      }
 
       _this.renderizarTabelaTemporal = function renderizarTabelaTemporal() {
          _this.renderizarRegistrosTabelaTemporal();
@@ -331,6 +362,7 @@
       };
 
       _this.atualizarTabela = function atualizarTabela(event) {
+         _this.mostrarTelaDeCarregamento();
          if (event != undefined) event.preventDefault();
          var sucesso = function (resposta) {
 
@@ -339,11 +371,13 @@
             listagemPadrao.find('.info').empty().append(_this.renderizarInfo(resposta));
 
             if (typeof opcoes.rowsCallback == 'function') opcoes.rowsCallback(resposta);
+            _this.tirarTelaDeCarregamento();
          };
 
          var erro = function (resposta) {
-            var mensagem = jqXHR.responseText || 'Erro ao popular select de farmácias.';
+            var mensagem = jqXHR.responseText || 'Erro ao listar tabela.';
             toastr.error(mensagem);
+            _this.tirarTelaDeCarregamento();
             return false;
          };
 
@@ -352,11 +386,14 @@
       };
 
       _this.configurar = function configurar() {
+         _this.rendererizarCarregamento();
+
          _this.renderizarTabela();
          _this.definirEventosTabela();
       };
 
       _this.configurarListagemTemporal = function configurar() {
+         _this.rendererizarCarregamento();
          _this.renderizarTabelaTemporal();
          _this.definirEventosTabela();
       };

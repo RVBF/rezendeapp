@@ -264,7 +264,7 @@
 			else if (window.location.href.search('editar') != -1) servicoChecklist.comId(pegarId(window.location.href, 'editar-checklist')).done(_this.desenhar);
 			else {
 				_this.formulario.parents('#painel_formulario').promise().done(function () {
-					_this.formulario.find('#botoes').prepend(' <div class="col col-md-2 col-4 col-sm-2 col-lg-2"><button type="submit" id="cadastrar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Cadastrar</button></div>').promise().done(function () {
+					_this.formulario.find('#botoes').prepend('<div class="col col-md-4 col-12 col-sm-5 col-lg-4"><button type="submit" id="cadastrar" class="waves-effect waves-light btn white grey-text text-darken-4 col-12 quebra-linha"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Cadastrar</button></div>').promise().done(function () {
 						$('#botoes').find('#cadastrar').on('click', _this.salvar);
 					});
 				});
@@ -289,12 +289,12 @@
 				_this.formulario.desabilitar(true);
 				_this.formulario.find('#botoes').desabilitar(false);
 
-				_this.formulario.find('#botoes').prepend(' <div class="col col-md-2 col-4 col-sm-2 col-lg-2"><button type="submit" id="remover" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-delete red-text text-darken-4"></i>Remover</button></div>').promise().done(function () {
+				_this.formulario.find('#botoes').prepend('<div class="col col-md-4 col-12 col-sm-5 col-lg-4"><button type="submit" id="remover" class="waves-effect waves-light btn white grey-text text-darken-4 col-12"><i class="mdi mdi-delete red-text text-darken-4"></i>Remover</button></div>').promise().done(function () {
 					$('#botoes').find('#remover').on('click', _this.remover);
 				});
 
 				if (_this.obj.status != 'Executado') {
-					_this.formulario.find('#botoes').prepend(' <div class="col col-md-2 col-4 col-sm-2 col-lg-2"><button type="button" id="editar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Editar</button></div>').promise().done(function () {
+					_this.formulario.find('#botoes').prepend('<div class="col col-md-4 col-12 col-sm-5 col-lg-4"><button type="button" id="editar" class="waves-effect waves-light btn white grey-text text-darken-4 col-12 quebra-linha"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Editar</button></div>').promise().done(function () {
 						_this.formulario.find('#editar').on('click', function (event) {
 							router.navigate('/editar-checklist/' + _this.obj.id);
 						});
@@ -308,7 +308,7 @@
 				_this.formulario.find('#questionarios').parents('.select-wrapper').desabilitar(true);
 				var html = '';
 				html += '<div class="col col-md-2 col-4 col-sm-2 col-lg-2">';
-				html += '<button id="salvar" type="submit" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">';
+				html += '<button id="salvar" type="submit" class="waves-effect waves-light btn white grey-text text-darken-4">';
 				html += '<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 ">';
 				html += '</i>salvar</button>';
 				html += '</div>';

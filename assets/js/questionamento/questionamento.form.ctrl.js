@@ -361,8 +361,8 @@
 
 			_this.formulario.find('.perguntas').empty().append(html).promise().done(function () {
 				if(_this.questionamentos.length == 1){
-					$('body #botoes_execucao').append('<button type="submit" id="salvar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Salvar e Sair</button>');
-					$('body #botoes_execucao').find('#salvar').remove();
+					$('body #botoes').append('<button type="submit" id="salvar" class="waves-effect waves-light btn white grey-text text-darken-4 col-12 quebra-linha"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Salvar e Sair</button>');
+					$('body #botoes').find('#salvar').remove();
 					_this.formulario.find('#salvar').on('click', _this.salvar);
 
 				}
@@ -484,15 +484,17 @@
 
 				if(_this.questionamentos != null){
 					if(_this.questionamentos.length == 0){
-						var html = '<button type="submit" id="terminar" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">';
+						var html = '<div class="col col-md-3 col-12 col-sm-4 col-lg-3">';
+						html += '<button type="submit" id="terminar" class="waves-effect waves-light btn white grey-text text-darken-4 col-12 quebra-linha f-12-dto">';
 						html += '<i class="mdi mdi-checkbox-marked-circle-outline teal-text text-accent-4"></i>';
 						html += 'Terminar';
 						html += '</button>';
+						html += '</div>';
 
-						$('body #botoes_execucao').find('#proximo').remove().promise().done(function(){
+						$('body #botoes').find('#proximo').remove().promise().done(function(){
 
 							if($('body #terminar').length ==0){
-								$('body #botoes_execucao').prepend(html).promise().done(function () {
+								$('body #botoes').prepend(html).promise().done(function () {
 									$('body #terminar').on('click', _this.salvar);
 								});
 							}
@@ -500,11 +502,14 @@
 					}
 					else{
 						if($('body #proximo').length == 0){
-							var html = '<button type="submit" id="proximo" class="waves-effect waves-light btn white grey-text text-darken-4 button-dto quebra-linha f-12-dto">';
+							var html = '<div class="col col-md-3 col-12 col-sm-4 col-lg-3">';
+							html += '<button type="submit" id="proximo" class="waves-effect waves-light btn white grey-text text-darken-4 col-12 quebra-linha">';
 							html += '<i class="mdi mdi-skip-next red-text text-darken-4 "></i>';
 							html += 'Próximo';
 							html += '</button>';
-							$('body #botoes_execucao').prepend(html).promise().done(function () {
+							html += '</div>';
+
+							$('body #botoes').prepend(html).promise().done(function () {
 								$('body #proximo').on('click', _this.proximo);
 							});
 						}

@@ -106,8 +106,9 @@
 
 <script>
     $(document).ready(function() {
+		window.mostrarTelaDeCarregamento();
         var servicoLoja = new app.ServicoLoja();
         var crltLoja = new app.ControladoraFormLoja(servicoLoja);
         crltLoja.configurar();
-    });
+    }).promise().done(window.tirarTelaDeCarregamento);
 </script>

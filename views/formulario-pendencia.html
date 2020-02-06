@@ -82,8 +82,9 @@
 
 <script>
     $(document).ready(function() {
+        window.mostrarTelaDeCarregamento();
         var servicoPendencia = new app.ServicoPendencia();
         var crltPendencia = new app.ControladoraFormPendencia(servicoPendencia);
         crltPendencia.configurar();
-    });
+    }).promise().done(window.tirarTelaDeCarregamento);
 </script>

@@ -84,9 +84,9 @@
                                 </div>    
                             </div>
 
-                            <div class="row form-row" id="botoes">			
-                                <div class="col col-md-2 col-4 col-sm-2 col-lg-2">
-                                    <button class="waves-effect waves-light btn white grey-text text-darken-4 button-dto f-12-dto checklist_link">
+                            <div class="row form-row botoes" id="botoes">			
+                                <div class="col col-md-4 col-12 col-sm-5 col-lg-4">
+                                    <button class="waves-effect waves-light btn white grey-text text-darken-4 checklist_link col-12 quebra-linha">
                                         <i class="mdi mdi-close-circle-outline yellow-text text-accent-4"></i>
                                         Cancelar
                                     </button>
@@ -101,10 +101,11 @@
  </section>
  
  <script>
-     $(document).ready(function() {
-         var servicoChecklist = new app.ServicoChecklist();
-         var crltChecklist = new app.ControladoraFormChecklist(servicoChecklist);
-         crltChecklist.configurar();
-     });
+    $(document).ready(function() {
+        window.mostrarTelaDeCarregamento();
+        var servicoChecklist = new app.ServicoChecklist();
+        var crltChecklist = new app.ControladoraFormChecklist(servicoChecklist);
+        crltChecklist.configurar();
+    }).promise().done(window.tirarTelaDeCarregamento);
  </script>
  
