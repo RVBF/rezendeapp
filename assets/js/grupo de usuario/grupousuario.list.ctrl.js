@@ -34,32 +34,39 @@
          objeto.columnDefs = function (data) {
             var html = '';
             html += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12 mb-0-dto">';
-            html += '<div class="row mb-0-dto">';
-            html += '<div class="col co-lg-10 col-md-10 col-sm-10 col-8">'
-            html += '<p class="f-12-dto"><strong>Nome : </strong>' + data.nome + '</p>'
-            html += '<p class="f-12-dto"><strong>descrição : </strong>' + data.descricao + '</p>'
+               html += '<div class="row mb-0-dto">';
+                     html += '<div class="col co-lg-10 col-md-10 col-sm-10 col-8">'
+                        html += '<p class="f-12-dto"><strong>Nome : </strong>' + data.nome + '</p>'
+                        html += '<p class="f-12-dto"><strong>descrição : </strong>' + data.descricao + '</p>'
 
-            html += '<p class="f-12-dto"><strong>Usuários : </strong>';
-            for (const index in data.usuarios) {
-               var usuario = data.usuarios[index];
-               html += usuario.login + ((parseInt(index) + 1 == data.usuarios.length) ? '.' : ',');
-            }
-            html += '</p>';
-            html += '</div>';
+                        html += '<p class="f-12-dto"><strong>Usuários : </strong>';
+                           for (const index in data.usuarios) {
+                              var usuario = data.usuarios[index];
+                              html += usuario.login + ((parseInt(index) + 1 == data.usuarios.length) ? '.' : ',');
+                           }
+                        html += '</p>';
+                     html += '</div>';
 
             html += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12 mb-0-dto opc_tabela">';
-            html += '<p class="mb-0-dto">';
-            html += '<a href="#" class="detalhes-dto visualizar_grupodeusuario">';
-            html += '<i class="mdi mdi-eye-outline small orange-text text-accent-4"></i>';
-            html += 'VER DETALHES';
-            html += '</a>';
-            html += '<a href="#" parametros="GrupoUsuario/' + data.id + '" class="detalhes-dto configurar_acessos_link">';
-            html += '<i class="mdi mdi-key small orange-text text-accent-4"></i>';
-            html += 'ACESSOS';
-            html += '</a>';
-            html += '</p>';
-            html += '</div>';
-            html += '</div>';
+               html += '<div class="col col-12 col-lg-4 col-md-4 col-sm-4 mb-0-dto">';
+                  html += '<p class="mb-0-dto">';
+                     html += '<a href="#" class="detalhes-dto visualizar_grupodeusuario">';
+                     html += '<i class="mdi mdi-eye-outline small orange-text text-accent-4"></i>';
+                     html += 'VER DETALHES';
+                     html += '</a>';
+                  html += '</p>';
+               html += '</div>';
+              
+               html += '<div class="col col-12 col-lg-4 col-md-4 col-sm-4 mb-0-dto">';
+                  html += '<p class="mb-0-dto">';
+                     html += '<a href="#" parametros="GrupoUsuario/' + data.id + '" class="detalhes-dto configurar_acessos_link">';
+                     html += '<i class="mdi mdi-key small orange-text text-accent-4"></i>';
+                     html += 'ACESSOS';
+                     html += '</a>';
+                  html += '</p>';
+               html += '</div>';
+                  html += '</div>';
+               html += '</div>';
             html += '</div>';
 
 

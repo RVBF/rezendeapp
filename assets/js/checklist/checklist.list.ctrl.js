@@ -24,11 +24,13 @@
 			objeto.ajax = servicoChecklist.rota();
 
 			objeto.carregando = true;
-			objeto.pageLength = 10;
-			objeto.lengthMenu =  [10, 30, 40, 100];
-			objeto.ordering= true;
+			objeto.pageLength = 20;
+			objeto.lengthMenu = [20, 30, 40, 100];
 			objeto.searching = true;
-			objeto.searchDelay = 600;	
+			objeto.ordering = true;
+			objeto.searching = true;
+			objeto.searchDelay = 600;
+			objeto.order = 'DESC';
 			objeto.cadastrarLink = 'cadastrar_checklist_link';
 			objeto.columnDefs = function (data){
 				var estaRespondido = function estaRespondido() {

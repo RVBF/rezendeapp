@@ -31,8 +31,8 @@ class Recurso {
    }
 
    public static function todosOsRecursosERotas() {
-      // Último ID usado para recursos: 59
-      // Último ID usado para rotas: 45
+      // Último ID usado para recursos: 60
+      // Último ID usado para rotas: 44
 
       return [
          ['id'=> 1, 'nome'=> 'Visualizar Checklists', 'model'=> 'Checklist', 'rotas'=> [
@@ -52,7 +52,9 @@ class Recurso {
          ['id'=> 6, 'nome'=> 'Visualizar PAs', 'model'=> 'PA', 'rotas'=> [
             ['id'=> 6, 'caminho'=> '/plano-acao', 'metodo'=> 'get'],
             ['id'=> 17, 'caminho'=> '/plano-acao/{id}', 'metodo'=> 'get'],
-            ['id' => 45, 'caminho' => '/plano-acao/pendentes/{id}', 'metodo'=>'get']
+            ['id' => 46, 'caminho' => '/plano-acao/pendentes/{id}', 'metodo'=>'get'],
+            ['id' => 61, 'caminho' => '/plano-acao/confirmar-responsabilidade', 'metodo'=>'post'],
+
          ]],
          ['id'=> 7, 'nome'=> 'Cadastrar PAs', 'model'=> 'PA', 'rotas'=> [
             ['id'=> 7, 'caminho'=> '/plano-acao', 'metodo'=> 'post']
@@ -160,10 +162,10 @@ class Recurso {
             ['id'=> 45, 'caminho'=> '/usuario/{id}', 'metodo'=> 'get']
          ]],
          ['id'=> 37, 'nome'=> 'Cadastrar Usuários', 'model'=> 'Usuario', 'rotas'=> [
-            ['id'=> 46, 'caminho'=> '/usuario', 'metodo'=> 'post']
+            ['id'=> 47, 'caminho'=> '/usuario', 'metodo'=> 'post']
          ]],
          ['id'=> 38, 'nome'=> 'Editar Usuários', 'model'=> 'Usuario', 'rotas'=> [
-            ['id'=> 47, 'caminho'=> '/usuario', 'metodo'=> 'put']
+            ['id'=> 60, 'caminho'=> '/usuario', 'metodo'=> 'put']
          ]],
          ['id'=> 39, 'nome'=> 'Remover Usuários', 'model'=> 'Usuario', 'rotas'=> [
             ['id'=> 48, 'caminho'=> '/usuario', 'metodo'=> 'delete']

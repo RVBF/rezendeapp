@@ -179,6 +179,7 @@
             }
             else {
                html += '<p class="text-center">Nenhum resultado encontrado!</p>';
+               listagemPadrao.find('.linhas').addClass('dados_nao_encontrado')
             }
          }
 
@@ -199,7 +200,9 @@
          };
 
          var erro = function (resposta) {
-            var mensagem = jqXHR.responseText || 'Erro ao popular select de farmácias.';
+            _this.tirarTelaDeCarregamento();
+
+            var mensagem = jqXHR.responseText || 'Erro ao carregar dados da tabela.';
             toastr.error(mensagem);
             return false;
          };
@@ -209,6 +212,7 @@
       };
 
       _this.renderizarRegistrosTabelaTemporal = function renderizarRegistrosTabelaTemporal() {
+         _this.mostrarTelaDeCarregamento();
          var sucesso = function (resposta) {
             if (resposta.recordsFiltered > 0) {
                ultimaResposta = resposta;
@@ -226,12 +230,15 @@
                if (opcoes.listagemTemporal) listagemPadrao.find('.timeline').find('.linhas').fadeIn();
 
             }
+
+            _this.tirarTelaDeCarregamento();
          };
 
          var erro = function (resposta) {
-            var mensagem = jqXHR.responseText || 'Erro ao popular select de farmácias.';
+            var mensagem = jqXHR.responseText || 'Erro ao exibir listagem.';
+            _this.tirarTelaDeCarregamento();
+
             toastr.error(mensagem);
-            return false;
          };
 
 
@@ -309,16 +316,6 @@
 
          return html;
       };
-      _this.rendererizarCarregamento = function rendererizarCarregamento() {
-         var html = '';
-         html += '<div class="loadertablePage" id="mainLoadertable">';
-			html += '<div class="loadertablePageLeft"></div>';
-			html += '<div class="loadertablePageRight"></div>';
-			html += '<div class="loadertable"></div>';
-         html += ' </div>';
-         
-         listagemPadrao.find('.card-panel').append(html);
-      }
 
       _this.renderizarTabelaTemporal = function renderizarTabelaTemporal() {
          _this.renderizarRegistrosTabelaTemporal();
@@ -386,14 +383,11 @@
       };
 
       _this.configurar = function configurar() {
-         _this.rendererizarCarregamento();
-
          _this.renderizarTabela();
          _this.definirEventosTabela();
       };
 
       _this.configurarListagemTemporal = function configurar() {
-         _this.rendererizarCarregamento();
          _this.renderizarTabelaTemporal();
          _this.definirEventosTabela();
       };
