@@ -168,7 +168,12 @@ form img.avatar,
 
 .listagem-padrao .card-panel{
     padding: 1em !important;
-    min-height: 4rem;
+    min-height: 25rem;
+}
+.listagem-padrao .dados_nao_encontrado{
+    top: calc(50% - 55px)  !important;
+    left: calc(50% - 100px) !important;
+    position: absolute;
 }
 
 .fadeIn {

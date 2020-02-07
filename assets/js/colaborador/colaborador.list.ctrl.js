@@ -35,19 +35,19 @@
             let imagem = (data.avatar != null) ? data.avatar.arquivoBase64 : '/assets/images/avatar-padrao.png';
             var html = '';
             html += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12 mb-0-dto">';
-            html += '<div class="row mb-0-dto">';
+            html += '<div class="row">';
 
             html += '<div class="col co-lg-2 col-md-2 col-sm-2 col-4 ">';
-            html += '<img src="' + imagem + '" class="avatar"></img>';
+               html += '<img src="' + imagem + '" class="avatar"></img>';
             html += '</div>';
 
             html += '<div class="col co-lg-10 col-md-10 col-sm-10 col-8">'
-            html += '<p class="f-12-dto"><strong>Nome : </strong>' + data.nome + ' ' + data.sobrenome + '</p>'
-            html += '<p class="f-12-dto"><strong>Email : </strong>' + data.email + '</p>'
+               html += '<p class="f-12-dto"><strong>Nome : </strong>' + data.nome + ' ' + data.sobrenome + '</p>'
+               html += '<p class="f-12-dto"><strong>Email : </strong>' + data.email + '</p>'
 
-            html += '<p class="f-12-dto"><strong>Setor : </strong>' + data.setor.titulo + '</p>';
-            html += '<p class="f-12-dto"> <strong>Loja</strong>  Loja Conselheiro - Nova Friburgo</p>';
-            html += '<p class="f-12-dto"> <strong>Usuário: </strong>  ' + data.usuario.login + '</p>';
+               html += '<p class="f-12-dto"><strong>Setor : </strong>' + data.setor.titulo + '</p>';
+               html += '<p class="f-12-dto"> <strong>Loja</strong>  Loja Conselheiro - Nova Friburgo</p>';
+               html += '<p class="f-12-dto"> <strong>Usuário: </strong>  ' + data.usuario.login + '</p>';
             html += '</div>';
 
             html += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12 mb-0-dto opc_tabela">';
@@ -67,10 +67,10 @@
                         html += 'ACESSOS';
                      html += '</a>';
                   html += '</p>';
+                  html += '</div>';
+                  html += '</div>';
                html += '</div>';
             html += '</div>';
-            html += '</div>';
-
 
 
             return html;

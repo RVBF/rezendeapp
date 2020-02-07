@@ -86,6 +86,12 @@
 <section class="listagem-padrao" id="minhas_atvidades">
    <div class="row">
       <div class="col col-sm-12 col-12 card-panel left-align timeline">
+         <div class="loadertablePage" id="mainLoadertable">
+				<div class="loadertablePageLeft"></div>
+				<div class="loadertablePageRight"></div>
+				<div class="loadertable"></div>
+         </div>
+         
          <div class="linhas fadeIn"></div>
       </div>
    </div>
@@ -101,5 +107,10 @@
       var crltChecklist = new app.ControladoraListagemChecklistAtividades(servicoChecklist);
 
       crltChecklist.configurar();
-   });
+
+      $('#menu_principal a').on('click', function() {
+         $('body .sidenav-overlay').click();
+         console.log('entrei');
+      });
+   })
 </script>

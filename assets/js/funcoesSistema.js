@@ -220,9 +220,9 @@
 
 
       $('.tooltip').tooltip();
-      if (window.location.href == 'http://rezendeconstrucao.com.br/rezendeapp/' || window.location.href == 'http://rezendeapp.local/') {
-         router.navigate('/');
-      }
+      // if (window.location.href == 'http://rezendeconstrucao.com.br/rezendeapp/' || window.location.href == 'http://rezendeapp.local/') {
+      //    router.navigate('/');
+      // }
 
       $.validator.addMethod("cRequired", $.validator.methods.required, "Campo obrigatório.");
       $.validator.addMethod("formatoAudio", $.validator.methods.fileType, "Formato de áudio inválido! Formatos permitidos: mp3|wma|aac|ogg|ac3|wav!");
