@@ -307,7 +307,7 @@
 				_this.horaLimite.setDate(dataLimite.toDate());
 				_this.formulario.find('#questionarios').parents('.select-wrapper').desabilitar(true);
 				var html = '';
-				html += '<div class="col col-md-2 col-4 col-sm-2 col-lg-2">';
+				html += '<div class="col col-md-4 col-12 col-sm-5 col-lg-4">';
 				html += '<button id="salvar" type="submit" class="waves-effect waves-light btn white grey-text text-darken-4">';
 				html += '<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 ">';
 				html += '</i>salvar</button>';

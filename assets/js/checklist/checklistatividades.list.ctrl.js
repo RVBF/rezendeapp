@@ -130,6 +130,19 @@
 
 			objeto.rowsCallback = function(resposta){
 				$('.remover_setor_link').on('click', _this.remover);
+				$('.pas_pendentes').on('click', function () {
+					event.preventDefault();
+					var objeto = _tabela.getObjetosTemporalListagem()[$(this).parents('.listagem-padrao-item').index() -1];
+
+					router.navigate('/planosacao-pendentes/'+ objeto.id);
+				});
+
+				$('.pes_pendentes').on('click', function () {
+					event.preventDefault();
+					var objeto = _tabela.getObjetosTemporalListagem()[$(this).parents('.listagem-padrao-item').index() -1];
+					router.navigate('/pendencias-pendentes/'+ objeto.id);
+				});
+
 				$('.executar_checklist').on('dblclick', _this.executar);
 			};
 
@@ -147,6 +160,7 @@
 
 			router.navigate('/executar-checklist/'+ objeto.id);
 		};
+
 		_this.remover = function remover(event){
 			var objeto = _tabela.getObjetosTemporalListagem()[$(this).parents('.listagem-padrao-item').index() -1];
 			BootstrapDialog.show({

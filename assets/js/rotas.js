@@ -271,7 +271,7 @@
       }
       else if (window.location.href.search('alterar-senha') != -1) {
          html += '<span class="center local-dto">Alterar Senha</span>';
-         html += '<a href="#/" class="left m16-dto pa_link"><i class="material-icons">navigate_before</i></a>';
+         html += '<a href="#/" class="left m16-dto configuracao_link"><i class="material-icons">navigate_before</i></a>';
       }
       else if (window.location.href.search('cadastrar-colaborador') != -1) {
          html += '<span class="center local-dto">Cadastrar Colaborador</span>';

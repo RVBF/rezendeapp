@@ -31,8 +31,8 @@ class Recurso {
    }
 
    public static function todosOsRecursosERotas() {
-      // Último ID usado para recursos: 60
-      // Último ID usado para rotas: 44
+      // Último ID usado para recursos: 63
+      // Último ID usado para rotas: 45
 
       return [
          ['id'=> 1, 'nome'=> 'Visualizar Checklists', 'model'=> 'Checklist', 'rotas'=> [
@@ -46,7 +46,7 @@ class Recurso {
             ['id'=> 3, 'caminho'=> '/checklist', 'metodo'=> 'put']
          ]],
          ['id'=> 5, 'nome'=> 'Remover Checklists', 'model'=> 'Checklist', 'rotas'=> [
-            ['id'=> 5, 'caminho'=> '/checklist', 'metodo'=> 'delete']
+            ['id'=> 5, 'caminho'=> '/checklist/{id}', 'metodo'=> 'delete']
          ]],
 
          ['id'=> 6, 'nome'=> 'Visualizar PAs', 'model'=> 'PA', 'rotas'=> [
@@ -66,12 +66,14 @@ class Recurso {
             ['id'=> 9, 'caminho'=> '/plano-acao/executar', 'metodo'=> 'post']
          ]],
          ['id'=> 10, 'nome'=> 'Remover PAs', 'model'=> 'PA', 'rotas'=> [
-            ['id'=> 10, 'caminho'=> '/plano-acao', 'metodo'=> 'delete']
+            ['id'=> 10, 'caminho'=> '/plano-acao/{id}', 'metodo'=> 'delete']
          ]],
 
          ['id'=> 11, 'nome'=> 'Visualizar PEs', 'model'=> 'PE', 'rotas'=> [
             ['id'=> 11, 'caminho'=> '/pendencia', 'metodo'=> 'get'],
-            ['id'=> 18, 'caminho'=> '/pendencia/{id}', 'metodo'=> 'get']
+            ['id'=> 18, 'caminho'=> '/pendencia/{id}', 'metodo'=> 'get'],
+            ['id'=> 62, 'caminho'=> '/pendencia/pendentes/{id}', 'metodo'=> 'get']
+
          ]],
          ['id'=> 12, 'nome'=> 'Cadastrar PEs', 'model'=> 'PE', 'rotas'=> [
             ['id'=> 12, 'caminho'=> '/pendencia', 'metodo'=> 'post']
@@ -80,10 +82,10 @@ class Recurso {
             ['id'=> 13, 'caminho'=> '/pendencia', 'metodo'=> 'put']
          ]],
          ['id'=> 14, 'nome'=> 'Executar PEs', 'model'=> 'PE', 'rotas'=> [
-            ['id'=> 14, 'caminho'=> '/pendencia/exeutar/{id}', 'metodo'=> 'get']
+            ['id'=> 14, 'caminho'=> '/pendencia/executar/{id}', 'metodo'=> 'get']
          ]],
          ['id'=> 15, 'nome'=> 'Remover PEs', 'model'=> 'PE', 'rotas'=> [
-            ['id'=> 15, 'caminho'=> '/pendencia', 'metodo'=> 'delete']
+            ['id'=> 15, 'caminho'=> '/pendencia/{id}', 'metodo'=> 'delete']
          ]],
 
          ['id'=> 16, 'nome'=> 'Visualizar Setores', 'model'=> 'Setor', 'rotas'=> [
@@ -97,7 +99,7 @@ class Recurso {
             ['id'=> 22, 'caminho'=> '/setor', 'metodo'=> 'put']
          ]],
          ['id'=> 19, 'nome'=> 'Remover Setores', 'model'=> 'Setor', 'rotas'=> [
-            ['id'=> 23, 'caminho'=> '/setor', 'metodo'=> 'delete']
+            ['id'=> 23, 'caminho'=> '/setor/{id}', 'metodo'=> 'delete']
          ]],
 
          ['id'=> 20, 'nome'=> 'Visualizar Questionários', 'model'=> 'Questionario', 'rotas'=> [
@@ -111,7 +113,7 @@ class Recurso {
             ['id'=> 27, 'caminho'=> '/questionario', 'metodo'=> 'put']
          ]],
          ['id'=> 23, 'nome'=> 'Remover Questionários', 'model'=> 'Questionario', 'rotas'=> [
-            ['id'=> 28, 'caminho'=> '/questionario', 'metodo'=> 'delete']
+            ['id'=> 28, 'caminho'=> '/questionario/{id}', 'metodo'=> 'delete']
          ]],
 
          ['id'=> 24, 'nome'=> 'Visualizar Lojas', 'model'=> 'Loja', 'rotas'=> [
@@ -125,7 +127,7 @@ class Recurso {
             ['id'=> 32, 'caminho'=> '/loja', 'metodo'=> 'put']
          ]],
          ['id'=> 27, 'nome'=> 'Remover Lojas', 'model'=> 'Loja', 'rotas'=> [
-            ['id'=> 33, 'caminho'=> '/loja', 'metodo'=> 'delete']
+            ['id'=> 33, 'caminho'=> '/loja/{id}', 'metodo'=> 'delete']
          ]],
 
          ['id'=> 28, 'nome'=> 'Visualizar Questionamentos', 'model'=> 'Questionamento', 'rotas'=> [
@@ -140,7 +142,7 @@ class Recurso {
             ['id'=> 37, 'caminho'=> '/questionamento', 'metodo'=> 'put']
          ]],
          ['id'=> 31, 'nome'=> 'Remover Questionamentos', 'model'=> 'Questionamento', 'rotas'=> [
-            ['id'=> 38, 'caminho'=> '/questionamento', 'metodo'=> 'delete']
+            ['id'=> 38, 'caminho'=> '/questionamento/{id}', 'metodo'=> 'delete']
          ]],
 
          ['id'=> 32, 'nome'=> 'Visualizar Colaboradores', 'model'=> 'Colaborador', 'rotas'=> [
@@ -154,7 +156,10 @@ class Recurso {
             ['id'=> 42, 'caminho'=> '/colaborador', 'metodo'=> 'put']
          ]],
          ['id'=> 35, 'nome'=> 'Remover Colaboradores', 'model'=> 'Colaborador', 'rotas'=> [
-            ['id'=> 43, 'caminho'=> '/colaborador', 'metodo'=> 'delete']
+            ['id'=> 43, 'caminho'=> '/colaborador/{id}', 'metodo'=> 'delete']
+         ]],
+         ['id'=> 45, 'nome'=> 'Atualizar Senha', 'model'=> 'Colaborador', 'rotas'=> [
+            ['id'=> 63, 'caminho'=> '/usuario/atualizar-senha', 'metodo'=> 'put']
          ]],
 
          ['id'=> 36, 'nome'=> 'Visualizar Usuários', 'model'=> 'Usuario', 'rotas'=> [
@@ -168,7 +173,7 @@ class Recurso {
             ['id'=> 60, 'caminho'=> '/usuario', 'metodo'=> 'put']
          ]],
          ['id'=> 39, 'nome'=> 'Remover Usuários', 'model'=> 'Usuario', 'rotas'=> [
-            ['id'=> 48, 'caminho'=> '/usuario', 'metodo'=> 'delete']
+            ['id'=> 48, 'caminho'=> '/usuario/{id}', 'metodo'=> 'delete']
          ]],
 
          ['id'=> 40, 'nome'=> 'Visualizar Grupos de Usuários', 'model'=> 'GrupoDeUsuario', 'rotas'=> [
@@ -182,7 +187,7 @@ class Recurso {
             ['id'=> 52, 'caminho'=> '/grupo-usuario', 'metodo'=> 'put']
          ]],
          ['id'=> 43, 'nome'=> 'Remover Grupos de Usuários', 'model'=> 'GrupoDeUsuario', 'rotas'=> [
-            ['id'=> 53, 'caminho'=> '/grupo-usuario', 'metodo'=> 'delete']
+            ['id'=> 53, 'caminho'=> '/grupo-usuario/{id}', 'metodo'=> 'delete']
          ]],
 
          ['id'=> 44, 'nome'=> 'Configurar Acessos', 'model'=> 'Acesso', 'rotas'=> [
