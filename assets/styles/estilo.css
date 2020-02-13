@@ -38,11 +38,11 @@ span{
 }
 
 .sidenav{
-    z-index: 100910 !important;
+    z-index: 1009110 !important;
 }
 
 .sidenav-overlay{
-    z-index: 10090 !important;
+    z-index: 1009100 !important;
 }
 
 .container {
@@ -587,7 +587,7 @@ opacity: 1.0;
     height: 100%;
     top: 0;
     background-color: #f5f5f5;
-    z-index: 999999;
+    z-index: 100998;
  }
 
  .loadertablePageLeft {
@@ -616,7 +616,7 @@ opacity: 1.0;
     -webkit-transform: translateZ(0);
     -ms-transform: translateZ(0);
     transform: translateZ(0);
-    z-index: 9999999;
+    z-index: 100999;
     opacity: 1;
     transition: opacity 300ms;
  }

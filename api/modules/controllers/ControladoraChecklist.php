@@ -356,8 +356,14 @@ class ControladoraChecklist {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");
 
 			if (! is_numeric($checklistId)) return $this->geradoraResposta->erro('O id informado não é numérico.', GeradoraResposta::TIPO_TEXTO);
-
+			$checklist = new Checklist(); $checklist->fromArray($this->colecaoChecklist->comId($checklistId));
+			if(!($checklist instanceof Checklist)) throw new Exception("Checklist não encontrado no banco de dados!");
+			
 			$questionamentos = $this->colecaoQuestionamento->questionamentosParaExecucao($checklistId);
+			foreach($questionamentos as $key => $questionamento){
+				$questionamentos[$key]['checklist'] = $checklist->toArray();
+			}
+			
 			$resposta = ['conteudo'=> $questionamentos, 'status' => true, 'mensagem'=> 'ok.'];
 		}
 		catch (\Exception $e) {
