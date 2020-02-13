@@ -31,7 +31,7 @@ class Recurso {
    }
 
    public static function todosOsRecursosERotas() {
-      // Último ID usado para recursos: 63
+      // Último ID usado para recursos: 64
       // Último ID usado para rotas: 45
 
       return [
@@ -136,7 +136,7 @@ class Recurso {
             ['id'=> 59, 'caminho'=> '/checklist/questionamentos/{id}', 'metodo'=> 'get']
          ]],
          ['id'=> 29, 'nome'=> 'Cadastrar Questionamentos', 'model'=> 'Questionamento', 'rotas'=> [
-            ['id'=> 36, 'caminho'=> '/questionamento', 'metodo'=> 'post']
+            ['id'=> 64, 'caminho'=> '/questionamento', 'metodo'=> 'post']
          ]],
          ['id'=> 30, 'nome'=> 'Editar Questionamentos', 'model'=> 'Questionamento', 'rotas'=> [
             ['id'=> 37, 'caminho'=> '/questionamento', 'metodo'=> 'put']

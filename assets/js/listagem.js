@@ -176,10 +176,12 @@
                   html += opcoes.columnDefs(data[indice]);
                   html += '</div>';
                };
+
+               listagemPadrao.find('.linhas').removeClass('dados_nao_encontrado')
             }
             else {
                html += '<p class="text-center">Nenhum resultado encontrado!</p>';
-               listagemPadrao.find('.linhas').addClass('dados_nao_encontrado')
+               if(listagemPadrao.find('.linhas').find('.listagem-padrao-item').length == 0) listagemPadrao.find('.linhas').addClass('dados_nao_encontrado')
             }
          }
 

@@ -150,7 +150,6 @@
          // Inicialização
          loader.script('assets/js/listagem.js');
          loader.script('assets/js/materialize.js');
-         loader.script('assets/js/init.js');
          loader.script('assets/js/app.js');
          loader.script('assets/js/sessao/sessao.serv.js');
          loader.script('assets/js/rotas.js');

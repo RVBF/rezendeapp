@@ -322,14 +322,14 @@
 								html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2">';
 										html += '<a class="list-group-item list-group-item-action orange accent-4 subicon-dto element" data-toggle="tooltip" title="Nenhum arquivo selecionado.">';
 										html += '<i class="mdi mdi-microphone white-text"></i>';
-										html += '<input class="d-none form-control arquivos_audio tamanhoArquivosPadrao" type="file" name="pergunta_audio" id="pergunta_audio" accept="audio/mpeg,audio/x-pn-realaudio">';
+										html += '<input class="d-none form-control arquivos_audio tamanhoArquivosPadrao" type="file" name="pergunta_audio" id="pergunta_audio" accept="audio/opus" capture="microphone">';
 										html += '</a>';
 								html += '</div>';
 
 								html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2">';
 										html += '<a class="list-group-item list-group-item-action orange accent-4 subicon-dto element" data-toggle="tooltip" title="Nenhum arquivo selecionado.">';
 										html += '<i class="mdi mdi-camera-outline white-text"></i>';
-										html += '<input class="d-none form-control arquivos_imagem tamanhoArquivosPadrao" type="file" ref="file"  name="pergunta_camera" id="pergunta_camera" accept="image/*" >';
+										html += '<input class="d-none form-control arquivos_imagem tamanhoArquivosPadrao" type="file" ref="file"  name="pergunta_camera" id="pergunta_camera"  accept="image/*"  capture="camera">';
 										html += '</a>';
 								html += '</div>';
 
@@ -461,8 +461,8 @@
 				_this.formulario.find('input[name="opcao"]').on('change',function(e){
 					if(this.value != "Bom"){
 						_this.formulario.find('.opcoes_questionamento').show(100);
-						$('.modal').find('#nome-categoria').html(_this.objetoAtual.checklist.titulo);
-						$('.modal').modal();
+						$('body #planoAcaoModal').find('#nome-categoria').html(_this.objetoAtual.checklist.titulo);
+						$('#planoAcaoModal').modal();
 
 						let destino = $(_this.formulario.find('.opcoes_questionamento').find('.active').attr('data-target'));
 

@@ -9,6 +9,7 @@
             $(this).desabilitar(true)
          });
 
+
          $(evento.target).find('.bootstrap-dialog-header').each(function (i) {
             $(this).find('.bootstrap-dialog-close-button').addClass('d-none')
          });
@@ -200,6 +201,19 @@
    });
 
    $(document).ready(function () {
+      $('.sidenav').sidenav();
+      navigator.permissions.query({name:'microphone'}).then(function(result) {
+         if (result.state == 'granted') {
+       
+         } else if (result.state == 'prompt') {
+       
+         } else if (result.state == 'denied') {
+       
+         }
+         result.onchange = function() {
+       
+         };
+       });
       moment.locale('pt-BR');
       $(window).scroll(function () {
 
