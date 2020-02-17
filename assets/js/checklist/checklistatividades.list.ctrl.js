@@ -156,9 +156,20 @@
 
 		_this.executar = function executar (event) {
 			event.preventDefault();
-			var objeto = _tabela.getObjetosTemporalListagem()[$(this).parents('.listagem-padrao-item').index() -1];
 
-			router.navigate('/executar-checklist/'+ objeto.id);
+			var estaRespondido = function estaRespondido(objeto) {
+				var i = 0;
+				for (var indice in objeto.questionamentos) {
+					var elemento = objeto.questionamentos[indice];
+					if(elemento.status == 'Respondido' || elemento.status == 'Respondido Com Pendências')i++;
+				}
+
+				return ( i == objeto.questionamentos.length ) ? true : false;
+			};
+			
+			var objeto = _tabela.getObjetosTemporalListagem()[$(this).parents('.listagem-padrao-item').index() -1];
+			if(!estaRespondido(objeto)) router.navigate('/executar-checklist/'+ objeto.id);
+			else toastr.error('O  Checklist já foi respondido, porém possui pendências a serem resolvidas.')
 		};
 
 		_this.remover = function remover(event){
