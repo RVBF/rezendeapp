@@ -29,6 +29,7 @@
          loader.find('.loadertablePageLeft').animate({ 'width': '0px' }, tempoDeAnimacao);
          loader.find('.loadertablePageRight').animate({ 'width': '0px' }, tempoDeAnimacao);
       }
+      
       _this.definirEventosTabela = function definirEventosTabela() {
          listagemPadrao.find('.atualizar').on('click', _this.atualizarTabela);
          listagemPadrao.on('click', '.paginate_button', function () {
@@ -41,7 +42,6 @@
          });
 
          listagemPadrao.on('change', '.qtd_resultados_pesquisapadrao', function () {
-            ;
             _this.atualizarTabela();
          });
 
@@ -317,7 +317,7 @@
          html += '</div>'
 
          html += '<div class="col col-12 col-sm-12 col-md-6 col-lg-6 paginacao">';
-         html += '<div class="paginacao_listagem " id="listagem_paginacao">';
+         html += '<div class="paginacao_listagem" id="listagem_paginacao">';
          html += _this.renderizarBotoes(data);
          html += '</div>';
          html += '</div>';
@@ -339,32 +339,30 @@
          let resultadosPorPagina = listagemPadrao.find('#qtd_resultados').val();
          let quantidadeBotoes = Math.ceil(data.recordsTotal / resultadosPorPagina);
          let html = '';
-         html += '<a class="paginacao-anterior disabled paginate_button" data-dt-idx="0" tabindex="0" id="anterior">';
-         html += '<font style="vertical-align: inherit;">';
-         html += '<font style="vertical-align: inherit;">Anterior </font>';
-         html += '</font>';
-         html += '</a>';
-         html += '<span>';
-         var i;
+         html += '<ul class="pagination">'
+            html += '<li  class="paginacao-anterior disabled paginate_button">';
+               html += '<a href="#" data-dt-idx="0" tabindex="0" class="page-link">';
+               html += 'Anterior';
+               html += '</a>';
+            html += '</li>';
 
-         for (i = 1; i <= quantidadeBotoes; i++) {
-            let classes = (i == 1) ? 'pagina-atual paginate_button' : ' paginate_button';
+            var i;
 
-            html += '<a class="' + classes + '" data-dt-idx="' + i + '" tabindex="0">';
-            html += '	<font style="vertical-align: inherit;">';
-            html += '	<font style="vertical-align: inherit;">' + i + '</font>';
-            html += '</font>';
-            html += '</a>';
-         }
+            for (i = 1; i <= quantidadeBotoes; i++) {
+               let classes = (i == 1) ? 'pagina-atual paginate_button' : ' paginate_button';
+               html += '<li  class="' + classes + '">'; 
+                  html += '<a href="#" data-dt-idx="' + i + '" tabindex="0"  class="page-link">' + i + '</a>';
+               html += '</li>';
 
-         html += '<a class="paginacao-proximo paginate_button" data-dt-idx="' + i + '" tabindex="0" id="proximo">';
-         html += '<font style="vertical-align: inherit;">';
-         html += '<font style="vertical-align: inherit;"> Próximo</font>';
-         html += '</font>';
-         html += '</a>';
-         html += '</span>';
+               if(i > 5) break;
+            }
 
-         return html
+            html += '<li  class="paginacao-proximo paginate_button">';
+
+            html += '<a href="#" data-dt-idx="' + i + '" tabindex="0"  class="page-link">Próximo</a>';
+            html += '</li>';
+            html += '</ul>';
+            return html
       };
 
       _this.atualizarTabela = function atualizarTabela(event) {
