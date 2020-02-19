@@ -33,11 +33,51 @@
       _this.definirEventosTabela = function definirEventosTabela() {
          listagemPadrao.find('.atualizar').on('click', _this.atualizarTabela);
          listagemPadrao.on('click', '.paginate_button', function () {
-            var atual = $(this);
-            var paginaAnterior = listagemPadrao.find('#listagem_paginacao').find('.pagina-atual').first();
-
+            event.preventDefault();
+            var elemento = $(this);
+            var paginaAnterior = listagemPadrao.find('#listagem_paginacao').find('.pagina-atual:first');
             paginaAnterior.removeClass('pagina-atual');
-            atual.addClass('pagina-atual');
+
+            if(elemento.hasClass('paginacao-proximo') && paginaAnterior.next().hasClass('d-none')){
+               paginaAnterior.nextAll('.d-none:first').removeClass('d-none').addClass('pagina-atual');
+               paginaAnterior.prevAll('.paginacao-anterior:first').removeClass('disabled').desabilitar(false);
+               listagemPadrao.find('.pagination').find('li').each(function (i, value) {
+                  if(!$(this).hasClass('d-none') && !$(this).hasClass('paginacao-anterior')){
+                     $(this).addClass('d-none');
+                     return false;
+                  }
+               });
+
+            } 
+            else if(elemento.hasClass('paginacao-proximo') && paginaAnterior.next().hasClass('paginacao-proximo')){
+               elemento.addClass('disabled').desabilitar(true);
+               elemento.prev().addClass('pagina-atual');
+            }
+            else if(elemento.hasClass('paginacao-proximo')){
+               paginaAnterior.next().addClass('pagina-atual');
+            }
+            else if(elemento.hasClass('paginacao-anterior') && paginaAnterior.prev().hasClass('d-none')){
+               paginaAnterior.prevAll('.d-none:first').removeClass('d-none').addClass('pagina-atual');
+               paginaAnterior.nextAll('.paginacao-proximo:first').removeClass('disabled').desabilitar(false);
+              $( listagemPadrao.find('.pagination').find('li').get().reverse()).each(function (i, value) {
+                  if(!$(this).hasClass('d-none') && !$(this).hasClass('paginacao-proximo')){
+                     $(this).addClass('d-none');
+                     return false;
+                  }
+               });
+
+            } 
+            else if(elemento.hasClass('paginacao-anterior') && paginaAnterior.prev().hasClass('paginacao-anterior')){
+               elemento.addClass('disabled').desabilitar(true);
+               elemento.next().addClass('pagina-atual');
+            }
+            else if(elemento.hasClass('paginacao-anterior')){
+               paginaAnterior.prev().addClass('pagina-atual');
+            }
+            else{
+               elemento.addClass('pagina-atual');  
+            }
+            
             _this.atualizarTabela();
          });
 
@@ -97,8 +137,9 @@
 
       _this.inicioDaPagina = function inicioDaPagina() {
          let limiteResultadosExibidos = parseInt($('#qtd_resultados').val());
+         var inicio = (parseInt(listagemPadrao.find('.pagina-atual').find('a').attr('data-dt-idx')) * parseInt($('#qtd_resultados').val())) - parseInt($('#qtd_resultados').val());
 
-         return (listagemPadrao.find('.linhas').find('.listagem-padrao-item').length == 0) ? 0 : _this.tamanhoPagina() - limiteResultadosExibidos;
+         return (listagemPadrao.find('.linhas').find('.listagem-padrao-item').length == 0) ? 0 : inicio;
       };
 
       _this.tamanhoPagina = function tamanhoPagina() {
@@ -121,7 +162,7 @@
             if (!opcoes.listagemTemporal) {
                _this.paginacao = {
                   start: _this.inicioDaPagina(),
-                  length: parseInt($('#qtd_resultados').val())
+                  length: _this.inicioDaPagina() + parseInt($('#qtd_resultados').val())
                };
 
                if (_this.caixaPesquisa != '' && _this.caixaPesquisa.length >= 3) _this.paginacao.search = { value: _this.caixaPesquisa };
@@ -303,7 +344,7 @@
       };
 
       _this.renderizarInfo = function renderizarInfo(data) {
-         let inicio = (_this.paginacao.start + 1), tamanhoPagina = (_this.paginacao.length == undefined) ? parseInt($('#qtd_resultados').val()) : _this.paginacao.length;
+         let inicio = (_this.paginacao.start + 1), tamanhoPagina = (_this.paginacao.length == undefined) ? inicio + parseInt($('#qtd_resultados').val()) : _this.paginacao.length;
          if (_this.objetos.length == 0) {
             tamanhoPagina = 0;
             inicio--;
@@ -336,6 +377,7 @@
       };
 
       _this.renderizarBotoes = function renderizarBotoes(data) {
+         console.log(data);
          let resultadosPorPagina = listagemPadrao.find('#qtd_resultados').val();
          let quantidadeBotoes = Math.ceil(data.recordsTotal / resultadosPorPagina);
          let html = '';
@@ -348,19 +390,32 @@
 
             var i;
 
+            var pagina = data.recordsFiltered / parseInt($('#qtd_resultados').val());
+
             for (i = 1; i <= quantidadeBotoes; i++) {
-               let classes = (i == 1) ? 'pagina-atual paginate_button' : ' paginate_button';
+               let classes = ' paginate_button';
+
+               if(data.recordsFiltered == (parseInt($('#qtd_resultados').val()) * i)){
+                  classes += ' pagina-atual';
+               }
+
+               let inicioVisualizacao = ((pagina -5) <= 0) ? 1 : pagina -5;
+
+               if(inicioVisualizacao  == 1 && pagina  == 1 && i > 5) classes += ' d-none';
+               else if(i < inicioVisualizacao || i > pagina)  classes += ' d-none';
+            
                html += '<li  class="' + classes + '">'; 
                   html += '<a href="#" data-dt-idx="' + i + '" tabindex="0"  class="page-link">' + i + '</a>';
                html += '</li>';
-
-               if(i > 5) break;
             }
 
-            html += '<li  class="paginacao-proximo paginate_button">';
+            if((i-1) > 5) {
+               html += '<li  class="paginacao-proximo paginate_button">';
 
-            html += '<a href="#" data-dt-idx="' + i + '" tabindex="0"  class="page-link">Próximo</a>';
-            html += '</li>';
+               html += '<a href="#" data-dt-idx="6" tabindex="0"  class="page-link">Próximo</a>';
+               html += '</li>'
+            } 
+
             html += '</ul>';
             return html
       };
