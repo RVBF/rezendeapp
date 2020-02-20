@@ -137,7 +137,7 @@
 
       _this.inicioDaPagina = function inicioDaPagina() {
          let limiteResultadosExibidos = parseInt($('#qtd_resultados').val());
-         var inicio = (parseInt(listagemPadrao.find('.pagina-atual').find('a').attr('data-dt-idx')) * parseInt($('#qtd_resultados').val())) - parseInt($('#qtd_resultados').val());
+         var inicio = (parseInt(listagemPadrao.find('.pagina-atual').find('a').attr('data-dt-idx')) * limiteResultadosExibidos) - limiteResultadosExibidos;
 
          return (listagemPadrao.find('.linhas').find('.listagem-padrao-item').length == 0) ? 0 : inicio;
       };
@@ -159,6 +159,7 @@
 
       _this.requisitarRegistros = function requisitarRegistros() {
          var parametrosRequisicao = function parametrosRequisicao() {
+
             if (!opcoes.listagemTemporal) {
                _this.paginacao = {
                   start: _this.inicioDaPagina(),
@@ -377,7 +378,6 @@
       };
 
       _this.renderizarBotoes = function renderizarBotoes(data) {
-         console.log(data);
          let resultadosPorPagina = listagemPadrao.find('#qtd_resultados').val();
          let quantidadeBotoes = Math.ceil(data.recordsTotal / resultadosPorPagina);
          let html = '';
@@ -397,12 +397,13 @@
 
                if(data.recordsFiltered == (parseInt($('#qtd_resultados').val()) * i)){
                   classes += ' pagina-atual';
+               }else if(data.recordsFiltered < parseInt($('#qtd_resultados').val())){
+                  classes += ' pagina-atual';
                }
 
-               let inicioVisualizacao = ((pagina -5) <= 0) ? 1 : pagina -5;
+               let inicioVisualizacao = (pagina  <= 5) ? 1 : pagina -4;
 
-               if(inicioVisualizacao  == 1 && pagina  == 1 && i > 5) classes += ' d-none';
-               else if(i < inicioVisualizacao || i > pagina)  classes += ' d-none';
+               if( i < inicioVisualizacao || (i > pagina && i > 5)) classes += ' d-none';
             
                html += '<li  class="' + classes + '">'; 
                   html += '<a href="#" data-dt-idx="' + i + '" tabindex="0"  class="page-link">' + i + '</a>';
@@ -439,7 +440,6 @@
             _this.tirarTelaDeCarregamento();
             return false;
          };
-
          var jqXHR = _this.requisitarRegistros();
          jqXHR.done(sucesso).fail(erro);
       };

@@ -174,7 +174,6 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			foreach ($checklists as $key => $checklist) {
 				$checklistsObjects[] = $this->construirObjeto($checklist);
 			}
-
 			return $checklistsObjects;
 		}
 		catch (\Exception $e) {
@@ -261,6 +260,17 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
     function contagem($idsLojas = []) {
 		return (count($idsLojas) > 0) ?  DB::table(self::TABELA)->where('deleted_at',NULL)->whereIn('loja_id', $idsLojas)->count() : DB::table(self::TABELA)->where('deleted_at',NULL)->count();
 	}
+
+	// function contagemGenerica($chavesComValores = []){
+	// 	$query = DB::table(self::TABELA)->where('deleted_at',NULL);
+		
+	// 	foreach ($chavesComValores as $key => $value) {
+	// 		if(is_array($value)) $query->whereIn($key, $value);
+	// 		else $query->where($key, $value);
+	// 	}
+
+	// 	return $query->count();
+	// }	
 
 	function temPendencia($idChecklist = 0){
 		try {
