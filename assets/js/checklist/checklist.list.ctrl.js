@@ -24,8 +24,8 @@
 			objeto.ajax = servicoChecklist.rota();
 
 			objeto.carregando = true;
-			objeto.pageLength = 20;
-			objeto.lengthMenu = [20, 30, 40, 100];
+			objeto.pageLength = 10;
+			objeto.lengthMenu = [10 ,20, 30, 40, 100];
 			objeto.searching = true;
 			objeto.ordering = true;
 			objeto.searching = true;
