@@ -345,13 +345,19 @@
       };
 
       _this.renderizarInfo = function renderizarInfo(data) {
-         let inicio = (_this.paginacao.start + 1), tamanhoPagina = (_this.paginacao.length == undefined) ? inicio + parseInt($('#qtd_resultados').val()) : _this.paginacao.length;
+         console.log(data);
+         let inicio = (_this.paginacao.start + 1), tamanhoPagina = (_this.paginacao.length == undefined) ? inicio + parseInt($('#qtd_resultados').val()) : (_this.paginacao.length == null) ? 0 :_this.paginacao.length ;
          if (_this.objetos.length == 0) {
             tamanhoPagina = 0;
             inicio--;
          }
 
          if (tamanhoPagina > data.recordsTotal) tamanhoPagina = data.recordsTotal;
+
+         if ( tamanhoPagina== null) tamanhoPagina = 0;
+         if (data.recordsTotal == null) data.recordsTotal  = 0;
+         if ( tamanhoPagina== 0 && data.recordsTotal == 0) inicio = 0;
+
          var html = '';
          html += '<div class="row">';
          html += '<div class="col col-12 col-sm-12 col-md-6 col-lg-6 informacao_exibicao">';
