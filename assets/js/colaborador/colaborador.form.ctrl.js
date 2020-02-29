@@ -278,7 +278,8 @@
 
       _this.definirForm = function definirForm(status) {
          _this.formulario.submit(false);
-
+         
+         _this.formulario.find('.avatar').attr('src',  window.location.pathname + 'assets/images/avatar-padrao.png');
          _this.formulario.find('#nome').focus();
 
          _this.popularLojas();
