@@ -32,7 +32,7 @@
          objeto.order = 'DESC';
          objeto.cadastrarLink = 'cadastrar_colaborador_link';
          objeto.columnDefs = function (data) {
-            let imagem = (data.avatar != null) ? data.avatar.arquivoBase64 : '/assets/images/avatar-padrao.png';
+            let imagem = (data.avatar != null) ? data.avatar.arquivoBase64 : window.location.pathname + 'assets/images/avatar-padrao.png';
             var html = '';
             html += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12 mb-0-dto">';
             html += '<div class="row">';
