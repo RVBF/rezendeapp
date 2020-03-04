@@ -213,6 +213,23 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 		}
 	}
 
+	function quantidadePorStatuseData(){
+		try {
+			$query = DB::table(self::TABELA)->select(
+				DB::raw('DISTINCT ( select count(*) from '. self::TABELA .' query1 where query1.`deleted_at` is null and query1.status =  "' . StatusChecklistEnumerado::AGUARDANDO_EXECUCAO . '" and DATE_FORMAT('. self::TABELA.'.data_cadastro, "%d/%m/%Y") = DATE_FORMAT(query1.data_cadastro, "%d/%m/%Y") group by query1.`status`, DATE_FORMAT(query1.data_cadastro, "%d/%m/%Y")) as qtdStatusAgaExecucao, 
+				(select count(*) from '. self::TABELA .' query1 where query1.`deleted_at` is null and query1.status =  "' . StatusChecklistEnumerado::EM_PROGRESSO . '" and DATE_FORMAT('. self::TABELA.'.data_cadastro, "%d/%m/%Y") = DATE_FORMAT(query1.data_cadastro, "%d/%m/%Y") group by query1.`status`, DATE_FORMAT(query1.data_cadastro, "%d/%m/%Y") ) as qtdStatusEmProgresso,
+				(select count(*) from '. self::TABELA .' query1 where query1.`deleted_at` is null and query1.status = "' . StatusChecklistEnumerado::EXECUTADO . '" and DATE_FORMAT('. self::TABELA.'.data_cadastro, "%d/%m/%Y") = DATE_FORMAT(query1.data_cadastro, "%d/%m/%Y") group by query1.`status`, DATE_FORMAT(query1.data_cadastro, "%d/%m/%Y") ) as qtdStatusExecutado,
+				DATE_FORMAT('. self::TABELA.'.data_cadastro, "%d/%m/%Y") as "Data"'));
+			$query->where('deleted_at', NULL);
+			
+			return $query->get();
+		}
+		catch (\Exception $e) {
+
+			throw new ColecaoException("Erro ao gerar relatório de checklists por quantidade e data!", $e->getCode(), $e);
+		}
+	}
+
 	function todosComId($ids = []) {
 		try {
 			$checklists = DB::table(self::TABELA)->where('deleted_at',NULL)->whereIn('id', $ids)->get();

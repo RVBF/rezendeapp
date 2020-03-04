@@ -32,6 +32,13 @@
 				url: _this.rota() + '/contadores',
 			});
 		}
+
+		_this.checklistsPorStatusEData = function checklistsPorStatusEData() {
+			return $.ajax({
+				type: "GET",
+				url: _this.rota() + '/checklists-status',
+			});
+		};
 	
 	}; // ServicoDashboard
 

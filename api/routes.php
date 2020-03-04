@@ -1497,5 +1497,25 @@ use \phputil\JSON;
 
 		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
 	});
+
+	$caminho = '/dashboard/checklists-status';
+	$metodo = 'get';
+
+	$app->get($caminho, function(Request $req,  Response $res, $args = []) use ($app, $session, $caminho, $metodo) {
+		$sessaoUsuario = new Sessao($session);
+
+		if(Acesso::vericarAcesso($sessaoUsuario->idUsuario(), $caminho, $metodo)) {
+			$this->logger->addInfo('Acessando o cadastro de tarefa');
+			$ctrl = new ControladoraRelatorio($req->getParsedBody(), $sessaoUsuario);
+			$response = $ctrl->checklistsPorStatus();
+		} else {
+			$response = [
+				'acessoNegado'=> true,
+				'metodo'=> $metodo
+			];
+		}
+
+		return $res->withHeader('Content-type', 'application/json; charset=UTF-8')->withJson($response);
+	});
 // Fim para Dashboard
 ?>

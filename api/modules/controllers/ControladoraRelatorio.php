@@ -42,6 +42,23 @@ class ControladoraRelatorio {
       }
 
 		return  $resposta;
-   }
+	}
+		   
+	function checklistsPorStatus(){
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");
+
+			$resultados = Dice::instance()->create('ColecaoChecklist')->quantidadePorStatuseData();
+
+			$resposta = ['status' => true, 'resposta'=> $resultados]; 
+
+		}
+		catch (\Exception $e )
+		{
+			$resposta = ['status' => false, 'mensagem'=> 'Erro ao consultar contadores!']; 
+		}
+
+		return  $resposta;
+	}
 }
 ?>

@@ -31,8 +31,8 @@ class Recurso {
    }
 
    public static function todosOsRecursosERotas() {
-      // Último ID usado para recursos: 64
-      // Último ID usado para rotas: 45
+      // Último ID usado para recursos: 67
+      // Último ID usado para rotas: 46
 
       return [
          ['id'=> 1, 'nome'=> 'Visualizar Checklists', 'model'=> 'Checklist', 'rotas'=> [
@@ -196,6 +196,11 @@ class Recurso {
             ['id'=> 56, 'caminho'=> '/acesso/{acessanteTipo}/{acessanteId}', 'metodo'=> 'get'],
             ['id'=> 57, 'caminho'=> '/acesso', 'metodo'=> 'post'],
             ['id'=> 58, 'caminho'=> '/acesso/{recursoId}/{acessanteTipo}/{acessanteId}', 'metodo'=> 'delete']
+         ]],
+
+         ['id'=> 46, 'nome'=> 'Dashboard', 'model'=> 'Dashboard', 'rotas'=> [
+            ['id'=> 65, 'caminho'=> '/dashboard/contadores', 'metodo'=> 'get'],
+            ['id'=> 67, 'caminho'=>'/dashboard/checklists-status', 'metodo'=>'get']
          ]],
       ];
    }

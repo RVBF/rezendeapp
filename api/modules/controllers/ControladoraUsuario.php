@@ -168,6 +168,8 @@ class ControladoraUsuario {
 				\ParamUtil::value($this->params, 'novaSenha'),
 				\ParamUtil::value($this->params, 'confirmacaoSenha')
 			);
+			
+			DB::commit();
 
 			$resposta = ['status' => true, 'mensagem'=> 'Senha atualizada com sucesso.'];
 		}

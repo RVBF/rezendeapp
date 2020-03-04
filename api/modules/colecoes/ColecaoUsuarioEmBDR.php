@@ -212,18 +212,17 @@ class ColecaoUsuarioEmBDR  implements ColecaoUsuario {
 	}
 
 	function novaSenha($id, $senhaAtual, $novaSenha, $confirmacaoSenha) {
-		if($this->validarTrocaDeSenha($id, $senhaAtual, $novaSenha, $confirmacaoSenha)){
+		try {
+			if($this->validarTrocaDeSenha($id, $senhaAtual, $novaSenha, $confirmacaoSenha)){
+				$hash = HashSenha::instance();
+				$novaSenha = $hash->gerarHashDeSenhaComSaltEmMD5($novaSenha);
 
-			$hash = HashSenha::instance();
-			$novaSenha = $hash->gerarHashDeSenhaComSaltEmMD5($novaSenha);
-
-			try {
-				DB::table(self::TABELA)->where('id', $id)->update(['senha' => $novaSenha]);
+				DB::table(self::TABELA)->where('id', $id)->where('deleted_at', NULL)->update(['senha' => $novaSenha]);
 			}
-			catch (\Exception $e) {
-				throw new ColecaoException("Erro ao alterar a senha de  usuário!", $e->getCode(), $e);
+		}
+		catch (\Exception $e) {
+			throw new ColecaoException("Erro ao alterar a senha de  usuário!", $e->getCode(), $e);
 
-			}
 		}
 	}
 
@@ -297,40 +296,39 @@ class ColecaoUsuarioEmBDR  implements ColecaoUsuario {
 	}
 
 	private function validarTrocaDeSenha($id, $senhaAtual, $novaSenha, $confirmacaoSenha) {
-		if($senhaAtual == $novaSenha)	throw new Exception("A nova senha deve ser difente da senha atual.");
-
+	
+		//Validações correspondentes ao tamanho e ao texto contido  do campo senha atual
 		if(!is_string($senhaAtual)) throw new ColecaoException( 'Valor inválido para o campo senha atual.' );
+		if(strlen($senhaAtual) < Usuario::TAMANHO_MINIMO_SENHA) throw new ColecaoException('O campo senha atual deve conter no minímo ' . Usuario::TAMANHO_MINIMO_SENHA . ' caracteres.');
+		if (strlen($senhaAtual) > Usuario::TAMANHO_MAXIMO_SENHA) throw new ColecaoException('O campo senha atual conter no máximo ' . Usuario::TAMANHO_MAXIMO_SENHA . ' caracteres.');
+		//Fim das validações correspondentes ao tamanho e ao texto do campo senha atual
 
-		$tamSenha = strlen($senhaAtual);
-
-		if($tamSenha < Usuario::TAMANHO_MINIMO_SENHA) throw new ColecaoException('O campo senha atual deve conter no minímo ' . Usuario::TAMANHO_MINIMO_SENHA . ' caracteres.');
-		if ($tamSenha > Usuario::TAMANHO_MAXIMO_SENHA) throw new ColecaoException('O campo senha atual conter no máximo ' . Usuario::TAMANHO_MAXIMO_SENHA . ' caracteres.');
+		//Validações correspondentes ao tamanho e ao texto contido  do campo nova senha
 		if(!is_string($novaSenha)) throw new ColecaoException( 'Valor inválido para o campo nova senha.' );
-
-		$tamSenha = strlen($novaSenha);
-
-		if($tamSenha < Usuario::TAMANHO_MINIMO_SENHA) throw new ColecaoException('O campo nova senha deve conter no minímo ' . Usuario::TAMANHO_MINIMO_SENHA . ' caracteres.');
-
-		if ($tamSenha > Usuario::TAMANHO_MAXIMO_SENHA) throw new ColecaoException('O campo nova senha conter no máximo ' . Usuario::TAMANHO_MAXIMO_SENHA . ' caracteres.');
-
+		if(strlen($novaSenha) < Usuario::TAMANHO_MINIMO_SENHA) throw new ColecaoException('O campo nova senha deve conter no minímo ' . Usuario::TAMANHO_MINIMO_SENHA . ' caracteres.');
+		if (strlen($novaSenha) > Usuario::TAMANHO_MAXIMO_SENHA) throw new ColecaoException('O campo nova senha conter no máximo ' . Usuario::TAMANHO_MAXIMO_SENHA . ' caracteres.');
+		//Fim das validações correspondentes ao tamanho e ao texto do campo nova senha
+		
+		//Validações correspondentes ao tamanho e ao texto contido do campo confirmação de senha
 		if(!is_string($confirmacaoSenha)) throw new ColecaoException( 'Valor inválido para o campo confirmação senha.' );
-
-		$tamSenha = strlen($confirmacaoSenha);
-
-		if($tamSenha < Usuario::TAMANHO_MINIMO_SENHA) throw new ColecaoException('O campo confirmação senha deve conter no minímo ' . Usuario::TAMANHO_MINIMO_SENHA . ' caracteres.');
-
-		if ($tamSenha > Usuario::TAMANHO_MAXIMO_SENHA) throw new ColecaoException('O campo confirmação senha conter no máximo ' . Usuario::TAMANHO_MAXIMO_SENHA . ' caracteres.');
-
-		if($novaSenha != $confirmacaoSenha)	throw new Exception("O campo nova senha e confirmação de senha não correspondem, corrija os dados e tente novamente!");
-
+		if(strlen($confirmacaoSenha) < Usuario::TAMANHO_MINIMO_SENHA) throw new ColecaoException('O campo confirmação senha deve conter no minímo ' . Usuario::TAMANHO_MINIMO_SENHA . ' caracteres.');
+		if (strlen($confirmacaoSenha) > Usuario::TAMANHO_MAXIMO_SENHA) throw new ColecaoException('O campo confirmação senha conter no máximo ' . Usuario::TAMANHO_MAXIMO_SENHA . ' caracteres.');
+		//Fim das validações correspondentes ao tamanho e ao texto do campo confirmação de senha
+		
 		$hash = HashSenha::instance();
-
 		$senhaAtual = $hash->gerarHashDeSenhaComSaltEmMD5($senhaAtual);
+		$novaSenha = $hash->gerarHashDeSenhaComSaltEmMD5($novaSenha);
+		$confirmacaoSenha = $hash->gerarHashDeSenhaComSaltEmMD5($confirmacaoSenha);
 
 		$senhaAtualUsuario = DB::table(self::TABELA)->select(self::TABELA.'.senha')->where('id', $id)->first();
 
+		if($novaSenha != $confirmacaoSenha)	throw new Exception("O campo nova senha e confirmação de senha não correspondem, corrija os dados e tente novamente!");
+
 		if($senhaAtualUsuario['senha'] != $senhaAtual)throw new Exception("A senha anterior inválida!");
 
+		if($senhaAtual == $novaSenha)	throw new Exception("A nova senha deve ser difente da senha atual.");		
+
+		return true;
 	}
 
 	private function validarRemocaoUsuario($id){
