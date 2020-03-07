@@ -31,13 +31,19 @@ class Recurso {
    }
 
    public static function todosOsRecursosERotas() {
-      // Último ID usado para recursos: 67
-      // Último ID usado para rotas: 46
+      // Último ID usado para recursos: 71
+      // Último ID usado para rotas: 47
 
       return [
          ['id'=> 1, 'nome'=> 'Visualizar Checklists', 'model'=> 'Checklist', 'rotas'=> [
             ['id'=> 1, 'caminho'=> '/checklist', 'metodo'=> 'get'],
             ['id'=> 16, 'caminho'=> '/checklist/{id}', 'metodo'=> 'get']
+         ]],
+         ['id'=> 47, 'nome'=> 'Executar Checklists', 'model'=> 'Checklist', 'rotas'=> [
+            ['id'=> 69, 'caminho'=> '/questionamento', 'metodo'=> 'get'],
+            ['id'=> 70, 'caminho'=> '/questionamento/{id}', 'metodo'=> 'get'],
+            ['id'=> 68, 'caminho'=> '/checklist/questionamentos/{id}', 'metodo'=> 'get'],
+            ['id'=> 71, 'caminho'=> '/questionamento', 'metodo'=> 'post']
          ]],
          ['id'=> 2, 'nome'=> 'Cadastrar Checklists', 'model'=> 'Checklist', 'rotas'=> [
             ['id'=> 2, 'caminho'=> '/checklist', 'metodo'=> 'post']
