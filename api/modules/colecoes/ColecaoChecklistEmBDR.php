@@ -130,8 +130,6 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 					$query->orWhereRaw('DATE_FORMAT('. self::TABELA .'.data_limite, "%d/%m/%Y") like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw('DATE_FORMAT('. self::TABELA .'.dataexecucao, "%d/%m/%Y") like "%' . $buscaCompleta . '%"');
 					$query->orWhereRaw('DATE_FORMAT('. self::TABELA .'.data_cadastro, "%d/%m/%Y") like "%' . $buscaCompleta . '%"');
-
-
 				});
 
 
@@ -216,12 +214,11 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 	function quantidadePorStatuseData(){
 		try {
 			$query = DB::table(self::TABELA)->select(
-				DB::raw('DISTINCT ( select count(*) from '. self::TABELA .' query1 where query1.`deleted_at` is null and query1.status =  "' . StatusChecklistEnumerado::AGUARDANDO_EXECUCAO . '" and DATE_FORMAT('. self::TABELA.'.data_cadastro, "%d/%m/%Y") = DATE_FORMAT(query1.data_cadastro, "%d/%m/%Y") group by query1.`status`, DATE_FORMAT(query1.data_cadastro, "%d/%m/%Y")) as qtdStatusAgaExecucao, 
-				(select count(*) from '. self::TABELA .' query1 where query1.`deleted_at` is null and query1.status =  "' . StatusChecklistEnumerado::EM_PROGRESSO . '" and DATE_FORMAT('. self::TABELA.'.data_cadastro, "%d/%m/%Y") = DATE_FORMAT(query1.data_cadastro, "%d/%m/%Y") group by query1.`status`, DATE_FORMAT(query1.data_cadastro, "%d/%m/%Y") ) as qtdStatusEmProgresso,
-				(select count(*) from '. self::TABELA .' query1 where query1.`deleted_at` is null and query1.status = "' . StatusChecklistEnumerado::EXECUTADO . '" and DATE_FORMAT('. self::TABELA.'.data_cadastro, "%d/%m/%Y") = DATE_FORMAT(query1.data_cadastro, "%d/%m/%Y") group by query1.`status`, DATE_FORMAT(query1.data_cadastro, "%d/%m/%Y") ) as qtdStatusExecutado,
-				DATE_FORMAT('. self::TABELA.'.data_cadastro, "%d/%m/%Y") as "Data"'));
-			$query->where('deleted_at', NULL);
-			
+				DB::raw('DISTINCT ( select count(*) from '. self::TABELA .' query1 where query1.`deleted_at` is null and query1.status =  "' . StatusChecklistEnumerado::AGUARDANDO_EXECUCAO . '" and DATE('. self::TABELA.'.data_cadastro) = DATE(query1.data_cadastro) group by query1.`status`, DATE(query1.data_cadastro)) as qtdStatusAgaExecucao, 
+				(select count(*) from '. self::TABELA .' query1 where query1.`deleted_at` is null and query1.status =  "' . StatusChecklistEnumerado::EM_PROGRESSO . '" and DATE('. self::TABELA.'.data_cadastro) = DATE(query1.data_cadastro) group by query1.`status`, DATE(query1.data_cadastro) ) as qtdStatusEmProgresso,
+				(select count(*) from '. self::TABELA .' query1 where query1.`deleted_at` is null and query1.status = "' . StatusChecklistEnumerado::EXECUTADO . '" and DATE('. self::TABELA.'.data_cadastro) = DATE(query1.data_cadastro) group by query1.`status`, DATE(query1.data_cadastro) ) as qtdStatusExecutado,
+				DATE('. self::TABELA.'.data_cadastro) as "Data"'));
+			$query->where('deleted_at', NULL)->orderBy('Data', 'asc');
 			return $query->get();
 		}
 		catch (\Exception $e) {
