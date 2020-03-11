@@ -39,6 +39,13 @@
 				url: _this.rota() + '/checklists-status',
 			});
 		};
+
+		_this.qtdPAePe = function qtdPAePe() {
+			return $.ajax({
+				type: "GET",
+				url: _this.rota() + '/quantidade-pa-pe',
+			});
+		};
 	
 	}; // ServicoDashboard
 

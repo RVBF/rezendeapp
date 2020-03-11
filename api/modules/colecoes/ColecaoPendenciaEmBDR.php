@@ -227,7 +227,6 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 			throw new ColecaoException("Erro ao listar checklists.", $e->getCode(), $e);
 		}
 	}
-	
 
 	function todosComChecklistId($limite = 0, $pulo = 10, $search = '', $colaboradorId = 0, $checklistId = 0){
 		try {	
@@ -300,6 +299,7 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 			throw new ColecaoException("Erro ao listar checklists.", $e->getCode(), $e);
 		}
 	}
+
 	function todosComId($ids = []) {
 		try {	
 			$tarefas = DB::table(self::TABELA)->where(self::TABELA. '.deleted_at', NULL)->whereIn('id', $ids)->get();
@@ -334,6 +334,22 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 		return $pendencia->toArray();
 	}	
 
+	function quantidadePorStatuseData(){
+		try {
+			$query = DB::table(self::TABELA)->select(
+				DB::raw('DISTINCT ( select count(*) from '. self::TABELA .' query1 where query1.`deleted_at` is null and query1.status =  "' . StatusChecklistEnumerado::AGUARDANDO_EXECUCAO . '" and DATE('. self::TABELA.'.data_cadastro) = DATE(query1.data_cadastro) group by query1.`status`, DATE(query1.data_cadastro)) as qtdStatusAgaExecucao, 
+				(select count(*) from '. self::TABELA .' query1 where query1.`deleted_at` is null and query1.status =  "' . StatusChecklistEnumerado::EM_PROGRESSO . '" and DATE('. self::TABELA.'.data_cadastro) = DATE(query1.data_cadastro) group by query1.`status`, DATE(query1.data_cadastro) ) as qtdStatusEmProgresso,
+				(select count(*) from '. self::TABELA .' query1 where query1.`deleted_at` is null and query1.status = "' . StatusChecklistEnumerado::EXECUTADO . '" and DATE('. self::TABELA.'.data_cadastro) = DATE(query1.data_cadastro) group by query1.`status`, DATE(query1.data_cadastro) ) as qtdStatusExecutado,
+				DATE('. self::TABELA.'.data_cadastro) as "Data"'));
+			$query->where('deleted_at', NULL)->orderBy('Data', 'asc');
+			return $query->get();
+		}
+		catch (\Exception $e) {
+
+			throw new ColecaoException("Erro ao gerar relatório de checklists por quantidade e data!", $e->getCode(), $e);
+		}
+	}
+	
     function contagem($idsLojas = []) {
 		if(is_array($idsLojas))
         return (count($idsLojas) > 0) ?  DB::table(self::TABELA)->whereIn('loja_id',

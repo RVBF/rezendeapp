@@ -31,7 +31,7 @@ class Recurso {
    }
 
    public static function todosOsRecursosERotas() {
-      // Último ID usado para recursos: 71
+      // Último ID usado para recursos: 72
       // Último ID usado para rotas: 47
 
       return [
@@ -206,7 +206,8 @@ class Recurso {
 
          ['id'=> 46, 'nome'=> 'Dashboard', 'model'=> 'Dashboard', 'rotas'=> [
             ['id'=> 65, 'caminho'=> '/dashboard/contadores', 'metodo'=> 'get'],
-            ['id'=> 67, 'caminho'=>'/dashboard/checklists-status', 'metodo'=>'get']
+            ['id'=> 67, 'caminho'=>'/dashboard/checklists-status', 'metodo'=>'get'],
+            ['id'=> 72, 'caminho'=>'/dashboard/quantidade-pa-pe', 'metodo'=>'get'],
          ]],
       ];
    }

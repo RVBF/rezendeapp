@@ -15,11 +15,17 @@ use Illuminate\Database\Capsule\Manager as DB;
 class ControladoraRelatorio {
 
     private $params;
-    private $servicoLogin;
+	private $servicoLogin;
+	private $colecaoChecklist;
+	private $colecaoPa;
+	private $colecaoPe;
 
 	function __construct($params, Sessao $sessao) {
 		$this->params = $params;
 		$this->servicoLogin = new ServicoLogin($sessao);
+		$this->colecaoPa = Dice::instance()->create('ColecaoPlanoAcao');
+		$this->colecaoPe = Dice::instance()->create('ColecaoPendencia');
+		$this->colecaoChecklist = Dice::instance()->create('ColecaoChecklist'); 
 	}
 
 	function contadores() {
@@ -28,10 +34,10 @@ class ControladoraRelatorio {
 				throw new Exception("Erro ao acessar página.");
 			}
 			$resposta = ['status' => true, 'resposta'=> [
-				'contagemChecklist' => Dice::instance()->create('ColecaoChecklist')->contagem(),
-				'contagemPendencia' => Dice::instance()->create('ColecaoPendencia')->contagem(),
-				'contagemPlanoAcao' => Dice::instance()->create('ColecaoPlanoAcao')->contagem(),
-				'contagemPorLoja' => Dice::instance()->create('ColecaoChecklist')->contagemPorLoja()
+				'contagemChecklist' => $this->colecaoChecklist->contagem(),
+				'contagemPendencia' =>$this->colecaoPe ->contagem(),
+				'contagemPlanoAcao' => $this->colecaoPe->contagem(),
+				'contagemPorLoja' => $this->colecaoChecklist->contagemPorLoja()
 			]]; 
 
 		}
@@ -48,10 +54,29 @@ class ControladoraRelatorio {
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");
 
-			$resultados = Dice::instance()->create('ColecaoChecklist')->quantidadePorStatuseData();
+			$resultados = $this->colecaoChecklist->quantidadePorStatuseData();
 
 			$resposta = ['status' => true, 'resposta'=> $resultados]; 
 
+		}
+		catch (\Exception $e )
+		{
+			$resposta = ['status' => false, 'mensagem'=> 'Erro ao consultar contadores!']; 
+		}
+
+		return  $resposta;
+	}
+
+	function quantidadePaPE(){
+		try {
+			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");
+
+			$resposta = ['status' => true, 'resposta'=> [
+				'contagemPendencia' =>$this->colecaoPe ->contagem(),
+				'contagemPlanoAcao' => $this->colecaoPe->contagem(),
+			]]; 
+
+			$resposta = ['status' => true, 'resposta'=> '']; 
 		}
 		catch (\Exception $e )
 		{
