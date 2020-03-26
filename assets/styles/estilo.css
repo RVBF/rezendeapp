@@ -219,6 +219,13 @@ span{
 
 .dashboard .contadores {
     font-size: 20px;
+    height: 100% !important;
+}
+
+.dashboard .contadores .col .card-panel{
+    align-items: center;
+    height: 100% !important;
+    padding: 5px !important;
 }
 
 select.qtd_resultados_pesquisapadrao {

@@ -43,9 +43,8 @@ class ControladoraRelatorio {
 		}
 		catch (\Exception $e )
 		{
-			Util::printr($e->getMessage());
 			$resposta = ['status' => false, 'mensagem'=> 'Erro ao consultar contadores!']; 
-      }
+      	}
 
 		return  $resposta;
 	}
@@ -71,12 +70,17 @@ class ControladoraRelatorio {
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");
 
-			$resposta = ['status' => true, 'resposta'=> [
-				'contagemPendencia' =>$this->colecaoPe ->contagem(),
-				'contagemPlanoAcao' => $this->colecaoPe->contagem(),
-			]]; 
+			$query = DB::table(ColecaoPendenciaEmBDR::TABELA)->select(
+			DB::raw('DISTINCT ( select count(*) from '. ColecaoPendenciaEmBDR::TABELA .' p1 where p1.`deleted_at` is null and p1.status =  "' . StatusPendenciaEnumerado::AGUARDANDO_EXECUCAO . '" and DATE('. ColecaoPendenciaEmBDR::TABELA.'.datacadastro) = DATE(p1.datacadastro)) as qtdStatusAgaExecucao, DATE('. ColecaoPendenciaEmBDR::TABELA.'.datacadastro) as "Data"'));
+			$query->where('deleted_at', NULL)->orderBy('Data', 'asc');
+				
+			$pEsAbertasPorData = $query->get();
+			$query = DB::table(ColecaoPlanoAcaoEmBDR::TABELA)->select(
+				DB::raw('DISTINCT ( select count(*) from '. ColecaoPlanoAcaoEmBDR::TABELA .' p1 where p1.`deleted_at` is null and p1.status =  "' . StatusPaEnumerado::AGUARDANDO_EXECUCAO . '" and DATE('. ColecaoPlanoAcaoEmBDR::TABELA.'.datacadastro) = DATE(p1.datacadastro)) as qtdStatusAgaExecucao, DATE('. ColecaoPlanoAcaoEmBDR::TABELA.'.datacadastro) as "Data"'));
+			$pAsAbertasPorData = $query->get();
 
-			$resposta = ['status' => true, 'resposta'=> '']; 
+
+			$resposta = ['status' => true, 'resposta'=> ['pEsAbertasPorData'=> $pEsAbertasPorData, 'pAsAbertasPorData'=>$pAsAbertasPorData]]; 
 		}
 		catch (\Exception $e )
 		{

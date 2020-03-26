@@ -129,6 +129,8 @@
          loader.script('vendor/tether/dist/js/tether.min.js');
          loader.script('vendor/bootstrap/dist/js/bootstrap.min.js');
          loader.script('vendor/toastr/toastr.min.js');
+         // loader.script('vendor/jquery-mobile/js/events/touch.js');
+
          loader.script('assets/js/bootstrap.js');
 
          loader.script('vendor/bootstrap3-dialog/dist/js/bootstrap-dialog.min.js');
