@@ -66,9 +66,6 @@ class ControladoraChecklist {
 				$erro = null;
 				$objetos = $this->colecaoChecklist->todosComLojaIds($dtr->length, $dtr->start, (isset($dtr->search->value)) ? $dtr->search->value : '', $idsLojas);
 				$contagem = $this->colecaoChecklist->contagem($idsLojas);
-				// Util::printr(is_array($objetos));
-				// Util::printr($objetos);
-
 				$conteudo = new DataTablesResponse(
 					(isset($dtr->search->value) and strlen($dtr->search->value) > 0) ? count($objetos) : $contagem,
 					is_array($objetos) ? count($objetos) : 0, //count($objetos ),

@@ -219,6 +219,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 				(select count(*) from '. self::TABELA .' query1 where query1.`deleted_at` is null and query1.status = "' . StatusChecklistEnumerado::EXECUTADO . '" and DATE('. self::TABELA.'.data_cadastro) = DATE(query1.data_cadastro) group by query1.`status`, DATE(query1.data_cadastro) ) as qtdStatusExecutado,
 				DATE('. self::TABELA.'.data_cadastro) as "Data"'));
 			$query->where('deleted_at', NULL)->orderBy('Data', 'asc');
+
 			return $query->get();
 		}
 		catch (\Exception $e) {
@@ -380,10 +381,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 
 			return $query->get();
 		}
-		catch (\Exception $e)
-		{
-			Util::printr($e->getMessage());
-
+		catch (\Exception $e) {
 			throw new ColecaoException("Erro ao buscar checklists no banco de dados!", $e->getCode(), $e);
 		}
 	}
