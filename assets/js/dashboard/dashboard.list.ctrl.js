@@ -9,12 +9,33 @@
    function ControladoraListagemDashboard(servicoDashboard) {
       var _this = this;
 
+      _this.configurarDasboard = function configurarDasboard(){
+
+         var html = '';
+         html += '<div class="row contadores">';
+         html += '</div>';
+
+         html += '<div class="row graficos_padrao1">';
+         html += '</div>';
+
+         html += '<div class="row contadores_pe_pa">';
+         html += '</div>';      
+
+         $('#dashboard').append(html).promise().done(function() {
+            function executaConfig(){
+               return new Promise((resolve, reject) =>{
+                  resolve();
+               });
+            }
+   
+            executaConfig().then(_this.renderizarContadores).then(_this.renderizarGraficoChecklistsPorLoja).then(_this.renderizarGraficoChecklistsPorStatus).then(_this.redenrizarGraficoQtdPAePE);
+         });
+      };
+
+
       _this.renderizarContadores = function renderizarContadores() {
          var sucesso = function (resposta) {
             var html = '';
-            html += '<div class="contadores col col-md-12 col-sm-12 col-lg-12 col-12">'
-            html += '<div class="row">';
-
             html += '<div class="col col-md-4 col-sm-4 col-lg-4 col-12">';
             html += '<div class="card-panel center-align text-white blue darken-2">'
             html += '<p class="font-weight-bold">Total de Checklists</p>'
@@ -35,38 +56,35 @@
             html += '<p class="font-weight-bold">'+ resposta.resposta['contagemPlanoAcao'] +'</p>'
             html += '</div>';
             html += '</div>';
-            html += '</div>';
 
 
             html += '</div>';
-            $('.dashboard').prepend(html);
+            $('#dashboard').find('.contadores:first').prepend(html).promise().done(function(){
+               google.charts.load('current', {'packages':['corechart']});
+               google.charts.setOnLoadCallback(drawChart);
+         
+               function drawChart() {
+                  var contagemLoja = new Array();
+                  contagemLoja.push(['Loja', 'Quantidade']);
+                  for (const key in resposta.resposta.contagemPorLoja) {
+                     const elemento = resposta.resposta.contagemPorLoja[key];
+                     contagemLoja.push([ elemento.Loja, parseInt(elemento.Quantidade)]);
+                  }
 
-            google.charts.load('current', {'packages':['corechart']});
-            google.charts.setOnLoadCallback(drawChart);
-      
-            function drawChart() {
+                  var data = google.visualization.arrayToDataTable(contagemLoja);
+                  var options = {
+							title: 'Checklist por loja',
+							is3D: true,
+              		};
 
-               var contagemLoja = new Array();
-               contagemLoja.push(['Loja', 'Quantidade']);
-               for (const key in resposta.resposta.contagemPorLoja) {
-                  const elemento = resposta.resposta.contagemPorLoja[key];
-                  contagemLoja.push([ elemento.Loja, parseInt(elemento.Quantidade)]);
-               }
+						var chart = new google.visualization.PieChart(document.getElementById('grafico_loja'));
+				
+						chart.draw(data, options);
+           	 	}
+            });
 
-               var data = google.visualization.arrayToDataTable(contagemLoja);
-               var options = {
-                title: 'Checklist por loja',
-                is3D: true,
-              };
-            //   $('<div></div>').attr("class","grafico_loja").attr("id","grafico_loja").append(".dashboard").promise().done(function () {
 
-            //   });
-
-              var chart = new google.visualization.PieChart(document.getElementById('grafico_loja'));
-      
-              chart.draw(data, options);
-           
-            }
+     
          };
 
          var jqXHR = servicoDashboard.contadores();
@@ -79,7 +97,7 @@
               html += '<div class="grafico_loja" id="grafico_loja"></div>';
               html += '</div>';
 
-              $(".dashboard").append(html).promise().done(function () {
+              $('#dashboard').find('.graficos_padrao1:first').append(html).promise().done(function () {
                google.charts.load('current', {'packages':['corechart']});
                google.charts.setOnLoadCallback(drawChart);
          
@@ -114,7 +132,7 @@
             var html = '<div class="col col-md-7 col-12 col-sm-12 col-lg-7">';
               html += '<div class="grafico_checklists_status" id="grafico_checklists_status"></div>';
               html += '</div>';
-            $(".dashboard").append(html).promise().done(function () {
+              $('#dashboard').find('.graficos_padrao1:first').append(html).promise().done(function () {
                google.charts.load('current', {'packages':['line']});
                google.charts.setOnLoadCallback(carregarGrafico); 
                function carregarGrafico() {
@@ -157,7 +175,7 @@
             var html = '<div class="col col-md-12 col-12 col-sm-12 col-lg-12">';
               html += '<div class="grafico_quantidade_pa_pe" id="grafico_quantidade_pa_pe"></div>';
               html += '</div>';
-            $(".dashboard").append(html).promise().done(function () {
+				  $('#dashboard').find('.contadores_pe_pa:first').append(html).promise().done(function () {
                google.charts.load("current", {packages:["corechart"]});
                google.charts.setOnLoadCallback(carregarGrafico); 
                function carregarGrafico() {
@@ -240,17 +258,7 @@
       };
 
       _this.configurar = function configurar() {
-         function executaConfig(){
-            return new Promise((resolve, reject) =>{
-               resolve();
-            });
-         }
-
-         executaConfig().then(_this.renderizarContadores).then(_this.renderizarGraficoChecklistsPorLoja).then(_this.renderizarGraficoChecklistsPorStatus).then(_this.redenrizarGraficoQtdPAePE);
-         // _this.renderizarContadores();
-         // _this.renderizarGraficoChecklistsPorLoja();
-         // _this.renderizarGraficoChecklistsPorStatus();
-         // _this.redenrizarGraficoQtdPAePE();
+         _this.configurarDasboard();
       };
    } // ControladoraListagemDashboard
 
