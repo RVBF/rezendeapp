@@ -115,7 +115,7 @@
             listagemPadrao.find('#pesquisar_itens').on('keyup', function () {
                _this.caixaPesquisa = $(this).val();
 
-               clearTimeout(_this.pesquisaTimeOut)
+               clearTimeout(_this.pesquisaTimeOut);
                _this.pesquisaTimeOut = setTimeout(function () {
                   _this.atualizarTabela();
                }, opcoes.searchDelay);
@@ -163,7 +163,7 @@
             if (!opcoes.listagemTemporal) {
                _this.paginacao = {
                   start: _this.inicioDaPagina(),
-                  length: _this.inicioDaPagina() + parseInt($('#qtd_resultados').val())
+                  length: parseInt($('#qtd_resultados').val())
                };
 
                if (_this.caixaPesquisa != '' && _this.caixaPesquisa.length >= 3) _this.paginacao.search = { value: _this.caixaPesquisa };
@@ -345,8 +345,7 @@
       };
 
       _this.renderizarInfo = function renderizarInfo(data) {
-         console.log(data);
-         let inicio = (_this.paginacao.start + 1), tamanhoPagina = (_this.paginacao.length == undefined) ? inicio + parseInt($('#qtd_resultados').val()) : (_this.paginacao.length == null) ? 0 :_this.paginacao.length ;
+         let inicio = (_this.paginacao.start + 1), tamanhoPagina = inicio + parseInt($('#qtd_resultados').val()) -1;
          if (_this.objetos.length == 0) {
             tamanhoPagina = 0;
             inicio--;
@@ -384,6 +383,7 @@
       };
 
       _this.renderizarBotoes = function renderizarBotoes(data) {
+         let inicio = (_this.paginacao.start + 1), tamanhoPagina = inicio + parseInt($('#qtd_resultados').val()) -1;
          let resultadosPorPagina = listagemPadrao.find('#qtd_resultados').val();
          let quantidadeBotoes = Math.ceil(data.recordsTotal / resultadosPorPagina);
          let html = '';
@@ -396,14 +396,14 @@
 
             var i;
 
-            var pagina = data.recordsFiltered / parseInt($('#qtd_resultados').val());
-
+            var pagina = tamanhoPagina / parseInt($('#qtd_resultados').val());
+           
             for (i = 1; i <= quantidadeBotoes; i++) {
                let classes = ' paginate_button';
 
-               if(data.recordsFiltered == (parseInt($('#qtd_resultados').val()) * i)){
+               if(tamanhoPagina == (parseInt($('#qtd_resultados').val()) * i)){
                   classes += ' pagina-atual';
-               }else if(data.recordsFiltered < parseInt($('#qtd_resultados').val())){
+               }else if(tamanhoPagina < parseInt($('#qtd_resultados').val())){
                   classes += ' pagina-atual';
                }
 

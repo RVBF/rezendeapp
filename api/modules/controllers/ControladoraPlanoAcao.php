@@ -382,7 +382,7 @@ class ControladoraPlanoAcao {
 			// if(!$this->servicoLogin->eAdministrador()){
 			// 	throw new Exception("Usuário sem permissão para executar ação.");
 			// }
-			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'solucao', 'anexos'], $this->params);
+			$inexistentes = \ArrayUtil::nonExistingKeys(['id', 'solucao'], $this->params);
 			$resposta = [];
 
 			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
@@ -391,18 +391,17 @@ class ControladoraPlanoAcao {
 				throw new Exception($msg);
 			}
 
+			// Util::printr($this->params);
+
 			$planoAcao = new PlanoAcao(); $planoAcao->fromArray($this->colecaoPlanoAcao->comId($this->params['id']));
 			
 			if(!isset($planoAcao) and !($planoAcao instanceof PlanoAcao)) throw new Exception("Plano de ação não encontrado no banco de dados.");
-
 			$responsavel = new Colaborador(); $responsavel->fromArray($planoAcao->getResponsavel());
 
 			$planoAcao->setStatus(StatusPaEnumerado::EXECUTADO);
 			$planoAcao->setResposta(\ParamUtil::value($this->params, 'resposta'));
 			$planoAcao->setDataExecucao(Carbon::now());
-			$planoAcao->setSolucao(json_encode($planoAcao->getSolucao()));
-
-			$this->colecaoPlanoAcao->atualizar($planoAcao);
+			$this->colecaoPlanoAcao->executar($planoAcao);
 			$questionamento = null;
 
 			if($this->colecaoQuestionamento->contagemPorColuna(\ParamUtil::value($this->params, 'id'), 'planoacao_id') > 0){
@@ -434,7 +433,7 @@ class ControladoraPlanoAcao {
 				}
 				else{
 					if($checklist->getStatus() == StatusChecklistEnumerado::AGUARDANDO_EXECUCAO){
-						$checklist->setStatus(StatusChecklistEnumerado::EM_PROGRESSO);
+						$checklist->setStatus(StatusChecklistEnumerado::INCOMPLETO);
 						$this->colecaoChecklist->atualizar($checklist);	
 					}
 				}
@@ -457,7 +456,7 @@ class ControladoraPlanoAcao {
 				}
 			}
 			else{
-				throw new Exception("É necessário  pelo menos um anexo para comprar a execução do plano de ação!");
+				throw new Exception("É necessário  anexar uma áudio ou foto para comprovar a execução do plano de ação!");
 			}
 
 			$resposta = ['status' => true, 'mensagem'=> 'Plano de ação executado com sucesso.']; 

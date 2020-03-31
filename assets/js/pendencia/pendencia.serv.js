@@ -11,6 +11,7 @@
         descricao,
         dataLimite,
 		solucao,
+		descricaoExecucao,
 		responsavel,
 		unidade,
         dataCadastro,
@@ -20,6 +21,7 @@
         this.descricao = descricao || '';
         this.dataLimite = dataLimite || '';
 		this.solucao = solucao || '';
+		this.descricaoExecucao = descricaoExecucao || '';
 		this.responsavel  = responsavel || 0;
 		this.unidade = unidade || 0;
         this.dataCadastro = dataCadastro || '';
@@ -39,6 +41,7 @@
             descricao,
             dataLimite,
 			solucao,
+			descricaoExecucao,
 			responsavel,
 			unidade,
             dataCadastro,
@@ -49,6 +52,7 @@
                 descricao : descricao || '',
                 dataLimite : dataLimite || '',
 				solucao : solucao || '',
+				descricaoExecucao : descricaoExecucao || '',
 				responsavel : responsavel ||  0,
 				unidade : unidade || 0,
                 dataCadastro : dataCadastro || '',

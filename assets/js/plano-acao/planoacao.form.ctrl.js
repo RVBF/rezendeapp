@@ -159,6 +159,7 @@
 
 		// Desenha o objeto no formulário
 		_this.desenhar = function desenhar(resposta) {
+			console.log(resposta);
 			_this.obj = resposta.conteudo;
 			if(window.location.href.search('editar') != -1) $('.acoes').find('.acao:first').find('.input-field').prepend('<i class="adicionar_acao prefix mdi mdi-plus-circle-outline"  id="adicionar_acao"></i>');
 
@@ -216,7 +217,22 @@
 						});
 					});
 				}
+				
+				if(_this.obj.status == 'Executado'){
+					let html = '';
+					html += '<div class="row form-row">';
+					html += '<div class="col col-sm-12 col-md-12 col-12 col-lg-12">';
+					html += '<div class="input-field ">';
+					html += '<textarea id="descricaoexecucao" class="campo_obrigatorio materialize-textarea validate valid" disabled=""></textarea>';
+					html += '<label for="descricaoexecucao" class="active">Descrição execução</label>';
+					html += '</div>';
+					html += '</div>';
+					html += '</div>';
 
+					_this.formulario.find($('.acoes')).after(html).promise().done(function(){
+						$('#descricaoexecucao').val(_this.obj.resposta).focus().blur();
+					});
+				}
 				$('.card-title').html('<h3>Visualizar PA</h3>');
 			}
 			else if(window.location.href.search('editar') != -1) {

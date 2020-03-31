@@ -24,10 +24,11 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 					'responsavel_id' => $obj->getResponsavel()->getId()
 				]
 			);
-			
+
 			$obj->setId($id);	
 		}
 		catch (\Exception $e) {
+			UtiL::printr($e->getMessage());
 			throw new ColecaoException("Erro ao adicionar nova pendência", $e->getCode(), $e);
 		}
 	
@@ -56,12 +57,28 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 				];
 				
 				DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $obj->getId())->update($filds);
-
-				return $obj;
 			}
 			catch (\Exception $e) {
 				throw new ColecaoException("Erro ao atualizar tarefa.", $e->getCode(), $e);
 			}
+	}
+
+	function executar(&$obj){
+		try {
+			$filds = [ 'status' => $obj->getStatus(),
+				'descricao' => $obj->getDescricao(),
+				'descricaosolucao' => $obj->getSolucao(),
+				'dataexecucao' => ($obj->getDataExecucao() instanceof Carbon) ? $obj->getDataExecucao()->toDateTimeString() : $obj->getDataExecucao(), 
+				'datalimite' => ($obj->getDataLimite() instanceof Carbon) ? $obj->getDataLimite()->toDateTimeString() : $obj->getDataLimite(), 
+				'responsavel_id' => ($obj->getResponsavel() instanceof Colaborador) ? $obj->getResponsavel()->getId() : $obj->getResponsavel()['id']
+			];
+		
+			DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $obj->getId())->update($filds);
+
+		} 
+		catch (\Exception $e) {
+			throw new Exception("Erro ao executar pendência!", $e->getMessage());
+		}
 	}
 
 	function comId($id){
@@ -326,6 +343,7 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 			$row['descricao'],
 			$row['datalimite'],
 			$row['descricaosolucao'],
+			$row['detalhesexecucao'],
             $responsavel,
 			$row['datacadastro'],
             $row['dataexecucao']

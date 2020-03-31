@@ -202,6 +202,7 @@
 
    $(document).ready(function () {
       $('.sidenav').sidenav();
+
       navigator.permissions.query({name:'microphone'}).then(function(result) {
          if (result.state == 'granted') {
        
@@ -213,8 +214,10 @@
          result.onchange = function() {
        
          };
-       });
+		});
+
       moment.locale('pt-BR');
+
       $(window).scroll(function () {
 
          //Display or hide scroll to top button
@@ -232,6 +235,9 @@
          return false;
       });
 
+		$('#nav-mobile').on('click', 'a', function () {
+			$('body .sidenav-overlay').trigger('click');
+		});
 
       $('.tooltip').tooltip();
       // if (window.location.href == 'http://rezendeconstrucao.com.br/rezendeapp/' || window.location.href == 'http://rezendeapp.local/') {

@@ -390,6 +390,7 @@ use \phputil\JSON;
 
 			$ctrl = new ControladoraQuestionamento($req->getQueryParams(), $sessaoUsuario);
 			$response = $ctrl->todos();
+			Util::printr($response);
 		} else {
 			$response = [
 				'acessoNegado'=> true,

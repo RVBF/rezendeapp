@@ -215,7 +215,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 		try {
 			$query = DB::table(self::TABELA)->select(
 				DB::raw('DISTINCT ( select count(*) from '. self::TABELA .' query1 where query1.`deleted_at` is null and query1.status =  "' . StatusChecklistEnumerado::AGUARDANDO_EXECUCAO . '" and DATE('. self::TABELA.'.data_cadastro) = DATE(query1.data_cadastro) group by query1.`status`, DATE(query1.data_cadastro)) as qtdStatusAgaExecucao, 
-				(select count(*) from '. self::TABELA .' query1 where query1.`deleted_at` is null and query1.status =  "' . StatusChecklistEnumerado::EM_PROGRESSO . '" and DATE('. self::TABELA.'.data_cadastro) = DATE(query1.data_cadastro) group by query1.`status`, DATE(query1.data_cadastro) ) as qtdStatusEmProgresso,
+				(select count(*) from '. self::TABELA .' query1 where query1.`deleted_at` is null and query1.status =  "' . StatusChecklistEnumerado::INCOMPLETO . '" and DATE('. self::TABELA.'.data_cadastro) = DATE(query1.data_cadastro) group by query1.`status`, DATE(query1.data_cadastro) ) as qtdStatusEmProgresso,
 				(select count(*) from '. self::TABELA .' query1 where query1.`deleted_at` is null and query1.status = "' . StatusChecklistEnumerado::EXECUTADO . '" and DATE('. self::TABELA.'.data_cadastro) = DATE(query1.data_cadastro) group by query1.`status`, DATE(query1.data_cadastro) ) as qtdStatusExecutado,
 				DATE('. self::TABELA.'.data_cadastro) as "Data"'));
 			$query->where('deleted_at', NULL)->orderBy('Data', 'asc');

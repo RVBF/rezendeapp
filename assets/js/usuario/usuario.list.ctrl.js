@@ -71,7 +71,6 @@
 				$('.visualizar_checklist').on('click',function(event){
 					event.preventDefault();
 					var objeto = _tabela.getObjetos()[$(this).parents('.listagem-padrao-item').index()];
-					console.log(objeto);
 					router.navigate('/visualizar-colaborador/'+ objeto.id);
 				});
 			}

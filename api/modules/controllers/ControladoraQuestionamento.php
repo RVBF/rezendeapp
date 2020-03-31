@@ -175,7 +175,6 @@ class ControladoraQuestionamento {
 							'',
 							($responsavel->getId() == $responsavelAtual->getId()) ?  true : false
 						);
-
 						$this->colecaoPlanoAcao->adicionar($planoDeAcao);
 
 
@@ -210,6 +209,7 @@ class ControladoraQuestionamento {
 							$this->params['pendencia']['descricao'],
 							$dataLimitePe,
 							$this->params['pendencia']['solucao'],
+							'',
 							$responsavel
 						);
 						$this->colecaoPendencia->adicionar($pendencia);
@@ -233,7 +233,7 @@ class ControladoraQuestionamento {
 					}
 				}
 				else{
-					throw new Exception("Para respostas inferior a bom é necessário adicionar ao menos 1 anexo para comprovação do problema!");
+					throw new Exception("Para respostas inferiores a bom é necessário adicionar uma foto ou áudio para comprovação do problema!");
 				}
 			}
 
@@ -252,7 +252,7 @@ class ControladoraQuestionamento {
 			}
 			else{
 				if($checklist->getStatus() == StatusChecklistEnumerado::AGUARDANDO_EXECUCAO){
-					$checklist->setStatus(StatusChecklistEnumerado::EM_PROGRESSO);
+					$checklist->setStatus(StatusChecklistEnumerado::INCOMPLETO);
 					$this->colecaoChecklist->atualizar($checklist);	
 				}
 			}

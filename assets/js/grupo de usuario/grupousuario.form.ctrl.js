@@ -165,7 +165,6 @@
 			if (resposta.conteudo.usuarios != null) {
 				for (const index in resposta.conteudo.usuarios) {
 					var usuario = resposta.conteudo.usuarios[index];
-					console.log(usuario);
 					$('#usuarios option').each(function (i, value) {
 						if (parseInt($(this).val()) == usuario.id) $(this).attr('selected', true);
 					});

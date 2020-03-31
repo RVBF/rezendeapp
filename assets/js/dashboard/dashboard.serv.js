@@ -26,7 +26,6 @@
 		};
 
 		_this.contadores = function contadores(){
-			// console.log(_this.rota())
 			return $.ajax({
 				type: "GET",
 				url: _this.rota() + '/contadores',

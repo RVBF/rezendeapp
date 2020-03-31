@@ -65,6 +65,23 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 		// }
 	}
 
+	function executar(&$obj){
+		try {
+			$filds = [
+				'status' => $obj->getStatus(),
+				'detalhesexecucao' => $obj->getResposta(),
+				'dataexecucao' => ($obj instanceof Carbon) ? $obj->getDataExecucao()->toDateTimeString() : $obj->getDataExecucao(),
+			];
+
+			DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $obj->getId())->update($filds);
+		}
+		catch (\Exception $e) {
+			Util::Printr($e->getMessage());
+			throw new Exception("Erro ao executar plano de ação", $e->getCode());
+			
+		}
+	}
+
 	function comId($id){
 		try {		
 			return (DB::table(self::TABELA)->where('id', $id)->count() > 0) ? $this->construirObjeto(DB::table(self::TABELA)->where('id', $id)->first()) : [];
@@ -141,6 +158,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 		}
 		catch (\Exception $e)
 		{			
+			Util::printr($e->getMessage());
 
 			throw new ColecaoException("Erro ao listar checklists.", $e->getCode(), $e);
 		}
@@ -231,7 +249,6 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 		}
 		catch (\Exception $e)
 		{
-
 			throw new ColecaoException("Erro ao listar checklists.", $e->getCode(), $e);
 		}
 	}
@@ -264,7 +281,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 			$row['descricaonaoconformidade'],
 			$row['datalimite'],
 			json_decode($row['descricaosolucao']),
-			'',
+			$row['detalhesexecucao'],
 			$responsavel,
 			null,
 			$row['datacadastro'],

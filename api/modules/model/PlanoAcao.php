@@ -51,6 +51,7 @@ class PlanoAcao {
         $this->descricao = $descricao;
         $this->dataLimite = $dataLimite;
         $this->solucao = $solucao;
+        $this->resposta = $resposta;
         $this->responsavel  = $responsavel;
         $this->unidade = $unidade;
         $this->resposta = $resposta;

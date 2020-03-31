@@ -313,11 +313,11 @@
 				html += '<div class="opcoes_questionamento col col-sm-12 col-md-12 col-lg-12 col-12 center-align" style="display: none">';
 					html += '<div class="row form-row ">'
 						html += '<div class="list-group">';
-								html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2">';
-										html += '<a class="list-group-item list-group-item-action orange accent-4 subicon-dto element">';
-										html += '<i class="mdi mdi-information-outline white-text"></i>';
-										html += '</a>';
-								html += '</div>';
+								// html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2">';
+								// 		html += '<a class="list-group-item list-group-item-action orange accent-4 subicon-dto element">';
+								// 		html += '<i class="mdi mdi-information-outline white-text"></i>';
+								// 		html += '</a>';
+								// html += '</div>';
 
 								html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2">';
 										html += '<a class="list-group-item list-group-item-action orange accent-4 subicon-dto element" data-toggle="tooltip" title="Nenhum arquivo selecionado.">';
@@ -528,7 +528,6 @@
 			var sucesso = function (resposta) {
 				_this.resetarForm();
 				_this.questionamentos = resposta.conteudo;
-				console.log(_this.questionamentos);
 				_this.popularQuestao();
 
 			};

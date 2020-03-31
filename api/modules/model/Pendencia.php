@@ -18,6 +18,7 @@ class Pendencia {
     private $descricao;
     private $dataLimite;
     private $solucao;
+    private $descricaoExecucao;
     private $responsavel;
     private $dataCadastro;
     private $dataExecucao;
@@ -28,6 +29,7 @@ class Pendencia {
         $descricao = '',
         $dataLimite = '',
         $solucao = '',
+        $descricaoExecucao = '',
         $responsavel = null,
         $dataCadastro = '',
         $dataExecucao = ''
@@ -37,6 +39,7 @@ class Pendencia {
         $this->descricao = $descricao;
         $this->dataLimite = $dataLimite;
         $this->solucao = $solucao;
+        $this->descricaoExecucao = $descricaoExecucao;
         $this->responsavel  = $responsavel;
         $this->dataCadastro = $dataCadastro;
         $this->dataExecucao = $dataExecucao;
