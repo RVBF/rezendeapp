@@ -137,7 +137,7 @@
                google.charts.setOnLoadCallback(carregarGrafico); 
                function carregarGrafico() {
                   var linhas = new Array();
-                  linhas.push(['Data', 'Aguardando Execução', 'Em Progresso', 'Executado']);
+                  linhas.push(['Data', 'Aguardando Execução', 'Incompleto', 'Executado']);
 
                   for(const key in resposta.resposta){
                      var objeto = resposta.resposta[key];
@@ -149,6 +149,8 @@
                         (objeto.qtdStatusExecutado != null) ? objeto.qtdStatusExecutado : 0
                      ]);
                   }
+
+                  if(linhas.length ==  1) linhas.push(['', 0,0, 0]);
                   var data = google.visualization.arrayToDataTable(linhas);
             
                   var options = {
@@ -224,17 +226,9 @@
                      if(moment(a[2]+ '-' + a[1] + '-' + a[0]).isBefore(moment(b[2]+ '-' + b[1] + '-' + b[0]))) return -1
                      
                      return 0;
-                     console.log(a);
-                     console.log(b);
-                     // if (a é menor que b em algum critério de ordenação) {
-                     //    return -1;
-                     //  }
-                     //  if (a é maior que b em algum critério de ordenação) {
-                     //    return 1;
-                     //  }
-                     //  // a deve ser igual a b
-                     //  return 0;  
-                  })
+                  });
+
+                  if(resultado.length ==  1) resultado.push(['', 0,0]);
                   
                   var data = google.visualization.arrayToDataTable(resultado);
 
@@ -259,6 +253,10 @@
 
       _this.configurar = function configurar() {
          _this.configurarDasboard();
+         setInterval(function name(params) {
+            window.location.reload();
+    
+         }, 60000)
       };
    } // ControladoraListagemDashboard
 

@@ -132,7 +132,7 @@
 		_this.popularSetores = function popularSetores(valor = 0) {
 			var sucesso = function (resposta) {
 				$("#setor").empty();
-				console.log(resposta);
+
 				$.each(resposta.data, function (i, item) {
 					$("#setor").append($('<option>', {
 						value: item.id,

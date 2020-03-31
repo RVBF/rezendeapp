@@ -16,7 +16,6 @@
 		_this.objeto = null
 		_this.anexos = [];
 
-
 		// Cria as opções de validação do formulário
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
 			var opcoes = {
@@ -39,7 +38,7 @@
 						toastr.success(resposta.mensagem);
 					}
 					else{
-						_this.formulario.find('#msg').empty().removeClass('d-none').append(resposta.mensagem);
+						_this.formulario.parents('#painel_formulario').find('#msg').empty().removeClass('d-none').append(resposta.mensagem);
 						if(resposta != undefined && resposta.mensagem) toastr.error(resposta.mensagem);
 					}
 				}).always(terminado).fail(window.erro);

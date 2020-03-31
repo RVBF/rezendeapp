@@ -328,7 +328,6 @@
 
 		// Desenha o objeto no formulário
 		_this.desenhar = function desenhar(obj) {
-			console.log(obj);
 			_this.obj = obj;
 			$('#id').val(obj.id).focus().blur();;
 			$('#nome').val(obj.colaborador.nome).focus().blur();;

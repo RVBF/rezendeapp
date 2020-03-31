@@ -77,7 +77,7 @@
 								html += '<p class="data '+((diferencaDias > 0) ? 'dark-text': ' red-text text-accent-4 ') +'">'+ dataLimite.format('DD/MM/YYYY')+ '</p>';
 							html += '</div>';
 							html += '<div class="col col-12 col-lg-9 col-md-9 col-sm-8 mb-0-dto">';
-								if(data.status == 'Em Progresso' ) html += '<span class="info_checklist yellow darken-2 btn-small">'+ data.status +'</span>';
+								if(data.status == 'Incompleto' ) html += '<span class="info_checklist yellow darken-2 btn-small">'+ data.status +'</span>';
 								else if(data.status == 'Executado' ) html += '<span class="info_checklist green darken-1 btn-small">'+ data.status +'</span>';
 								else if(data.status == 'Aguardando Execução') html += '<span class="info_checklist light-blue darken-3 btn-small">'+ data.status +'</span>';
 

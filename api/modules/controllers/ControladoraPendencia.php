@@ -140,7 +140,7 @@ class ControladoraPendencia {
 				StatusPendenciaEnumerado::AGUARDANDO_EXECUCAO,
 				\ParamUtil::value($this->params, 'descricao'),
 				$dataLimite,
-				'',
+				\ParamUtil::value($this->params, 'solucao'),
 				$responsavel
 			);
 			
@@ -370,6 +370,7 @@ class ControladoraPendencia {
 			
 			$pendencia->setStatus(StatusPendenciaEnumerado::EXECUTADO);
 			$pendencia->setDataExecucao(Carbon::now());
+			$pendencia->setDescricaoExecucao();
 
 			$this->colecaoPendencia->atualizar($pendencia);
 
@@ -404,7 +405,7 @@ class ControladoraPendencia {
 				}
 				else{
 					if($checklist->getStatus() == StatusChecklistEnumerado::AGUARDANDO_EXECUCAO){
-						$checklist->setStatus(StatusChecklistEnumerado::EM_PROGRESSO);
+						$checklist->setStatus(StatusChecklistEnumerado::INCOMPLETO);
 						$this->colecaoChecklist->atualizar($checklist);	
 					}
 				}

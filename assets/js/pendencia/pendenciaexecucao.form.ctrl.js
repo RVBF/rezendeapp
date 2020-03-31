@@ -71,6 +71,55 @@
 		};
 
 		_this.configurarEventos = function configurarEventos() {
+
+			_this.formulario.find('input[type="file"]').change(function(evt){
+				var elemento = $(this);
+				var file = evt.target.files[0];
+				var nomeArquivo = $(this).val().split('\\');
+				nomeArquivo = nomeArquivo[nomeArquivo.length -1];
+				var reader = new FileReader();
+				reader.onerror = function (evt) {
+					switch(evt.target.error.code) {
+						case evt.target.error.NOT_FOUND_ERR:
+						  alert('File Not Found!');
+						  break;
+						case evt.target.error.NOT_READABLE_ERR:
+						  alert('File is not readable');
+						  break;
+						case evt.target.error.ABORT_ERR:
+						  break; // noop
+						default:
+						  alert('An error occurred reading this file.');
+					  };
+				};
+				reader.onprogress =  function updateProgress(evt) {
+					var progress = document.querySelector('.percent');
+
+					// evt is an ProgressEvent.
+					if (evt.lengthComputable) {
+					  var percentLoaded = Math.round((evt.loaded / evt.total) * 100);
+					  // Increase the progress bar length.
+					  if (percentLoaded < 100) {
+						progress.style.width = percentLoaded + '%';
+						progress.textContent = percentLoaded + '%';
+					  }
+					}
+				};
+				reader.onabort = function(e) {
+					alert('File read cancelled');
+				};
+
+				reader.onload = function () {
+					_this.anexos.push({'nome': nomeArquivo,'arquivo': reader.result, 'tipo' : file.type});
+				};
+
+				reader.readAsDataURL(file);
+			});
+
+
+			_this.formulario.find('i').on('click', function (event) {
+				$(this).next("input[type='file']").trigger('click');
+			});
 			_this.formulario.find('#salvar').on('click',_this.salvar);
 		};
 

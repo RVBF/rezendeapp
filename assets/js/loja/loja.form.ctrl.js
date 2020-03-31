@@ -220,7 +220,6 @@
                hotkey: 'S'.charCodeAt(0),
                action: function (dialog) {
                   servicoLoja.remover(_this.obj.id).done(function (resposta) {
-                     console.log(resposta);
                      if (resposta.status) {
                         router.navigate('/lojas');
                         toastr.success(resposta.mensagem);
