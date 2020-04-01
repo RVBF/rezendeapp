@@ -20,13 +20,15 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 			$id = DB::table(self::TABELA)->insertGetId([ 
 				'caminho' => $obj->getPatch(),
 				'tipo' => $obj->getTipo(),
-				'questionamento_id' => ($obj->getQuestionamento() instanceof Questionamento) ? $obj->getQuestionamento()->getId() : 0,
-				'planoacao_id' => ($obj->getPlanoAcao() instanceof PlanoAcao) ? $obj->getPlanoAcao()->getId() : 0,
-
+				'questionamento_id' => ($obj->getQuestionamento() instanceof Questionamento) ? $obj->getQuestionamento()->getId() : $obj->getQuestionamento()['id'],
+				'planoacao_id' => ($obj->getPlanoAcao() instanceof PlanoAcao) ? $obj->getPlanoAcao()->getId() : $obj->getPlanoAcao()['id'],
+				'pendencia_id' => ($obj->getPendencia() instanceof Pendencia) ? $obj->getPendencia()->getId() : $obj->getPendencia()['id']
 			]);
 			$obj->setId($id);
 		}
 		catch (\Exception $e) {
+			Util::printr($e->getMessage());
+
 			throw new ColecaoException('Erro ao adicionar Anexo!');
 		}
 	}
@@ -64,6 +66,22 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 		try {	
 
 			$anexos = DB::table(self::TABELA)->where('deleted_at', NULL)->where('questionamento_id', $id)->get();
+			$anexosObjects = [];
+			foreach ($anexos as $anexo) {
+				$anexosObjects[] =  $this->construirObjeto($anexo);
+			}
+
+			return $anexosObjects;
+		}
+		catch (\Exception $e) {
+			throw new ColecaoException("Erro ao buscar anexo no banco de dados!", $e->getCode(), $e);
+		}
+	}
+
+	public function comPendenciaId($id){
+		try {	
+
+			$anexos = DB::table(self::TABELA)->where('deleted_at', NULL)->where('pendencia_id', $id)->get();
 			$anexosObjects = [];
 			foreach ($anexos as $anexo) {
 				$anexosObjects[] =  $this->construirObjeto($anexo);
@@ -120,7 +138,8 @@ class ColecaoAnexoEmBDR implements ColecaoAnexo
 			$row['caminho'],
 			$row['tipo'],
 			$row['questionamento_id'],
-			$row['planoacao_id']
+			$row['planoacao_id'],
+			$row['pendencia_id']
 		);
 
 		$anexo->setArquivoBase64($base64);

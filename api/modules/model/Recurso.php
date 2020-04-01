@@ -88,7 +88,7 @@ class Recurso {
             ['id'=> 13, 'caminho'=> '/pendencia', 'metodo'=> 'put']
          ]],
          ['id'=> 14, 'nome'=> 'Executar PEs', 'model'=> 'PE', 'rotas'=> [
-            ['id'=> 14, 'caminho'=> '/pendencia/executar/{id}', 'metodo'=> 'get']
+            ['id'=> 14, 'caminho'=> '/pendencia/executar', 'metodo'=> 'post']
          ]],
          ['id'=> 15, 'nome'=> 'Remover PEs', 'model'=> 'PE', 'rotas'=> [
             ['id'=> 15, 'caminho'=> '/pendencia/{id}', 'metodo'=> 'delete']

@@ -83,9 +83,9 @@
 				$('#nao-conformidade').val(),
 				dataLimite.toString() + ' ' + $('#hora_limite').val(),
 				$('#descricao').val(),
-				$('#responsavel').val(),
-				$('#unidade').val(),
 				'',
+				$('#responsavel').val(),
+				$('#unidade').val()
 			);
 		};
 
@@ -176,6 +176,22 @@
 						_this.formulario.find('#editar').on('click', function(event){
 							router.navigate('/editar-pendencia/'+ _this.obj.id);
 						});
+					});
+				}
+				console.log(_this.obj.descricaoExecucao);
+				if(_this.obj.status == 'Executado'){
+					let html = '';
+					html += '<div class="row form-row">';
+					html += '<div class="col col-sm-12 col-md-12 col-12 col-lg-12">';
+					html += '<div class="input-field ">';
+					html += '<textarea id="descricaoexecucao" class="campo_obrigatorio materialize-textarea validate valid" disabled=""></textarea>';
+					html += '<label for="descricaoexecucao" class="active">Descrição execução</label>';
+					html += '</div>';
+					html += '</div>';
+					html += '</div>';
+
+					_this.formulario.find('#data_limite').parents('.row').before(html).promise().done(function(){
+						$('#descricaoexecucao').val(_this.obj.descricaoExecucao).focus().blur();
 					});
 				}
 

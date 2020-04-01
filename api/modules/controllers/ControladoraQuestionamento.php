@@ -225,9 +225,10 @@ class ControladoraQuestionamento {
 						$anexo = new Anexo(
 							0,
 							$patch,
-							$arquivo['tipo'],
-							$questionamento
+							$arquivo['tipo']
 						);
+
+						$anexo->setQuestionamento($questionamento);
 
 						$this->colecaoAnexo->adicionar($anexo);
 					}

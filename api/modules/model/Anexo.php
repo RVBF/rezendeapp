@@ -18,16 +18,15 @@ class Anexo {
     private $tipo;
     private $questionamento;
     private $planoAcao;
+    private $pendencia;
     private $arquivoBase64;
 
 	const CAMINHO_ARQUIVOS = '/../assets/images/anexos';
 
-    function __construct($id = 0, $patch = '', $tipo = '', $questionamento = null, $planoAcao = null) {
+    function __construct($id, $patch, $tipo) {
         $this->id = $id;
         $this->patch = $patch;
         $this->tipo = $tipo;
-        $this->questionamento = $questionamento;
-        $this->planoAcao = $planoAcao;
     }
 }
 ?>

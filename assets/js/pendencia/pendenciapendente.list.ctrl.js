@@ -65,7 +65,7 @@
 					html += '<div class="col col-12 col-lg-9 col-md-9 col-sm-8">';
 						if(data.status == 'Aguardando Responsável' ) html += '<span class="info_checklist yellow darken-2 btn-small">'+ data.status +'</span>';
 						else if(data.status == 'Executado' ) html += '<span class="info_checklist green darken-1 btn-small">'+ data.status +'</span>';
-						else if(data.status == 'Aguardando Execução') html += '<span class="info_checklist red accent-4 btn-small">'+ data.status +'</span>';
+						else if(data.status == 'Aguardando Execução') html += '<span class="info_checklist light-blue darken-3 btn-small">'+ data.status +'</span>';
 
 						'<span class="info_checklist orange darken-4 btn-small">PA Pendente</span>';
 						'<span class="info_checklist grey darken-1 btn-small">Pendência Pendente</span>';
@@ -89,6 +89,13 @@
 								html += '</a>';
 								html += '</p>';
 							html += '</div>';
+							
+							if (data.anexos.length > 0 ) {
+								html += '<div class="col col-12 col-lg-3 col-md-3 col-sm-3 mb-0-dto">';
+									html += '<a href="anexos.html" class="anexos detalhes-dto"><i class="mdi mdi-paperclip orange-text"></i>ANEXOS</a>';
+								html += '</div>';
+							}
+							
 							if(data.status != 'Executado' ) {
 								html += '<div class="col col-12 col-lg-3 col-md-3 col-sm-3 mb-0-dto">';
 									html += '<p class="mb-0-dto">';
@@ -114,6 +121,37 @@
 				$('.visualizar_pe').on('click', _this.visualizar);
 				$('.confirmar_responsabilidade').on('click', _this.confirmarResponsabilidade);
 				$('.devolver_responsabilidade').on('click', _this.devolverResponsabilidade);
+				$('.anexos').on('click', function (event) {
+					event.preventDefault();
+					var objeto = _tabela.getObjetos()[$(this).parents('.listagem-padrao-item').index()];
+					console.log(objeto);
+					$('.modal').modal();
+					$('.modal').find('#drop-zone').empty();
+					var contador = 0;
+
+					var html = '';
+					for(var indice in objeto.anexos) {
+						var caminho = objeto.anexos[indice].patch.split('/');
+						var nome = caminho[caminho.length -1];
+						var conteudo = objeto.anexos[indice].arquivoBase64.split(';')[1];
+
+						html += (contador == 0) ? '<div class="row">' : '';
+						html += (contador >= 0 && contador <= 3) ? '<div class="col-md-4 col-sm-4 col-xs-4 col-4" >' : '' ;
+						html += '<a  class="download" href="' +  objeto.anexos[indice].arquivoBase64 + '" arquivo="' + conteudo + '" nomeArquivo="' + nome + '"  tipo="'+ objeto.anexos[indice].tipo +'" download>';
+						html += (objeto.anexos[indice].tipo.split('/')[0] == 'image') ? '<i class="fas fa-file-image"></i>' : '<i class="far fa-file-audio"></i>';
+						html += '<br><span class="name toltip" title="' + nome + '">' + nome.substring(1, 10) + '</span></a>';
+						html += (contador >= 0 && contador <= 3) ?  '</div>' : '';
+						html +=  (contador == 3) ? '</div>': '';
+
+						contador++;
+
+						if(contador == 3) contador = 0;
+						else contador++;
+					}
+
+					$('.modal').find('#drop-zone').append(html);
+
+				});
 			};
 
 			return objeto;
