@@ -22,6 +22,7 @@ class Pendencia {
     private $responsavel;
     private $dataCadastro;
     private $dataExecucao;
+    private $anexos;
 
     function __construct(
         $id = 0,
@@ -32,7 +33,8 @@ class Pendencia {
         $descricaoExecucao = '',
         $responsavel = null,
         $dataCadastro = '',
-        $dataExecucao = ''
+        $dataExecucao = '',
+        $anexos = []
      ) {
         $this->id = $id;
         $this->status = $status;
@@ -43,6 +45,7 @@ class Pendencia {
         $this->responsavel  = $responsavel;
         $this->dataCadastro = $dataCadastro;
         $this->dataExecucao = $dataExecucao;
+        $this->anexos = $anexos;
     }
 }
 ?>

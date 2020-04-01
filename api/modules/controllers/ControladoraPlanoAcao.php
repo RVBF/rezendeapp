@@ -447,16 +447,16 @@ class ControladoraPlanoAcao {
 					$anexo = new Anexo(
 						0,
 						$patch,
-						$arquivo['tipo'],
-						(isset($questionamento) and $questionamento instanceof Questionamento) ? $questionamento : 0,
-						(isset($planoAcao) and $planoAcao instanceof PlanoAcao) ? $planoAcao : 0
+						$arquivo['tipo']
 					);
 
+					$anexo->setPlanoAcao($planoAcao);
+					
 					$this->colecaoAnexo->adicionar($anexo);
 				}
 			}
 			else{
-				throw new Exception("É necessário  anexar uma áudio ou foto para comprovar a execução do plano de ação!");
+				throw new Exception("É necessário  anexar um áudio ou foto para comprovar a execução do plano de ação!");
 			}
 
 			$resposta = ['status' => true, 'mensagem'=> 'Plano de ação executado com sucesso.']; 

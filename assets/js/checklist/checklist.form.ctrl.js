@@ -94,6 +94,7 @@
 				controls: true,
 				inline: true,
 				container: '.date-panel',
+
 				text: {
 					title: 'Selecione a data',
 					cancel: 'Cancelar',
@@ -106,6 +107,9 @@
 					second: 'Segundo',
 					millisecond: 'Milissegundos',
 				},
+				hidden : function(opcao){
+					console.log(opcao);
+				},
 				headers: true,
 				months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
 				monthsShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
@@ -117,6 +121,9 @@
 				controls: true,
 				inline: true,
 				container: '.time-panel',
+				'hide' : function(opcao){
+					console.log(opcao);
+				},
 				text: {
 					title: 'Selecione a hora',
 					cancel: 'Cancelar',

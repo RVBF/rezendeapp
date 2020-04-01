@@ -141,6 +141,7 @@ class ControladoraPendencia {
 				\ParamUtil::value($this->params, 'descricao'),
 				$dataLimite,
 				\ParamUtil::value($this->params, 'solucao'),
+				'',
 				$responsavel
 			);
 			
@@ -343,40 +344,35 @@ class ControladoraPendencia {
 		return $resposta;
 	}
 
-    function executar($id){
+    function executar(){
 		DB::beginTransaction();
 
 		try {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) throw new Exception("Erro ao acessar página.");		
 			
-			// if(!$this->servicoLogin->eAdministrador()){
-			// 	throw new Exception("Usuário sem permissão para executar ação.");
-			// }
-
 			$resposta = [];
 			$colaborador = new Colaborador();  $colaborador->fromArray($this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario()));
 			if(!isset($colaborador) and !($colaborador instanceof Colaborador)){
 				throw new Exception("Colaborador não encontrado na base de dados.");
 			}	
 
-			$pendencia = new Pendencia(); $pendencia->fromArray($this->colecaoPendencia->comId($id));
+
+			$pendencia = new Pendencia(); $pendencia->fromArray($this->colecaoPendencia->comId(\ParamUtil::value($this->params, 'id')));
 			if(!isset($pendencia) and !($pendencia instanceof Pendencia)){
 				throw new Exception("Pendência não encontrada na base de dados.");
 			}	
-			
+
 			$responsavel = new Colaborador(); $responsavel->fromArray($pendencia->getResponsavel());
 
 			if($colaborador->getId() != $responsavel->getId()) throw new Exception("Só o usuário Responsável pode executar essa pendência!");
 			
 			$pendencia->setStatus(StatusPendenciaEnumerado::EXECUTADO);
 			$pendencia->setDataExecucao(Carbon::now());
-			$pendencia->setDescricaoExecucao();
-
-			$this->colecaoPendencia->atualizar($pendencia);
+			$pendencia->setDescricaoExecucao(\ParamUtil::value($this->params, 'descricaoExecucao'));
 
 			$questionamento = null;
-			if($this->colecaoQuestionamento->contagemPorColuna($id, 'pendencia_id') > 0){
-				$questionamento = new Questionamento(); $questionamento->fromArray($this->colecaoQuestionamento->comPendenciaId($id));
+			if($this->colecaoQuestionamento->contagemPorColuna($pendencia->getId(), 'pendencia_id') > 0){
+				$questionamento = new Questionamento(); $questionamento->fromArray($this->colecaoQuestionamento->comPendenciaId($pendencia->getId()));
 
 				if(!isset($questionamento) and !($questionamento instanceof Questionamento)){
 					throw new Exception("Questionamento não encontrado na base de dados.");
@@ -410,7 +406,30 @@ class ControladoraPendencia {
 					}
 				}
 			}
-		
+
+			$anexo = null;
+			if(isset($this->params['anexos']) and count($this->params['anexos']) > 0){
+				$pastaTarefa = 'pendencia_'. $pendencia->getId();
+
+				foreach($this->params['anexos'] as $arquivo) {
+					$patch = $this->servicoArquivo->validarESalvarImagem($arquivo, $pastaTarefa, 'pendencia_' . $pendencia->getId());
+					$anexo = new Anexo(
+						0,
+						$patch,
+						$arquivo['tipo']
+					);
+
+					$anexo->setPendencia($pendencia);
+
+					$this->colecaoAnexo->adicionar($anexo);
+				}
+			}
+			else{
+				throw new Exception("É necessário  anexar um áudio ou foto para comprovar a execução do plano de ação!");
+			}
+
+			$this->colecaoPendencia->executar($pendencia);
+
 			$resposta = ['status' => true, 'mensagem'=> 'Pendência executada com sucesso!']; 
 			DB::commit();
 		}

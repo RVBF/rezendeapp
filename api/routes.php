@@ -912,17 +912,17 @@ use \phputil\JSON;
 	});
 
 
-	$caminho = '/pendencia/executar/{id}';
-	$metodo = 'get';
+	$caminho = '/pendencia/executar';
+	$metodo = 'post';
 
-	$app->get($caminho, function(Request $req, Response $res, $args = []) use ($app, $session, $caminho, $metodo) {
+	$app->post($caminho, function(Request $req, Response $res, $args = []) use ($app, $session, $caminho, $metodo) {
 		$sessaoUsuario = new Sessao($session);
 
 		if(Acesso::vericarAcesso($sessaoUsuario->idUsuario(), $caminho, $metodo)) {
 			$this->logger->addInfo("Acessando o cadastro de pendência");
 
 			$ctrl = new ControladoraPendencia($req->getParsedBody(), $sessaoUsuario);
-			$response = $ctrl->executar($args['id']);
+			$response = $ctrl->executar();
 		} else {
 			$response = [
 				'acessoNegado'=> true,

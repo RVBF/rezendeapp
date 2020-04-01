@@ -99,7 +99,7 @@
 				},
 				_this.objetoAtual.checklist,
 				_this.servicoPlanoAcao.criar(
-					'',
+					0,
 					$('#nao-conformidade-pa').val(),
 					dataLimitePa.toString() + ' ' + $('#hora_limitepa').val(),
 					configuraoAcoesPA,
@@ -107,11 +107,12 @@
 					'',
 				),
 				_this.servicoPendencia.criar(
-					'',
+					0,
 					$('#descricao-pendencia').val(),
 					dataLimitePe.toString() + ' ' + $('#hora_limitepe').val(),
 					$('#descricao-solucao').val(),
-					$('#responsavelpe').children("option:selected").val()
+					'',
+					$('#responsavelpe').children("option:selected").val(),
 				),
 				_this.anexos
 			);
@@ -322,7 +323,7 @@
 								html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2">';
 										html += '<a class="list-group-item list-group-item-action orange accent-4 subicon-dto element" data-toggle="tooltip" title="Nenhum arquivo selecionado.">';
 										html += '<i class="mdi mdi-microphone white-text"></i>';
-										html += '<input class="d-none form-control arquivos_audio tamanhoArquivosPadrao" type="file" name="pergunta_audio" id="pergunta_audio" accept="audio/opus" capture="microphone">';
+										html += '<input class="d-none form-control arquivos_audio tamanhoArquivosPadrao" type="file" name="pergunta_audio" id="pergunta_audio" accept="audio/*" capture="microphone">';
 										html += '</a>';
 								html += '</div>';
 

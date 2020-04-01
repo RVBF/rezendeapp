@@ -15,7 +15,8 @@
 		responsavel,
 		unidade,
         dataCadastro,
-        dataExecucao
+		dataExecucao,
+		anexos
     ){
         this.id = id || 0;
         this.descricao = descricao || '';
@@ -25,7 +26,8 @@
 		this.responsavel  = responsavel || 0;
 		this.unidade = unidade || 0;
         this.dataCadastro = dataCadastro || '';
-        this.dataExecucao = dataExecucao || '';
+		this.dataExecucao = dataExecucao || '';
+		this.anexos = anexos || '';
     };
 
 	function ServicoPendencia() { // Model
@@ -45,7 +47,8 @@
 			responsavel,
 			unidade,
             dataCadastro,
-            dataExecucao
+			dataExecucao,
+			anexos
         ) {
 			return {
                 id : id || 0,
@@ -56,7 +59,8 @@
 				responsavel : responsavel ||  0,
 				unidade : unidade || 0,
                 dataCadastro : dataCadastro || '',
-                dataExecucao : dataExecucao || ''
+				dataExecucao : dataExecucao || '',
+				anexos : anexos || ''
 			};
 		};
 
@@ -109,10 +113,11 @@
 			return _this.rota() + '/pendentes/' + id;
 		}
 
-		_this.executar = function executar(id){
+		_this.executar = function executar(obj){
 			return $.ajax({
-				type: "GET",
-				url: _this.rota() + '/executar/' + id
+				type: "post",
+				url: _this.rota() + '/executar',
+				data: obj
 			});
 		}
 	}; // Servicopendencia

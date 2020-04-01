@@ -21,14 +21,14 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 					'descricao' => $obj->getDescricao(),
 					'descricaosolucao' => $obj->getSolucao(),
 					'datalimite' => ($obj->getDataLimite() instanceof Carbon) ? $obj->getDataLimite()->toDateTimeString() : $obj->getDataLimite(),
-					'responsavel_id' => $obj->getResponsavel()->getId()
+					'responsavel_id' =>($obj->getResponsavel() instanceof Colaborador) ? $obj->getResponsavel()->getId() : $obj->getResponsavel()
 				]
 			);
 
 			$obj->setId($id);	
 		}
 		catch (\Exception $e) {
-			UtiL::printr($e->getMessage());
+			Util::printr($e->getMessage());
 			throw new ColecaoException("Erro ao adicionar nova pendência", $e->getCode(), $e);
 		}
 	
@@ -66,11 +66,8 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 	function executar(&$obj){
 		try {
 			$filds = [ 'status' => $obj->getStatus(),
-				'descricao' => $obj->getDescricao(),
-				'descricaosolucao' => $obj->getSolucao(),
-				'dataexecucao' => ($obj->getDataExecucao() instanceof Carbon) ? $obj->getDataExecucao()->toDateTimeString() : $obj->getDataExecucao(), 
-				'datalimite' => ($obj->getDataLimite() instanceof Carbon) ? $obj->getDataLimite()->toDateTimeString() : $obj->getDataLimite(), 
-				'responsavel_id' => ($obj->getResponsavel() instanceof Colaborador) ? $obj->getResponsavel()->getId() : $obj->getResponsavel()['id']
+				'detalhesexecucao' => $obj->getSolucao(),
+				'dataexecucao' => ($obj->getDataExecucao() instanceof Carbon) ? $obj->getDataExecucao()->toDateTimeString() : $obj->getDataExecucao()
 			];
 		
 			DB::table(self::TABELA)->where('deleted_at', NULL)->where('id', $obj->getId())->update($filds);
@@ -336,6 +333,7 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 
 	function construirObjeto(array $row) {
 		$responsavel = ($row['responsavel_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comId($row['responsavel_id']) : '';
+		$anexos = Dice::instance()->create('ColecaoAnexo')->comPendenciaId($row['id']);
 
 		$pendencia = new Pendencia(
 			$row['id'],
@@ -346,7 +344,8 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 			$row['detalhesexecucao'],
             $responsavel,
 			$row['datacadastro'],
-            $row['dataexecucao']
+			$row['dataexecucao'],
+			$anexos
 		);
 		
 		return $pendencia->toArray();

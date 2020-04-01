@@ -1,5 +1,5 @@
 /**
- *  questionamento.form.ctrl.js
+ *  pendenciaexecucao.form.ctrl.js
  *
  *  @author  Rafael Vinicius Barros Ferreira
  *	 @version 1.0
@@ -16,7 +16,6 @@
 		_this.objeto = null
 		_this.anexos = [];
 
-
 		// Cria as opções de validação do formulário
 		var criarOpcoesValidacao = function criarOpcoesValidacao() {
 			var opcoes = {
@@ -31,7 +30,7 @@
 
 				_this.formulario.desabilitar(true);
 
-				var jqXHR = servicoPendencia.executar(obj.id);
+				var jqXHR = servicoPendencia.executar(obj);
 
 				jqXHR.done(function(resposta) {
 					if(resposta.status){
@@ -61,12 +60,12 @@
 				_this.objeto.descricao,
 				_this.objeto.dataLimite,
 				_this.objeto.solucao,
+				$('#destalhes_execucao').val(),
 				_this.objeto.responsavel,
 				_this.objeto.loja,
-				$('#destalhes_execucao').val(),
-				_this.anexos,
 				_this.objeto.dataCadastro,
-				_this.objeto.dataExecucao
+				_this.objeto.dataExecucao,
+				_this.anexos
 			);
 		};
 

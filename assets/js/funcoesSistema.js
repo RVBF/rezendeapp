@@ -245,7 +245,7 @@
       // }
 
       $.validator.addMethod("cRequired", $.validator.methods.required, "Campo obrigatório.");
-      $.validator.addMethod("formatoAudio", $.validator.methods.fileType, "Formato de áudio inválido! Formatos permitidos: mp3|wma|aac|ogg|ac3|wav!");
+      $.validator.addMethod("formatoAudio", $.validator.methods.fileType, "Formato de áudio inválido! Formatos permitidos: mp3|wma|aac|ogg|ac3|wav|mp4|m4a!");
       $.validator.addMethod("formatoImagem", $.validator.methods.fileType, "Formato de imagem inválido! Formatos permitidos: bmp|gif|jpeg|png!");
       $.validator.addMethod('filesize', $.validator.methods.maxFileSize, 'Tamanho de arquivo invalido! O arquivo deve ser menor que  100KB e maior que 25MB"!');
 
@@ -256,7 +256,7 @@
 
       $.validator.addClassRules("campo_obrigatorio", { cRequired: true });
       $.validator.addClassRules("email_formato", { emailFormat: true });
-      $.validator.addClassRules("arquivos_audio", { formatoAudio: { types: ["mp3", "wma", "aac", "ogg", "ac3", "wav"] } });
+      $.validator.addClassRules("arquivos_audio", { formatoAudio: { types: ["mp3", "wma", "aac", "ogg", "ac3", "wav", "mp4", "m4a"] } });
       $.validator.addClassRules("arquivos_imagem", { formatoImagem: { types: ["bmp", "gif", "jpeg", "png"] } });
       $.validator.addClassRules("tamanhoArquivosPadrao", { filesize: { size: 25, unit: 'MB' } });
 
