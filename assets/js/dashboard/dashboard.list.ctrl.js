@@ -194,9 +194,10 @@
                         if(moment(objetoPA.Data).format('DD/MM/YYYY') ==  moment(objeto.Data).format('DD/MM/YYYY')) qtdPAAberta =  objetoPA.qtdStatusAgaExecucao;
                      }
 
-
-                     var dados = [ moment(objeto.Data).format('DD/MM/YYYY'), (objeto.qtdStatusAgaExecucao != null) ? objeto.qtdStatusAgaExecucao : 0, qtdPAAberta ];
-                     resultado.push(dados);
+                     if(resultado.find(element => element == moment(objeto.Data).format('DD/MM/YYYY')) == undefined){
+                        var dados = [ moment(objeto.Data).format('DD/MM/YYYY'), (objeto.qtdStatusAgaExecucao != null) ? objeto.qtdStatusAgaExecucao : 0, qtdPAAberta ];
+                        resultado.push(dados);
+                     }
                   }
 
                   for(const key in resposta.resposta.pAsAbertasPorData){
@@ -208,12 +209,12 @@
                         if(moment(objetoPE.Data).format('DD/MM/YYYY') ==  moment(objeto.Data).format('DD/MM/YYYY')) qtdPEAberta =  objetoPE.qtdStatusAgaExecucao;
                      }
 
-                     if(resultado.find(element => moment(objeto.Data).format('DD/MM/YYYY')) != undefined){
-                        
+                     if(resultado.find(element => element == moment(objeto.Data).format('DD/MM/YYYY')) != undefined){
                         var dados = [ moment(objeto.Data).format('DD/MM/YYYY'), qtdPEAberta, (objeto.qtdStatusAgaExecucao != null) ? objeto.qtdStatusAgaExecucao : 0];
                         resultado.push(dados);
                      }
                   }
+
 
                   resultado.sort(function name(a,b) {
 
@@ -229,7 +230,6 @@
                   });
 
                   if(resultado.length ==  1) resultado.push(['', 0,0]);
-                  
                   var data = google.visualization.arrayToDataTable(resultado);
 
                   var options = {

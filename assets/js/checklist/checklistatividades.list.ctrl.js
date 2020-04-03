@@ -117,9 +117,9 @@
 				// 	html += '<div class="col col-12 col-lg-4 col-md-4 col-sm-4 mb-0-dto">';
 
 				// 		html += '<p class="mb-0-dto">';
-				// 		html += '<a href="#" class="detalhes-dto perguntas">';
+				// 		html += '<a href="#" class="detalhes-dto historico">';
 				// 		html += '<i class="mdi mdi-note-text small  orange-text text-accent-4"></i>';
-				// 		html += 'Perguntas';
+				// 		html += 'historico';
 				// 		html += '</a>';
 				// 		html += '</p>';
 				// 	html += '</div>';

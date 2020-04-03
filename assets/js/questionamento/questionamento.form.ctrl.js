@@ -51,7 +51,7 @@
 				var jqXHR = _this.alterar ? servicoQuestionamento.atualizar(obj) : servicoQuestionamento.adicionar(obj);
 				jqXHR.done(function(resposta) {
 					if(resposta.status && _this.questionamentos.length > 0){
-						_this.formulario.find('.perguntas').empty().promise().done(function () {
+						_this.formulario.find('.historico').empty().promise().done(function () {
 							_this.buscarQuestionamentos();
 
 							toastr.success('O questionamento de id '+ _this.objetoAtual.id+ ' foi executado com suscesso!');
@@ -323,7 +323,7 @@
 								html += '<div class="col col-4 col-sm-4 col-lg-2 col-md-2">';
 										html += '<a class="list-group-item list-group-item-action orange accent-4 subicon-dto element" data-toggle="tooltip" title="Nenhum arquivo selecionado.">';
 										html += '<i class="mdi mdi-microphone white-text"></i>';
-										html += '<input class="d-none form-control arquivos_audio tamanhoArquivosPadrao" type="file" name="pergunta_audio" id="pergunta_audio" accept="audio/*" capture="microphone">';
+										html += '<input class="d-none form-control arquivos_audio tamanhoArquivosPadrao" type="file" name="pergunta_audio" id="pergunta_audio"E po accept="audio/*" capture="microphone">';
 										html += '</a>';
 								html += '</div>';
 
@@ -360,7 +360,7 @@
 			html += '</div>';
 
 
-			_this.formulario.find('.perguntas').empty().append(html).promise().done(function () {
+			_this.formulario.find('.historico').empty().append(html).promise().done(function () {
 				if(_this.questionamentos.length == 1){
 					$('body #botoes').append('<button type="submit" id="salvar" class="waves-effect waves-light btn white grey-text text-darken-4 col-12 quebra-linha"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Salvar e Sair</button>');
 					$('body #botoes').find('#salvar').remove();
