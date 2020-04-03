@@ -93,7 +93,7 @@
    router.get('/visualizar-checklist/:id', criarRotaPara('formulario-checklist.html'));
    router.get('/editar-checklist/:id', criarRotaPara('formulario-checklist.html'));
    router.get('/executar-checklist/:id', criarRotaPara('formulario-executarchecklist.html'));
-   router.get('/checklist/perguntas/:id', criarRotaPara('questionamentos.html'));
+   router.get('/checklist/historico/:id', criarRotaPara('questionamentos.html'));
 
    router.get('/questionarios', criarRotaPara('questionarios.html'));
    router.get('/cadastrar-questionario', criarRotaPara('formulario-questionario.html'));
@@ -257,8 +257,8 @@
          html += '<span class="center local-dto">Editar Checklist</span>';
          html += '<a href="#/" class="left m16-dto checklist_link"><i class="material-icons">navigate_before</i></a>';
       }
-      else if (window.location.href.search('perguntas') != -1) {
-         html += '<span class="center local-dto">Perguntas</span>';
+      else if (window.location.href.search('historico') != -1) {
+         html += '<span class="center local-dto">historico</span>';
          html += '<a href="#/" class="left m16-dto checklist_link"><i class="material-icons">navigate_before</i></a>';
       }
       else if (window.location.href.search('cadastrar-pa') != -1) {

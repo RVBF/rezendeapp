@@ -35,7 +35,7 @@
 		//Configura a tabela
 		_this.opcoesDaTabela = function opcoesDaTabela() {
             var objeto =  new Object();
-			objeto.ajax = servicoQuestionamento.todos(pegarId(window.location.href,'perguntas'));
+			objeto.ajax = servicoQuestionamento.todos(pegarId(window.location.href,'historico'));
             objeto.listagemTemporal = true;
 			objeto.carregando = true;
 			objeto.pageLength = 10;

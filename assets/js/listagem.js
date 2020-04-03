@@ -16,7 +16,7 @@
       _this.mostrarTelaDeCarregamento = function mostrarTelaDeCarregamento() {
          loader.find('.loadertable').removeClass('d-none');
 
-         $('body .listagem-padrao .card-panel').css('overflow', 'hidden');
+         $('body .listagem-padrao .card-panel:first').css('overflow', 'hidden');
 
          loader.find('.loadertablePageLeft').animate({ 'width': '60%' }, tempoDeAnimacao);
          loader.find('.loadertablePageRight').animate({ 'width': '60%' }, tempoDeAnimacao);
@@ -24,7 +24,7 @@
 
       _this.tirarTelaDeCarregamento = function tirarTelaDeCarregamento() {
          loader.find('.loadertable').addClass('d-none');
-         $('body .listagem-padrao .card-panel').css('overflow', 'auto');
+         $('body .listagem-padrao .card-panel:first').css('overflow', 'auto');
 
          loader.find('.loadertablePageLeft').animate({ 'width': '0px' }, tempoDeAnimacao);
          loader.find('.loadertablePageRight').animate({ 'width': '0px' }, tempoDeAnimacao);
@@ -256,7 +256,6 @@
       };
 
       _this.renderizarRegistrosTabelaTemporal = function renderizarRegistrosTabelaTemporal() {
-         _this.mostrarTelaDeCarregamento();
          var sucesso = function (resposta) {
             if (resposta.recordsFiltered > 0) {
                ultimaResposta = resposta;

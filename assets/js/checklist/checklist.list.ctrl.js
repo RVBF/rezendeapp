@@ -86,7 +86,7 @@
 								
 								html += '<p><i class="mdi mdi-map-marker-radius orange-text text-accent-4"></i> <strong>' + data.loja.razaoSocial + '</strong> ' + data.loja.nomeFantasia + '</p>';
 								if(!estaRespondido())html += '<a href="#" class="executar_checklist"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="black-text">' + data.titulo + '</strong></p></a>';
-								else html += '<a href="#" class="perguntas"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.titulo + '</strong></p></a>';
+								else html += '<a href="#" class="historico"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.titulo + '</strong></p></a>';
 								// html += '<a href="#" class="inteligencia_link"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="orange-text text-accent-4">' + data.titulo + '</strong></p></a>';								
 								html += '<p class=" dias_restantes '+ ((diferencaDias >= 0) ?' dark-text ' : ' red-text text-accent-4 ' ) +'"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>'+textoDiasRestantes+'</strong></p>';
 								html += '<p><strong>Descrição : </strong> ' + data.descricao+ '</p>';
@@ -116,9 +116,9 @@
 								html += '<div class="col col-12 col-lg-4 col-md-4 col-sm-4 mb-0-dto">';
 
 								html += '<p class="mb-0-dto">';
-								html += '<a href="#" class="detalhes-dto perguntas">';
+								html += '<a href="#" class="detalhes-dto historico">';
 								html += '<i class="mdi mdi-note-text small  orange-text text-accent-4"></i>';
-								html += 'Perguntas';
+								html += 'Histórico';
 								html += '</a>';
 								html += '</p>';
 							html += '</div>';
@@ -171,11 +171,11 @@
 					router.navigate('/visualizar-checklist/'+ objeto.id);
 				});
 
-				$('.perguntas').on('click',function(i, value){
+				$('.historico').on('click',function(i, value){
 					event.preventDefault();
 					var objeto = _tabela.getObjetos()[$(this).parents('.listagem-padrao-item').index()];
 
-					router.navigate('/checklist/perguntas/'+ objeto.id);
+					router.navigate('/checklist/historico/'+ objeto.id);
 				});
 			};
 

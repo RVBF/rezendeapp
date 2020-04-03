@@ -74,12 +74,12 @@
 
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
-			var configuracaoes = { perguntas: [] };
+			var configuracaoes = { historico: [] };
 
 			if (_this.formulario.find('.pergunta').length > 0) {
 				$('.ids').each(function () {
 					var id = $(this).val();
-					configuracaoes.perguntas.push({ id: id, pergunta: $('#pergunta_' + id).val(), comentario: $('#comentario-pergunta').val() });
+					configuracaoes.historico.push({ id: id, pergunta: $('#pergunta_' + id).val(), comentario: $('#comentario-pergunta').val() });
 				});
 			}
 
@@ -109,7 +109,7 @@
 		};
 
 		_this.adiconarPergunta = function () {
-			var quantidade = $(this).parents('form').find('.perguntas').find('.pergunta').length + 1;
+			var quantidade = $(this).parents('form').find('.historico').find('.pergunta').length + 1;
 			var html = '<div class="pergunta">';
 			html += '<input type= "hidden" class="ids"  name="pergunta_' + quantidade + '" value ="' + quantidade + '">';
 			html += '<div class="row form-row">';
@@ -137,13 +137,13 @@
 			html += '</div>';
 			html += '</div>';
 
-			_this.formulario.find('.perguntas').append(html);
+			_this.formulario.find('.historico').append(html);
 			$('.adicionar_pergunta:last').on('click', _this.adiconarPergunta);
 			$('.remover_pergunta:last').on('click', _this.removerPergunta);
 		};
 
 		_this.removerPergunta = function () {
-			var quantidade = $(this).parents('.perguntas').find('.pergunta').length;
+			var quantidade = $(this).parents('.historico').find('.pergunta').length;
 
 			if (quantidade > 1) $(this).parents('.pergunta').remove();
 		};
@@ -184,8 +184,8 @@
 			$('#titulo').val(_this.obj.titulo).focus().blur();
 			$('#descricao').val(_this.obj.descricao).focus().blur();
 
-			for (var index in _this.obj.formulario.perguntas) {
-				var elemento = _this.obj.formulario.perguntas[index];
+			for (var index in _this.obj.formulario.historico) {
+				var elemento = _this.obj.formulario.historico[index];
 				if (index == 0) {
 					$('#pergunta_1').val(elemento.pergunta).focus().blur();
 				} else {
@@ -216,7 +216,7 @@
 					html += '</div>';
 					html += '</div>';
 
-					_this.formulario.find('.perguntas').append(html).promise().done(function () {
+					_this.formulario.find('.historico').append(html).promise().done(function () {
 						$(this).find('.pergunta:last').find('#pergunta_' + elemento.id).focus().blur();
 
 						$('.adicionar_pergunta:last').on('click', _this.adiconarPergunta);
