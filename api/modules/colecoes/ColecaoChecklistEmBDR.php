@@ -18,13 +18,15 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 
 	function adicionar(&$obj) {
 		try {
-			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+				// Util::printr($obj->getRepeteDiariamente());
+				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
 			$id = DB::table(self::TABELA)->insertGetId([
 				'titulo' => $obj->getTitulo(),
 				'status' => $obj->getStatus(),
 				'tipoChecklist' => $obj->getTipoChecklist(),
 				'descricao' => $obj->getDescricao(),
+				'repeteDiariamente' => ($obj->getRepeteDiariamente() == 'true') ? true : false, 
 				'data_limite' => $obj->getDataLimite()->toDateTimeString(),
 				'questionador_id' => $obj->getQuestionador()->getId(),
 				'responsavel_id' => $obj->getResponsavel()->getId(),
@@ -46,11 +48,9 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			DB::table(self::TABELA_RELACIONAL)->insert($questionariosInserts);
 
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-
-
-			return $obj;
 		}
 		catch (\Exception $e) {
+			Util::printr($e->getMEssage());
 			throw new ColecaoException("Erro ao adicionar Checklist ", $e->getCode(), $e);
 		}
 	}
@@ -74,6 +74,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 				'status' => $obj->getStatus(),
 				'tipoChecklist' => $obj->getTipoChecklist(),
 				'descricao' => $obj->getDescricao(),
+				'repeteDiariamente' => $obj->getRepeteDiariamente(),
 				'data_limite' => ($obj->getDataLimite() instanceof Carbon) ? $obj->getDataLimite()->toDateTimeString() : $obj->getDataLimite(),
 				'dataexecucao' => ($obj->getDataLimite() instanceof Carbon) ? $obj->getDataLimite()->toDateTimeString() : $obj->getDataLimite(),
 				'questionador_id' => ($obj->getQuestionador() instanceof Colaborador) ? $obj->getQuestionador()->getId() : $obj->getQuestionador()['id'],

@@ -74,7 +74,7 @@
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
 			var dataLimite = moment(_this.dataLimite.getDate()).format('YYYY-MM-DD');
-
+			console.log($('#repete_diariamente').is(':checked'))
 			return servicoChecklist.criar(
 				$('#id').val(),
 				$('#titulo').val(),
@@ -84,7 +84,8 @@
 				$('#responsavel option:selected').val(),
 				$('#setor option:selected').val(),
 				$('#unidade option:selected').val(),
-				$('#questionarios').formSelect('getSelectedValues')
+				$('#questionarios').formSelect('getSelectedValues'),
+				$('#repete_diariamente').is(':checked')
 			);
 		};
 

@@ -103,12 +103,7 @@ class ControladoraChecklist {
 			if($this->servicoLogin->verificarSeUsuarioEstaLogado() == false) {
 				throw new Exception("Erro ao acessar página.");
 			}
-
-			// if(!$this->servicoLogin->eAdministrador()){
-			// 	throw new Exception("Usuário sem permissão para executar ação.");
-			// }
-
-			$inexistentes = \ArrayUtil::nonExistingKeys(['titulo', 'descricao', 'dataLimite', 'setor', 'loja', 'questionarios'], $this->params);
+			$inexistentes = \ArrayUtil::nonExistingKeys(['titulo', 'descricao', 'dataLimite', 'setor', 'loja', 'questionarios', 'repeteDiariamente'], $this->params);
 
 			if(is_array($inexistentes) ? count($inexistentes) > 0 : 0) {
 				$msg = 'Os seguintes campos obrigatórios não foram enviados: ' . implode(', ', $inexistentes);
@@ -165,6 +160,7 @@ class ControladoraChecklist {
 				$questionarios
 			);
 
+			$checklist->setRepeteDiariamente(\ParamUtil::value($this->params, 'repeteDiariamente'));
 			$this->colecaoChecklist->adicionar($checklist);
 
 			$questionarios =$this->params['questionarios'];
@@ -278,6 +274,7 @@ class ControladoraChecklist {
 			$checklist->setLoja($loja);
 			$checklist->setQuestionador($questionador);
 			$checklist->setResponsavel($responsavel);
+			$checklist->setRepeteDiariamente(\ParamUtil::value($this->params, 'repeteDiariamente'));
 
 			$this->colecaoChecklist->atualizar($checklist);
 
