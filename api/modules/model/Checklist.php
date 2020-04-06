@@ -27,6 +27,7 @@ class Checklist {
     private $responsavel;
     private $questionarios;
     private $questionamentos;
+    private $repeteDiariamente;
 
     const TAM_TITULO_MIM = 2;
     const TAM_TITULO_MAX = 100;

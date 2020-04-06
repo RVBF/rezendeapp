@@ -6,7 +6,7 @@
 (function (app, $) {
    'use strict';
 
-   function Checklist(id, titulo, descricao, tipoChecklist, dataLimite, responsavel, setor, loja, questionarios) {
+   function Checklist(id, titulo, descricao, tipoChecklist, dataLimite, responsavel, setor, loja, questionarios, repeteDiariamente) {
       this.id = id || 0;
       this.titulo = titulo || '';
       this.descricao = descricao || '';
@@ -16,6 +16,7 @@
       this.setor = setor || 0;
       this.loja = loja || 0;
       this.questionarios = questionarios || 0;
+      this.repeteDiariamente = repeteDiariamente || 0;
    };
 
    function ServicoChecklist() { // Model
@@ -26,7 +27,7 @@
       };
 
       // Cria um objeto de Checklist
-      this.criar = function criar(id, titulo, descricao, tipoChecklist, dataLimite, responsavel, setor, loja, questionarios) {
+      this.criar = function criar(id, titulo, descricao, tipoChecklist, dataLimite, responsavel, setor, loja, questionarios, repeteDiariamente) {
          return {
             id: id || 0,
             titulo: titulo || '',
@@ -36,8 +37,8 @@
             responsavel: responsavel || 0,
             setor: setor || 0,
             loja: loja || 0,
-            questionarios: questionarios || 0
-
+            questionarios: questionarios || 0,
+            repeteDiariamente : repeteDiariamente || 0
          };
       };
 
