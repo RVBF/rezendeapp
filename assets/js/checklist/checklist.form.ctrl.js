@@ -74,13 +74,12 @@
 		// Obtém o conteúdo atual do form como um objeto
 		_this.conteudo = function conteudo() {
 			var dataLimite = moment(_this.dataLimite.getDate()).format('YYYY-MM-DD');
-			console.log($('#repete_diariamente').is(':checked'))
 			return servicoChecklist.criar(
 				$('#id').val(),
 				$('#titulo').val(),
 				$('#descricao').val(),
 				$('#tipo-checklist').val(),
-				dataLimite.toString() + ' ' + $('#hora').val(),
+				($('#repete_diariamente').is(':checked')) ? '' : dataLimite.toString() + ' ' + $('#hora').val(),
 				$('#responsavel option:selected').val(),
 				$('#setor option:selected').val(),
 				$('#unidade option:selected').val(),
@@ -268,6 +267,16 @@
 			_this.popularSetores();
 			_this.configurarBotoes();
 
+			$('#repete_diariamente').change(function(){
+				if($(this).is(':checked'))
+				{
+					$('.data_limite:first').addClass('d-none').desabilitar(true);
+				}
+				else{
+					$('.data_limite:first').removeClass('d-none').desabilitar(false);
+				}
+			});
+
 			if (window.location.href.search('visualizar') != -1) servicoChecklist.comId(pegarId(window.location.href, 'visualizar-checklist')).done(_this.desenhar);
 			else if (window.location.href.search('editar') != -1) servicoChecklist.comId(pegarId(window.location.href, 'editar-checklist')).done(_this.desenhar);
 			else {
@@ -289,6 +298,10 @@
 
 			var dataLimite = moment(_this.obj.dataLimite);
 
+			if(_this.obj.repeteDiariamente){
+				_this.formulario.find('#repete_diariamente').prop('checked', true);
+				$('.data_limite:first').addClass('d-none').desabilitar(true);
+			}
 			$('#data').val(dataLimite.format('DD') + ' de ' + dataLimite.format('MMMM') + ' de ' + dataLimite.format('YYYY')).focus().blur();
 			$('#hora').val(dataLimite.format('HH') + ':' + dataLimite.format('mm')).focus().blur();
 			$('#descricao').val(_this.obj.descricao).focus().blur();

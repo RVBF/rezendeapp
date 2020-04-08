@@ -18,8 +18,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 
 	function adicionar(&$obj) {
 		try {
-				// Util::printr($obj->getRepeteDiariamente());
-				DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
 			$id = DB::table(self::TABELA)->insertGetId([
 				'titulo' => $obj->getTitulo(),
@@ -50,7 +49,6 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 		}
 		catch (\Exception $e) {
-			Util::printr($e->getMEssage());
 			throw new ColecaoException("Erro ao adicionar Checklist ", $e->getCode(), $e);
 		}
 	}
@@ -163,7 +161,7 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			}
 
 			$checklists = $query->groupBy(self::TABELA . '.id', self::TABELA . '.status', self::TABELA . '.titulo', self::TABELA . '.descricao', self::TABELA . '.data_limite', self::TABELA . '.tipoChecklist', self::TABELA . '.data_cadastro', self::TABELA . '.encerrado', self::TABELA . '.questionador_id', self::TABELA . '.responsavel_id', self::TABELA . '.setor_id', self::TABELA . '.checklist_id', self::TABELA . '.loja_id')
-								->orderByRaw(self::TABELA . '.status = "' . StatusChecklistEnumerado::EXECUTADO . '" ASC , '. self::TABELA.'.data_limite ASC')
+								->orderByRaw(self::TABELA . '.status = "' . StatusChecklistEnumerado::EXECUTADO . '" ASC , '. self::TABELA . '.status = "' . StatusChecklistEnumerado::AGUARDANDO_EXECUCAO . '" ASC , '. self::TABELA.'.data_limite ASC')
 								->offset($pulo)
 								->limit($limite)
 								->get();
@@ -253,7 +251,6 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 		$responsavel = ($row['responsavel_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comUsuarioId($row['responsavel_id']) : '';
 		$questionamentos = ($row['id'] > 0) ? Dice::instance()->create('ColecaoQuestionamento')->questionamentosComChecklistId($row['id']) : '';
 
-
 		$checklist = new Checklist(
 			$row['id'],
 			$row['status'],
@@ -269,6 +266,8 @@ class ColecaoChecklistEmBDR implements ColecaoChecklist {
 			null,
 			$questionamentos
 		);
+
+		$checklist->setRepeteDiariamente($row['repeteDiariamente']);
 
 		return $checklist->toArray();
 	}
