@@ -142,7 +142,7 @@ class ColecaoPendenciaEmBDR implements ColecaoPendencia {
 			}
 			
 			$pendencia = $query->groupBy('id','status', 'descricao','descricaosolucao', 'datalimite', 'dataexecucao', 'datacadastro', 'responsavel_id', 'loja_id')
-								->orderByRaw(self::TABELA . '.status = "' . StatusPaEnumerado::EXECUTADO . '" ASC , '. self::TABELA.'.datalimite ASC')
+								->orderByRaw(self::TABELA . '.status = "' . StatusPaEnumerado::EXECUTADO . '" ASC , '. self::TABELA . '.status = "' . StatusPaEnumerado::AGUARDANDO_RESPONSAVEL . '" ASC , '. self::TABELA.'.datalimite ASC')
 								->offset($limite)
 								->limit($pulo)->get();
 

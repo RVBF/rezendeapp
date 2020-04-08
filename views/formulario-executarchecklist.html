@@ -22,163 +22,203 @@
 	</div>
 </div>
 
+<section id="dados_checklist" class="dados_checklist">
+	<div class="row form-row  mb-0-dto">
+		<div class="col col-sm-12 col-md-12 col-lg-12 col-12  mb-0-dto">
+
+			<div class="card-panel left-align  mb-0-dto">
+				<h5>Dados do Checklist</h5>
+				<div class="row form-row mb-0-dto">
+					<div class="col col-sm-12 col-md-12 col-lg-12 col-12 mb-0-dto">
+						<p class="text-danger text-uppercase font-weight-bold"><strong>Título do checklist : </strong></p>
+						<p id="titulo_checklist"></p>
+					</div>
+				</div>
+
+				<div class="row form-row mb-0-dto">
+					<div class="col col-sm-12 col-md-12 col-lg-12 col-12 mb-0-dto">
+						<p class="text-danger text-uppercase font-weight-bold"><strong>Descrição do checklist : </strong></p>
+						<p id="descricao_checklist"></p>
+					</div>
+				</div>
+
+				<div class="row form-row mb-0-dto">
+					<div class="col col-sm-12 col-md-12 col-lg-12 col-12 mb-0-dto">
+						<p class="text-danger text-uppercase font-weight-bold"><strong>Data Limite : </strong></p>
+						<p id="datalimite_checklist"></p>
+					</div>
+				</div>
+
+				<div class="row form-row mb-0-dto">
+					<div class="col col-sm-12 col-md-12 col-lg-12 col-12 mb-0-dto">
+						<p class="text-danger text-uppercase font-weight-bold"><strong>Repete Diariamente : </strong></p>
+						<p id="repeticao_checklist"></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+		
+</section>
 
 <section id="checklist_execucao">
-	<div class="col col-sm-12 col-md-12 col-lg-12 col-12">
-		<form class="form-horizontal "  method="post" id="executarquestionamento_form" enctype="multipart/form-data">
-			<section id="msg" class="card-panel left-align text-danger msg d-none  desabilitado"></section>
+	<div class="row form-row  mb-0-dto">
+		<div class="col col-sm-12 col-md-12 col-lg-12 col-12">
+			<form class="form-horizontal "  method="post" id="executarquestionamento_form" enctype="multipart/form-data">
+				<section id="msg" class="card-panel left-align text-danger msg d-none  desabilitado"></section>
 
-			<section class="perguntas"></section>
-			
-			<!-- <section id="info" class="opcao-selecionada d-none desabilitado"></section> -->
+				<section class="historico"></section>
+				
+				<!-- <section id="info" class="opcao-selecionada d-none desabilitado"></section> -->
 
-			<section id="comentarios" class="opcao-selecionada d-none desabilitado">
-				<div class="card-panel left-align ">
-					<span class="card-title"><h5>Comentários Checklist</h5></span>
-					<div class="divisor-secao"></div>
-					<div class="row form-row">
-						<div class="col col-sm-12 col-md-12 col-12 col-lg-12">
-							<div class="row form-row">
-								<div class="col col-sm-12 col-md-12 col-12 col-lg-12">
-									<div class="input-field ">
-										<textarea id="comentario-pergunta" class="materialize-textarea" rows="10"></textarea>
-										<label for="comentario-pergunta">Comentários</label>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>	
-			</section>
-
-			<section id="secao_PA" class="opcao-selecionada d-none desabilitado">
-				<div class="card-panel left-align ">
-					<span class="card-title"><h3>Cadastrar PA</h3></span>
-					<div class="divisor-secao"></div>
-					<div class="row form-row">
-						<div class="col col-sm-12 col-md-12 col-12 col-lg-12">
-							<div class="row form-row">
-								<div class="col col-sm-12 col-md-12 col-12 col-lg-12">
-									<div class="input-field ">
-										<textarea id="nao-conformidade-pa" class="materialize-textarea"></textarea>
-										<label for="nao-conformidade-pa">Descreva a Não Conformidade</label>
-									</div>
-								</div>
-							</div>
-
-							<div class="acoes">
-								<div class="row form-row acao">
-									<input type= "hidden" class="ids"  name="acao_pa_1" value ='1'>
-		
+				<section id="comentarios" class="opcao-selecionada d-none desabilitado">
+					<div class="card-panel left-align ">
+						<span class="card-title"><h5>Comentários Checklist</h5></span>
+						<div class="divisor-secao"></div>
+						<div class="row form-row">
+							<div class="col col-sm-12 col-md-12 col-12 col-lg-12">
+								<div class="row form-row">
 									<div class="col col-sm-12 col-md-12 col-12 col-lg-12">
 										<div class="input-field ">
-											<i class="adicionar_acao prefix mdi mdi-plus-circle-outline"  id="adicionar_acao"></i>
-											<textarea id="acao_pa_1" class=" campo_obrigatorio materialize-textarea validate"></textarea>
-											<label for="acao_pa_1">Descreva o P.A</label>												
+											<textarea id="comentario-pergunta" class="materialize-textarea" rows="10"></textarea>
+											<label for="comentario-pergunta">Comentários</label>
 										</div>
 									</div>
 								</div>
 							</div>
-								
-							<div class="row form-row">
-								<div class="col col-md-6 col-12 col-sm-6 col-lg-6">
-									<div class="input-field">
-										<i class="prefix mdi mdi-calendar"></i>
-										<input id="data_limitepa" type="text" class="validate form-control data-picker">
-										<label for="data_limitepa">Data Limite para Execução</label>
+						</div>
+					</div>	
+				</section>
+
+				<section id="secao_PA" class="opcao-selecionada d-none desabilitado">
+					<div class="card-panel left-align ">
+						<span class="card-title"><h3>Cadastrar PA</h3></span>
+						<div class="divisor-secao"></div>
+						<div class="row form-row">
+							<div class="col col-sm-12 col-md-12 col-12 col-lg-12">
+								<div class="row form-row">
+									<div class="col col-sm-12 col-md-12 col-12 col-lg-12">
+										<div class="input-field ">
+											<textarea id="nao-conformidade-pa" class="materialize-textarea"></textarea>
+											<label for="nao-conformidade-pa">Descreva a Não Conformidade</label>
+										</div>
 									</div>
-									<div class="date-panel-pa"></div>
 								</div>
 
-								<div class="col col-md-6 col-12 col-sm-6 col-lg-6">
-									<div class="input-field">
-										<i class="prefix mdi mdi-av-timer"></i>
-										<input id="hora_limitepa" type="text" class="validate form-control hora-picker">
-										<label for="hora_limitepa">Hora limite para Execução</label>
+								<div class="acoes">
+									<div class="row form-row acao">
+										<input type= "hidden" class="ids"  name="acao_pa_1" value ='1'>
+			
+										<div class="col col-sm-12 col-md-12 col-12 col-lg-12">
+											<div class="input-field ">
+												<i class="adicionar_acao prefix mdi mdi-plus-circle-outline"  id="adicionar_acao"></i>
+												<textarea id="acao_pa_1" class=" campo_obrigatorio materialize-textarea validate"></textarea>
+												<label for="acao_pa_1">Descreva o P.A</label>												
+											</div>
+										</div>
 									</div>
-									<div class="time-panel-pa"></div>
 								</div>
-							</div>
+									
+								<div class="row form-row">
+									<div class="col col-md-6 col-12 col-sm-6 col-lg-6">
+										<div class="input-field">
+											<i class="prefix mdi mdi-calendar"></i>
+											<input id="data_limitepa" type="text" class="validate form-control data-picker">
+											<label for="data_limitepa">Data Limite para Execução</label>
+										</div>
+										<div class="date-panel-pa"></div>
+									</div>
 
-							<div class="row form-row">
-								<div class="col col-md-12 col-12 col-sm-12 col-lg-12 ">
-									<div class=" input-field">
-										<select id ="responsavelpa"  name="responsavelpa" class="select campo_obrigatorio" ><option value="" disabled selected>Responsável</option></select>
-										<label for="responsavelpa">*Responsável</label>
+									<div class="col col-md-6 col-12 col-sm-6 col-lg-6">
+										<div class="input-field">
+											<i class="prefix mdi mdi-av-timer"></i>
+											<input id="hora_limitepa" type="text" class="validate form-control hora-picker">
+											<label for="hora_limitepa">Hora limite para Execução</label>
+										</div>
+										<div class="time-panel-pa"></div>
+									</div>
+								</div>
+
+								<div class="row form-row">
+									<div class="col col-md-12 col-12 col-sm-12 col-lg-12 ">
+										<div class=" input-field">
+											<select id ="responsavelpa"  name="responsavelpa" class="select campo_obrigatorio" ><option value="" disabled selected>Responsável</option></select>
+											<label for="responsavelpa">*Responsável</label>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				</div>							
-			</section>
+					</div>							
+				</section>
 
-			<section id="secao_pendencia" class="opcao-selecionada d-none desabilitado">
-				<div class="card-panel left-align ">
-					<span class="card-title"><h3>Cadastrar Pendencia</h3></span>
-					<div class="divisor-secao"></div>
-					<div class="row form-row">
-						<div class="col col-sm-12 col-md-12 col-12 col-lg-12">
-							<div class="row form-row">
-								<div class="col col-sm-12 col-md-12 col-12 col-lg-12">
-									<div class="input-field ">
-										<textarea id="descricao-pendencia" class="materialize-textarea"></textarea>
-										<label for="descricao-pendencia">Descreva Pendência</label>
+				<section id="secao_pendencia" class="opcao-selecionada d-none desabilitado">
+					<div class="card-panel left-align ">
+						<span class="card-title"><h3>Cadastrar Pendencia</h3></span>
+						<div class="divisor-secao"></div>
+						<div class="row form-row">
+							<div class="col col-sm-12 col-md-12 col-12 col-lg-12">
+								<div class="row form-row">
+									<div class="col col-sm-12 col-md-12 col-12 col-lg-12">
+										<div class="input-field ">
+											<textarea id="descricao-pendencia" class="materialize-textarea"></textarea>
+											<label for="descricao-pendencia">Descreva Pendência</label>
+										</div>
 									</div>
 								</div>
-							</div>
 
-							<div class="row form-row">
-								<div class="col col-sm-12 col-md-12 col-12 col-lg-12">
-									<div class="input-field ">
-										<textarea id="descricao-solucao" class="materialize-textarea validate"></textarea>
-										<label for="descricao-solucao">Descreva o Solução para Pendência</label>												
+								<div class="row form-row">
+									<div class="col col-sm-12 col-md-12 col-12 col-lg-12">
+										<div class="input-field ">
+											<textarea id="descricao-solucao" class="materialize-textarea validate"></textarea>
+											<label for="descricao-solucao">Descreva o Solução para Pendência</label>												
+										</div>
 									</div>
 								</div>
-							</div>
-								
-							<div class="row form-row">
-								<div class="col col-md-6 col-12 col-sm-6 col-lg-6">
-									<div class="input-field">
-										<i class="prefix mdi mdi-calendar"></i>
-										<input id="data_limitepe" type="text" class="validate form-control data-picker">
-										<label for="data_limitepe">Data Limite para Execução</label>
+									
+								<div class="row form-row">
+									<div class="col col-md-6 col-12 col-sm-6 col-lg-6">
+										<div class="input-field">
+											<i class="prefix mdi mdi-calendar"></i>
+											<input id="data_limitepe" type="text" class="validate form-control data-picker">
+											<label for="data_limitepe">Data Limite para Execução</label>
+										</div>
+										<div class="date-panel-pe"></div>
 									</div>
-									<div class="date-panel-pe"></div>
+
+									<div class="col col-md-6 col-12 col-sm-6 col-lg-6">
+										<div class="input-field">
+											<i class="prefix mdi mdi-av-timer"></i>
+											<input id="hora_limitepe" type="text" class="validate form-control hora-picker">
+											<label for="hora_limitepe">Hora limite para Execução</label>
+										</div>
+										<div class="time-panel-pe"></div>
+									</div>
 								</div>
 
-								<div class="col col-md-6 col-12 col-sm-6 col-lg-6">
-									<div class="input-field">
-										<i class="prefix mdi mdi-av-timer"></i>
-										<input id="hora_limitepe" type="text" class="validate form-control hora-picker">
-										<label for="hora_limitepe">Hora limite para Execução</label>
-									</div>
-									<div class="time-panel-pe"></div>
-								</div>
-							</div>
-
-							<div class="row form-row">
-								<div class="col col-md-12 col-12 col-sm-12 col-lg-12 ">
-									<div class=" input-field">
-										<select id ="responsavelpe"  name="responsavelpe" class="select campo_obrigatorio" ><option value="" disabled selected>Responsável</option></select>
-										<label for="responsavelpe">*Responsável</label>
+								<div class="row form-row">
+									<div class="col col-md-12 col-12 col-sm-12 col-lg-12 ">
+										<div class=" input-field">
+											<select id ="responsavelpe"  name="responsavelpe" class="select campo_obrigatorio" ><option value="" disabled selected>Responsável</option></select>
+											<label for="responsavelpe">*Responsável</label>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				</div>							
-			</section>
+					</div>							
+				</section>
 
-			<div class="row form-row botoes" id="botoes">			
-				<div class="col col-md-3 col-12 col-sm-4 col-lg-3">
-					<button id="cancelar" class="waves-effect waves-light btn white grey-text text-darken-4 col-12 checklist_link">
-						<i class="mdi mdi-close-circle-outline yellow-text text-accent-4"></i>
-						Cancelar
-					</button>
+				<div class="row form-row botoes" id="botoes">			
+					<div class="col col-md-3 col-12 col-sm-4 col-lg-3">
+						<button id="cancelar" class="waves-effect waves-light btn white grey-text text-darken-4 col-12 checklist_link">
+							<i class="mdi mdi-close-circle-outline yellow-text text-accent-4"></i>
+							Cancelar
+						</button>
+					</div>
 				</div>
-			</div>
-		</form>
+			</form>
+		</div>
 	</div>
 </section>
 

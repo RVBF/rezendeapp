@@ -369,44 +369,6 @@ class ControladoraPendencia {
 			$pendencia->setStatus(StatusPendenciaEnumerado::EXECUTADO);
 			$pendencia->setDataExecucao(Carbon::now());
 			$pendencia->setDescricaoExecucao(\ParamUtil::value($this->params, 'descricaoExecucao'));
-
-			$questionamento = null;
-			if($this->colecaoQuestionamento->contagemPorColuna($pendencia->getId(), 'pendencia_id') > 0){
-				$questionamento = new Questionamento(); $questionamento->fromArray($this->colecaoQuestionamento->comPendenciaId($pendencia->getId()));
-
-				if(!isset($questionamento) and !($questionamento instanceof Questionamento)){
-					throw new Exception("Questionamento não encontrado na base de dados.");
-				}	
-				
-				if($questionamento->getPlanoAcao() != null){
-					$planoAcao =  new PlanoAcao(); $planoAcao->fromArray($questionamento->getPlanoAcao());
-					if($planoAcao->getStatus() != StatusPaEnumerado::EXECUTADO){
-						$questionamento->setStatus(TipoQuestionamentoEnumerado::RESPONDIDO);
-						$this->colecaoQuestionamento->atualizar($questionamento);
-					}
-				}
-				else if($questionamento->getPlanoAcao() == null){
-					$questionamento->setStatus(TipoQuestionamentoEnumerado::RESPONDIDO);
-					$this->colecaoQuestionamento->atualizar($questionamento);
-				}
-				
-				$checklist = new Checklist(); $checklist->fromArray($this->colecaoChecklist->comId($questionamento->getChecklist()));
-				if(!isset($checklist) and !($checklist instanceof Checklist)){
-					throw new Exception("checklist não encontrado na base de dados.");
-				}	
-
-				if(!$this->colecaoChecklist->temPendencia($checklist->getId())){
-					$checklist->setStatus(StatusChecklistEnumerado::EXECUTADO);
-					$this->colecaoChecklist->atualizar($checklist);	
-				}
-				else{
-					if($checklist->getStatus() == StatusChecklistEnumerado::AGUARDANDO_EXECUCAO){
-						$checklist->setStatus(StatusChecklistEnumerado::INCOMPLETO);
-						$this->colecaoChecklist->atualizar($checklist);	
-					}
-				}
-			}
-
 			$anexo = null;
 			if(isset($this->params['anexos']) and count($this->params['anexos']) > 0){
 				$pastaTarefa = 'pendencia_'. $pendencia->getId();
@@ -429,6 +391,45 @@ class ControladoraPendencia {
 			}
 
 			$this->colecaoPendencia->executar($pendencia);
+
+			$questionamento = null;
+
+			if($this->colecaoQuestionamento->contagemPorColuna($pendencia->getId(), 'pendencia_id') > 0){
+				$questionamento = new Questionamento(); $questionamento->fromArray($this->colecaoQuestionamento->comPendenciaId($pendencia->getId()));
+
+				if(!isset($questionamento) and !($questionamento instanceof Questionamento)){
+					throw new Exception("Questionamento não encontrado na base de dados.");
+				}	
+				
+				if($questionamento->getPlanoAcao() != null){
+					$planoAcao =  new PlanoAcao(); $planoAcao->fromArray($questionamento->getPlanoAcao());
+					if($planoAcao->getStatus() != StatusPaEnumerado::EXECUTADO){
+						$questionamento->setStatus(TipoQuestionamentoEnumerado::RESPONDIDO);
+						$this->colecaoQuestionamento->atualizar($questionamento);
+					}
+				}
+				else if($questionamento->getPlanoAcao() == null){
+					$questionamento->setStatus(TipoQuestionamentoEnumerado::RESPONDIDO);
+					$this->colecaoQuestionamento->atualizar($questionamento);
+				}
+				
+				$checklist = new Checklist(); $checklist->fromArray($this->colecaoChecklist->comId($questionamento->getChecklist()));
+
+				if(!isset($checklist) and !($checklist instanceof Checklist)){
+					throw new Exception("checklist não encontrado na base de dados.");
+				}	
+
+				if(!$this->colecaoChecklist->temPendencia($checklist->getId())){
+					$checklist->setStatus(StatusChecklistEnumerado::EXECUTADO);
+					$this->colecaoChecklist->atualizar($checklist);	
+				}
+				else{
+					if($checklist->getStatus() == StatusChecklistEnumerado::AGUARDANDO_EXECUCAO){
+						$checklist->setStatus(StatusChecklistEnumerado::INCOMPLETO);
+						$this->colecaoChecklist->atualizar($checklist);	
+					}
+				}
+			}
 
 			$resposta = ['status' => true, 'mensagem'=> 'Pendência executada com sucesso!']; 
 			DB::commit();

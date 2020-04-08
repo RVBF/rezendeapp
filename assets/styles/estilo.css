@@ -85,7 +85,7 @@ span{
 }
 
 .listagem-padrao-item p{
-    margin: 0;
+    margin: 0px;
 }
 
 .listagem-padrao-item p:not(.exc){
@@ -411,6 +411,10 @@ opacity: 1.0;
 
     #checklist_execucao .card-panel{
         padding: 1em;
+    }
+
+    #dados_checklist .card-panel{
+        padding: 1em !important;
     }
 
     .listagem-padrao .opc_tabela a{

@@ -50,9 +50,25 @@
 			objeto.columnDefs = function (data){
 				var html = '';
 				var dataLimite = moment(data.dataLimite);
-				var diferencaDias = dataLimite.diff(moment(),'days');
-				var textoDiasRestantes = (diferencaDias > 0) ? Math.abs(diferencaDias) +' dias para que o cheklist seja executado!' : Math.abs(diferencaDias) +' dias de atraso!';
-				var textoDiasRestantes = (diferencaDias > 0) ? Math.abs(diferencaDias) +' dias para que o cheklist seja executado!' : Math.abs(diferencaDias) +' dias de atraso!';
+				var textoDiasRestantes = '';
+				if(dataLimite.isSameOrAfter(moment())){
+					var dataParaComparacao = moment(data.dataLimite);
+					var diferencaAnos = dataParaComparacao.diff(moment(),'years');
+					var diferencaMeses = (diferencaAnos > 0) ? dataParaComparacao.subtract(diferencaAnos, 'years').diff(moment(),'months') : dataParaComparacao.diff(moment(),'months');
+					var diferencaDias = (diferencaMeses > 0) ? dataParaComparacao.subtract(diferencaMeses, 'months').diff(moment(),'days') : dataParaComparacao.diff(moment(),'days');
+					var diferencaHoras = (diferencaDias > 0) ? dataParaComparacao.subtract(diferencaDias, 'days').diff(moment(),'hours'): dataParaComparacao.diff(moment(),'hours');
+					var diferencaMinutos = (diferencaHoras > 0) ? dataParaComparacao.subtract(diferencaHoras, 'hours').diff(moment(),'minutes') : dataParaComparacao.diff(moment(),'minutes');;
+
+					textoDiasRestantes = ((Math.abs(diferencaAnos) == 1) ? Math.abs(diferencaAnos) +' ano' : Math.abs(diferencaAnos) +' anos') + ', '+ ((Math.abs(diferencaMeses) == 1) ? Math.abs(diferencaMeses) +' mês' : Math.abs(diferencaMeses) +' meses') + ', ' + ((Math.abs(diferencaDias) == 1) ? Math.abs(diferencaDias) + ' dia' : Math.abs(diferencaDias) +' dias') + ', '+((diferencaHoras == 1) ?  Math.abs(diferencaHoras) +' hora' : Math.abs(diferencaHoras) +' horas') +' e '+((diferencaMinutos == 1) ?  Math.abs(diferencaMinutos) +' minuto ' : Math.abs(diferencaMinutos) +' minutos ')+'para que o plano de ação seja executado!' 
+				}
+				else
+				{
+					textoDiasRestantes = 'O plano de ação está atrasado!'
+				}
+				if(data.status == 'Executado'){
+					textoDiasRestantes = 'Encerrado!';
+				}			
+				
 				var tipoClasse = !(data.status == 'Executado') ? ' agenda-dto ' : ' agenda-dto cinza ';
 				if(data.status == 'Executado'){
 					textoDiasRestantes = 'Encerrado!';
@@ -60,8 +76,8 @@
 				html += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12 mb-0-dto">';
 				html += '<div class="row '+ tipoClasse + ' plano-dto">';
 					html += '<div class="col col-12 col-lg-3 col-md-3 col-sm-4">';
-						html += '<p class="dia '+((diferencaDias > 0) ? 'black-text': ' red-text text-accent-4 ') +'">'+ dataLimite.format('ddd') + '</p>';
-						html += '<p class="data '+((diferencaDias > 0) ? 'black-text': ' red-text text-accent-4 ') +'">'+ dataLimite.format('DD/MM/YYYY')+ '</p>';
+						html += '<p class="dia '+((dataLimite.isSameOrAfter(moment())) ? 'black-text': ' red-text text-accent-4 ') +'">'+ dataLimite.format('ddd') + '</p>';
+						html += '<p class="data '+((dataLimite.isSameOrAfter(moment())) ? 'black-text': ' red-text text-accent-4 ') +'">'+ dataLimite.format('DD/MM/YYYY')+ '</p>';
 					html += '</div>';
 					html += '<div class="col col-12 col-lg-9 col-md-9 col-sm-8">';
 						html += '<div class="col col-12 col-lg-12 col-md-12 col-sm-12 mb-0-dto">';
@@ -71,7 +87,7 @@
 						html += '</div>';
 						if(data.status != 'Executado') html += '<a href="#" class="executar_pa"><p><i class="mdi mdi-clipboard-check orange-text text-accent-4"></i> <strong class="black-text descricao">' + data.descricao + '</strong></p></a>';
 						else html += '</i> <strong class="black-text descricao">' + data.descricao + '</strong></p>';
-						html += '<p class="dias_restantes '+((diferencaDias > 0) ? 'black-text': ' red-text text-accent-4 ')+'"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>'+textoDiasRestantes+'</strong></p>';
+						html += '<p class="dias_restantes '+((dataLimite.isSameOrAfter(moment())) ? 'black-text': ' red-text text-accent-4 ')+'"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>'+textoDiasRestantes+'</strong></p>';
 						if(data.solucao != null){
 							html += '<p><strong>Ações para Solução : </strong> ';
 

@@ -142,9 +142,18 @@ class ControladoraChecklist {
 				throw new Exception("Responśavel não encontrado na base de dados.");
 			}
 
+			
+			$dataLimite = $agora = Carbon::now();
 
-			$dataLimite = new Carbon(\ParamUtil::value($this->params, 'dataLimite'), 'America/Sao_Paulo');
-
+			if(\ParamUtil::value($this->params, 'repeteDiariamente')){
+				$dataLimite->hour = 23;
+				$dataLimite->minute = 59;
+				$dataLimite->second = 59;
+			}
+			else $dataLimite = new Carbon(\ParamUtil::value($this->params, 'dataLimite'), 'America/Sao_Paulo');
+			if($dataLimite->isBefore($agora)) throw new Exception("A data limite deve ser uma data futura.");
+			
+			// Util::printr($dataLimite);
 			$checklist = new Checklist(
 				0,
 				StatusChecklistEnumerado::AGUARDANDO_EXECUCAO,

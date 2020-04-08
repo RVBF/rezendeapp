@@ -52,9 +52,10 @@
 				jqXHR.done(function(resposta) {
 					if(resposta.status && _this.questionamentos.length > 0){
 						_this.formulario.find('.historico').empty().promise().done(function () {
+							toastr.success('O questionamento "'+ _this.objetoAtual.formularioPergunta.pergunta + '" foi executado com suscesso!');
+
 							_this.buscarQuestionamentos();
 
-							toastr.success('O questionamento de id '+ _this.objetoAtual.id+ ' foi executado com suscesso!');
 						});
 					}else{
 						_this.formulario.find('#msg').empty().removeClass('d-none').append(resposta.mensagem);
@@ -269,8 +270,14 @@
 
 		_this.popularQuestao = function popularQuestao() {
 			_this.objetoAtual = _this.questionamentos.shift();
+			$('body').find('.dados_checklist').find('#titulo_checklist').html(_this.objetoAtual.checklist.titulo);
+			$('body').find('.dados_checklist').find('#descricao_checklist').html(_this.objetoAtual.checklist.descricao);
+			$('body').find('.dados_checklist').find('#datalimite_checklist').html(moment(_this.objetoAtual.checklist.data_limite).format('DD/MM/YYYY HH:MM:SS'));
+			if(_this.objetoAtual.checklist.repeteDiariamente) $('body').find('#dados_checklist').find('#repeticao_checklist').html('Sim');
+			else $('body').find('.dados_checklist').find('#repeticao_checklist').html('Não');
 			_this.anexo = [];
 			let html = '';
+			
 			html += '<div class="row form-row questionamento mb-0-dto">'
 				html +='<div class="col col-sm-12 col-md-12 col-lg-12 col-12 mb-0-dto">';
 
@@ -358,7 +365,6 @@
 					html += '</div>';
 				html += '</div>';
 			html += '</div>';
-
 
 			_this.formulario.find('.historico').empty().append(html).promise().done(function () {
 				if(_this.questionamentos.length == 1){
@@ -530,7 +536,6 @@
 				_this.resetarForm();
 				_this.questionamentos = resposta.conteudo;
 				_this.popularQuestao();
-
 			};
 
 			var erro = function(resposta)
