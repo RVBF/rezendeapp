@@ -97,44 +97,46 @@
 		};
 
 		_this.configurarEventos = function configurarEventos() {
-			_this.dataLimite =new Picker($('#data_limitepa').get()[0], {
-				format : 'DD de MMMM de YYYY',
-				controls: true,
-				inline: true,
-				container: '.date-panel-pa',
-				text : {
-					title: 'Selecione a data',
-					cancel: 'Cancelar',
-					confirm: 'OK',
-					year: 'Ano',
-					month: 'Mês',
-					day: 'Dia',
-					hour: 'Hora',
-					minute: 'Minuto',
-					second: 'Segundo',
-					millisecond: 'Milissegundos',
-				},
-				headers : true,
-				months : ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-				monthsShort : ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
-			});
-
-			_this.horaLimite = new Picker($('#hora_limitepa').get()[0], {
-					format: 'HH:mm',
-					headers: true,
+			if(window.location.href.search('editar') != -1 || window.location.href.search('cadastrar') != -1){
+				_this.dataLimite =new Picker($('#data_limitepa').get()[0], {
+					format : 'DD de MMMM de YYYY',
 					controls: true,
 					inline: true,
-					container: '.time-panel-pa',
+					container: '.date-panel-pa',
 					text : {
-						title: 'Selecione a hora',
+						title: 'Selecione a data',
 						cancel: 'Cancelar',
 						confirm: 'OK',
+						year: 'Ano',
+						month: 'Mês',
+						day: 'Dia',
 						hour: 'Hora',
 						minute: 'Minuto',
 						second: 'Segundo',
 						millisecond: 'Milissegundos',
 					},
-			});
+					headers : true,
+					months : ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+					monthsShort : ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+				});
+
+				_this.horaLimite = new Picker($('#hora_limitepa').get()[0], {
+						format: 'HH:mm',
+						headers: true,
+						controls: true,
+						inline: true,
+						container: '.time-panel-pa',
+						text : {
+							title: 'Selecione a hora',
+							cancel: 'Cancelar',
+							confirm: 'OK',
+							hour: 'Hora',
+							minute: 'Minuto',
+							second: 'Segundo',
+							millisecond: 'Milissegundos',
+						},
+				});
+			}
 
 			$('body').find('.adicionar_acao').on('click', _this.adiconarAcao);
 		};
@@ -150,7 +152,7 @@
 				_this.popularColaboradores();
 				_this.popularLojas();
 				$('.card-title').html('<h3>Cadastrar PA</h3>');
-				_this.formulario.find('#botoes').prepend(' <div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end"><button type="submit" id="cadastrar" class="waves-effect waves-light btn white grey-text text-darken-4 col-12 quebra-linha"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Cadastrar</button></div>').promise().done(function(){
+				_this.formulario.find('#botoes').prepend('<div class="col col-md-4 col-12 col-sm-5 col-lg-4"><button type="submit" id="cadastrar" class="waves-effect waves-light btn white grey-text text-darken-4 col-12 quebra-linha"><i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 "></i>Cadastrar</button></div>').promise().done(function(){
 					$('#botoes').find('#cadastrar').on('click', _this.salvar);
 				});
 
@@ -240,7 +242,7 @@
 				_this.dataLimite.setDate(dataLimite.toDate());
 				_this.horaLimite.setDate(dataLimite.toDate());
 				var html = '';
-				html += '<div class="col col-md-6 col-6 col-sm-6 col-lg-6 d-flex justify-content-sm-end justify-content-md-end">';
+				html += '<div class="col col-md-4 col-12 col-sm-5 col-lg-4">';
 				html += '<button id="salvar" type="submit" class="waves-effect waves-light btn white grey-text text-darken-4 col-12 quebra-linha">';
 				html += '<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 ">';
 				html += '</i>salvar</button>';

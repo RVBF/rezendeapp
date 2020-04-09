@@ -61,5 +61,23 @@ class Checklist {
         $this->questionarios = $questionarios;
         $this->questionamentos = $questionamentos;
     }
+
+    function clone(){
+        return new Checklist(
+            $this->id,
+            $this->status,
+            $this->titulo,
+            $this->descricao,
+            $this->dataLimite,
+            $this->dataCadastro,
+            $this->tipoChecklist,
+            $this->setor,
+            $this->loja,
+            $this->questionador,
+            $this->responsavel,
+            $this->questionarios,
+            $this->questionamentos
+        );
+    }
 }
 ?>

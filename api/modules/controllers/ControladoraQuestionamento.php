@@ -159,8 +159,11 @@ class ControladoraQuestionamento {
 							throw new Exception("Colaborador não encontrado na base de dados.");
 						}	
 						
+						$dataLimitePA = $agora = Carbon::now();
 
 						$dataLimitePA = new Carbon($this->params['planoAcao']['dataLimite'], 'America/Sao_Paulo');
+						
+						if($dataLimitePA->isBefore($agora)) throw new Exception("A data limite  do plano de ação deve ser uma data futura.");
 
 						$planoDeAcao = new PlanoAcao(
 							0,
@@ -201,8 +204,12 @@ class ControladoraQuestionamento {
 						if(!isset($responsavel) and !($responsavel instanceof Colaborador)){
 							throw new Exception("Colaborador não encontrado na base de dados.");
 						}
+
+						$dataLimitePe = $agora = Carbon::now();
+
 						$dataLimitePe = new Carbon($this->params['pendencia']['dataLimite'], 'America/Sao_Paulo');
-	
+						if($dataLimitePe->isBefore($agora)) throw new Exception("A data limite  da pendência deve ser uma data futura.");
+
 						$pendencia = new Pendencia(
 							0,
 							StatusPendenciaEnumerado::AGUARDANDO_EXECUCAO,

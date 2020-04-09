@@ -117,13 +117,6 @@ class ControladoraChecklist {
 				throw new Exception("Setor não encontrado na base de dados.");
 			}
 
-
-			$loja = new Loja(); $loja->fromArray($this->colecaoLoja->comId((\ParamUtil::value($this->params, 'loja')> 0) ? \ParamUtil::value($this->params, 'loja') : \ParamUtil::value($this->params, 'loja')));
-
-			if(!isset($loja) and !($loja instanceof Loja)){
-				throw new Exception("Loja não encontrada na base de dados.");
-			}
-
 			$questionarios = $this->colecaoQuestionario->todosComId($this->params['questionarios']);
 
 			if(!isset($questionarios) and count($questionarios) == count($this->params['questionarios'])){
@@ -163,14 +156,26 @@ class ControladoraChecklist {
 				'',
 				\ParamUtil::value($this->params, 'tipoChecklist'),
 				$setor,
-				$loja,
+				'',
 				$questionador,
 				$responsavel,
 				$questionarios
 			);
 
 			$checklist->setRepeteDiariamente(\ParamUtil::value($this->params, 'repeteDiariamente'));
-			$this->colecaoChecklist->adicionar($checklist);
+
+			if(count($this->params['loja']) > 0) throw new Exception("É obrigatório selecionar ao menos uma unidade.");
+			
+			foreach($this->params['loja'] as $lojaAtual){
+				$loja = new Loja(); $loja->fromArray($this->colecaoLoja->comId($lojaAtual));
+				$checklistAtual = $checklist->clone();
+				if(!isset($loja) and !($loja instanceof Loja)){
+					throw new Exception("Loja de selecionada não se encontra na base de dados.");
+				}
+				$checklistAtual->setLoja($loja);
+				$this->colecaoChecklist->adicionar($checklistAtual);
+
+			}
 
 			$questionarios =$this->params['questionarios'];
 
@@ -268,8 +273,16 @@ class ControladoraChecklist {
 			}
 
 
-			$dataLimite = new Carbon(\ParamUtil::value($this->params, 'dataLimite'), 'America/Sao_Paulo');
+			$dataLimite = $agora = Carbon::now();
 
+			if(\ParamUtil::value($this->params, 'repeteDiariamente')){
+				$dataLimite->hour = 23;
+				$dataLimite->minute = 59;
+				$dataLimite->second = 59;
+			}
+			else $dataLimite = new Carbon(\ParamUtil::value($this->params, 'dataLimite'), 'America/Sao_Paulo');
+			if($dataLimite->isBefore($agora)) throw new Exception("A data limite deve ser uma data futura.");
+			
 			$checklist = new Checklist(); $checklist->fromArray($this->colecaoChecklist->comId(\ParamUtil::value($this->params, 'id')));
 			if(!isset($checklist) and !($checklist instanceof Checklist)){
 				throw new Exception("Checklist não encontrado na base de dados.");

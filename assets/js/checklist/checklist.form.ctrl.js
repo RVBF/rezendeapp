@@ -82,58 +82,60 @@
 				($('#repete_diariamente').is(':checked')) ? '' : dataLimite.toString() + ' ' + $('#hora').val(),
 				$('#responsavel option:selected').val(),
 				$('#setor option:selected').val(),
-				$('#unidade option:selected').val(),
+				$('#unidade').formSelect('getSelectedValues'),
 				$('#questionarios').formSelect('getSelectedValues'),
 				$('#repete_diariamente').is(':checked')
 			);
 		};
 
 		_this.configurarBotoes = function configurarBotoes() {
-			_this.dataLimite = new Picker($('#data').get()[0], {
-				format: 'DD de MMMM de YYYY',
-				controls: true,
-				inline: true,
-				container: '.date-panel',
+			if(window.location.href.search('editar') != -1 || window.location.href.search('cadastrar') != -1){
+				_this.dataLimite = new Picker($('#data').get()[0], {
+					format: 'DD de MMMM de YYYY',
+					controls: true,
+					inline: true,
+					container: '.date-panel',
 
-				text: {
-					title: 'Selecione a data',
-					cancel: 'Cancelar',
-					confirm: 'OK',
-					year: 'Ano',
-					month: 'Mês',
-					day: 'Dia',
-					hour: 'Hora',
-					minute: 'Minuto',
-					second: 'Segundo',
-					millisecond: 'Milissegundos',
-				},
-				hidden : function(opcao){
-					console.log(opcao);
-				},
-				headers: true,
-				months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-				monthsShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
-			});
+					text: {
+						title: 'Selecione a data',
+						cancel: 'Cancelar',
+						confirm: 'OK',
+						year: 'Ano',
+						month: 'Mês',
+						day: 'Dia',
+						hour: 'Hora',
+						minute: 'Minuto',
+						second: 'Segundo',
+						millisecond: 'Milissegundos',
+					},
+					hidden : function(opcao){
+						console.log(opcao);
+					},
+					headers: true,
+					months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+					monthsShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+				});
 
-			_this.horaLimite = new Picker($('#hora').get()[0], {
-				format: 'HH:mm',
-				headers: true,
-				controls: true,
-				inline: true,
-				container: '.time-panel',
-				'hide' : function(opcao){
-					console.log(opcao);
-				},
-				text: {
-					title: 'Selecione a hora',
-					cancel: 'Cancelar',
-					confirm: 'OK',
-					hour: 'Hora',
-					minute: 'Minuto',
-					second: 'Segundo',
-					millisecond: 'Milissegundos',
-				},
-			});
+				_this.horaLimite = new Picker($('#hora').get()[0], {
+					format: 'HH:mm',
+					headers: true,
+					controls: true,
+					inline: true,
+					container: '.time-panel',
+					'hide' : function(opcao){
+						console.log(opcao);
+					},
+					text: {
+						title: 'Selecione a hora',
+						cancel: 'Cancelar',
+						confirm: 'OK',
+						hour: 'Hora',
+						minute: 'Minuto',
+						second: 'Segundo',
+						millisecond: 'Milissegundos',
+					},
+				});
+			}
 		};
 
 		_this.popularSetores = function popularSetores(valor = 0) {
@@ -277,6 +279,10 @@
 				}
 			});
 
+			if(window.location.href.search('cadastrar-checklist') != -1){
+				_this.formulario.find('#unidade').prop('multiple', true).prop('name', 'unidade[]').formSelect();
+			}
+
 			if (window.location.href.search('visualizar') != -1) servicoChecklist.comId(pegarId(window.location.href, 'visualizar-checklist')).done(_this.desenhar);
 			else if (window.location.href.search('editar') != -1) servicoChecklist.comId(pegarId(window.location.href, 'editar-checklist')).done(_this.desenhar);
 			else {
@@ -321,6 +327,7 @@
 						});
 					});
 				}
+				// _this.dataLimite.hide();
 			}
 			else if (window.location.href.search('editar') != -1) {
 				_this.alterar = true;
@@ -329,11 +336,11 @@
 				_this.formulario.find('#questionarios').parents('.select-wrapper').desabilitar(true);
 				var html = '';
 				html += '<div class="col col-md-4 col-12 col-sm-5 col-lg-4">';
-				html += '<button id="salvar" type="submit" class="waves-effect waves-light btn white grey-text text-darken-4">';
-				html += '<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 col-12 quebra-linha">';
+				html += '<button id="salvar" type="submit" class="waves-effect waves-light btn white grey-text text-darken-4 col-12 quebra-linha">';
+				html += '<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 ">';
 				html += '</i>salvar</button>';
 				html += '</div>';
-
+				
 				_this.formulario.find('#botoes').prepend(html).promise().done(function () {
 					$('#salvar').on('click', _this.salvar);
 
