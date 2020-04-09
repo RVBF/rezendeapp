@@ -132,8 +132,9 @@ class ControladoraPendencia {
 
 			if(!isset($responsavel) and !($responsavel instanceof Responsavel)) throw new Exception("Responsável não encontrada na base de dados.");
 
-			$dataLimite = new Carbon();                  // equivalent to Carbon::now()
+			$dataLimite = $agora = Carbon::now();
 			$dataLimite = new Carbon(\ParamUtil::value($this->params, 'dataLimite'), 'America/Sao_Paulo');
+			if($dataLimite->isBefore($agora)) throw new Exception("A data limite  do plano de ação deve ser uma data futura.");
 
 			$pendencia = new Pendencia(
 				0,
@@ -186,8 +187,10 @@ class ControladoraPendencia {
 
 			if(!isset($responsavel) and !($responsavel instanceof Responsavel)) throw new Exception("Responsável não encontrada na base de dados.");
 
-			$dataLimite = new Carbon();                  // equivalent to Carbon::now()
+
+			$dataLimite = $agora = Carbon::now();
 			$dataLimite = new Carbon(\ParamUtil::value($this->params, 'dataLimite'), 'America/Sao_Paulo');
+			if($dataLimite->isBefore($agora)) throw new Exception("A data limite  do plano de ação deve ser uma data futura.");
 
 			$pendencia = new Pendencia(); $pendencia->fromArray($this->colecaoPendencia->comId(\ParamUtil::value($this->params, 'id')));
 

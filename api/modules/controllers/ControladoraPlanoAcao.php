@@ -135,8 +135,9 @@ class ControladoraPlanoAcao {
 
 			if(!isset($responsavel) and !($responsavel instanceof Responsavel)) throw new Exception("Responsável não encontrada na base de dados.");
 
-			$dataLimite = new Carbon();
+			$dataLimite = $agora = Carbon::now();
 			$dataLimite = new Carbon(\ParamUtil::value($this->params, 'dataLimite'), 'America/Sao_Paulo');
+			if($dataLimite->isBefore($agora)) throw new Exception("A data limite  do plano de ação deve ser uma data futura.");
 
 			$planoAcao = new PlanoAcao(
 				0,
@@ -195,8 +196,9 @@ class ControladoraPlanoAcao {
 
 			if(!isset($responsavel) and !($responsavel instanceof Responsavel)) throw new Exception("Responsável não encontrada na base de dados.");
 
-			$dataLimite = new Carbon();                  // equivalent to Carbon::now()
+			$dataLimite = $agora = Carbon::now();
 			$dataLimite = new Carbon(\ParamUtil::value($this->params, 'dataLimite'), 'America/Sao_Paulo');
+			if($dataLimite->isBefore($agora)) throw new Exception("A data limite  do plano de ação deve ser uma data futura.");
 
 			$planoAcao = new PlanoAcao(); $planoAcao->fromArray($this->colecaoPlanoAcao->comId(\ParamUtil::value($this->params, 'id')));
 			$responsavelAnterior = new Colaborador();  $responsavelAnterior->fromArray($this->colecaoColaborador->comId($planoAcao->getResponsavel()['id']));

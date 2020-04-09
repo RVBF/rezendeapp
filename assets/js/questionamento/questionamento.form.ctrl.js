@@ -272,9 +272,6 @@
 			_this.objetoAtual = _this.questionamentos.shift();
 			$('body').find('.dados_checklist').find('#titulo_checklist').html(_this.objetoAtual.checklist.titulo);
 			$('body').find('.dados_checklist').find('#descricao_checklist').html(_this.objetoAtual.checklist.descricao);
-			$('body').find('.dados_checklist').find('#datalimite_checklist').html(moment(_this.objetoAtual.checklist.data_limite).format('DD/MM/YYYY HH:MM:SS'));
-			if(_this.objetoAtual.checklist.repeteDiariamente) $('body').find('#dados_checklist').find('#repeticao_checklist').html('Sim');
-			else $('body').find('.dados_checklist').find('#repeticao_checklist').html('Não');
 			_this.anexo = [];
 			let html = '';
 			
@@ -585,11 +582,6 @@
 				_this.iniciarFormularioModoEdicao();
 			}
 		}
-
-		// Desenha o objeto no formulário
-		_this.desenhar = function desenhar(obj) {
-
-		};
 
 		_this.salvar = function salvar() {
 			_this.formulario.validate(criarOpcoesValidacao());
