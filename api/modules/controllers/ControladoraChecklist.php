@@ -163,8 +163,7 @@ class ControladoraChecklist {
 			);
 
 			$checklist->setRepeteDiariamente(\ParamUtil::value($this->params, 'repeteDiariamente'));
-
-			if(count($this->params['loja']) > 0) throw new Exception("É obrigatório selecionar ao menos uma unidade.");
+			if(count($this->params['loja']) == 0) throw new Exception("É obrigatório selecionar ao menos uma unidade.");
 			
 			foreach($this->params['loja'] as $lojaAtual){
 				$loja = new Loja(); $loja->fromArray($this->colecaoLoja->comId($lojaAtual));

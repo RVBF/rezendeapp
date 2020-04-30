@@ -47,7 +47,6 @@
 				};
 
 				_this.formulario.desabilitar(true);
-
 				var jqXHR = (window.location.href.search('editar') != -1) ? servicoChecklist.atualizar(obj) : servicoChecklist.adicionar(obj);
 				jqXHR.done(function (resposta) {
 					if (resposta.status) {
@@ -340,7 +339,7 @@
 				html += '<i class="mdi mdi-checkbox-marked-circle-outline orange-text text-accent-4 ">';
 				html += '</i>salvar</button>';
 				html += '</div>';
-				
+
 				_this.formulario.find('#botoes').prepend(html).promise().done(function () {
 					$('#salvar').on('click', _this.salvar);
 

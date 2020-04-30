@@ -123,7 +123,19 @@
 			var sucesso = function (resposta) {
 				$("#responsavelpe").empty();
 				$('#responsavelpa').empty();
+				$("#responsavelpe").append($('<option>', {
+					value: '',
+					text: 'Selecione o responsável',
+					disabled : true,
+					selected : true
+				}));
 
+				$("#responsavelpa").append($('<option>', {
+					value: '',
+					text: 'Selecione o responsável',
+					disabled : true,
+					selected : true
+				}));
 				$.each(resposta.data, function(i ,item) {
 					$("#responsavelpe").append($('<option>', {
 						value: item.id,
