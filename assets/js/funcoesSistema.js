@@ -9,7 +9,6 @@
             $(this).desabilitar(true)
          });
 
-
          $(evento.target).find('.bootstrap-dialog-header').each(function (i) {
             $(this).find('.bootstrap-dialog-close-button').addClass('d-none')
          });
