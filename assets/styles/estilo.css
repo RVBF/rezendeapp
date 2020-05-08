@@ -735,3 +735,4 @@ opacity: 1.0;
         }
     }
 /* Página de carrgeamento tabela - Fim */
+.withCustomStyle("ul {user-select:none}")

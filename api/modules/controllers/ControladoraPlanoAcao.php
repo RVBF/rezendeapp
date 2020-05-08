@@ -57,7 +57,6 @@ class ControladoraPlanoAcao {
 			$contagem = 0;
 			$objetos = [];
 			$erro = null;
-
 			$colaborador = new Colaborador();  $colaborador->fromArray($this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario()));
 			$objetos = $this->colecaoPlanoAcao->todosComResponsavelId($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $colaborador->getId());
 			$contagem = $this->colecaoPlanoAcao->contagem($colaborador->getId());
@@ -90,8 +89,8 @@ class ControladoraPlanoAcao {
 			$erro = null;
 
 			$colaborador = new Colaborador();  $colaborador->fromArray($this->colecaoColaborador->comUsuarioId($this->servicoLogin->getIdUsuario()));
-
 			$objetos = $this->colecaoPlanoAcao->todosComChecklistId($dtr->start, $dtr->length, (isset($dtr->search->value)) ? $dtr->search->value : '', $colaborador->getId(), $checklistId);
+
 			$contagem = $this->colecaoPlanoAcao->contagem($colaborador->getId());
 		}
 		catch (\Exception $e ) {

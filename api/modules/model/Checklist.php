@@ -45,7 +45,8 @@ class Checklist {
         $questionador = null,
         $responsavel = null,
         $questionarios = [],
-        $questionamentos = []
+        $questionamentos = [],
+        $repeteDiariamente = false
     ) {
         $this->id = $id;
         $this->status  = $status;
@@ -60,6 +61,7 @@ class Checklist {
         $this->responsavel = $responsavel;
         $this->questionarios = $questionarios;
         $this->questionamentos = $questionamentos;
+        $this->repeteDiariamente = $repeteDiariamente;
     }
 
     function clone(){
@@ -76,7 +78,8 @@ class Checklist {
             $this->questionador,
             $this->responsavel,
             $this->questionarios,
-            $this->questionamentos
+            $this->questionamentos,
+            $this->repeteDiariamente
         );
     }
 }

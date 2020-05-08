@@ -70,6 +70,7 @@
 						else html += '</i> <strong class="black-text descricao">' + data.descricao + '</strong></p>';
 						html += '<p class="dias_restantes '+((dataLimite.isSameOrAfter(moment())) ? 'black-text': ' red-text text-accent-4 ')+'"><i class="mdi mdi-calendar-clock orange-text text-accent-4"></i> <strong>'+textoDiasRestantes+'</strong></p>';
 						html += '<p><strong>Ações para Solução : </strong> ';
+						console.log(data);
 						for (const index in data.solucao.acoes) {
 							var acao =  data.solucao.acoes[index];
 							html += acao.acao + ((parseInt(index)+1 == data.solucao.acoes.length) ? '.' : ',');

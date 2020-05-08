@@ -112,30 +112,21 @@ class ControladoraChecklist {
 			}
 
 			$setor = new Setor(); $setor->fromArray($this->colecaoSetor->comId(($this->params['setor'] > 0) ? $this->params['setor'] : \ParamUtil::value($this->params, 'setor')));
-
-			if(!isset($setor) and !($setor instanceof Setor)){
-				throw new Exception("Setor não encontrado na base de dados.");
-			}
+			if(!isset($setor) and !($setor instanceof Setor)) throw new Exception("Setor não encontrado na base de dados.");
 
 			$questionarios = $this->colecaoQuestionario->todosComId($this->params['questionarios']);
 
-			if(!isset($questionarios) and count($questionarios) == count($this->params['questionarios'])){
-				throw new Exception("Alguma opção de questionário seleciona não foi encontrado na base de dados.");
-			}
+			if(!isset($questionarios) and count($questionarios) == count($this->params['questionarios']))throw new Exception("Alguma opção de questionário seleciona não foi encontrado na base de dados.");
+
 
 			$responsavel = new Colaborador(); $responsavel->fromArray($this->colecaoColaborador->comId((\ParamUtil::value($this->params, 'responsavel')> 0) ? \ParamUtil::value($this->params, 'responsavel') : \ParamUtil::value($this->params, 'responsavel')));
 
-			if(!isset($responsavel) and !($responsavel instanceof Colaborador)){
-				throw new Exception("Responśavel não encontrado na base de dados.");
-			}
+			if(!isset($responsavel) and !($responsavel instanceof Colaborador))throw new Exception("Responśavel não encontrado na base de dados.");
 
 			$questionador = new Colaborador(); $questionador->fromArray($this->colecaoColaborador->comId((\ParamUtil::value($this->params, 'questionario')> 0) ? \ParamUtil::value($this->params, 'responsavel') : \ParamUtil::value($this->params, 'responsavel')));
 
-			if(!isset($responsavel) and !($responsavel instanceof Colaborador)){
-				throw new Exception("Responśavel não encontrado na base de dados.");
-			}
+			if(!isset($questionador) and !($questionador instanceof Colaborador))throw new Exception("Questionador não encontrado na base de dados.");
 
-			
 			$dataLimite = $agora = Carbon::now();
 
 			if(\ParamUtil::value($this->params, 'repeteDiariamente')){
@@ -146,7 +137,6 @@ class ControladoraChecklist {
 			else $dataLimite = new Carbon(\ParamUtil::value($this->params, 'dataLimite'), 'America/Sao_Paulo');
 			if($dataLimite->isBefore($agora)) throw new Exception("A data limite deve ser uma data futura.");
 			
-			// Util::printr($dataLimite);
 			$checklist = new Checklist(
 				0,
 				StatusChecklistEnumerado::AGUARDANDO_EXECUCAO,
@@ -165,41 +155,41 @@ class ControladoraChecklist {
 			$checklist->setRepeteDiariamente(\ParamUtil::value($this->params, 'repeteDiariamente'));
 			if(count($this->params['loja']) == 0) throw new Exception("É obrigatório selecionar ao menos uma unidade.");
 			
+			$questionarios =$this->params['questionarios'];
+
+			$questionamentos = [];
 			foreach($this->params['loja'] as $lojaAtual){
 				$loja = new Loja(); $loja->fromArray($this->colecaoLoja->comId($lojaAtual));
 				$checklistAtual = $checklist->clone();
+
 				if(!isset($loja) and !($loja instanceof Loja)){
 					throw new Exception("Loja de selecionada não se encontra na base de dados.");
 				}
 				$checklistAtual->setLoja($loja);
 				$this->colecaoChecklist->adicionar($checklistAtual);
 
-			}
+				$contador = 0;
+				foreach($questionarios as $questionarioId){
+					$questionario = new Questionario(); $questionario->fromArray($this->colecaoQuestionario->comId($questionarioId));
 
-			$questionarios =$this->params['questionarios'];
+					if(!isset($questionario) and !($questionario instanceof Questionario)){
+						throw new Exception('O Questionário selecionado de id nº ' . $questionarioId . ' não foi encontrado na base de dados.');
+					}
 
-			$questionamentos = [];
-			$contador = 0;
-			foreach($questionarios as $questionarioId){
-				$questionario = new Questionario(); $questionario->fromArray($this->colecaoQuestionario->comId($questionarioId));
+					foreach ($questionario->getFormulario()->perguntas as $pergunta) {
+						$contador++;
+						$questionamentos[] = new Questionamento(
+							0,
+							TipoQuestionamentoEnumerado::NAO_RESPONDIDO,
+							json_encode($pergunta),
+							'',
+							$checklistAtual,
+							null,
+							[]
+						);
 
-				if(!isset($questionario) and !($questionario instanceof Questionario)){
-					throw new Exception('O Questionário selecionado de id nº ' . $questionarioId . ' não foi encontrado na base de dados.');
-				}
-
-				foreach ($questionario->getFormulario()->perguntas as $pergunta) {
-					$contador++;
-					$questionamentos[] = new Questionamento(
-						0,
-						TipoQuestionamentoEnumerado::NAO_RESPONDIDO,
-						json_encode($pergunta),
-						'',
-						$checklist,
-						null,
-						[]
-					);
-
-					end($questionamentos)->setIndice($contador);
+						end($questionamentos)->setIndice($contador);
+					}
 				}
 			}
 
