@@ -166,6 +166,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 
 	function todosComChecklistId($limite = 0, $pulo = 10, $search = '', $colaboradorId = 0, $checklistId = 0){
 		try {	
+
 			$query = DB::table(self::TABELA)->where(self::TABELA .'.deleted_at', NULL)->select(self::TABELA .'.*')->where(self::TABELA .'.responsavel_id', $colaboradorId);
 
 			$query->leftJoin(ColecaoQuestionamentoEmBDR::TABELA, ColecaoQuestionamentoEmBDR::TABELA. '.planoacao_id', '=', self::TABELA .'.id');
@@ -274,7 +275,7 @@ class ColecaoPlanoAcaoEmBDR implements ColecaoPlanoAcao {
 		$responsavel = ($row['responsavel_id'] > 0) ? Dice::instance()->create('ColecaoColaborador')->comId($row['responsavel_id']) : '';
 		$historicoAtual = Dice::instance()->create('ColecaoHistoricoResponsabilidade')->comPlanoAcaoId($row['id']);
 		$anexos = Dice::instance()->create('ColecaoAnexo')->comPlanoAcaoId($row['id']);
-
+		// Util::printr($row);
 		$planoDeAcao = new PlanoAcao(
 			$row['id'],
 			$row['status'],
