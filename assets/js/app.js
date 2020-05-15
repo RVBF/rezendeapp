@@ -14,15 +14,10 @@ var app = {
    toastr.options.positionClass = "toast-top-right";
    toastr.options.preventDuplicates = false;
    toastr.options.onclick = null;
-   toastr.options.showDuration = "300";
-   toastr.options.hideDuration = "1000";
-   toastr.options.timeOut = "2000";
-   toastr.options.extendedTimeOut = "1000";
-   toastr.options.showEasing = "swing";
-   toastr.options.hideEasing = "linear";
-   toastr.options.showMethod = "fadeIn";
-   toastr.options.hideMethod = "fadeOut";
-
+   toastr.options.showDuration = "8000";
+   toastr.options.hideDuration = "8000";
+   toastr.options.timeOut = "8000";
+   toastr.options.extendedTimeOut = "8000";
    var nua = navigator.userAgent
    var isAndroid = (nua.indexOf('Mozilla/5.0') > -1 && nua.indexOf('Android ') > -1 && nua.indexOf('AppleWebKit') > -1 && nua.indexOf('Chrome') === -1)
 

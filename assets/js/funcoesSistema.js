@@ -200,8 +200,12 @@
    });
 
    $(document).ready(function () {
-      $('.sidenav').sidenav();
+      $('.sidenav').sidenav();     
+      let url = window.location.href.replace(/^.*\//g, '');
 
+      if (url == '#' || url == '') {
+         router.navigate('/');
+      }
       navigator.permissions.query({name:'microphone'}).then(function(result) {
          if (result.state == 'granted') {
        
