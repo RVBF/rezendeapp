@@ -159,7 +159,6 @@
       if (url == '#' || url == '') {
          html += '<a id="logo-container" href="#/" class="brand-logo center home"><img src="assets/images/logo_branco.png" alt="" class="logo-dto"></a>';
          html += '<a href="#/" data-target="nav-mobile" class="sidenav-trigger button-collapse show-on-large"><i class="material-icons">menu</i></a>';
-
       }
       else if (url == 'configuracao') {
          html += '<span class="center local-dto">Configurações</span>';

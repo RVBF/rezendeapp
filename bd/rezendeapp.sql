@@ -580,3 +580,68 @@ COMMIT;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+
+BEGIN
+  DECLARE done INT DEFAULT FALSE;
+
+  DECLARE id INT;
+  DECLARE status VARCHAR(255);
+  DECLARE titulo VARCHAR(255);
+  DECLARE tipoChecklist VARCHAR(255);
+  DECLARE descricao VARCHAR(255);
+  DECLARE data_limite DATETIME;
+  DECLARE dataexecucao DATETIME;
+  DECLARE data_cadastro DATETIME;
+  DECLARE encerrado BOOLEAN;
+  DECLARE deleted_at DATETIME;
+  DECLARE repeteDiariamente boolean; 
+  DECLARE questionador_id int; 
+  DECLARE responsavel_id int; 
+  DECLARE setor_id INT;
+  DECLARE checklist_id INT;
+  DECLARE loja_id INT;
+  DECLARE idQuestionamento INT;
+  DECLARE statusQuestionamento varchar(255);
+	DECLARE formulariopergunta TEXT;
+	DECLARE formularioresposta TEXT;
+	DECLARE indice int;
+  DECLARE deleteat_questionamento datetime;
+	DECLARE idchecklist_questionamento int;
+	DECLARE planoacao_id int;
+	DECLARE pendencia_id int;
+  DECLARE ultimoIdChecklist int;
+
+  DECLARE cur1 CURSOR FOR SELECT * from checklist where checklist.repeteDiariamente = 1;
+	DECLARE cur2 CURSOR FOR SELECT  * from questionamento;
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    OPEN cur1;
+    read_loop: LOOP
+      FETCH cur1 INTO  id, status, titulo, tipoChecklist, descricao, data_limite, dataexecucao, data_cadastro, encerrado, deleted_at, repeteDiariamente, questionador_id, responsavel_id, setor_id, checklist_id, loja_id;	
+      IF done THEN
+			  LEAVE read_loop;
+			END IF;	
+      select questionador_id;
+      insert into checklist(status, titulo, tipoChecklist, descricao, data_limite, repeteDiariamente, questionador_id, responsavel_id, setor_id, checklist_id, loja_id) values ( 'Aguardando Execução',  titulo,  tipoChecklist,  descricao,  CONCAT(DATE(NOW()), ' ', '23:59:59'), 0,  questionador_id, responsavel_id, setor_id, id, loja_id);  
+		  
+      SET ultimoIdChecklist = LAST_INSERT_ID();
+
+      OPEN cur2;
+        curso2LOOP: LOOP
+        FETCH cur2 INTO idQuestionamento, statusQuestionamento,formulariopergunta, formularioresposta,indice,deleteat_questionamento, idchecklist_questionamento, planoacao_id,pendencia_id;
+        IF done THEN
+          LEAVE curso2LOOP;
+        END IF;		
+
+        IF(idchecklist_questionamento = id) THEN
+          insert into questionamento( status, checklist_id , formulariopergunta, indice) values ( 'Não Respondido', ultimoIdChecklist,  formulariopergunta, indice);  
+        END IF;
+        END LOOP;
+      CLOSE cur2;
+		
+  END LOOP;
+  CLOSE cur1;
+
+END
